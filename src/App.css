@@ -1,0 +1,623 @@
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/red.css';
+@import '@radix-ui/colors/violet.css';
+
+
+/* Global styles */
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background-color: #f5f5f5;
+}
+
+.card {
+	border-radius: 5px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	width: 250px;
+	margin: 1em 0;
+}
+      
+.card img {
+	width: 100%;
+	height: 50%;
+}
+
+.card-details {
+	padding: 2px;
+	background-color: #ffd700;
+}
+
+.card-details h2 {
+	margin-top: 0;
+}
+
+.card-buttons {
+	padding: 5px 0px;
+	display: flex;
+	justify-content: center;
+}
+
+/* Voter Box styles */
+.vote-card {
+	display: flex;
+        align-items: center;
+        width: 300px; /* Adjust width as needed */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+}
+
+.vote-card img {
+	width: 100px; /* Adjust image width as needed */
+        height: auto; /* Maintain aspect ratio */
+        margin-right: 20px;
+        border-radius: 8px;
+}
+
+.vote-card content {
+	flex-grow: 1;
+}
+
+.vote-card-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+}
+
+.vote-card-desc {
+        font-size: 14px;
+        margin-bottom: 10px;
+}
+
+.vote-card-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+}
+
+.voter-card-button:hover {
+        background-color: #0056b3;
+}
+/* ############  navbar styles */
+
+nav {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+nav li {
+	display: inline;
+	margin: 0 .5em;
+}
+
+nav ul {
+	text-decoration: none;
+	list-style-type: none;
+}
+
+.subnav {
+	height: 2em;
+	display: flex;
+	justify-content: flex-start;
+
+}
+
+.subnav > a {
+	margin: 0 1em;
+	text-decoration: none;
+}
+
+header {
+	height: 80px;
+	display: flex;
+	align-items: center;
+	padding-block: 10px;
+	background-color:  #0047AB;
+}
+
+header .site-logo {
+	color: black;
+	margin-right: auto;
+	text-transform: uppercase;
+	font-weight: 900;
+	font-size: 25px;
+}
+    
+header a {
+	text-decoration: none;
+	color: #fff;
+	font-weight: 600;
+	padding: 5px 20px;
+}
+    
+header a:hover {
+	color: #161616;
+	text-decoration: underline;
+}
+
+/* ############################### Form styles ###############################*/
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 80vh; /* Adjust as needed */
+	width: 100vw;
+	background-color: #f5f5f5;
+}
+      
+.form-container {
+	/* background-color: #ffd700; Light gold background color */
+	padding: 20px;
+	border-radius: 10px;
+	width: 30vw;
+}
+
+.logo {
+	margin: 0 auto;
+	width: 70px;
+}
+      
+.logo img {
+	width: 50px; 
+	height: 50px; 
+}
+
+input[type="text"], 
+	input[type="password"], 
+	input[type="email"], 
+	input[type="tel"],
+	input[type="number"]  {
+		width: 95%; 
+		padding: 10px; 
+		border: 1px solid goldenrod; 
+		border-radius: 5px; 
+		font-size: 16px;
+		margin: .5em 0;
+}
+
+input[type="text"]:focus, 
+	input[type="password"]:focus, 
+	input[type="email"]:focus, 
+	input[type="tel"]:focus,
+	input[type="number"]:focus {
+		box-shadow: 0 0 5px rgba(218, 165, 32, 0.5); 
+		outline: none; 
+}
+
+/* remove the spinners on  */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+/* modal */
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.8);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content {
+	width: 50%;
+	max-width: 50vw;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	position: relative;
+	background-color: #fff;
+}
+
+/* ################### Election container styles ############################ */
+.election-container {
+	border: 2px solid #333; 
+	border-radius: 10px; 
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+	padding: 20px; /* Padding */
+	margin: 20px auto; /* Centering */
+	max-width: 900px; /* Maximum width */
+	overflow: hidden; /* Prevents overflow */
+	position: relative; /* For positioning child elements */
+}
+    
+.election-container:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: linear-gradient(45deg, #ff7e5f, #feb47b); /* Gradient background */
+	opacity: 0.2; /* Opacity */
+	z-index: -1; /* Behind other content */
+	border-radius: 10px; /* Rounded corners */
+}
+    
+.election-container:hover:before {
+	opacity: 0.3; /* Opacity on hover */
+	transition: opacity 0.3s ease; /* Smooth transition */
+}
+    
+.election-container h2 {
+	font-size: 24px; /* Heading size */
+	margin-bottom: 10px; /* Bottom margin */
+}
+    
+.election-container p {
+	font-size: 16px; /* Paragraph font size */
+	line-height: 1.6; /* Line height */
+	margin-bottom: 20px; /* Bottom margin */
+}
+
+.electioninfo {
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	transition: transform 0.3s ease;
+}
+
+.electioninfo-content {
+	padding: 20px;
+}
+      
+/* Container styles */
+.home-container {
+	display: flex;
+	height: 80vh;
+	background-color: #f5f5f5;
+
+}
+      
+/* Left and right div styles */
+.home-left, .home-right {
+	flex: 1;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.home-left {
+	border-right: #ccc solid 1px;
+}
+
+.home-right {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.resultsContainer {
+	display: flex;
+	height: 80vh;
+	background-color: #f5f5f5;
+}
+
+.resultsLeft, .resultsRight {
+	flex: 1;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.resultsRight {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Radix Alert Dialog */
+
+/* reset */
+button {
+	all: unset;
+}
+      
+.AlertDialogOverlay {
+	background-color: var(--black-a9);
+	position: fixed;
+	inset: 0;
+	animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+      
+.AlertDialogContent {
+	background-color: white;
+	border-radius: 6px;
+	box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 90vw;
+	max-width: 500px;
+	max-height: 85vh;
+	padding: 25px;
+	animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+      
+.AlertDialogContent:focus {
+	outline: none;
+}
+      
+.AlertDialogTitle {
+	margin: 0;
+	color: var(--mauve-12);
+	font-size: 17px;
+	font-weight: 500;
+}
+      
+.AlertDialogDescription {
+	margin-bottom: 20px;
+	color: var(--mauve-11);
+	font-size: 15px;
+	line-height: 1.5;
+}
+      
+.Button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	padding: 0 15px;
+	font-size: 15px;
+	line-height: 1;
+	font-weight: 500;
+	height: 35px;
+}
+
+.Button.violet {
+	background-color: #6a0dad;
+	color: #fff;
+	box-shadow: 0 2px 10px var(--black-a7);
+}
+.Button.violet:hover {
+	background-color: var(--mauve-3);
+	color: #161616;
+}
+.Button.violet:focus {
+	box-shadow: 0 0 0 2px black;
+}
+.Button.red {
+	background-color: var(--red-4);
+	color: var(--red-11);
+}
+.Button.red:hover {
+	background-color: var(--red-5);
+}
+.Button.red:focus {
+	box-shadow: 0 0 0 2px var(--red-7);
+}
+.Button.mauve {
+	background-color: var(--mauve-4);
+	color: var(--mauve-11);
+}
+.Button.mauve:hover {
+	background-color: var(--mauve-5);
+}
+.Button.mauve:focus {
+	box-shadow: 0 0 0 2px var(--mauve-7);
+}
+
+/* Dialog styles */
+.DialogOverlay {
+	background-color: var(--black-a9);
+	position: fixed;
+	inset: 0;
+	animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent {
+	background-color: white;
+	border-radius: 6px;
+	box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 90vw;
+	max-width: 450px;
+	max-height: 85vh;
+	padding: 25px;
+	animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent:focus {
+	outline: none;
+}
+
+.DialogTitle {
+	margin: 0;
+	font-weight: 500;
+	color: var(--mauve-12);
+	font-size: 17px;
+}
+
+.DialogDescription {
+	margin: 10px 0 20px;
+	color: var(--mauve-11);
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.Button.green {
+	background-color: var(--green-4);
+	color: var(--green-11);
+}
+
+.Button.green:hover {
+	background-color: var(--green-5);
+}
+
+.Button.green:focus {
+	box-shadow: 0 0 0 2px var(--green-7);
+}
+
+.IconButton {
+	font-family: inherit;
+	border-radius: 100%;
+	height: 25px;
+	width: 25px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--violet-11);
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.IconButton:hover {
+	background-color: var(--violet-4);
+}
+
+.IconButton:focus {
+	box-shadow: 0 0 0 2px var(--violet-7);
+}
+
+.Fieldset {
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.Label {
+	font-size: 15px;
+	color: var(--violet-11);
+	width: 90px;
+	text-align: right;
+}
+
+.Input {
+	width: 100%;
+	flex: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	padding: 0 10px;
+	font-size: 15px;
+	line-height: 1;
+	color: var(--violet-11);
+	box-shadow: 0 0 0 1px var(--violet-7);
+	height: 35px;
+}
+
+.Input:focus {
+	box-shadow: 0 0 0 2px var(--violet-8);
+}
+
+@keyframes overlayShow {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes contentShow {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -48%) scale(0.96);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+
+      
+@media (max-width: 768px) {
+	header {
+		width: 100vw;
+		justify-content: space-around;
+	}
+
+	.election-container {
+	    padding: 15px; /* Decreased padding */
+	}
+    
+	.election-container h2 {
+	    font-size: 20px; /* Further decreased font size for headings */
+	}
+    
+	.election-container p {
+	    font-size: 14px; /* Further decreased font size for paragraphs */
+	}
+
+	.home-container {
+		flex-direction: column;
+		min-height: 100vh;
+	      }
+	    
+	      .home-left {
+		width: auto;
+		min-height: 60vh;
+	      } 
+	      .home-right {
+		min-height: 50vh;
+		width: auto;
+	}
+
+	.container {
+		width: 98%;
+		min-height: 40vh;
+		display: flex;
+		align-items: start;
+		justify-content: center;
+		background-color: antiquewhite;
+	}
+	
+	.form-container {
+		margin: 2em 0;
+		width: 95%;
+	}
+
+	.modal-content {
+		width: 95vw;
+		max-width: 98vw;
+	}
+
+	.resultsContainer {
+		flex-direction: column;
+		min-height: 100vh;
+	      }
+	    
+	      .resultsLeft {
+		width: auto;
+		min-height: 60vh;
+	      } 
+	      .resultsRight {
+		min-height: 80vh;
+		width: auto;
+	}
+}
+
+
+    
