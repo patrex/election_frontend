@@ -15,10 +15,6 @@ function Header() {
 			<Toaster position="top-right" richColors/>
 			<h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2>
 			<nav>
-				{/* <NavLink to="/"
-					style={({isActive}) => isActive ? linkStyles: null}
-				>Home</NavLink> */}
-
 				<NavLink to="/login"
 					style={({isActive}) => isActive ? linkStyles: null}
 				>Login</NavLink>

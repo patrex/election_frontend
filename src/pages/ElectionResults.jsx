@@ -31,6 +31,7 @@ function ElectionResults() {
 	const [selectedPosition, setSelectedPosition] = useState("");
 	const [winner, setWinner] = useState({});
 	const [runnerUps, setRunnerUps] = useState([]);
+	const [eventException, setEventException] = useState(false);
 
 	const [colorSpace] = useState([
 		'aqua', 'azure', 'beige', 'blue',
@@ -57,6 +58,10 @@ function ElectionResults() {
 		setVotesList(votes.filter(vote => vote.position == position._id))
 	}
 
+	useEffect(() => {
+		moment(election.endDate).isAfter(new Date()) && setEventException(true)
+	}, [election.endDate])
+
 	useEffect( () => {
 		setData([])
 		
@@ -73,13 +78,29 @@ function ElectionResults() {
 			setData(prev => [...prev, row])
 		})
 		
-		
 	}, [selectedPosition])
 
 	
 
 	return ( 
 		<>
+			{eventException &&
+				<div className="modal-overlay">
+					<div className="w-full sm:w-1/2 max-w-full sm:max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+						<h5>{`${election.title}`}</h5>
+						<hr />
+						
+						<p>This election is still ongoing</p>
+						
+						<hr />
+						
+						<div className="my-2">
+							<button className="Button red my-0 mx-3 w-20" onClick={() => navigate('/')}>Go Home</button>
+						</div>
+					</div>
+				</div>
+
+			}
 			<div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 ease-in-out">
 				<div className="p-5">
 					<h2><strong>{ election.title }</strong></h2>

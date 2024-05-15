@@ -1,12 +1,17 @@
-import { Link } from 'react-router-dom'
+import { Link, useRouteError } from 'react-router-dom';
+
+
 function NotFound() {
+	const error = useRouteError();
+
 	return (  
-		<div className="van-details-box">
-			<h1>Sorry, the page/resource you wanted to see was not found on the site</h1>
+		<div class="flex items-center justify-center min-h-screen bg-gray-100">
+			<div class="text-center max-w-lg mx-auto py-12">
+				<h1 class="text-6xl font-bold text-gray-800 mb-4">404</h1>
+				<p class="text-xl text-gray-600 mb-8">Election Not Found</p>
 
-			<Link to='/' className=''>Let's take you home</Link>
-
-			<h4>Or you may use one of the links above...</h4>
+				<Link to='/' className='text-blue-500 hover:underline'>Let's take you home</Link>
+			</div>
 		</div>
 	);
 }

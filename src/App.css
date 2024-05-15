@@ -310,6 +310,30 @@ input[type=number] {
 	flex-direction: column;
 }
 
+/* styles for candidate self reg */
+.split-container {
+	display: flex;
+	min-height: 80vh;
+	background-color: #f5f5f5;
+}
+
+.left-split, .right-split {
+	flex: 1;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.left-split {
+	border-right: #ccc solid 1px;
+}
+
+.home-right {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
 .resultsContainer {
 	display: flex;
 	height: 80vh;
@@ -333,6 +357,10 @@ input[type=number] {
 /* reset */
 button {
 	all: unset;
+}
+
+.error-msg {
+	color: red;
 }
       
 .AlertDialogOverlay {

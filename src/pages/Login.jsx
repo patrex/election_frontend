@@ -3,22 +3,23 @@ import { useNavigate } from 'react-router-dom'
 
 import { toast } from 'sonner'
 
+import Joi from 'joi';
+import { useForm } from 'react-hook-form'
+import { joiResolver } from '@hookform/resolvers/joi'
+
 function Login() {
 	const navigate = useNavigate();
 
-	const [formData, setFormData] = useState({
-		username: "",
-		password: ""
+	const schema = Joi.object({
+		username: Joi.string().email({ minDomainSegments: 2, tlds: { deny: ['xxx'] } }).required(),
+		password: Joi.string().min(6).max(200)
+	})
+	
+	const { register, handleSubmit, formState: {errors} } = useForm({
+		resolver: joiResolver(schema)
 	});
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-
-		if (!formData.username || !formData.password) {
-			toast.warning("You must enter an id and password")
-			return;
-		}
-
+	const onSubmit = async (formData) => {
 		const res = await fetch(`/user/auth/login`, {
 			method: 'POST',
 			headers: {
@@ -27,45 +28,36 @@ function Login() {
 			mode: 'cors',
       			body: JSON.stringify(formData),
 		})
-
+		
 		if (res.ok) {
 			let user = await res.json();
 			navigate(`/user/${user._id}`)
-		} else {
+		} else if (res.status == 401) {
 			toast.warning('Username or password is incorrect')
 			return;
+		} else {
+			toast.error('Something went wrong...')
 		}
 	}
 
-	const handleChange = (e) => {
-		setFormData(prev => ({...prev, [e.target.name]: e.target.value}));
-	}
-
 	return (
-
 		<div className="container">
 			<div className="form-container">
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={ handleSubmit(onSubmit) }>
 					<div className="mb-3">
-						<input type="text" 
-							id="userId"
-							name="username"
-							aria-describedby="userId"
-							onChange={handleChange}
-							value={formData.userid}
-							placeholder="Username/email/phone"
+						Email
+						<input type="email"
+							placeholder="email"
 							autoFocus
-						/>
-						<div id="userId" className="form-text">We'll never share your email with anyone else</div>
+							{...register('username')}
+						/>{errors.email && <span className='error-msg'>You need to enter a valid email</span>}
 					</div>
 
 					<div className="mb-3">
+						Password
 						<input type="password" 
-							id="psw"
-							name="password"
-							onChange={handleChange} 
-							value={formData.password}
 							placeholder="password"
+							{...register('password')}
 						/>
 					</div>
 					
