@@ -33,15 +33,10 @@ function CreateAccount() {
       			body: JSON.stringify(formData),
 		})
 		if(res.ok) {
-			const resp = await res.json();
-			console.log(resp);
 			navigate('/login');
 		}
 		else {
-			Swal.fire({
-				text: `There was an error`,
-				icon: "error"
-			});
+			toast.error("There was an error");
 		}
 	}
 
