@@ -13,16 +13,16 @@ export default defineConfig({
   	server: {
 		proxy: {
 			'/elections': {
-				target: 'http://localhost:3000',
+				target: 'https://election-backend-kduj.onrender.com',
 				secure: false
 			},
 			
 			'/election': {
-				target: 'http://localhost:3000',
+				target: 'https://election-backend-kduj.onrender.com',
 				secure: false
 			},
 			'/user': {
-				target: 'http://localhost:3000',
+				target: 'https://election-backend-kduj.onrender.com',
 				secure: false
 			},
 		}
