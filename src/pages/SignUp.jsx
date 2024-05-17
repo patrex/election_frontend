@@ -32,7 +32,11 @@ function CreateAccount() {
 			mode: 'cors',
       			body: JSON.stringify(formData),
 		})
-		if(res.ok) navigate('/login')
+		if(res.ok) {
+			const resp = await res.json();
+			console.log(resp);
+			navigate('/login');
+		}
 		else {
 			Swal.fire({
 				text: `There was an error`,
