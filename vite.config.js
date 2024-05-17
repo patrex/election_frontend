@@ -14,16 +14,16 @@ export default defineConfig({
 		proxy: {
 			'/elections': {
 				target: 'https://election-backend-kduj.onrender.com',
-				secure: false
+				secure: true
 			},
 			
 			'/election': {
 				target: 'https://election-backend-kduj.onrender.com',
-				secure: false
+				secure: true
 			},
 			'/user': {
 				target: 'https://election-backend-kduj.onrender.com',
-				secure: false
+				secure: true
 			},
 		}
   	},
