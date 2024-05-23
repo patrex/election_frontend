@@ -10,11 +10,12 @@ export async function dashboardLoader({params}) {
 	try {
 		const res = await fetch(`https://election-backend-kduj.onrender.com/elections/${params.userId}`)
 		elections = await res.json()
+		console.log(elections)
 	} catch (error) {
 		toast.warning(error);
 	}
 
-	return [ elections ]
+	return elections;
 }
 
 
