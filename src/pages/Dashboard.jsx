@@ -172,7 +172,7 @@ function Dashboard() {
 					</thead>
 
 					<tbody className='table-group-divider'>
-						{electionsList.map(election => (
+						{electionsList && electionsList.map(election => (
 							<tr key={election._id}>
 								<td><Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link></td>
 							
