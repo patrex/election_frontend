@@ -8,14 +8,14 @@ export async function loader({params}) {
 	let position = params.position;
 
 	try {
-		const res1 = await fetch(`/election/${params.id}`)
-		const candidateList = await fetch(`/election/${params.id}/${params.position}/candidates`)
+		const res1 = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}`)
+		const candidateList = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/${params.position}/candidates`)
 
 		election = await res1.json();
 		candidates = await candidateList.json();
 
 	} catch (error) {
-		console.log(error);
+		
 	}
 
 	return [election, candidates, position]
@@ -33,7 +33,7 @@ function PositionDetails() {
 			denyButtonText: `Cancel`
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				const res = await fetch(`/election/${election._id}/candidate/${candidate._id}/delete`, {
+				const res = await fetch(`https://election-backend-kduj.onrender.com/election/${election._id}/candidate/${candidate._id}/delete`, {
 					method: 'delete'
 				})
 	
