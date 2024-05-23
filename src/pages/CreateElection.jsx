@@ -34,7 +34,7 @@ function CreateElection() {
 	// });
 
 	async function onSubmit(formData) {
-		const res = await fetch(`/elections`, {
+		const res = await fetch(`https://election-backend-kduj.onrender.com/elections`, {
       			method: 'POST',
       			headers: {
         			'Content-Type': 'application/json',
