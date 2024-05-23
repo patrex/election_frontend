@@ -8,7 +8,7 @@ export async function dashboardLoader({params}) {
 	let elections = undefined;
 
 	try {
-		const res = await fetch(`/elections/${params.userId}`)
+		const res = await fetch(`https://election-backend-kduj.onrender.com/elections/${params.userId}`)
 		elections = await res.json()
 	} catch (error) {
 		toast.warning(error);
@@ -38,7 +38,7 @@ function Dashboard() {
 			denyButtonText: `Cancel`
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				const res = await fetch(`/election/${election._id}/delete`, {
+				const res = await fetch(`https://election-backend-kduj.onrender.com/election/${election._id}/delete`, {
 					method: 'delete'
 				})
 	
@@ -59,7 +59,7 @@ function Dashboard() {
 	}
 
 	function addPhoneNosToDB (voterlist) {
-		fetch(`/election/${election._id}/addvoters`, {
+		fetch(`https://election-backend-kduj.onrender.com/election/${election._id}/addvoters`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ function Dashboard() {
 		if (newPosition) {
 			closePositionModal();
 			
-			fetch(`/election/${election._id}/position`, {
+			fetch(`https://election-backend-kduj.onrender.com/election/${election._id}/position`, {
 				method: 'POST',
 				headers: {
 				  'Content-Type': 'application/json',
