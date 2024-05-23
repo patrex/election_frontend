@@ -25,7 +25,7 @@ function CreateAccount() {
 	});
 
 	const onSubmit = async (formData) => {
-		const res = await fetch(`/user/auth/signup`, {
+		const res = await fetch(`https://election-backend-kduj.onrender.com/user/auth/signup`, {
 			method: 'POST',
 			headers: {
         			'Content-Type': 'application/json',
