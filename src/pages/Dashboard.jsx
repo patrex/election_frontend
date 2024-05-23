@@ -153,8 +153,6 @@ function Dashboard() {
 		if (text) toast.success("copied")
 	}
 
-	useEffect(() => { console.log(electionsList)}, [])
-
 	return (
 		<>
 			<div className='dashboard-container table-responsive'>
