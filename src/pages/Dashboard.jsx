@@ -2,7 +2,7 @@ import  { useState } from 'react';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
 import Swal from 'sweetalert2';
-import {toast} from 'sonner'
+import { toast } from 'sonner'
 
 export async function dashboardLoader({params}) {
 	let elections = undefined;

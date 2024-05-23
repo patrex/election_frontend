@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { client } from "@/utils/fetcher";
 
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
