@@ -175,7 +175,7 @@ function Dashboard() {
 					</thead>
 
 					<tbody className='table-group-divider'>
-{/* 						{electionsList && electionsList.map(election => (
+						{electionsList && electionsList.map(election => (
 							<tr key={election._id}>
 								<td><Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link></td>
 							
@@ -189,7 +189,7 @@ function Dashboard() {
 								<td><button className="Button violet" onClick={() => copyLink(election.shareLink)}><i className="bi bi-link-45deg"></i></button></td>
 								<td><button className='Button red' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 							</tr>
-						))} */}
+						))}
 					</tbody>
 				</table>
 
