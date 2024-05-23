@@ -33,12 +33,11 @@ function CreateAccount() {
 			mode: 'cors',
       			body: JSON.stringify(formData),
 		})
-		if(res.ok) navigate('/login')
+		if(res.ok) {
+			navigate('/login');
+		}
 		else {
-			Swal.fire({
-				text: `There was an error`,
-				icon: "error"
-			});
+			toast.error("There was an error");
 		}
 	}
 
