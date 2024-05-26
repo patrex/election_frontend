@@ -4,12 +4,14 @@ import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
 
+import backendUrl from '../utils/backendurl'
+
 export async function electionDetailLoader({params}) {
 	let election, positions = undefined;
 
 	try {
-		const res1 = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}`)
-		const res2 = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/positions`)
+		const res1 = await fetch(`${backendUrl}/election/${params.id}`)
+		const res2 = await fetch(`${backendUrl}/election/${params.id}/positions`)
 
 		election = await res1.json()
 		positions = await res2.json()
@@ -36,7 +38,7 @@ function ElectionDetail() {
 		}).then(async (result) => {
 			let i = undefined;
 			if (result.isConfirmed) {
-				const res = await fetch(`https://election-backend-kduj.onrender.com/election/${election._id}/${position._id}/delete`, {
+				const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
 					method: 'delete'
 				})
 

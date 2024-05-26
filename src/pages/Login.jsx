@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
 
 import { toast } from 'sonner'
+import backendUrl from '../utils/backendurl'
 
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
@@ -20,7 +21,7 @@ function Login() {
 	});
 
 	const onSubmit = async (formData) => {
-		const res = await fetch(`https://election-backend-kduj.onrender.com/user/auth/login`, {
+		const res = await fetch(`${backendUrl}/user/auth/login`, {
 			method: 'POST',
 			headers: {
         			'Content-Type': 'application/json',

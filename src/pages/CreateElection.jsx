@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import backendUrl from '../utils/backendurl'
 
 import { toast } from 'sonner'
 
@@ -34,7 +35,7 @@ function CreateElection() {
 	// });
 
 	async function onSubmit(formData) {
-		const res = await fetch(`https://election-backend-kduj.onrender.com/elections`, {
+		const res = await fetch(`${backendUrl}/elections`, {
       			method: 'POST',
       			headers: {
         			'Content-Type': 'application/json',

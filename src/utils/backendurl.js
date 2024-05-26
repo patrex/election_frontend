@@ -1,3 +1,3 @@
-const rootUrl = ``
+const backendUrl = `https://election-backend-kduj.onrender.com`
 
-export default rootUrl;
+export default backendUrl;

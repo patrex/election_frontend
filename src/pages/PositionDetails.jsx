@@ -3,13 +3,15 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import backendUrl from '../utils/backendurl'
+
 export async function loader({params}) {
 	let election, candidates = undefined;
 	let position = params.position;
 
 	try {
-		const res1 = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}`)
-		const candidateList = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/${params.position}/candidates`)
+		const res1 = await fetch(`${backendUrl}/election/${params.id}`)
+		const candidateList = await fetch(`${backendUrl}/election/${params.id}/${params.position}/candidates`)
 
 		election = await res1.json();
 		candidates = await candidateList.json();
@@ -33,7 +35,7 @@ function PositionDetails() {
 			denyButtonText: `Cancel`
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				const res = await fetch(`https://election-backend-kduj.onrender.com/election/${election._id}/candidate/${candidate._id}/delete`, {
+				const res = await fetch(`${backendUrl}/election/${election._id}/candidate/${candidate._id}/delete`, {
 					method: 'delete'
 				})
 	

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import backendUrl from '../utils/backendurl'
 
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
@@ -24,7 +25,7 @@ function CreateAccount() {
 	});
 
 	const onSubmit = async (formData) => {
-		const res = await fetch(`https://election-backend-kduj.onrender.com/user/auth/signup`, {
+		const res = await fetch(`${backendUrl}/user/auth/signup`, {
 			method: 'POST',
 			headers: {
         			'Content-Type': 'application/json',

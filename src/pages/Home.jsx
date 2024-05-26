@@ -2,6 +2,8 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from 'sonner'
 
+import backendUrl from '../utils/backendurl'
+
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
 	const electionid = url.searchParams.get("event_id")
@@ -31,7 +33,7 @@ function Home() {
 	async function procElection(electionid) {
 		try {
 			let election = undefined;
-			let e = await fetch(`https://election-backend-kduj.onrender.com/election/${electionid}`)
+			let e = await fetch(`${backendUrl}/election/${electionid}`)
 
 			if (e.ok) election = await e.json();
 
@@ -62,7 +64,7 @@ function Home() {
 	}
 
 	const handleOTPSubmit = async () => {
-		let s = await fetch(`https://election-backend-kduj.onrender.com/election/${OTPVal}/verifyOTP`);
+		let s = await fetch(`${backendUrl}/election/${OTPVal}/verifyOTP`);
 		if (s.ok) {
 			closeOTPModal();
 			setOTPVal('');
@@ -83,7 +85,7 @@ function Home() {
 
 	async function addVoterToDB () {
 		try {
-			await fetch(`https://election-backend-kduj.onrender.com/election/${election._id}/voter/phone`, {
+			await fetch(`${backendUrl}/election/${election._id}/voter/phone`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -114,7 +116,7 @@ function Home() {
 			}
 
 			// create an OTP for verification
-			const s = await fetch(`https://election-backend-kduj.onrender.com/election/getOTP`, {
+			const s = await fetch(`${backendUrl}/election/getOTP`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

@@ -3,11 +3,13 @@ import { useParams, useLoaderData } from "react-router-dom";
 import moment from "moment";
 import {toast} from 'sonner'
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
+
+import backendUrl from '../utils/backendurl'
       
 export async function electionLoader({ params }) {
-	const e = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}`);
-	const o = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/ownerinfo`);
-	const p = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/positions`);
+	const e = await fetch(`${backendUrl}/election/${params.id}`);
+	const o = await fetch(`${backendUrl}/election/${params.id}/ownerinfo`);
+	const p = await fetch(`${backendUrl}/election/${params.id}/positions`);
 	
 
 	let election = await e.json();
@@ -51,7 +53,7 @@ export default function Election() {
 
 	async function sendVote(candidate, voterId) {
 		try {
-			const userVotes = await fetch(`https://election-backend-kduj.onrender.com/election/${electionData._id}/${voterId}/votes`);
+			const userVotes = await fetch(`${backendUrl}/election/${electionData._id}/${voterId}/votes`);
 			let userHasVoted = false;
 
 			if (userVotes.ok) {
@@ -70,7 +72,7 @@ export default function Election() {
 			}
 
 			if (!userHasVoted) {
-				const v = await fetch(`https://election-backend-kduj.onrender.com/election/vote`, {
+				const v = await fetch(`${backendUrl}/election/vote`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -110,7 +112,7 @@ export default function Election() {
 		setSelectedPosition(selected);
 		try {
 			// attempt to fetch candidates for selected position
-			const req = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/${selected}/candidates`);
+			const req = await fetch(`${backendUrl}/election/${params.id}/${selected}/candidates`);
 			const c = await req.json()
 			setCandidates(c)
 		} catch (error) {

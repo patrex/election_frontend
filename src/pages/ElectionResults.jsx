@@ -4,15 +4,14 @@ import moment from 'moment';
 import { toast } from 'sonner';
 import * as d3 from 'd3'
 
-import Badge from '@/components/Badge';
-import { data } from 'autoprefixer';
+import backendUrl from '../utils/backendurl'
 
 export async function resultsLoader({params}) {
-	const e = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}`);
-	const p = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/positions`);
-	const c = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/candidates`);
-	const v = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/votes`);
-	const o = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/ownerinfo`);
+	const e = await fetch(`${backendUrl}/election/${params.id}`);
+	const p = await fetch(`${backendUrl}/election/${params.id}/positions`);
+	const c = await fetch(`${backendUrl}/election/${params.id}/candidates`);
+	const v = await fetch(`${backendUrl}/election/${params.id}/votes`);
+	const o = await fetch(`${backendUrl}/election/${params.id}/ownerinfo`);
 
 	const election = await e.json();
 	const positions = await p.json();

@@ -4,6 +4,7 @@ import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import moment from 'moment';
 import { toast } from 'sonner';
 import NotFound from './NotFound';
+import backendUrl from '../utils/backendurl'
 
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
@@ -14,8 +15,8 @@ import { fireman } from '../utils/fireloader';
 
 export async function candidateSelfAddLoader({params}) {
 	try {
-		const Election = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}`);
-		const Positions = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/positions`);
+		const Election = await fetch(`${backendUrl}/election/${params.id}`);
+		const Positions = await fetch(`${backendUrl}/election/${params.id}/positions`);
 
 		if (!Election.ok || !Positions.ok) throw new Error("Election not found");
 		
@@ -66,7 +67,7 @@ function CandidateSelfAdd() {
 				photoUrl = imgUrl;
 			})
 			.then( async (data) => {
-				const res = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/add-candidate`, {
+				const res = await fetch(`${backendUrl}/election/${params.id}/add-candidate`, {
 					method: 'POST',
 					headers: {
 					  'Content-Type': 'application/json',
@@ -119,7 +120,7 @@ function CandidateSelfAdd() {
 	}
 
 	const handleOTPSubmit = async () => {
-		let s = await fetch(`https://election-backend-kduj.onrender.com/election/${OTPVal}/verifyOTP`);
+		let s = await fetch(`${backendUrl}/election/${OTPVal}/verifyOTP`);
 		if (s.ok) {
 			closeOTPModal();
 			setOTPVal('');
@@ -141,7 +142,7 @@ function CandidateSelfAdd() {
 
 	async function procOTP (phoneNumber) {
 		// create an OTP for verification
-		const s = await fetch(`https://election-backend-kduj.onrender.com/election/getOTP`, {
+		const s = await fetch(`${backendUrl}/election/getOTP`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
