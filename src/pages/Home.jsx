@@ -31,7 +31,7 @@ function Home() {
 	async function procElection(electionid) {
 		try {
 			let election = undefined;
-			let e = await fetch(`/election/${electionid}`)
+			let e = await fetch(`https://election-backend-kduj.onrender.com/election/${electionid}`)
 
 			if (e.ok) election = await e.json();
 
@@ -43,7 +43,7 @@ function Home() {
 
 			if (end_date < current_date) {
 				toast.warning("This event has been concluded");
-				navigate(`/election/${election._id}/results`)
+				navigate(`election/${election._id}/results`)
 			} else if (start_date > current_date) {
 				toast.warning("This event has not started")
 				return;
@@ -62,7 +62,7 @@ function Home() {
 	}
 
 	const handleOTPSubmit = async () => {
-		let s = await fetch(`election/${OTPVal}/verifyOTP`);
+		let s = await fetch(`https://election-backend-kduj.onrender.com/election/${OTPVal}/verifyOTP`);
 		if (s.ok) {
 			closeOTPModal();
 			setOTPVal('');
@@ -83,7 +83,7 @@ function Home() {
 
 	async function addVoterToDB () {
 		try {
-			await fetch(`/election/${election._id}/voter/phone`, {
+			await fetch(`https://election-backend-kduj.onrender.com/election/${election._id}/voter/phone`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ function Home() {
 			}
 
 			// create an OTP for verification
-			const s = await fetch(`/election/getOTP`, {
+			const s = await fetch(`https://election-backend-kduj.onrender.com/election/getOTP`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

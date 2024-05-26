@@ -8,11 +8,11 @@ import Badge from '@/components/Badge';
 import { data } from 'autoprefixer';
 
 export async function resultsLoader({params}) {
-	const e = await fetch(`/election/${params.id}`);
-	const p = await fetch(`/election/${params.id}/positions`);
-	const c = await fetch(`/election/${params.id}/candidates`);
-	const v = await fetch(`/election/${params.id}/votes`);
-	const o = await fetch(`/election/${params.id}/ownerinfo`);
+	const e = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}`);
+	const p = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/positions`);
+	const c = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/candidates`);
+	const v = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/votes`);
+	const o = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/ownerinfo`);
 
 	const election = await e.json();
 	const positions = await p.json();

@@ -20,7 +20,7 @@ function AddCandidate() {
 	const [image, setImage] = useState('');
 
 	const fetchPositions = () => {
-		fetch(`/election/${params.id}/positions`)
+		fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/positions`)
 			.then(data => data.json())
 			.then(positions => setPositions(positions))
 			.catch(err => console.log(err))
@@ -37,7 +37,7 @@ function AddCandidate() {
 				photoUrl = imgUrl;
 			})
 			.then( async (data) => {
-				const res = await fetch(`/election/${params.id}/add-candidate`, {
+				const res = await fetch(`https://election-backend-kduj.onrender.com/election/${params.id}/add-candidate`, {
 					method: 'POST',
 					headers: {
 					  'Content-Type': 'application/json',
