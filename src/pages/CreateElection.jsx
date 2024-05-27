@@ -14,8 +14,8 @@ function CreateElection() {
 
 	const schema = Joi.object({
 		electiontitle: Joi.string().min(2).required(),
-		startdate: Joi.number().integer().min(2024).required(),
-		enddate: Joi.number().integer().min(3000).required(),
+		startdate: Joi.date().iso().min(new Date().getFullYear()).required(),
+		enddate: Joi.date().iso().min(new Date().getFullYear()).required(),
 		electiontype: Joi.string(),
 		description: Joi.string().max(200),
 		rules: Joi.string().max(1000),
@@ -35,7 +35,6 @@ function CreateElection() {
 	// });
 
 	async function onSubmit(formData) {
-		console.log('Hi')
 		const res = await fetch(`${backendUrl}/elections`, {
       			method: 'POST',
       			headers: {
@@ -48,7 +47,6 @@ function CreateElection() {
 			})
     		})
 
-		console.log("Hello");
 		if(res.ok) navigate(`/user/${params.userId}`)
 		
 		else {
