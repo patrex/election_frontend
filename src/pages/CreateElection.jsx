@@ -65,7 +65,7 @@ function CreateElection() {
 	return (
 		<div className="container">
 			<div className="form-container">
-				<form method="POST" onSubmit={ handleSubmit(onSubmit) }>
+				<form onSubmit={ handleSubmit(onSubmit) }>
 					<div className="mb-3">
 						<label htmlFor="electionTitle" className="form-label">Election Name: </label>
 						<input type="text" 
@@ -112,18 +112,18 @@ function CreateElection() {
 						placeholder="Describe the election"
 						className="block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-blue-500 focus:outline-none"
 						{...register('description')}
-					/>
+					/> {errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
 
 					<textarea name="rules" 
 						id="" cols="55" rows="5"  
 						placeholder="State any rules for this election"
 						className="block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-blue-500 focus:outline-none"
 						{...register('rules')}
-					/>
+					/> {errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
 
-					<div>
-						<button className="Button violet" type="submit">Create Election</button>
-					</div>
+					
+					<button className="Button violet" type="submit">Create Election</button>
+					
 				</form>
 			</div>
 		</div>
