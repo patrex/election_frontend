@@ -35,6 +35,7 @@ function CreateElection() {
 	// });
 
 	async function onSubmit(formData) {
+		console.log('Hi')
 		const res = await fetch(`${backendUrl}/elections`, {
       			method: 'POST',
       			headers: {
@@ -47,6 +48,7 @@ function CreateElection() {
 			})
     		})
 
+		console.log("Hello");
 		if(res.ok) navigate(`/user/${params.userId}`)
 		
 		else {
