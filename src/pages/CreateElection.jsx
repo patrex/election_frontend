@@ -14,8 +14,8 @@ function CreateElection() {
 
 	const schema = Joi.object({
 		electiontitle: Joi.string().min(2).required(),
-		startdate: Joi.number().integer().min(new Date().getFullYear()).required(),
-		enddate: Joi.number().integer().min(new Date().getFullYear()).required(),
+		startdate: Joi.number().integer().min(2024).required(),
+		enddate: Joi.number().integer().min(3000).required(),
 		electiontype: Joi.string(),
 		description: Joi.string().max(200),
 		rules: Joi.string().max(1000),
@@ -67,7 +67,7 @@ function CreateElection() {
 	return (
 		<div className="container">
 			<div className="form-container">
-				<form method="POST" onSubmit={handleSubmit(onSubmit)}>
+				<form method="POST" onSubmit={ handleSubmit(onSubmit) }>
 					<div className="mb-3">
 						<label htmlFor="electionTitle" className="form-label">Election Name: </label>
 						<input type="text" 
@@ -76,7 +76,7 @@ function CreateElection() {
 							name="electiontitle"
 							autoFocus
 							{...register('electiontitle')}
-						/>
+						/>{errors.electiontitle && <span className='error-msg'>You need at least two characters</span>}
 						<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 					</div>
 					<div className="mb-3">
@@ -85,7 +85,7 @@ function CreateElection() {
 							id="startDate" 
 							name="startdate"
 							{...register('startdate')}
-						/>
+						/>{errors.startdate && <span className='error-msg'>Start date cannot be less than current year</span>}
 					</div>
 
 					<div className="mb-3">
@@ -94,7 +94,7 @@ function CreateElection() {
 							id="endDate" 
 							name="enddate"
 							{...register('enddate')}
-						/>
+						/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
 					</div>
 
 					<label htmlFor="type">Select the election type</label>
