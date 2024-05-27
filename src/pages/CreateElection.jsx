@@ -48,7 +48,7 @@ function CreateElection() {
 				})
 			})
 
-			navigate(`user/${params.userId}`)
+			navigate(`/user/${params.userId}`)
 		} catch (error) {
 			toast.warning('There was an error')
 		}
