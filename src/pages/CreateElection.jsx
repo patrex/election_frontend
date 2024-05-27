@@ -35,21 +35,21 @@ function CreateElection() {
 	// });
 
 	async function onSubmit(formData) {
-		try {
-			await fetch(`${backendUrl}/elections`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				mode: 'cors',
-				body: JSON.stringify({
-					...formData,
-					userId: params.userId
-				})
+		const res = await fetch(`${backendUrl}/elections`, {
+      			method: 'POST',
+      			headers: {
+        			'Content-Type': 'application/json',
+      			},
+			mode: 'cors',
+      			body: JSON.stringify({
+				...formData,
+				userId: params.userId
 			})
+    		})
 
-			navigate(`/user/${params.userId}`)
-		} catch (error) {
+		if(res.ok) navigate(`/user/${params.userId}`)
+		
+		else {
 			toast.warning('There was an error')
 		}
 	}
@@ -65,7 +65,7 @@ function CreateElection() {
 	return (
 		<div className="container">
 			<div className="form-container">
-				<form method="POST" onSubmit={ handleSubmit(onSubmit) }>
+				<form method="POST" onSubmit={handleSubmit(onSubmit)}>
 					<div className="mb-3">
 						<label htmlFor="electionTitle" className="form-label">Election Name: </label>
 						<input type="text" 
