@@ -124,7 +124,7 @@ function CreateElection() {
 					/>
 
 					<div>
-						<button className="Button violet" type="submit" onClick={handleSubmit}>Create Election</button>
+						<button className="Button violet" type="submit">Create Election</button>
 					</div>
 				</form>
 			</div>
