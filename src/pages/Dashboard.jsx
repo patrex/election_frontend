@@ -34,7 +34,11 @@ function Dashboard() {
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				const res = await fetch(`${backendUrl}/election/${election._id}/delete`, {
-					method: 'delete'
+					method: 'delete',
+					headers: {
+        					'Content-Type': 'application/json',
+      					},
+					mode: 'cors',
 				})
 	
 				if(res.ok) {
