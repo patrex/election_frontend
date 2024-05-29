@@ -6,14 +6,8 @@ import { toast } from 'sonner'
 import backendUrl from '../utils/backendurl'
 
 export async function dashboardLoader({params}) {
-	let elections = undefined;
-
-	try {
-		const res = await fetch(`${backendUrl}/elections/${params.userId}`)
-		elections = await res.json()
-	} catch (error) {
-		toast.warning(error);
-	}
+	const res = await fetch(`${backendUrl}/elections/${params.userId}`)
+	const elections = await res.json()
 
 	return elections;
 }
@@ -21,7 +15,7 @@ export async function dashboardLoader({params}) {
 
 function Dashboard() {
 	const params = useParams();
-	const [elections] = useLoaderData();
+	const elections = useLoaderData();
 
 	const [electionsList, setElectionsList] = useState(elections);
 	const [modalOpen, setModalOpen] = useState(false);
@@ -189,7 +183,7 @@ function Dashboard() {
 								<td><button className="Button violet" onClick={() => copyLink(election.shareLink)}><i className="bi bi-link-45deg"></i></button></td>
 								<td><button className='Button red' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 							</tr>
-						))}
+						)) || <p>No elections to show</p>}
 					</tbody>
 				</table>
 

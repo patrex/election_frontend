@@ -1,3 +1,3 @@
-const backendUrl = `https://election-backend-kduj.onrender.com`
+const backendUrl = `http://localhost:3000`
 
 export default backendUrl;
