@@ -39,7 +39,13 @@ function ElectionDetail() {
 			let i = undefined;
 			if (result.isConfirmed) {
 				const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
-					method: 'delete'
+					method: 'delete',
+					headers: {
+						'Content-Type': 'application/json',
+						'Access-Control-Allow-Origin': '*',
+						'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Z-Key',
+						'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS'},
+					mode: 'cors',
 				})
 
 				if(res.ok) {
