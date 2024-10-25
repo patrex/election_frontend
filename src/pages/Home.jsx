@@ -103,38 +103,41 @@ function Home() {
 	async function procOTP (phoneNumber) {
 		try {
 			let list = await fetch(`election/${election._id}/voterlist`);
-			let voterlist = await list.json();
-			const votersList = voterlist.map(v => v.phoneNo);
+
+			if (!list) {toast.warning("Returned an empty list")}
+
+			// let voterlist = await list.json();
+			// const votersList = voterlist.map(v => v.phoneNo);
 			
 			// create a new voter
-			if (!(votersList.includes(phoneNumber))) {
-				// if election is closed, no further processing: user has to be added by the creator
-				// of the election
+			// if (!(votersList.includes(phoneNumber))) {
+			// 	// if election is closed, no further processing: user has to be added by the creator
+			// 	// of the election
 	
-				if (election.type == 'closed') {
-					toast.warning('This is a closed event. Ensure your admin has added your number and try again')
-					return;
-				}
+			// 	if (election.type == 'closed') {
+			// 		toast.warning('This is a closed event. Ensure your admin has added your number and try again')
+			// 		return;
+			// 	}
 	
-				// create an OTP for verification
-				const s = await fetch(`${backendUrl}/election/getOTP`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					mode: 'cors',
-					body: JSON.stringify({
-						phoneNumber
-					}),
-				})
+			// 	// create an OTP for verification
+			// 	const s = await fetch(`${backendUrl}/election/getOTP`, {
+			// 		method: 'POST',
+			// 		headers: {
+			// 			'Content-Type': 'application/json',
+			// 		},
+			// 		mode: 'cors',
+			// 		body: JSON.stringify({
+			// 			phoneNumber
+			// 		}),
+			// 	})
 	
-				if (s.ok) {
-					closePhoneNoModal()
-					setOTPOpen(true) //open otp modal
-				}
-			} else {
-				navigate(`/election/${election._id}/${phoneNo}`)
-			}
+			// 	if (s.ok) {
+			// 		closePhoneNoModal()
+			// 		setOTPOpen(true) //open otp modal
+			// 	}
+			// } else {
+			// 	navigate(`/election/${election._id}/${phoneNo}`)
+			// }
 		} catch (error) {
 			toast.error("An error occured")
 		}
