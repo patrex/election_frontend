@@ -102,7 +102,7 @@ function Home() {
 
 	async function procOTP (phoneNumber) {
 		try {
-			let list = await fetch(`election/${election._id}/voterlist`);
+			let list = await fetch(`${backendUrl}/election/${election._id}/voterlist`);
 
 			if (!list) {toast.warning("Returned an empty list")}
 
