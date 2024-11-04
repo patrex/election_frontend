@@ -38,7 +38,7 @@ function AddCandidate() {
 				photoUrl = imgUrl;
 			})
 			.then( async (data) => {
-				const res = await fetch(`${backendUrl}/${params.id}/add-candidate`, {
+				const res = await fetch(`${backendUrl}/election/${params.id}/add-candidate`, {
 					method: 'POST',
 					headers: {
 					  'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ function AddCandidate() {
 					navigate(`/user/${params.userId}`)
 				}
 			})
-			.catch(err => console.log(err))
+			.catch(err => toast(err))
 	}
 
 	let handleSubmit = function (e) {
