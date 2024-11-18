@@ -602,13 +602,14 @@ button {
 	.home-container {
 		flex-direction: column;
 		min-height: 100vh;
-	      }
+	}
 	    
-	      .home-left {
+	.home-left {
 		width: auto;
 		min-height: 60vh;
-	      } 
-	      .home-right {
+	} 
+	
+	.home-right {
 		min-height: 50vh;
 		width: auto;
 	}
@@ -619,7 +620,6 @@ button {
 		display: flex;
 		align-items: start;
 		justify-content: center;
-		background-color: antiquewhite;
 	}
 	
 	.form-container {
@@ -635,13 +635,13 @@ button {
 	.resultsContainer {
 		flex-direction: column;
 		min-height: 100vh;
-	      }
+	}
 	    
-	      .resultsLeft {
+	.resultsLeft {
 		width: auto;
 		min-height: 60vh;
-	      } 
-	      .resultsRight {
+	} 
+	.resultsRight {
 		min-height: 80vh;
 		width: auto;
 	}
