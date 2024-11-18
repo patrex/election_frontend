@@ -5,6 +5,11 @@
 
 
 /* Global styles */
+
+#root {
+	height: 100%;
+}
+
 body {
 	font-family: Arial, sans-serif;
 	margin: 0;
@@ -155,7 +160,6 @@ header a:hover {
 	align-items: center;
 	min-height: 80vh; /* Adjust as needed */
 	width: 100vw;
-	background-color: #f5f5f5;
 }
       
 .form-container {

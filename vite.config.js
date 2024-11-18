@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import backendUrl from './src/utils/backendurl'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,19 +14,16 @@ export default defineConfig({
   	server: {
 		proxy: {
 			'/elections': {
-				target: 'https://election-backend-kduj.onrender.com',
+				target: `${backendUrl}`,
 				secure: false,
-				changeOrigin: true
 			},
 			'/election': {
-				target: 'https://election-backend-kduj.onrender.com',
+				target: `${backendUrl}`,
 				secure: false,
-				changeOrigin: true
 			},
 			'/user': {
-				target: 'https://election-backend-kduj.onrender.com',
+				target: `${backendUrl}`,
 				secure: false,
-				changeOrigin: true
 			},
 		}
   	},
