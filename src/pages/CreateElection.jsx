@@ -45,7 +45,8 @@ function CreateElection() {
 			mode: 'cors',
       			body: JSON.stringify({
 				...formData,
-				userId: params.userId
+				userId: params.userId,
+				host_name: window.location.origin
 			})
     		})
 
