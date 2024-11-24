@@ -180,14 +180,14 @@ function Dashboard() {
 							<tr key={election._id}>
 								<td><Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link></td>
 							
-								<td>{moment(election.startDate).format('LLL')}</td>
-								<td>{moment(election.endDate).format('LLL')}</td>
+								<td>{moment(election.startDate).format('MMM[-]Do[-]YY')}</td>
+								<td>{moment(election.endDate).format('MMM[-]Do[-]YY')}</td>
 								<td>{election.type}</td>
 								<td><button className='Button violet' onClick={() => openPostionModal(election)}>Add Position</button></td>
 								<td><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button className='Button violet'>Add Candidate</button></Link></td>
 								<td>{election.type === 'closed' && (<button className='Button violet' onClick={() => openModal(election)}>Add Voters</button>) }</td>
-								<td><button className="Button violet" onClick={() => copyLink(election._id)}><i className="bi bi-clipboard"></i></button></td>
-								<td><button className="Button violet" onClick={() => copyLink(election.shareLink)}><i className="bi bi-link-45deg"></i></button></td>
+								<td><button className="Button violet" onClick={() => copyLink(election._id)}>Copy ID</button></td>
+								<td><button className="Button violet" onClick={() => copyLink(election.shareLink)}>Copy Link</button></td>
 								<td><button className='Button red' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 							</tr>
 						)) || <p>No elections to show</p>}
