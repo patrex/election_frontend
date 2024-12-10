@@ -426,12 +426,12 @@ button {
 	background-color: #ccc;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	border-radius: 10px;
 }
 
 .pos-heading-banner {
 	min-height: 30vh;
 	overflow: hidden;
-	border-radius: 10px;
 	min-width: 100%;
 	margin-bottom: 10px;
 }
