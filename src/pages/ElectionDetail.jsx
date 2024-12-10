@@ -63,28 +63,31 @@ function ElectionDetail() {
 
 	return ( 
 		<div className="detail-container">
-			<table className="table table-hover table-striped">
-				<thead>
-					<tr>
-						<th>Election</th>
-						<th>{election.title}</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th scope='row'>Created On</th>
-						<td>{moment(election.dateCreated).format('LLL')}</td>
-					</tr>
-					<tr>
-						<th scope='row'>Starting On</th>
-						<td>{moment(election.startDate).format('LLL')}</td>
-					</tr>
-					<tr>
-						<th scope='row'>Ending On</th>
-						<td>{moment(election.endDate).format('LLL')}</td>
-					</tr>
-				</tbody>
-			</table>
+			<div className="pos-heading-banner">
+
+				<table className="table table-hover table-striped">
+					<thead>
+						<tr>
+							<th>Election</th>
+							<th>{election.title}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope='row'>Created On</th>
+							<td>{moment(election.dateCreated).format('LLL')}</td>
+						</tr>
+						<tr>
+							<th scope='row'>Starting On</th>
+							<td>{moment(election.startDate).format('LLL')}</td>
+						</tr>
+						<tr>
+							<th scope='row'>Ending On</th>
+							<td>{moment(election.endDate).format('LLL')}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
 			<div className="pos-list-container">
 				<table className="table table-hover table-striped">
