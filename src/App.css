@@ -422,12 +422,17 @@ button {
 	align-items: center;
 	flex-direction: column;
 	flex-wrap: nowrap;
+	padding: .5em;
+	margin: .1em;
+	background-color: #ccc;
 }
 
 .pos-list-container {
-	min-height: 70vh;
-	background-color: #feb47b;
+	min-height: 50vh;
+	background-color: #ffd700;
 	overflow: hidden;
+	border-radius: 10px;
+	min-width: 100%;
 }
       
 .Button {
