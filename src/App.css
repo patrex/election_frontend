@@ -416,17 +416,15 @@ button {
 }
 
 .detail-container {
-	width: 90vw;
+	width: 50vw;
 	display: flex;
-	justify-content: center;
-	flex-direction: column;
+	justify-content: left;
 }
 
 .pos-list-container {
-	width: 80vw;
 	min-height: 70vh;
 	background-color: #feb47b;
-	overflow: scroll;
+	overflow: hidden;
 }
       
 .Button {
