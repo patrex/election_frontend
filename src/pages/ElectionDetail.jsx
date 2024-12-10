@@ -27,6 +27,10 @@ function ElectionDetail() {
 	const [election, positions] = useLoaderData();
 	const [positionsList, setPositionsList] = useState(positions);
 
+	function editPosition(position) {
+		
+	}
+
 	function removePosition(position) {
 		Swal.fire({
 			title: `Delete <strong>${position.position}</strong> from <strong>${election.title}?</strong>`,
@@ -82,31 +86,34 @@ function ElectionDetail() {
 				</tbody>
 			</table>
 
-			<table className="table table-hover table-striped">
-				<thead>
-					<tr>
-						<th scope='col'>Positions</th>
-						<th scope="col">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{
-						positionsList.map(position => (
-							<tr key={position._id}>
-								<td>
-									<Link to={`./position/${position.position}`}>{position.position}</Link>
-								</td>
+			<div className="pos-list-container">
+				<table className="table table-hover table-striped">
+					<thead>
+						<tr>
+							<th scope='col'>Positions</th>
+							<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{
+							positionsList.map(position => (
+								<tr className="position-row" key={position._id}>
+									<td>
+										<Link to={`./position/${position.position}`}>{position.position}</Link>
+									</td>
 
-								<td>
-									<button className='Button red' 
-										onClick={() => removePosition(position)}>
-											<i className="bi bi-trash3 m-1"></i>Remove</button>
-								</td>
-							</tr>
-						))
-					}
-				</tbody>
-			</table>
+									<td>
+										<button className='Button red' 
+											onClick={() => removePosition(position)}>
+												<i className="bi bi-trash3 m-1"></i></button>
+									</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</div>
+
 		</div>
 	 );
 }

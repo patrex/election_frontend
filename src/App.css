@@ -414,6 +414,13 @@ button {
 	font-size: 15px;
 	line-height: 1.5;
 }
+
+.pos-list-container {
+	width: 80vw;
+	min-height: auto;
+	background-color: #feb47b;
+	overflow: scroll;
+}
       
 .Button {
 	display: inline-flex;
