@@ -62,7 +62,7 @@ function ElectionDetail() {
 	
 
 	return ( 
-		<div className="detail-container">
+		<div className="pos-detail-container">
 			<div className="pos-heading-banner">
 
 				<table className="table table-hover table-striped">
