@@ -415,9 +415,16 @@ button {
 	line-height: 1.5;
 }
 
+.detail-container {
+	width: 90vw;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
 .pos-list-container {
 	width: 80vw;
-	min-height: auto;
+	min-height: 70vh;
 	background-color: #feb47b;
 	overflow: scroll;
 }
