@@ -419,6 +419,7 @@ button {
 	width: 50vw;
 	display: flex;
 	justify-content: left;
+	flex-direction: row;
 }
 
 .pos-list-container {
