@@ -418,28 +418,30 @@ button {
 
 .pos-detail-container {
 	width: 70vw;
+	min-height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	flex-wrap: nowrap;
 	background-color: #ccc;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .pos-heading-banner {
 	min-height: 30vh;
-	background-color: #ffd700;
 	overflow: hidden;
 	border-radius: 10px;
 	min-width: 100%;
+	margin-bottom: 10px;
 }
 
 .pos-list-container {
 	min-height: 50vh;
-	background-color: #ffd700;
 	overflow: hidden;
 	border-radius: 10px;
 	min-width: 70%;
+	margin-top: 10px;
 }
       
 .Button {
