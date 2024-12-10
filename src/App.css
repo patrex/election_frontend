@@ -417,14 +417,12 @@ button {
 
 
 .pos-detail-container {
-	width: 80vw;
+	width: 70vw;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 	flex-wrap: nowrap;
-	padding: .1em;
-	margin: .1em;
 	background-color: #ccc;
 }
 
@@ -441,7 +439,7 @@ button {
 	background-color: #ffd700;
 	overflow: hidden;
 	border-radius: 10px;
-	min-width: 50%;
+	min-width: 70%;
 }
       
 .Button {
