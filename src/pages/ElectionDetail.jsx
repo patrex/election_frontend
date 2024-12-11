@@ -99,7 +99,7 @@ function ElectionDetail() {
 					</thead>
 					<tbody>
 						{	
-							(positionsList.length == 0 || !positionsList) && <tr><td colSpan={2}><button className='Button violet' onClick={() => openPostionModal(election)}>Add Position</button></td></tr> ||
+							(!positionsList) && <tr><td colSpan={2}><button className='Button violet' onClick={() => openPostionModal(election)}>Add Position</button></td></tr> ||
 							positionsList.map(position => (
 								<tr className="position-row" key={position._id}>
 									<td>
