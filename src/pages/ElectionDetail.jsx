@@ -63,6 +63,7 @@ function ElectionDetail() {
 			})
 			.then((response) => response.json())
 			.then((data) => {
+				setPositionsList(data)
 				toast.success('position was added')
 			})
 			.catch((error) => {
@@ -84,7 +85,6 @@ function ElectionDetail() {
 			confirmButtonText: "Delete",
 			denyButtonText: `Cancel`
 		}).then(async (result) => {
-			let i = undefined;
 			if (result.isConfirmed) {
 				const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
 					method: 'delete',
