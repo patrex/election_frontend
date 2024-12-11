@@ -113,7 +113,7 @@ function ElectionDetail() {
 								</tr>
 							))
 						}
-						<tr><td><button className='Button violet' onClick={() => openPostionModal(election)}>Add Position</button></td></tr>
+						<tr><td colSpan={2}><button className='Button violet' onClick={() => openPostionModal(election)}>Add Position</button></td></tr>
 					</tbody>
 				</table>
 			</div>
