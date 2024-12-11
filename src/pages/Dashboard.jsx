@@ -22,8 +22,7 @@ function Dashboard() {
 	const [phoneNos, setPhoneNos] = useState('')
 	const [election, setElection] = useState({});
 
-	const [positionModalOpen, setPositionModalOpen] = useState(false);
-	const [newPosition, setNewPosition] = useState("");
+	
 
 	const removeElection = async (election) => {
 		Swal.fire({
@@ -56,9 +55,7 @@ function Dashboard() {
 		setPhoneNos(e.target.value)
 	}
 
-	function handlePositionChange(e) {
-		setNewPosition(e.target.value);
-	}
+	
 
 	function addPhoneNosToDB (voterlist) {
 		fetch(`${backendUrl}/election/${election._id}/addvoters`, {
@@ -113,39 +110,7 @@ function Dashboard() {
 	const closeModal = () => {
 		setModalOpen(false);
 	}
-	const openPostionModal = (election) => {
-		setPositionModalOpen(true);
-		setElection(election)
-	}
-
-	const closePositionModal = () => {
-		setPositionModalOpen(false);
-	}
-
-	const handleAddPosition = () => {
-		if (newPosition) {
-			closePositionModal();
-			
-			fetch(`${backendUrl}/election/${election._id}/position`, {
-				method: 'POST',
-				headers: {
-				  'Content-Type': 'application/json',
-				},
-				mode: 'cors',
-				body: JSON.stringify({
-					position: newPosition,
-					electionId: election._id
-				}),
-			})
-			.then((response) => response.json())
-			.then((data) => {
-				toast.success('position was added')
-			})
-			.catch((error) => {
-				toast.warning('could not add the position')
-			});
-		} else toast.warning("you need to enter a new position to continue")
-	}
+	
 
 	function copyLink(link) {
 		let text = '';
@@ -190,27 +155,6 @@ function Dashboard() {
 						)) || <p>No elections to show</p>}
 					</tbody>
 				</table>
-
-				{positionModalOpen && (
-					<div className="modal-overlay">
-						<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
-							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
-							<br />
-							<input 
-								type='text'
-								placeholder="Enter new position"
-								id='newposition' 
-								value={newPosition}
-								onChange={handlePositionChange}
-								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
-							/>
-							<div className="my-2">
-								<button className='Button violet' onClick={handleAddPosition}>Add Position</button>
-								<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
-							</div>
-						</div>
-					</div>
-				)}
 
 				{modalOpen && ( 
 					<div className="modal-overlay">

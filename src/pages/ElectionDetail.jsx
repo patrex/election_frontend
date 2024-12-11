@@ -27,6 +27,47 @@ function ElectionDetail() {
 	const [election, positions] = useLoaderData();
 	const [positionsList, setPositionsList] = useState(positions);
 
+	const [positionModalOpen, setPositionModalOpen] = useState(false);
+	const [newPosition, setNewPosition] = useState("");
+
+	function handlePositionChange(e) {
+		setNewPosition(e.target.value);
+	}
+
+	const openPostionModal = (election) => {
+		setPositionModalOpen(true);
+		// setElection(election)
+	}
+
+	const closePositionModal = () => {
+		setPositionModalOpen(false);
+	}
+
+	const handleAddPosition = () => {
+		if (newPosition) {
+			closePositionModal();
+			
+			fetch(`${backendUrl}/election/${election._id}/position`, {
+				method: 'POST',
+				headers: {
+				  'Content-Type': 'application/json',
+				},
+				mode: 'cors',
+				body: JSON.stringify({
+					position: newPosition,
+					electionId: election._id
+				}),
+			})
+			.then((response) => response.json())
+			.then((data) => {
+				toast.success('position was added')
+			})
+			.catch((error) => {
+				toast.warning('could not add the position')
+			});
+		} else toast.warning("you need to enter a new position to continue")
+	}
+
 	function editPosition(position) {
 		
 	}
@@ -92,6 +133,27 @@ function ElectionDetail() {
 					</tbody>
 				</table>
 			</div>
+
+			{positionModalOpen && (
+					<div className="modal-overlay">
+						<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
+							<br />
+							<input 
+								type='text'
+								placeholder="Enter new position"
+								id='newposition' 
+								value={newPosition}
+								onChange={handlePositionChange}
+								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+							/>
+							<div className="my-2">
+								<button className='Button violet' onClick={handleAddPosition}>Add Position</button>
+								<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
+							</div>
+						</div>
+					</div>
+			)}
 
 			<div className="pos-list-container">
 				<table className="table table-hover table-striped">
