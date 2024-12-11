@@ -30,7 +30,7 @@ function ElectionDetail() {
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [newPosition, setNewPosition] = useState("");
 
-	const [elec, setElection] = election;
+	const [elec, setElection] = useState(election);
 
 
 	function handlePositionChange(e) {
