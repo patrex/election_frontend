@@ -32,7 +32,7 @@ function ElectionDetail() {
 	const [newPosition, setNewPosition] = useState("");
 
 	const [elec, setElection] = useState(election);
-	const [tableData, setTableData] = useState(positions);
+	const [tableData, setTableData] = useState([positions]);
 
 
 
@@ -70,7 +70,6 @@ function ElectionDetail() {
 					toast.success('position was added')
 					const newRow = await response.json();
 					setTableData((prev) => [...prev, newRow]);
-					setNewPosition("")
 				} else {
 					toast.error("Error submitting data: ", response.statusText)
 				}
