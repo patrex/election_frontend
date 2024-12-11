@@ -99,22 +99,21 @@ function ElectionDetail() {
 					</thead>
 					<tbody>
 						{	
-							positionsList ?
-								positionsList.map(position => (
-									<tr className="position-row" key={position._id}>
-										<td>
-											<Link to={`./position/${position.position}`}>{position.position}</Link>
-										</td>
+							positionsList.map(position => (
+								<tr className="position-row" key={position._id}>
+									<td>
+										<Link to={`./position/${position.position}`}>{position.position}</Link>
+									</td>
 
-										<td>
-											<button className='Button red' 
-												onClick={() => removePosition(position)}>
-													<i className="bi bi-trash3 m-1"></i></button>
-										</td>
-									</tr>
-								))
-							: <tr> <td colSpan={2}>No positions added yet</td> </tr>
+									<td>
+										<button className='Button red' 
+											onClick={() => removePosition(position)}>
+												<i className="bi bi-trash3 m-1"></i></button>
+									</td>
+								</tr>
+							))
 						}
+						<tr><td><button className='Button violet' onClick={() => openPostionModal(election)}>Add Position</button></td></tr>
 					</tbody>
 				</table>
 			</div>
