@@ -30,13 +30,16 @@ function ElectionDetail() {
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [newPosition, setNewPosition] = useState("");
 
+	const [elec, setElection] = election;
+
+
 	function handlePositionChange(e) {
 		setNewPosition(e.target.value);
 	}
 
-	const openPostionModal = (election) => {
+	const openPostionModal = () => {
 		setPositionModalOpen(true);
-		// setElection(election)
+		setElection(elec)
 	}
 
 	const closePositionModal = () => {
