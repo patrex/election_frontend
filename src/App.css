@@ -423,24 +423,20 @@ button {
 	justify-content: center;
 	flex-direction: column;
 	background-color: #ccc;
-	padding-top: 2px;
-	padding-bottom: 2px;
+	padding: 0px;
 	border-radius: 10px;
 }
 
 .pos-heading-banner {
 	min-height: 30vh;
-	overflow: hidden;
 	min-width: 100%;
-	margin-bottom: 2px;
+	margin-bottom: 1px;
 }
 
 .pos-list-container {
 	min-height: 50vh;
 	overflow: hidden;
-	border-radius: 10px;
 	min-width: 100%;
-	margin-top: 2px;
 }
       
 .Button {
