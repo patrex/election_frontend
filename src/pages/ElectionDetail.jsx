@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'sonner';
 
 import backendUrl from '../utils/backendurl'
+import async from 'react-select/dist/declarations/src/async/index';
 
 export async function electionDetailLoader({params}) {
 	let election, positions = undefined;
@@ -25,12 +26,14 @@ export async function electionDetailLoader({params}) {
 
 function ElectionDetail() {
 	const [election, positions] = useLoaderData();
-	const [positionsList, setPositionsList] = useState(positions);
+	// const [positionsList, setPositionsList] = useState(positions);
 
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [newPosition, setNewPosition] = useState("");
 
 	const [elec, setElection] = useState(election);
+	const [tableData, setTableData] = useState(positions);
+
 
 
 	function handlePositionChange(e) {
@@ -46,34 +49,35 @@ function ElectionDetail() {
 		setPositionModalOpen(false);
 	}
 
-	const handleAddPosition = () => {
+	const handleAddPosition = async () => {
 		if (newPosition) {
 			closePositionModal();
-			
-			fetch(`${backendUrl}/election/${election._id}/position`, {
-				method: 'POST',
-				headers: {
-				  'Content-Type': 'application/json',
-				},
-				mode: 'cors',
-				body: JSON.stringify({
-					position: newPosition,
-					electionId: election._id
-				}),
-			})
-			.then((response) => response.json())
-			.then((data) => {
-				setPositionsList(data)
-				toast.success('position was added')
-			})
-			.catch((error) => {
-				toast.warning('could not add the position')
-			});
-		} else toast.warning("you need to enter a new position to continue")
-	}
 
-	function editPosition(position) {
-		
+			try {
+				const response = await fetch(`${backendUrl}/election/${election._id}/position`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
+					},
+					mode: 'cors',
+					body: JSON.stringify({
+						position: newPosition,
+						electionId: election._id
+					}),
+				})
+
+				if (response.ok) {
+					toast.success('position was added')
+					const newRow = await response.json();
+					setTableData((prev) => [...prev, newRow]);
+					setNewPosition("")
+				} else {
+					toast.error("Error submitting data: ", response.statusText)
+				}
+			} catch (error) {
+				toast.warning("Could not add position")
+			}
+		} else toast.warning("you need to enter a new position to continue")
 	}
 
 	function removePosition(position) {
@@ -97,7 +101,7 @@ function ElectionDetail() {
 				})
 
 				if(res.ok) {
-					setPositionsList(positionsList.filter(p => p._id != position._id))
+					setPositionsList(tableData.filter(p => p._id != position._id))
 					toast.success("The position was removed")	
 				} else toast.warning('could not remove the position: ')
 			}
@@ -168,7 +172,7 @@ function ElectionDetail() {
 					</thead>
 					<tbody>
 						{	
-							positionsList.map(position => (
+							tableData.map(position => (
 								<tr className="position-row" key={position._id}>
 									<td>
 										<Link to={`./position/${position.position}`}>{position.position}</Link>
