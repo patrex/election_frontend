@@ -64,6 +64,7 @@ function ElectionDetail() {
 			.then((response) => response.json())
 			.then((data) => {
 				toast.success('position was added')
+				setPositionsList((prev) => [...prev, data])
 			})
 			.catch((error) => {
 				toast.warning('could not add the position')
@@ -84,7 +85,6 @@ function ElectionDetail() {
 			confirmButtonText: "Delete",
 			denyButtonText: `Cancel`
 		}).then(async (result) => {
-			let i = undefined;
 			if (result.isConfirmed) {
 				const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
 					method: 'delete',
@@ -99,7 +99,7 @@ function ElectionDetail() {
 				if(res.ok) {
 					setPositionsList(positionsList.filter(p => p._id != position._id))
 					toast.success("The position was removed")	
-				} else toast.warning('could not remove the position: ')
+				} else toast.warning('Could not remove the position: ')
 			}
 		});	
 	}
