@@ -38,6 +38,7 @@ function ElectionDetail() {
 	}
 
 	const openPostionModal = () => {
+		setNewPosition("")
 		setPositionModalOpen(true);
 		setElection(elec)
 	}
