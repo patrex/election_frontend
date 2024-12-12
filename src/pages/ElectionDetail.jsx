@@ -71,6 +71,8 @@ function ElectionDetail() {
 					setPositionsList(prev => [...prev, newEntry])
 					toast.success('Position was added')
 					
+				} else if (response.status == 409) {
+					toast.warning('Position already exists')
 				} else {
 					toast.warning('Could not add the position')
 				}
