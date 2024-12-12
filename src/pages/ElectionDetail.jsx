@@ -46,29 +46,36 @@ function ElectionDetail() {
 		setPositionModalOpen(false);
 	}
 
-	const handleAddPosition = () => {
+	const handleAddPosition = async (e) => {
+		e.preventDefault();
+
 		if (newPosition) {
 			closePositionModal();
-			
-			fetch(`${backendUrl}/election/${election._id}/position`, {
-				method: 'POST',
-				headers: {
-				  'Content-Type': 'application/json',
-				},
-				mode: 'cors',
-				body: JSON.stringify({
-					position: newPosition,
-					electionId: election._id
-				}),
-			})
-			.then((response) => response.json())
-			.then((data) => {
-				toast.success('position was added')
-				setPositionsList((prev) => [...prev, data])
-			})
-			.catch((error) => {
-				toast.warning('could not add the position')
-			});
+
+			try {
+				const response = await fetch(`${backendUrl}/election/${election._id}/position`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
+					},
+					mode: 'cors',
+					body: JSON.stringify({
+						position: newPosition,
+						electionId: election._id
+					}),
+				});
+
+				if (response.ok) {
+					const newEntry = await response.json();
+					setPositionsList(prev => [...prev, newEntry])
+					toast.success('Position was added')
+					
+				} else {
+					toast.warning('Could not add the position')
+				}
+			} catch (error) {
+				toast.warning('Could not add the position')
+			}
 		} else toast.warning("you need to enter a new position to continue")
 	}
 
