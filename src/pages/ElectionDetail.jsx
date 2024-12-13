@@ -206,8 +206,8 @@ function ElectionDetail() {
 					<thead>
 						<tr>
 							<th scope='col'>Positions</th>
-							<th width="50%" scope="col">Actions</th>
-							<th width="50%" scope="col"></th>
+							<th scope="col">Actions</th>
+							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
