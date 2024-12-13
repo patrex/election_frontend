@@ -215,13 +215,18 @@ function ElectionDetail() {
 								<tr className="position-row" key={position._id}>
 									<td>
 										<Link to={`./position/${position.position}`}>{position.position}</Link> 
-											<span><i className="bi bi-pencil" onClick={() => editPosition(position)}></i></span> 
 									</td>
 
 									<td>
 										<button className='Button red' 
 											onClick={() => removePosition(position)}>
 												<i className="bi bi-trash3 m-1"></i></button>
+									</td>
+
+									<td>
+										<button className='Button red' 
+											onClick={() => editPosition(position)}>
+												<i className="bi bi-pencil"></i></button>
 									</td>
 								</tr>
 							))
