@@ -29,12 +29,27 @@ function ElectionDetail() {
 
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [newPosition, setNewPosition] = useState("");
+	const [updatedPosition, setUpdatedPosition] = useState("")
+	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
 
 	const [elec, setElection] = useState(election);
 
 
 	function handlePositionChange(e) {
 		setNewPosition(e.target.value);
+	}
+
+	function handlePositionUpdate(e) {
+		setUpdatedPosition(e.target.value)
+	}
+
+	const openUpdatePositionModal = (position) => {
+		setUpdatedPosition("")
+		setUpdatePositionModalOpen(true)
+	}
+
+	const closeUpdatePositionModal = () => {
+		setUpdatePositionModalOpen(false)
 	}
 
 	const openPostionModal = () => {
@@ -61,7 +76,7 @@ function ElectionDetail() {
 					},
 					mode: 'cors',
 					body: JSON.stringify({
-						position: newPosition,
+						position: String(newPosition).trim(),
 						electionId: election._id
 					}),
 				});
@@ -70,7 +85,6 @@ function ElectionDetail() {
 					const newEntry = await response.json();
 					setPositionsList(prev => [...prev, newEntry])
 					toast.success('Position was added')
-					
 				} else if (response.status == 409) {
 					toast.warning('Position already exists')
 				} else {
@@ -118,7 +132,6 @@ function ElectionDetail() {
 	return ( 
 		<div className="pos-detail-container">
 			<div className="pos-heading-banner">
-
 				<table className="table table-hover table-striped">
 					<thead>
 						<tr>
@@ -148,24 +161,44 @@ function ElectionDetail() {
 			</div>
 
 			{positionModalOpen && (
-					<div className="modal-overlay">
-						<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
-							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
-							<br />
-							<input 
-								type='text'
-								placeholder="Enter new position"
-								id='newposition' 
-								value={newPosition}
-								onChange={handlePositionChange}
-								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
-							/>
-							<div className="my-2">
-								<button className='Button violet' onClick={handleAddPosition}>Add Position</button>
-								<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
-							</div>
+				<div className="modal-overlay">
+					<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+						<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
+						<br />
+						<input 
+							type='text'
+							placeholder="Enter new position"
+							id='newposition' 
+							value={newPosition}
+							onChange={handlePositionChange}
+							className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+						/>
+						<div className="my-2">
+							<button className='Button violet' onClick={handleAddPosition}>Add Position</button>
+							<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
 						</div>
 					</div>
+				</div>
+			)}
+
+			{updatePositionModalOpen && (
+				<div className="modal-overlay">
+					<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+						<span>Edit position for <strong>{`${election.title}`}</strong></span>
+						<br />
+						<input 
+							type='text'
+							id='newposition' 
+							value={updatedPosition}
+							onChange={handlePositionUpdate}
+							className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+						/>
+						<div className="my-2">
+							<button className='Button violet' onClick={handleAddPosition}>Update Position</button>
+							<button className='Button red my-0 mx-3 w-20' onClick={closeUpdatePositionModal}>Cancel</button>
+						</div>
+					</div>
+				</div>
 			)}
 
 			<div className="pos-list-container">
@@ -181,7 +214,8 @@ function ElectionDetail() {
 							positionsList.map(position => (
 								<tr className="position-row" key={position._id}>
 									<td>
-										<Link to={`./position/${position.position}`}>{position.position}</Link>
+										<Link to={`./position/${position.position}`}>{position.position}</Link> 
+											<span><i className="bi bi-pencil" onClick={() => editPosition(position)}></i></span> 
 									</td>
 
 									<td>
@@ -192,7 +226,6 @@ function ElectionDetail() {
 								</tr>
 							))
 						}
-						
 					</tbody>
 				</table>
 			</div>
