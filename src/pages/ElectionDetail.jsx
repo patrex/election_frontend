@@ -97,7 +97,7 @@ function ElectionDetail() {
 	}
 
 	function editPosition(position) {
-		
+		openUpdatePositionModal()
 	}
 
 	function removePosition(position) {
@@ -207,6 +207,7 @@ function ElectionDetail() {
 						<tr>
 							<th scope='col'>Positions</th>
 							<th scope="col">Actions</th>
+							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -217,16 +218,17 @@ function ElectionDetail() {
 										<Link to={`./position/${position.position}`}>{position.position}</Link> 
 									</td>
 
-									<td>
-										<button className='Button red' 
-											onClick={() => removePosition(position)}>
-												<i className="bi bi-trash3 m-1"></i></button>
-									</td>
 
 									<td>
 										<button className='Button red' 
 											onClick={() => editPosition(position)}>
 												<i className="bi bi-pencil"></i></button>
+									</td>
+
+									<td>
+										<button className='Button red' 
+											onClick={() => removePosition(position)}>
+												<i className="bi bi-trash3 m-1"></i></button>
 									</td>
 								</tr>
 							))
