@@ -98,6 +98,7 @@ function ElectionDetail() {
 
 	function editPosition(position) {
 		openUpdatePositionModal()
+		setUpdatedPosition(position.position)
 	}
 
 	function removePosition(position) {
@@ -188,7 +189,7 @@ function ElectionDetail() {
 						<br />
 						<input 
 							type='text'
-							id='newposition' 
+							id='updateposition' 
 							value={updatedPosition}
 							onChange={handlePositionUpdate}
 							className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
