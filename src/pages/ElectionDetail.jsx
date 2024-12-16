@@ -29,8 +29,9 @@ function ElectionDetail() {
 
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [newPosition, setNewPosition] = useState("");
-	const [updatedPosition, setUpdatedPosition] = useState("")
+	const [updatedPosition, setUpdatedPosition] = useState("");
 	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
+	const [currentlySelectedPosition, setCurrentlySelectedPosition] = useState("");
 
 	const [elec, setElection] = useState(election);
 
@@ -96,9 +97,43 @@ function ElectionDetail() {
 		} else toast.warning("you need to enter a new position to continue")
 	}
 
+	const handleUpdatePosition = async (e) => {
+		if (updatedPosition) {
+			closeUpdatePositionModal();
+
+			try {
+				const response = await fetch(`${backendUrl}/election/${election._id}/position/update`, {
+					method: 'PUT',
+					headers: {
+					  'Content-Type': 'application/json',
+					},
+					mode: 'cors',
+					body: JSON.stringify({
+						position: currentlySelectedPosition,
+						electionId: election._id,
+						new_position: String(updatedPosition).trim()
+					}),
+				});
+
+				if (response.ok) {
+					const updated_position = await response.json();
+
+					setPositionsList((prev) => 
+						prev.map((position) => position._id === updated_position._id ? updated_position: position
+					))
+				} else {
+					toast.warning("Could not update the position")
+				}
+			} catch (error) {
+				toast.error("Rhere was an error updating the position")
+			}
+		}
+	}
+
 	function editPosition(position) {
 		openUpdatePositionModal()
 		setUpdatedPosition(position.position)
+		setCurrentlySelectedPosition(position.position)
 	}
 
 	function removePosition(position) {
