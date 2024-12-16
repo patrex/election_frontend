@@ -103,7 +103,7 @@ function ElectionDetail() {
 
 			try {
 				const response = await fetch(`${backendUrl}/election/${election._id}/position/update`, {
-					method: 'PUT',
+					method: 'PATCH',
 					headers: {
 					  'Content-Type': 'application/json',
 					},
@@ -140,7 +140,6 @@ function ElectionDetail() {
 		Swal.fire({
 			title: `Delete <strong>${position.position}</strong> from <strong>${election.title}?</strong>`,
 			text: 'This will also remove every candidate under this position',
-			icon: 'warning',
 			showDenyButton: true,
 			confirmButtonText: "Delete",
 			denyButtonText: `Cancel`
