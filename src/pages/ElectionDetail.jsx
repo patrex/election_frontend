@@ -125,7 +125,7 @@ function ElectionDetail() {
 					toast.warning("Could not update the position")
 				}
 			} catch (error) {
-				toast.error("Rhere was an error updating the position")
+				toast.error("There was an error updating the position")
 			}
 		}
 	}
@@ -229,7 +229,7 @@ function ElectionDetail() {
 							className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 						/>
 						<div className="my-2">
-							<button className='Button violet' onClick={handleAddPosition}>Update Position</button>
+							<button className='Button violet' onClick={handleUpdatePosition}>Update Position</button>
 							<button className='Button red my-0 mx-3 w-20' onClick={closeUpdatePositionModal}>Cancel</button>
 						</div>
 					</div>
