@@ -37,6 +37,7 @@ body {
 .card-details {
 	padding: 2px;
 	background-color: #ffd700;
+	height: 50%;
 }
 
 .card-details h2 {
