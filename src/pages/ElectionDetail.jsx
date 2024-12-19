@@ -26,6 +26,7 @@ export async function electionDetailLoader({params}) {
 function ElectionDetail() {
 	const [election, positions] = useLoaderData();
 	const [positionsList, setPositionsList] = useState(positions);
+	const params = useParams()
 
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [newPosition, setNewPosition] = useState("");
