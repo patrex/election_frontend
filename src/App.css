@@ -434,7 +434,7 @@ button {
 }
 
 .position-action-btn-cont {
-	padding: 20px;
+	padding: 5px;
 	display: flex;
 	gap: 10px;
 	flex-direction: row;
