@@ -18,13 +18,15 @@ body {
 	background-color: #f5f5f5;
 }
 
+.candidates-grid {
+	display: inline-grid;
+}
+
 .card {
 	border-radius: 5px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 	width: 250px;
-	height: 300px;
-	margin: 1em 0;
 }
       
 .card img {

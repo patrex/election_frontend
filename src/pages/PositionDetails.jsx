@@ -56,7 +56,7 @@ function PositionDetails() {
 	return ( 
 		<>
 			<h1>Candidates for {position}</h1>
-			<div className="grid">
+			<div className="candidates-grid">
 				{
 					candidatesList.map(candidate => (
 						<div className="card">
