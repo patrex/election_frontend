@@ -434,10 +434,17 @@ button {
 }
 
 .position-action-btn-cont {
+	padding: 20px;
 	display: flex;
+	gap: 10px;
 	flex-direction: row;
 	align-items: center;
 	justify-content: flex-start;
+}
+
+.pos-act-item {
+	padding: 10px;
+	margin: 5px;
 }
 
 .pos-list-container {
