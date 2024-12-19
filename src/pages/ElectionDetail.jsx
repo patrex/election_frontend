@@ -191,6 +191,10 @@ function ElectionDetail() {
 							<th></th>
 							<td><button className='Button violet' onClick={() => openPostionModal(election)}>Add Position</button></td>
 						</tr>
+						<tr>
+							<th></th>
+							<td><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button className='Button violet'>Add Candidate</button></Link></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
