@@ -37,12 +37,13 @@ body {
 }
 
 .card-details {
-	background-color: #ffd700;
+	background-color: #007bff;
 	height: 50%;
 }
 
 .card-details h2 {
 	margin-top: 0;
+	display: inline-block;
 }
 
 .card-buttons {
