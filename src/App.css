@@ -20,6 +20,7 @@ body {
 
 .candidates-grid {
 	display: inline-grid;
+	min-height: 100vh;
 }
 
 .card {
@@ -27,6 +28,7 @@ body {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 	width: 250px;
+	height: 300px;
 }
       
 .card img {
