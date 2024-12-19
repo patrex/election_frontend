@@ -52,7 +52,7 @@ function AddCandidate() {
 				})
 
 				if(res.ok) {
-					navigate(`/user/${params.userId}`)
+					navigate(`/user/${params.userId}/election/${params.id}`)
 				}
 			})
 			.catch(err => toast(err))
