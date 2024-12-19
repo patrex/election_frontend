@@ -433,6 +433,13 @@ button {
 	margin-bottom: 1px;
 }
 
+.position-action-btn-cont {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+}
+
 .pos-list-container {
 	min-height: 50vh;
 	overflow: hidden;
