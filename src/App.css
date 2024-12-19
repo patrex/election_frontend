@@ -27,8 +27,8 @@ body {
 	border-radius: 5px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
-	width: 250px;
-	height: 300px;
+	width: 150px;
+	height: 200px;
 }
       
 .card img {
@@ -37,7 +37,6 @@ body {
 }
 
 .card-details {
-	padding: 2px;
 	background-color: #ffd700;
 	height: 50%;
 }
