@@ -60,7 +60,7 @@ function PositionDetails() {
 				{
 					candidatesList.map(candidate => (
 						<div className="card">
-							<img src={candidate.imgUrl} alt={candidate.firstname} width={240} />
+							<img src={candidate.imgUrl} alt={candidate.firstname} />
 							<div className="card-details">
 								<h2>{`${candidate.firstname} ${candidate.lastname}`}</h2>
 								<p>{position} </p>
