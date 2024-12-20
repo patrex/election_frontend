@@ -59,10 +59,10 @@ function PositionDetails() {
 			<div className="candidates-grid">
 				{
 					candidatesList.map(candidate => (
-						<div className="card">
+						<div className="candidate-card">
 							<img src={candidate.imgUrl} alt={candidate.firstname} />
-							<div className="card-details">
-								<h2>{`${candidate.firstname} ${candidate.lastname}`}</h2>
+							<div className="candidate-card-details">
+								<p className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</p>
 								<p>{position} </p>
 								<button className='btn btn-danger btn-sm' 
 									onClick={() => removeCandidate(candidate)}>
