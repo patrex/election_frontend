@@ -65,7 +65,6 @@ body {
 }
 
 .candidate-card-name-plaque {
-	margin: .5rem 5px;
 	font-weight: bolder;
 	font-size: 18px;
 }
@@ -80,7 +79,7 @@ body {
 .vote-card {
 	display: flex;
         align-items: center;
-        width: 300px; /* Adjust width as needed */
+        width: 300px; 
         padding: 20px;
         border: 1px solid #ccc;
         border-radius: 8px;
@@ -89,7 +88,7 @@ body {
 }
 
 .vote-card img {
-	width: 100px; /* Adjust image width as needed */
+	width: 100px; 
         height: auto; /* Maintain aspect ratio */
         margin-right: 20px;
         border-radius: 8px;
