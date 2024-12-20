@@ -54,6 +54,7 @@ body {
 .candidate-card-details {
 	background-color: #007bff;
 	height: 39%;
+	overflow: hidden;
 }
 
 .candidate-pos-label {
@@ -61,7 +62,7 @@ body {
 }
 
 .candidate-card-name-plaque {
-	margin: 5px;
+	margin: .5rem 5px;
 	font-weight: bolder;
 	font-size: 18px;
 }
@@ -143,7 +144,6 @@ nav ul {
 	height: 2em;
 	display: flex;
 	justify-content: flex-start;
-
 }
 
 .subnav > a {
