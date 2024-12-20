@@ -34,14 +34,12 @@ body {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 	width: 150px;
-	height: 200px;
-	display: flex;
-	flex-direction: column;
+	height: 250px;
 }
       
 .candidate-card-img {
 	width: 100%;
-	min-height: 40%;
+	height: 60%;
 	overflow: hidden;
 	position: relative;
 }
@@ -55,7 +53,7 @@ body {
 
 .candidate-card-details {
 	background-color: #007bff;
-	height: 50%;
+	height: 40%;
 }
 
 .candidate-card-name-plaque {
