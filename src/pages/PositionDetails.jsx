@@ -67,7 +67,7 @@ function PositionDetails() {
 								<p>{position} </p>
 								<button className='btn btn-danger btn-sm' 
 									onClick={() => removeCandidate(candidate)}>
-										<i className="bi bi-trash3 m-1"></i>Remove</button>
+										<i className="bi bi-trash3 m-1"></i></button>
 							</div>
 						</div>
 					))
