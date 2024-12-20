@@ -27,6 +27,8 @@ body {
 	min-height: 100vh;
 	padding: 1rem;
 	gap: .5rem;
+
+	outline: #ff7e5f solid 2px;
 }
 
 .candidate-card {
