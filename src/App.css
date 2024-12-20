@@ -61,7 +61,8 @@ body {
 }
 
 .candidate-pos-label {
-	padding: 0 .5rem
+	padding: 0 .5rem;
+	margin-bottom: .5rem;
 }
 
 .candidate-card-name-plaque {
