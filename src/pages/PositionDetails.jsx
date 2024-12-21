@@ -55,7 +55,7 @@ function PositionDetails() {
 
 	return ( 
 		<>
-			<h1>Candidates for {position}</h1>
+			<h1 style={{padding: "0 .5rem"}}>Candidates for {position}</h1>
 			<div className="candidates-grid">
 				{
 					candidatesList.map(candidate => (
@@ -66,6 +66,8 @@ function PositionDetails() {
 								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
 								<div className="candidate-pos-label">{position} </div>
 								<div>
+									<button className='btn btn-danger btn-sm' onClick={() => removeCandidate(candidate)}>
+										<i className="bi bi-trash3 m-1"></i></button>
 									<button className='btn btn-danger btn-sm' onClick={() => removeCandidate(candidate)}>
 										<i className="bi bi-trash3 m-1"></i></button>
 								</div>
