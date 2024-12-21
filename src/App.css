@@ -73,6 +73,14 @@ body {
 	margin: 0 5px;
 }
 
+.candidate-pos-actn-btn-container {
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
 .card-buttons {
 	padding: 5px 0px;
 	display: flex;
