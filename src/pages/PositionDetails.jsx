@@ -66,7 +66,7 @@ function PositionDetails() {
 								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
 								<div className="candidate-pos-label">{position} </div>
 								<div className="btn-group" role="group">
-									<button type="button" className='btn btn-info' onClick={() => removeCandidate(candidate)}>
+									<button type="button" className='btn btn-secondary' onClick={() => removeCandidate(candidate)}>
 										<i class="bi bi-pen-fill"></i></button>
 									<button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
 										<i className="bi bi-trash3"></i></button>
