@@ -43,27 +43,29 @@ function PositionDetails() {
 	
 	const [updateCandidateModalOpen, setUpdateCandidateModalOpen] = useState(false); // control update candidate modal
 
-	const schema = Joi.object({
-		firstname: Joi.string().min(2).required(),
-		lastname: Joi.string().min(2).required(),
-		selectedPosition: Joi.string().min(2),
-		manifesto: Joi.string()
-	})
 	
-	const { register, handleSubmit, formState: {errors} } = useForm({
-		defaultValues: {
-			firstname: candidate.firstname,
-			lastname: candidate.lastname,
-			manifesto: candidate.manifesto,
-			imgUrl: candidate.imgUrl,
-			selectedPosition: position.position
-		},
-		resolver: joiResolver(schema)
-	});
-
 	async function editCandidate(candidate)  {
 		setCandidate(candidate);
 		setUpdateCandidateModalOpen(true)
+
+		const schema = Joi.object({
+			firstname: Joi.string().min(2).required(),
+			lastname: Joi.string().min(2).required(),
+			selectedPosition: Joi.string().min(2),
+			manifesto: Joi.string()
+		})
+		
+		const { register, handleSubmit, formState: {errors} } = useForm({
+			defaultValues: {
+				firstname: candidate.firstname,
+				lastname: candidate.lastname,
+				manifesto: candidate.manifesto,
+				imgUrl: candidate.imgUrl,
+				selectedPosition: position.position
+			},
+			resolver: joiResolver(schema)
+		});
+	
 	}
 
 	const uploadImage = () => {
