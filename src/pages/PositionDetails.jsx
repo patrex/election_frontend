@@ -46,7 +46,8 @@ function PositionDetails() {
 	const schema = Joi.object({
 		firstname: Joi.string().min(2).required(),
 		lastname: Joi.string().min(2).required(),
-		selectedPosition: Joi.string().min(2)
+		selectedPosition: Joi.string().min(2),
+		manifesto: Joi.string()
 	})
 	
 	const { register, handleSubmit, formState: {errors} } = useForm({
