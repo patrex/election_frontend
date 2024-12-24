@@ -151,22 +151,23 @@ function PositionDetails() {
 				<div className="edit-candidate-modal">
 					<div>
 						<form className='form' onSubmit={handleSubmit(async (formdata) => {
-							try {
-								const response = await fetch(`${backendUrl}/election/updatecandidate`, {
-									method: 'PATCH',
-									headers: {
-										'Content-Type': 'application/json',
-									      },
-									      mode: 'cors',
-									      body: JSON.stringify({
-										      electionId: election._id,
-										      candidate_id: candidate._id,
-										      ...formdata,
-									      }),
-								})
-							} catch (error) {
+							console.log(formdata);
+							// try {
+							// 	const response = await fetch(`${backendUrl}/election/updatecandidate`, {
+							// 		method: 'PATCH',
+							// 		headers: {
+							// 			'Content-Type': 'application/json',
+							// 		      },
+							// 		      mode: 'cors',
+							// 		      body: JSON.stringify({
+							// 			      electionId: election._id,
+							// 			      candidate_id: candidate._id,
+							// 			      ...formdata,
+							// 		      }),
+							// 	})
+							// } catch (error) {
 								
-							}
+							// }
 							})}>
 
 							<div className="mb-3">
@@ -221,7 +222,7 @@ function PositionDetails() {
 
 							{/*  candidate picture */}
 							<div className="picture-section">
-								<div className="candidate-picture">
+								<div className="candidate-picture-img">
 									<img src={candidate.imgUrl} alt="" />
 								</div>
 								
