@@ -54,7 +54,6 @@ function PositionDetails() {
 
 	async function editCandidate(candidate)  {
 		setCandidate(candidate);
-		setCurrentPosition(candidate.position);
 		setUpdateCandidateModalOpen(true)
 	}
 
