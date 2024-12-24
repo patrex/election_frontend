@@ -51,9 +51,6 @@ function PositionDetails() {
 	})
 	
 	const { register, handleSubmit, formState: {errors}, reset } = useForm({
-		defaultValues: {
-			
-		},
 		resolver: joiResolver(schema)
 	});
 
@@ -67,6 +64,26 @@ function PositionDetails() {
 			imgUrl: candidate.imgUrl,
 			selectedPosition: position.position
 		})
+	}
+
+	const onSubmit = async (formdata) => {
+		// try {
+		// 	const response = await fetch(`${backendUrl}/election/updatecandidate`, {
+		// 		method: 'PATCH',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 		      },
+		// 		      mode: 'cors',
+		// 		      body: JSON.stringify({
+		// 			      electionId: election._id,
+		// 			      candidate_id: candidate._id,
+		// 			      ...formdata,
+		// 		      }),
+		// 	})
+		// } catch (error) {
+			
+		// }
+		console.log(formdata)
 	}
 
 	const uploadImage = () => {
@@ -162,26 +179,7 @@ function PositionDetails() {
 			{updateCandidateModalOpen && (
 				<div className="edit-candidate-modal">
 					<div>
-						<form className='form' onSubmit={handleSubmit(async (formdata) => {
-							console.log(formdata);
-							// try {
-							// 	const response = await fetch(`${backendUrl}/election/updatecandidate`, {
-							// 		method: 'PATCH',
-							// 		headers: {
-							// 			'Content-Type': 'application/json',
-							// 		      },
-							// 		      mode: 'cors',
-							// 		      body: JSON.stringify({
-							// 			      electionId: election._id,
-							// 			      candidate_id: candidate._id,
-							// 			      ...formdata,
-							// 		      }),
-							// 	})
-							// } catch (error) {
-								
-							// }
-							})}>
-
+						<form className='form' onSubmit={handleSubmit(onSubmit)}>
 							<div className="mb-3">
 								<label htmlFor="fname" className="form-label">Firstname: </label>
 								<input type="text" 
