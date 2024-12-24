@@ -43,29 +43,30 @@ function PositionDetails() {
 	
 	const [updateCandidateModalOpen, setUpdateCandidateModalOpen] = useState(false); // control update candidate modal
 
+	const schema = Joi.object({
+		firstname: Joi.string().min(2).required(),
+		lastname: Joi.string().min(2).required(),
+		selectedPosition: Joi.string().min(2),
+		manifesto: Joi.string()
+	})
 	
+	const { register, handleSubmit, formState: {errors}, reset } = useForm({
+		defaultValues: {
+			
+		},
+		resolver: joiResolver(schema)
+	});
+
 	async function editCandidate(candidate)  {
 		setCandidate(candidate);
 		setUpdateCandidateModalOpen(true)
-
-		const schema = Joi.object({
-			firstname: Joi.string().min(2).required(),
-			lastname: Joi.string().min(2).required(),
-			selectedPosition: Joi.string().min(2),
-			manifesto: Joi.string()
+		reset({
+			firstname: candidate.firstname,
+			lastname: candidate.lastname,
+			manifesto: candidate.manifesto,
+			imgUrl: candidate.imgUrl,
+			selectedPosition: position.position
 		})
-		
-		const { register, handleSubmit, formState: {errors} } = useForm({
-			defaultValues: {
-				firstname: candidate.firstname,
-				lastname: candidate.lastname,
-				manifesto: candidate.manifesto,
-				imgUrl: candidate.imgUrl,
-				selectedPosition: position.position
-			},
-			resolver: joiResolver(schema)
-		});
-	
 	}
 
 	const uploadImage = () => {
@@ -222,7 +223,6 @@ function PositionDetails() {
 							<div className="mb-3">
 								<textarea name="manifesto"
 									id="" rows="3" cols="55"
-									value={candidate.manifesto}
 									className='block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-transparent focus:outline-none'
 									{...register('manifesto')}
 								/>
@@ -241,10 +241,10 @@ function PositionDetails() {
 										onChange={
 											e => setImage(e.target.files[0])
 										}
+										{...register('imgUrl')}
 									/>
 								</div>
 							</div>
-							
 							
 							<div className="my-2">
 								<button className='Button violet' type="submit">Save</button>
