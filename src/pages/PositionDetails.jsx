@@ -205,7 +205,8 @@ function PositionDetails() {
 									Select position:
 									<select {...register('selectedPosition')}
 										className='form-select form-select-lg mb-3'
-									>
+										name="selectedPosition"
+									> {errors.selectedPosition && <span className='error-msg'>Select a position</span>}
 										{/* <option selected value={position.position}>{position.position}</option> */}
 										{positions.length > 0 ? 
 											positions.map((position) => (
@@ -229,7 +230,7 @@ function PositionDetails() {
 							{/*  candidate picture */}
 							<div className="picture-section">
 								<div className="candidate-picture-img">
-									<img src={candidate.imgUrl} {...register('imgUrl')} />
+									<img src={candidate.imgUrl} name="imgUrl" {...register('imgUrl')} />
 								</div>
 								
 								<div className="mb-3">
