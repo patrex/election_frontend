@@ -258,7 +258,7 @@ function ElectionDetail() {
 									<td>
 										<button className='Button red' 
 											onClick={() => editPosition(position)}>
-												<i className="bi bi-pencil"></i></button>
+												<i className="bi bi-pen-fill"></i></button>
 									</td>
 
 									<td>

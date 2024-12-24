@@ -1,31 +1,101 @@
 import { useLoaderData } from "react-router-dom";
+import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { toast } from "sonner";
+
+import Joi from 'joi';
+import { useForm } from 'react-hook-form'
+import { joiResolver } from '@hookform/resolvers/joi'
 
 import backendUrl from '../utils/backendurl'
 
 export async function loader({params}) {
 	let election, candidates = undefined;
 	let position = params.position;
+	let positions = undefined;
 
 	try {
 		const res1 = await fetch(`${backendUrl}/election/${params.id}`)
 		const candidateList = await fetch(`${backendUrl}/election/${params.id}/${params.position}/candidates`)
+		const pos_res = await fetch(`${backendUrl}/election/${params.id}/positions`)
 
 		election = await res1.json();
 		candidates = await candidateList.json();
+		positions = await pos_res.json()
 
 	} catch (error) {
 		
 	}
 
-	return [election, candidates, position]
+	return [election, candidates, position, positions]
 }
 
 function PositionDetails() {
-	const [election, candidates, position] = useLoaderData();
+	const [election, candidates, position, positions] = useLoaderData();
 	const [candidatesList, setCandidatesList] = useState(candidates);
+
+	const [candidate, setCandidate] = useState();
+	const [selectedPosition, setSelectedPosition] = useState("");
+
+
+	const [image, setImage] = useState('');
+	
+	const [updateCandidateModalOpen, setUpdateCandidateModalOpen] = useState(false); // control update candidate modal
+
+	const schema = Joi.object({
+		firstname: Joi.string().min(2).required(),
+		lastname: Joi.string().min(2).required()
+	})
+	
+	const { register, handleSubmit, formState: {errors} } = useForm({
+		resolver: joiResolver(schema)
+	});
+
+	async function editCandidate(candidate)  {
+		setCandidate(candidate);
+		setCurrentPosition(candidate.position);
+		setUpdateCandidateModalOpen(true)
+	}
+
+	const uploadImage = () => {
+		let photoUrl = ''
+		const imgRef =
+		 ref(fireman, `votersystem/${election._id}/${selectedPosition}/${candidate.firstname.concat(candidate.lastname) }`);
+
+		uploadBytes(imgRef, image)
+			.then(snapshot => getDownloadURL(snapshot.ref))
+			.then(imgUrl => {
+				photoUrl = imgUrl;
+			})
+			.then( async (data) => {
+				const res = await fetch(`${backendUrl}/election/${election._id}/add-candidate`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
+					},
+					mode: 'cors',
+					body: JSON.stringify({
+						...formData,
+						photoUrl,
+						selectedPosition
+					}),
+				})
+
+				if(res.ok) {
+					navigate(`/user/${params.userId}/election/${params.id}`)
+				}
+			})
+			.catch(err => toast(err))
+	}
+
+	async function updateCandidate() {
+
+	}
+
+	const closeUpdateCandidateModal = () => {
+		setUpdateCandidateModalOpen(false)
+	}
 
 	function removeCandidate(candidate) {
 		Swal.fire({
@@ -66,7 +136,7 @@ function PositionDetails() {
 								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
 								<div className="candidate-pos-label">{position} </div>
 								<div className="btn-group" role="group">
-									<button type="button" className='btn btn-secondary' onClick={() => removeCandidate(candidate)}>
+									<button type="button" className='btn btn-secondary' onClick={() => editCandidate(candidate)}>
 										<i class="bi bi-pen-fill"></i></button>
 									<button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
 										<i className="bi bi-trash3"></i></button>
@@ -77,6 +147,104 @@ function PositionDetails() {
 					))
 				}
 			</div>
+
+			{updateCandidateModalOpen && (
+				<div className="edit-candidate-modal">
+					<div>
+						<form className='form' onSubmit={handleSubmit(async (formdata) => {
+							try {
+								const response = await fetch(`${backendUrl}/election/updatecandidate`, {
+									method: 'PATCH',
+									headers: {
+										'Content-Type': 'application/json',
+									      },
+									      mode: 'cors',
+									      body: JSON.stringify({
+										      electionId: election._id,
+										      candidate_id: candidate._id,
+										      ...formdata,
+									      }),
+								})
+							} catch (error) {
+								
+							}
+						})}>
+							<div className="mb-3">
+								<label htmlFor="fname" className="form-label">Firstname: </label>
+								<input type="text" 
+									id="firstname" 
+									aria-describedby="firstname"
+									name="firstname"
+									autoFocus
+									{...register('firstname')}
+								/>{errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>}
+							</div>
+							<div className="mb-3">
+								<label htmlFor="lastname" className="form-label">Lastname: </label>
+								<input type="text" 
+									id="lastname" 
+									aria-describedby="lastname"
+									name="lastname"
+									{...register('lastname')}
+								/>{errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>}
+							</div>
+							
+							<div className='mb-3'>
+								<label>
+									Select position:
+									<select {...register('selectedPosition')}
+										className='form-select form-select-lg mb-3'
+										value={candidate.position} 
+									>
+										<option value="" disabled>Select a position</option>
+										{positions.length > 0 ? 
+											positions.map((position) => (
+												<option key={position.position} value={position.position}>
+													{position.position}
+												</option>
+											))
+										: "no positions.."}
+									</select>
+								</label>
+							</div>
+
+							<div className="mb-3">
+								<textarea name="manifesto"
+									id="" rows="3" cols="55"
+									value={candidate.manifesto}
+									className='block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-transparent focus:outline-none'
+									{...register('manifesto')}
+								/>
+							</div>
+
+							{/*  candidate picture */}
+							<div className="picture-section">
+								<div className="candidate-picture">
+									<img src={candidate.imgUrl} alt="" />
+								</div>
+								
+								<div className="mb-3">
+									<input className='fileupload form-control-file' 
+										type="file"
+										id="" 
+										onChange={
+											e => setImage(e.target.files[0])
+										}
+									/>
+								</div>
+							</div>
+							
+							
+							<div className="my-2">
+								<button className='Button violet' onClick={updateCandidate}>Save</button>
+								<button className='Button red my-0 mx-3 w-20' onClick={closeUpdateCandidateModal}>Cancel</button>
+							</div>
+						</form>
+					</div>
+
+					
+				</div>
+			)}
 		</>
 	);
 }
