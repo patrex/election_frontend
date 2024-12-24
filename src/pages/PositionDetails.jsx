@@ -167,13 +167,15 @@ function PositionDetails() {
 							} catch (error) {
 								
 							}
-						})}>
+							})}>
+
 							<div className="mb-3">
 								<label htmlFor="fname" className="form-label">Firstname: </label>
 								<input type="text" 
 									id="firstname" 
 									aria-describedby="firstname"
 									name="firstname"
+									value={candidate.firstname}
 									autoFocus
 									{...register('firstname')}
 								/>{errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>}
@@ -184,6 +186,7 @@ function PositionDetails() {
 									id="lastname" 
 									aria-describedby="lastname"
 									name="lastname"
+									value={candidate.lastname}
 									{...register('lastname')}
 								/>{errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>}
 							</div>
@@ -240,8 +243,6 @@ function PositionDetails() {
 							</div>
 						</form>
 					</div>
-
-					
 				</div>
 			)}
 		</>
