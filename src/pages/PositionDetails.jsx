@@ -51,6 +51,13 @@ function PositionDetails() {
 	})
 	
 	const { register, handleSubmit, formState: {errors} } = useForm({
+		defaultValues: {
+			firstname: candidate.firstname,
+			lastname: candidate.lastname,
+			manifesto: candidate.manifesto,
+			imgUrl: candidate.imgUrl,
+			selectedPosition: position.position
+		},
 		resolver: joiResolver(schema)
 	});
 
@@ -178,7 +185,6 @@ function PositionDetails() {
 									id="firstname" 
 									aria-describedby="firstname"
 									name="firstname"
-									value={candidate.firstname}
 									autoFocus
 									{...register('firstname')}
 								/>{errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>}
@@ -189,7 +195,6 @@ function PositionDetails() {
 									id="lastname" 
 									aria-describedby="lastname"
 									name="lastname"
-									value={candidate.lastname}
 									{...register('lastname')}
 								/>{errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>}
 							</div>
@@ -200,7 +205,7 @@ function PositionDetails() {
 									<select {...register('selectedPosition')}
 										className='form-select form-select-lg mb-3'
 									>
-										<option selected value={position.position}>{position.position}</option>
+										{/* <option selected value={position.position}>{position.position}</option> */}
 										{positions.length > 0 ? 
 											positions.map((position) => (
 												<option key={position.position} value={position.position}>
