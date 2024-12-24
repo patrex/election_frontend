@@ -229,7 +229,7 @@ function PositionDetails() {
 							{/*  candidate picture */}
 							<div className="picture-section">
 								<div className="candidate-picture-img">
-									<img src={candidate.imgUrl} alt="" />
+									<img src={candidate.imgUrl} {...register('imgUrl')} />
 								</div>
 								
 								<div className="mb-3">
@@ -239,7 +239,6 @@ function PositionDetails() {
 										onChange={
 											e => setImage(e.target.files[0])
 										}
-										{...register('imgUrl')}
 									/>
 								</div>
 							</div>
