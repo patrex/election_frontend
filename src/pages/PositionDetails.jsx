@@ -45,7 +45,8 @@ function PositionDetails() {
 
 	const schema = Joi.object({
 		firstname: Joi.string().min(2).required(),
-		lastname: Joi.string().min(2).required()
+		lastname: Joi.string().min(2).required(),
+		selectedPosition: Joi.string().min(2)
 	})
 	
 	const { register, handleSubmit, formState: {errors} } = useForm({
@@ -197,9 +198,8 @@ function PositionDetails() {
 									Select position:
 									<select {...register('selectedPosition')}
 										className='form-select form-select-lg mb-3'
-										value={candidate.position} 
 									>
-										<option value="" disabled>Select a position</option>
+										<option selected value={candidate.position}>{candidate.position}</option>
 										{positions.length > 0 ? 
 											positions.map((position) => (
 												<option key={position.position} value={position.position}>
