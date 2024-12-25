@@ -2,6 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import Swal from "sweetalert2";
 import { useState } from "react";
+import { fireman } from '../utils/fireloader';
 import { toast } from "sonner";
 
 import Joi from 'joi';
