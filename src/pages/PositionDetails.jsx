@@ -206,8 +206,6 @@ function PositionDetails() {
 										className='form-select form-select-lg mb-3'
 										name="selectedPosition"
 										onChange={handleSelect}
-										value={position}
-
 									>
 										<option selected value={position}>{position}</option>
 										{positions.length > 0 ? 
