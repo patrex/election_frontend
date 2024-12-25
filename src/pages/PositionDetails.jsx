@@ -71,6 +71,7 @@ function PositionDetails() {
 	}
 
 	const uploadImage = (formdata) => {
+		console.log(formdata);
 		let photoUrl = ''
 		const imgRef =
 		 ref(fireman, `votersystem/${election._id}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname) }`);
