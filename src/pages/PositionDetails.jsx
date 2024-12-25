@@ -244,7 +244,7 @@ function PositionDetails() {
 							</div>
 							
 							<div className="my-2">
-								<input type="submit" value={"Save"} />
+								<input type="submit" className="Button violet" value={"Save"} />
 								<button className='Button red my-0 mx-3 w-20' onClick={closeUpdateCandidateModal}>Cancel</button>
 							</div>
 						</form>
