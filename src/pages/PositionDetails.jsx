@@ -4,6 +4,10 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import Joi from 'joi';
+import { useForm } from 'react-hook-form'
+import { joiResolver } from '@hookform/resolvers/joi'
+
 import backendUrl from '../utils/backendurl'
 
 export async function loader({params}) {
@@ -13,7 +17,7 @@ export async function loader({params}) {
 
 	try {
 		const res1 = await fetch(`${backendUrl}/election/${params.id}`)
-		const candidateList = await fetch(`${backendUrl}/election/${params.id}/${position}/candidates`)
+		const candidateList = await fetch(`${backendUrl}/election/${params.id}/${params.position}/candidates`)
 		const pos_res = await fetch(`${backendUrl}/election/${params.id}/positions`)
 
 		election = await res1.json();
@@ -39,28 +43,30 @@ function PositionDetails() {
 	
 	const [updateCandidateModalOpen, setUpdateCandidateModalOpen] = useState(false); // control update candidate modal
 
-	const [formData, setFormData] = useState({
-		firstname: '',
-		lastname: '',
-		manifesto: ''
+	const schema = Joi.object({
+		firstname: Joi.string().min(2).required(),
+		lastname: Joi.string().min(2).required(),
+		selectedPosition: Joi.string().min(2),
+		manifesto: Joi.string()
+	})
+	
+	const { register, handleSubmit, formState: {errors}, reset } = useForm({
+		resolver: joiResolver(schema)
 	});
-
-	let handleSelect = function(e) {
-		const selected = e.target.value
-		setSelectedPosition(selected)
-	}
-
-	let handleChange = function(e) {
-		const { name, value } = e.target;
-		setFormData(prev => ({...prev, [name]: value}))
-	}
 
 	async function editCandidate(candidate)  {
 		setCandidate(candidate);
 		setUpdateCandidateModalOpen(true)
+		reset({
+			firstname: candidate.firstname,
+			lastname: candidate.lastname,
+			manifesto: candidate.manifesto,
+			imgUrl: candidate.imgUrl,
+			selectedPosition: position.position
+		})
 	}
 
-	const handleUpdate = async () => {
+	const onSubmit = async (formdata) => {
 		// try {
 		// 	const response = await fetch(`${backendUrl}/election/updatecandidate`, {
 		// 		method: 'PATCH',
@@ -77,7 +83,7 @@ function PositionDetails() {
 		// } catch (error) {
 			
 		// }
-		console.log(formData)
+		console.log(formdata)
 	}
 
 	const uploadImage = () => {
@@ -111,10 +117,8 @@ function PositionDetails() {
 			.catch(err => toast(err))
 	}
 
-	async function updateCandidate(e) {
-		e.preventDefault();
+	async function updateCandidate() {
 
-		handleUpdate()
 	}
 
 	const closeUpdateCandidateModal = () => {
@@ -154,9 +158,7 @@ function PositionDetails() {
 				{
 					candidatesList.map(candidate => (
 						<div className="candidate-card">
-							<div className="candidate-card-img">
-								<img src={candidate.imgUrl} alt={candidate.firstname + ' ' + candidate.lastname} />
-							</div>
+							<div className="candidate-card-img"><img src={candidate.imgUrl} alt={candidate.firstname + ' ' + candidate.lastname} /></div>
 			
 							<div className="candidate-card-details">
 								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
@@ -167,6 +169,7 @@ function PositionDetails() {
 									<button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
 										<i className="bi bi-trash3"></i></button>
 								</div>
+								
 							</div>
 						</div>
 					))
@@ -176,17 +179,16 @@ function PositionDetails() {
 			{updateCandidateModalOpen && (
 				<div className="edit-candidate-modal">
 					<div>
-						<form className='form'>
+						<form className='form' onSubmit={handleSubmit(onSubmit)}>
 							<div className="mb-3">
 								<label htmlFor="fname" className="form-label">Firstname: </label>
 								<input type="text" 
 									id="firstname" 
 									aria-describedby="firstname"
 									name="firstname"
-									value={candidate.firstname}
-									onChange={handleChange}
 									autoFocus
-								/>
+									{...register('firstname')}
+								/>{errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>}
 							</div>
 							<div className="mb-3">
 								<label htmlFor="lastname" className="form-label">Lastname: </label>
@@ -194,20 +196,18 @@ function PositionDetails() {
 									id="lastname" 
 									aria-describedby="lastname"
 									name="lastname"
-									value={candidate.lastname}
-									onChange={handleChange}
-								/>
+									{...register('lastname')}
+								/>{errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>}
 							</div>
 							
 							<div className='mb-3'>
 								<label>
 									Select position:
-									<select 
+									<select {...register('selectedPosition')}
 										className='form-select form-select-lg mb-3'
 										name="selectedPosition"
-										onChange={handleSelect}
-									>
-										<option selected value={position}>{position}</option>
+									> {errors.selectedPosition && <span className='error-msg'>Select a position</span>}
+										{/* <option selected value={position.position}>{position.position}</option> */}
 										{positions.length > 0 ? 
 											positions.map((position) => (
 												<option key={position.position} value={position.position}>
@@ -223,15 +223,14 @@ function PositionDetails() {
 								<textarea name="manifesto"
 									id="" rows="3" cols="55"
 									className='block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-transparent focus:outline-none'
-									value={candidate.manifesto}
-									onChange={handleChange}
+									{...register('manifesto')}
 								/>
 							</div>
 
 							{/*  candidate picture */}
 							<div className="picture-section">
 								<div className="candidate-picture-img">
-									<img src={candidate.imgUrl} name="imgUrl"/>
+									<img src={candidate.imgUrl} name="imgUrl" />
 								</div>
 								
 								<div className="mb-3">
@@ -246,7 +245,7 @@ function PositionDetails() {
 							</div>
 							
 							<div className="my-2">
-								<button className='Button violet' type="submit" onSubmit={updateCandidate}>Save</button>
+								<button className='Button violet' type="submit">Save</button>
 								<button className='Button red my-0 mx-3 w-20' onClick={closeUpdateCandidateModal}>Cancel</button>
 							</div>
 						</form>
