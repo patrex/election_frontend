@@ -61,7 +61,6 @@ function PositionDetails() {
 			firstname: candidate.firstname,
 			lastname: candidate.lastname,
 			manifesto: candidate.manifesto,
-			imgUrl: candidate.imgUrl,
 			selectedPosition: position.position
 		})
 	}
@@ -245,7 +244,7 @@ function PositionDetails() {
 							</div>
 							
 							<div className="my-2">
-								<button className='Button violet' type="submit">Save</button>
+								<input type="submit" value={"Save"} />
 								<button className='Button red my-0 mx-3 w-20' onClick={closeUpdateCandidateModal}>Cancel</button>
 							</div>
 						</form>
