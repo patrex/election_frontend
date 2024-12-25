@@ -66,7 +66,7 @@ function PositionDetails() {
 		})
 	}
 
-	const onSubmit = async (formdata) => {
+	const onSubmit = (formdata) => {
 		// try {
 		// 	const response = await fetch(`${backendUrl}/election/updatecandidate`, {
 		// 		method: 'PATCH',
