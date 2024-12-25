@@ -65,30 +65,14 @@ function PositionDetails() {
 		})
 	}
 
-	const onSubmit = (formdata) => {
-		// try {
-		// 	const response = await fetch(`${backendUrl}/election/updatecandidate`, {
-		// 		method: 'PATCH',
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 		      },
-		// 		      mode: 'cors',
-		// 		      body: JSON.stringify({
-		// 			      electionId: election._id,
-		// 			      candidate_id: candidate._id,
-		// 			      ...formdata,
-		// 		      }),
-		// 	})
-		// } catch (error) {
-			
-		// }
-		console.log(formdata)
+	const onSubmit = async (formdata) => {
+		uploadImage(formdata)
 	}
 
-	const uploadImage = () => {
+	const uploadImage = (formdata) => {
 		let photoUrl = ''
 		const imgRef =
-		 ref(fireman, `votersystem/${election._id}/${selectedPosition}/${candidate.firstname.concat(candidate.lastname) }`);
+		 ref(fireman, `votersystem/${election._id}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname) }`);
 
 		uploadBytes(imgRef, image)
 			.then(snapshot => getDownloadURL(snapshot.ref))
@@ -96,21 +80,27 @@ function PositionDetails() {
 				photoUrl = imgUrl;
 			})
 			.then( async (data) => {
-				const res = await fetch(`${backendUrl}/election/${election._id}/add-candidate`, {
-					method: 'POST',
-					headers: {
-					  'Content-Type': 'application/json',
-					},
-					mode: 'cors',
-					body: JSON.stringify({
-						...formData,
-						photoUrl,
-						selectedPosition
-					}),
-				})
-
-				if(res.ok) {
-					navigate(`/user/${params.userId}/election/${params.id}`)
+				try {
+					const response = await fetch(`${backendUrl}/election/updatecandidate`, {
+						method: 'PATCH',
+						headers: {
+							'Content-Type': 'application/json',
+						      },
+						      mode: 'cors',
+						      body: JSON.stringify({
+							      electionId: election._id,
+							      candidate_id: candidate._id,
+							      ...formdata,
+							      photoUrl
+						      }),
+					})
+		
+					if (response.ok) {
+						toast.success("Candidate data was updated");
+						setUpdateCandidateModalOpen(false);
+					}
+				} catch (error) {
+					toast.error("Update failed")
 				}
 			})
 			.catch(err => toast(err))
