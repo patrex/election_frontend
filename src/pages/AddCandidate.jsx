@@ -15,6 +15,7 @@ function AddCandidate() {
 		lastname: '',
 		manifesto: ''
 	});
+	
 	const [positions, setPositions] = useState([]);
 	const [selectedPosition, setSelectedPosition] = useState("");
 
