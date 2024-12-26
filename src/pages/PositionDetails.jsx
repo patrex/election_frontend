@@ -197,7 +197,7 @@ function PositionDetails() {
 									<select {...register('selectedPosition')}
 										className='form-select form-select-lg mb-3'
 									> 
-										<option value="">{position}</option>
+										<option value={position} selected>{position}</option>
 										{positions.length > 0 ? 
 											positions.filter(position => candidate.position != position._id).map((position) => (
 												<option key={position.position} value={position.position}>
