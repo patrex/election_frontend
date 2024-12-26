@@ -196,7 +196,6 @@ function PositionDetails() {
 									Select position:
 									<select {...register('selectedPosition')}
 										className='form-select form-select-lg mb-3'
-										name="selectedPosition"
 									> 
 										
 										{positions.length > 0 ? 
