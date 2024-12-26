@@ -80,6 +80,7 @@ function PositionDetails() {
 			.then(snapshot => getDownloadURL(snapshot.ref))
 			.then(imgUrl => {
 				photoUrl = imgUrl;
+				console.log(photoUrl)
 			})
 			.then( async (data) => {
 				try {
