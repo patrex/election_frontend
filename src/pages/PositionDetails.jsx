@@ -58,6 +58,7 @@ function PositionDetails() {
 	async function editCandidate(candidate)  {
 		setCandidate(candidate);
 		setUpdateCandidateModalOpen(true)
+		setImage(candidate.imgUrl)
 		reset({
 			firstname: candidate.firstname,
 			lastname: candidate.lastname,
