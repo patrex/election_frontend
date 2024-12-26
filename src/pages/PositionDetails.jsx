@@ -80,7 +80,6 @@ function PositionDetails() {
 			.then(snapshot => getDownloadURL(snapshot.ref))
 			.then(imgUrl => {
 				photoUrl = imgUrl;
-				console.log(photoUrl)
 			})
 			.then( async (data) => {
 				try {
@@ -198,16 +197,16 @@ function PositionDetails() {
 									<select {...register('selectedPosition')}
 										className='form-select form-select-lg mb-3'
 										name="selectedPosition"
-									> {errors.selectedPosition && <span className='error-msg'>Select a position</span>}
-										{/* <option selected value={position.position}>{position.position}</option> */}
+									> 
+										<option selected value={position.position}>{position.position}</option>
 										{positions.length > 0 ? 
-											positions.map((position) => (
+											positions.filter(position => candidate.position != position._id).map((position) => (
 												<option key={position.position} value={position.position}>
 													{position.position}
 												</option>
 											))
 										: "no positions.."}
-									</select>
+									</select> {errors.selectedPosition && <span className='error-msg'>Select a position</span>}
 								</label>
 							</div>
 
