@@ -234,9 +234,9 @@ function PositionDetails() {
 							</div>
 
 							{/*  candidate picture */}
-								<div className="picture-section">
-									<div className="candidate-picture-img">
-										<img src={candidate.imgUrl} name="candidateimgUrl" />
+								<div className="update-candidate-picture-section">
+									<div className="candidate-card-img">
+										<img src={image} name="candidateimgUrl" />
 									</div>
 									<div className="mb-3">
 										<input className='fileupload form-control-file' 

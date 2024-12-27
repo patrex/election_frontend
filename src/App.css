@@ -99,6 +99,12 @@ body {
 	justify-content: center;
 }
 
+.update-candidate-picture-section {
+	display: flex;
+	flex-direction: row;
+	
+}
+
 /* Voter Box styles */
 .vote-card {
 	display: flex;
