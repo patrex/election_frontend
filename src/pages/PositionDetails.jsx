@@ -5,9 +5,10 @@ import { useState } from "react";
 import { fireman } from '../utils/fireloader';
 import { toast } from "sonner";
 
-import Joi from 'joi';
 import { useForm } from 'react-hook-form'
-import { joiResolver } from '@hookform/resolvers/joi'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+
 
 import backendUrl from '../utils/backendurl'
 
@@ -37,23 +38,25 @@ function PositionDetails() {
 	const [candidatesList, setCandidatesList] = useState(candidates);
 
 	const [candidate, setCandidate] = useState();
-	const [selectedPosition, setSelectedPosition] = useState("");
-
-
 	const [image, setImage] = useState('');
 	
 	const [updateCandidateModalOpen, setUpdateCandidateModalOpen] = useState(false); // control update candidate modal
 
-	const schema = Joi.object({
-		firstname: Joi.string().min(2).required(),
-		lastname: Joi.string().min(2).required(),
-		selectedPosition: Joi.string().min(2),
-		manifesto: Joi.string()
+	const schema = yup.object().shape({
+		firstname: yup.string().min(2).required(),
+		lastname: yup.string().min(2).required(),
+		selectedPosition: yup.string(),
+		manifesto: yup.string(),
+		imgUrl: yup.mixed().test('required', 'Choose a picture for the candidate', value => {
+			return value && value.length;
+		}),
 	})
 	
-	const { register, handleSubmit, formState: {errors}, reset } = useForm({
-		resolver: joiResolver(schema)
+	const { register, handleSubmit, formState, reset, watch } = useForm({
+		resolver: yupResolver(schema)
 	});
+
+	const { dirtyFields, isDirty, errors } = formState;
 
 	async function editCandidate(candidate)  {
 		setCandidate(candidate);
@@ -63,53 +66,65 @@ function PositionDetails() {
 			firstname: candidate.firstname,
 			lastname: candidate.lastname,
 			manifesto: candidate.manifesto,
-			selectedPosition: position.position
+			selectedPosition: position.position,
+			imgUrl: candidate.imgUrl
 		})
 	}
 
+	const convert64 = imgUrl => {
+		const reader = new FileReader()
+		reader.onloadend = () => {
+			setImage(reader.result.toString())
+		}
+
+		reader.readAsDataURL(imgUrl)
+	}
+
 	const onSubmit = async (formdata) => {
-		uploadImage(formdata)
-	}
+		if (formdata.imgUrl.length > 0) {
+			convert64(formdata.imgUrl[0]);
+		}
 
-	const uploadImage = (formdata) => {
-		let photoUrl = ''
-		const imgRef =
-		 ref(fireman, `votersystem/${election._id}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname) }`);
-
-		uploadBytes(imgRef, image)
-			.then(snapshot => getDownloadURL(snapshot.ref))
-			.then(imgUrl => {
-				photoUrl = imgUrl;
-			})
-			.then( async (data) => {
-				try {
-					const response = await fetch(`${backendUrl}/election/updatecandidate`, {
-						method: 'PATCH',
-						headers: {
-							'Content-Type': 'application/json',
-						      },
-						      mode: 'cors',
-						      body: JSON.stringify({
-							      electionId: election._id,
-							      candidate_id: candidate._id,
-							      ...formdata,
-							      photoUrl
-						      }),
-					})
-		
-					if (response.ok) {
-						toast.success("Candidate data was updated");
-						setUpdateCandidateModalOpen(false);
+		if (isDirty) {
+			let photoUrl = ''
+			const imgRef =
+			 ref(fireman, `vote4me/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname) }`);
+	
+			uploadBytes(imgRef, image)
+				.then(snapshot => getDownloadURL(snapshot.ref))
+				.then(imgUrl => {
+					photoUrl = imgUrl;
+				})
+				.then( async (data) => {
+					try {
+						const response = await fetch(`${backendUrl}/election/updatecandidate`, {
+							method: 'PATCH',
+							headers: {
+								'Content-Type': 'application/json',
+							      },
+							      mode: 'cors',
+							      body: JSON.stringify({
+								      electionId: election._id,
+								      candidate_id: candidate._id,
+								      ...formdata,
+								      photoUrl
+							      }),
+						})
+			
+						if (response.ok) {
+							toast.success("Candidate data was updated");
+							setUpdateCandidateModalOpen(false);
+						}
+					} catch (error) {
+						toast.error("Update failed")
 					}
-				} catch (error) {
-					toast.error("Update failed")
-				}
-			})
-			.catch(err => toast(err))
-	}
-
-	async function updateCandidate() {
-
+				})
+				.catch(err => toast(err))
+		} else {
+			toast.success("You did not make any changes");
+			return 
+		}
+		
 	}
 
 	const closeUpdateCandidateModal = () => {
@@ -169,6 +184,7 @@ function PositionDetails() {
 
 			{updateCandidateModalOpen && (
 				<div className="edit-candidate-modal">
+					
 					<div>
 						<form className='form' onSubmit={handleSubmit(onSubmit)}>
 							<div className="mb-3">
@@ -218,21 +234,26 @@ function PositionDetails() {
 							</div>
 
 							{/*  candidate picture */}
-							<div className="picture-section">
-								<div className="candidate-picture-img">
-									<img src={candidate.imgUrl} name="imgUrl" />
+								<div className="picture-section">
+									<div className="candidate-picture-img">
+										<img src={candidate.imgUrl} name="imgUrl" />
+									</div>
+									
+									{ !watch('imgUrl') || watch('imgUrl').length === 0 ? (
+										<div className="mb-3">
+											<input className='fileupload form-control-file' 
+												type="file"
+												id="fileupload" 
+												style={{ display: 'none'}}
+												{...register("imgUrl") }
+											/>
+											<label htmlFor="fileupload" style={ {cursor: 'pointer'} }>
+												Choose picture
+											</label>
+										</div> 
+									) : ( <span>{ watch('imgUrl')[0].name }</span>) }
+									{errors.selectedPosition && <span className='error-msg'>Choose a picture</span>}
 								</div>
-								
-								<div className="mb-3">
-									<input className='fileupload form-control-file' 
-										type="file"
-										id="" 
-										onChange={
-											e => setImage(e.target.files[0])
-										}
-									/>
-								</div>
-							</div>
 							
 							<div className="my-2">
 								<input type="submit" className="Button violet" value={"Save"} />
@@ -240,6 +261,7 @@ function PositionDetails() {
 							</div>
 						</form>
 					</div>
+					
 				</div>
 			)}
 		</>
