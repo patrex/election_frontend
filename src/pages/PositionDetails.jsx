@@ -246,7 +246,7 @@ function PositionDetails() {
 												{...register("imgUrl") }
 
 											/>
-											<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer'}}>Choose Picture</label>
+											<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0.2rem"}}>Choose Picture</label>
 										</div> 
 									
 									{errors.selectedPosition && <span className='error-msg'>Choose different picture</span>}
