@@ -246,7 +246,7 @@ function PositionDetails() {
 												{...register("imgUrl") }
 
 											/>
-											<label htmlFor="fileuploadr">Choose Picture</label>
+											<label htmlFor="fileuploadr" className="Button blue">Choose Picture</label>
 										</div> 
 									
 									{errors.selectedPosition && <span className='error-msg'>Choose a picture</span>}
