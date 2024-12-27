@@ -235,7 +235,7 @@ function PositionDetails() {
 
 							{/*  candidate picture */}
 								<div className="update-candidate-picture-section">
-									<div className="candidate-card-img">
+									<div className="candidate-picture-img">
 										<img src={image} name="candidateimgUrl" />
 									</div>
 									<div className="mb-3">
