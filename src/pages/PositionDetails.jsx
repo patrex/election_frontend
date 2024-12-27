@@ -242,6 +242,7 @@ function PositionDetails() {
 											<input className='fileupload form-control-file' 
 												type="file"
 												id="fileuploadr" 
+												style={{display: 'none'}}
 												{...register("imgUrl") }
 
 											/>
