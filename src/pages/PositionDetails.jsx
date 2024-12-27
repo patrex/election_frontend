@@ -236,10 +236,8 @@ function PositionDetails() {
 							{/*  candidate picture */}
 								<div className="picture-section">
 									<div className="candidate-picture-img">
-										<img src={candidate.imgUrl} name="imgUrl" />
+										<img src={candidate.imgUrl} name="candidateimgUrl" />
 									</div>
-									
-									{ !watch('imgUrl') || watch('imgUrl').length === 0 ? (
 										<div className="mb-3">
 											<input className='fileupload form-control-file' 
 												type="file"
@@ -247,11 +245,8 @@ function PositionDetails() {
 												style={{ display: 'none'}}
 												{...register("imgUrl") }
 											/>
-											<label htmlFor="fileupload" style={ {cursor: 'pointer'} }>
-												Choose picture
-											</label>
 										</div> 
-									) : ( <span>{ watch('imgUrl')[0].name }</span>) }
+									
 									{errors.selectedPosition && <span className='error-msg'>Choose a picture</span>}
 								</div>
 							
