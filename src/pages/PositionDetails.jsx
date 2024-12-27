@@ -241,9 +241,11 @@ function PositionDetails() {
 										<div className="mb-3">
 											<input className='fileupload form-control-file' 
 												type="file"
-												id="fileupload" 
+												id="fileuploadr" 
 												{...register("imgUrl") }
+
 											/>
+											<label htmlFor="fileuploadr">Choose Picture</label>
 										</div> 
 									
 									{errors.selectedPosition && <span className='error-msg'>Choose a picture</span>}
