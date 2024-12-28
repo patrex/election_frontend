@@ -159,6 +159,29 @@ function PositionDetails() {
 
 	return ( 
 		<>
+			<h1 style={{padding: "0 .5rem"}}>Candidates for {position}</h1>
+			<div className="candidates-grid">
+				{
+					candidatesList.map(candidate => (
+						<div className="candidate-card">
+							<div className="candidate-card-img"><img src={candidate.imgUrl} alt={candidate.firstname + ' ' + candidate.lastname} /></div>
+			
+							<div className="candidate-card-details">
+								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
+								<div className="candidate-pos-label">{position} </div>
+								<div className="btn-group" role="group">
+									<button type="button" className='btn btn-secondary' onClick={() => editCandidate(candidate)}>
+										<i class="bi bi-pen-fill"></i></button>
+									<button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
+										<i className="bi bi-trash3"></i></button>
+								</div>
+								
+							</div>
+						</div>
+					))
+				}
+			</div>
+			
 			{updateCandidateModalOpen && (
 				<div className="modal-overlay">
 					<div className="update-candidate-modal">
@@ -239,28 +262,7 @@ function PositionDetails() {
 				</div>
 			)}
 
-			<h1 style={{padding: "0 .5rem"}}>Candidates for {position}</h1>
-			<div className="candidates-grid">
-				{
-					candidatesList.map(candidate => (
-						<div className="candidate-card">
-							<div className="candidate-card-img"><img src={candidate.imgUrl} alt={candidate.firstname + ' ' + candidate.lastname} /></div>
 			
-							<div className="candidate-card-details">
-								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
-								<div className="candidate-pos-label">{position} </div>
-								<div className="btn-group" role="group">
-									<button type="button" className='btn btn-secondary' onClick={() => editCandidate(candidate)}>
-										<i class="bi bi-pen-fill"></i></button>
-									<button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
-										<i className="bi bi-trash3"></i></button>
-								</div>
-								
-							</div>
-						</div>
-					))
-				}
-			</div>
 		</>
 	);
 }
