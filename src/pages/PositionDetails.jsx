@@ -183,12 +183,8 @@ function PositionDetails() {
 			</div>
 
 			{updateCandidateModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+				<div className="modal-overlay">
 					<div className="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6 md:p-8 space-y-8">
-						<button class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none"
-							aria-label="Close Modal"
-						>✕</button>
-
 						<div class="flex flex-col md:flex-row md:space-x-8 space-y-8 md:space-y-0 items-center">
 							<div class="w-full md:w-1/2">
 								<form className='form space-y-4' onSubmit={handleSubmit(onSubmit)}>
@@ -233,7 +229,7 @@ function PositionDetails() {
 									<div className="mb-3">
 										<textarea name="manifesto"
 											id="" rows="3" cols="55"
-											className='block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-transparent focus:outline-none'
+											className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
 											{...register('manifesto')}
 										/>
 									</div>
@@ -247,7 +243,7 @@ function PositionDetails() {
 											<input className='fileupload form-control-file' 
 												type="file"
 												id="fileuploadr" 
-												style={{display: 'none'}}
+												style={{ display: 'none' }}
 												{...register("imgUrl") }
 											/>
 											<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
