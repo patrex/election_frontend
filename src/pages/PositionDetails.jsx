@@ -187,7 +187,7 @@ function PositionDetails() {
 					<div className="w-full sm:w-1/2 max-w-full sm:max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
 						<form className='form' onSubmit={handleSubmit(onSubmit)}>
 							<div className="update-candidate-left">
-								<div className="mb-3">
+								<div className="mb-3" style={{padding: '0px'}}>
 									<label htmlFor="fname" className="form-label">Firstname: </label>
 									<input type="text" 
 										id="firstname" 
@@ -197,7 +197,7 @@ function PositionDetails() {
 										{...register('firstname')}
 									/>{errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>}
 								</div>
-								<div className="mb-3">
+								<div className="mb-3" style={{padding: '0px'}}>
 									<label htmlFor="lastname" className="form-label">Lastname: </label>
 									<input type="text" 
 										id="lastname" 
