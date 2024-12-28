@@ -184,7 +184,7 @@ function PositionDetails() {
 
 			{updateCandidateModalOpen && (
 				<div className="modal-overlay">
-					<div>
+					<div className="edit-candidate-modal">
 						<form className='form' onSubmit={handleSubmit(onSubmit)}>
 							<div className="mb-3">
 								<label htmlFor="fname" className="form-label">Firstname: </label>
