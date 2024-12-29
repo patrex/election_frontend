@@ -352,6 +352,20 @@ input[type=number] {
 	display: flex;
 	flex-direction: row;
 }
+
+.update-cand-form-cont {
+	display: grid;
+	grid-template-rows: 70%;
+	grid-template-columns: 2fr 1fr;
+}
+
+.update-candidate-left {
+	grid-column: 1;
+}
+
+.update-candidate-right {
+	grid-column: 2;
+}
       
 /* Container styles */
 .home-container {
