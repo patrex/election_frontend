@@ -366,6 +366,11 @@ input[type=number] {
 .update-candidate-right {
 	grid-column: 2;
 }
+
+.candidate-update-form {
+	min-height: 80vh;
+	width: 70vw;
+}
       
 /* Container styles */
 .home-container {

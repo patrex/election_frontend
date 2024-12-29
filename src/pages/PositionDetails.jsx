@@ -184,7 +184,7 @@ function PositionDetails() {
 
 			{updateCandidateModalOpen && (
 				<div className="modal-overlay">
-					<div className="w-full sm:w-1/2 max-w-full sm:max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+					<div className="candidate-update-form">
 						<form className='form' onSubmit={handleSubmit(onSubmit)}>
 							<div className="update-cand-form-cont">
 								<div className="update-candidate-left">
