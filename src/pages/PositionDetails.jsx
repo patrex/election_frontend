@@ -183,7 +183,7 @@ function PositionDetails() {
 			</div>
 
 			{updateCandidateModalOpen && (
-				<div className="modal-overlay">
+				<div className="modal-overlay-1">
 					<div className="candidate-update-form">
 						<form className='form' onSubmit={handleSubmit(onSubmit)}>
 							<div className="update-cand-form-cont">
@@ -208,7 +208,7 @@ function PositionDetails() {
 										/>{errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>}
 									</div>
 									
-									<div className='mb-3'>
+									<div>
 										<label>
 											Select position:
 											<select {...register('selectedPosition')}
@@ -241,7 +241,7 @@ function PositionDetails() {
 										<div className="w-48 h-48 rounded-full overflow-hidden border border-gray-300">
 											<img src={image} name="candidateimgUrl" className="w-full h-full object-cover" />
 										</div>
-										<div className="mb-3">
+										<div>
 											<input className='fileupload form-control-file' 
 												type="file"
 												id="fileuploadr" 
