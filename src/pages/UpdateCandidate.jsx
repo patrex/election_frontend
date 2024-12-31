@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useState } from "react";
 import { fireman } from '../utils/fireloader';
@@ -43,8 +43,8 @@ function UpdateCandidate() {
 	const [image, setImage] = useState("");
 
 	const schema = yup.object().shape({
-		firstname: yup.string().min(2).required(),
-		lastname: yup.string().min(2).required(),
+		firstname: yup.string().required(),
+		lastname: yup.string().required(),
 		selectedPosition: yup.string(),
 		manifesto: yup.string(),
 		imgUrl: yup.mixed().test('required', 'Choose a picture for the candidate', value => {
@@ -198,7 +198,6 @@ function UpdateCandidate() {
 						
 						<div className="my-2">
 							<input type="submit" className="Button violet" value={"Save"} />
-							<Link to={`../position/${position.position}`}><button className='Button red my-0 mx-3 w-20'>Back</button> </Link> 
 						</div>
 					</div>
 				</form>
