@@ -11,8 +11,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import backendUrl from '../utils/backendurl'
 
-export async function updateloader({params}) {
-	let election = undefined;
+export async function updateloader({ params }) {
+	let election = params.id;
 	let position = undefined;
 	let positions = undefined;
 	let candidate = undefined;
@@ -31,12 +31,12 @@ export async function updateloader({params}) {
 		
 	}
 
-	return [candidate, position, positions]
+	return [election, candidate, position, positions]
 }
 
 function UpdateCandidate() {
-	const [candidate, position, positions] = useLoaderData();
-	console.log(candidate, position, positions)
+	const [candidate, position, positions, election] = useLoaderData();
+	console.log(election)
 
 	return ( 
 		<>
