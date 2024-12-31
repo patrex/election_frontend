@@ -12,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import backendUrl from '../utils/backendurl'
 
 export async function updateloader({ params }) {
-	let election = params.id;
+	let election = params;
 	let position = undefined;
 	let positions = undefined;
 	let candidate = undefined;
