@@ -36,10 +36,11 @@ export async function updateloader({params}) {
 
 function UpdateCandidate() {
 	const [candidate, position, positions] = useLoaderData();
+	console.log(candidate, position, positions)
 
 	return ( 
 		<>
-			<p>{position.position}</p>
+			<p></p>
 		</>
 	);
 }
