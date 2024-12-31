@@ -59,6 +59,8 @@ function UpdateCandidate() {
 	const { dirtyFields, isDirty, errors } = formState;
 
 	// preload the form with candidate data
+	setImage(candidate.imgUrl);
+
 	reset({
 		firstname: candidate.firstname,
 		lastname: candidate.lastname,
@@ -67,7 +69,6 @@ function UpdateCandidate() {
 		imgUrl: candidate.imgUrl
 	})
 
-	setImage(candidate.imgUrl);
 
 	const convert64 = imgUrl => {
 		const reader = new FileReader()
@@ -191,13 +192,13 @@ function UpdateCandidate() {
 									/>
 									<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
 								</div> 
-								{errors.img && <span className='error-msg'>Choose a picture</span>}
+								{errors.imgUrl && <span className='error-msg'>Choose a picture</span>}
 							</div>
 						</div>
 						
 						<div className="my-2">
 							<input type="submit" className="Button violet" value={"Save"} />
-							<Link to={`../position/${position.position}`}> </Link> <button className='Button red my-0 mx-3 w-20'>Back</button>
+							<Link to={`../position/${position.position}`}><button className='Button red my-0 mx-3 w-20'>Back</button> </Link> 
 						</div>
 					</div>
 				</form>
