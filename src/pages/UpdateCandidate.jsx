@@ -11,16 +11,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import backendUrl from '../utils/backendurl'
 
-export async function updateloader({ params, request }) {
-	const searchParams = new URL(request.url).searchParams;
-	const candidateId = searchParams.get("id");
-	
+export async function updateloader({ params }) {
 	let position = undefined;
 	let positions = undefined;
 	let candidate = undefined;
 
 	try {
-		const c = await fetch(`${backendUrl}/election/candidate/${candidateId}`)
+		const c = await fetch(`${backendUrl}/election/candidate/${params.candidateId}`)
 		candidate = await c.json();
 
 		const pos_res = await fetch(`${backendUrl}/election/${candidate.electionId}/positions`)

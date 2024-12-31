@@ -33,7 +33,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 			<Route path='election/:id' element={<ElectionDetail />} loader={ electionDetailLoader } />
 			<Route path='election/:id/addcandidate' element={<AddCandidate />} />
 			<Route path='election/:id/position/:position' element={<PositionDetails />} loader={ loader } />
-			<Route path='election/candidate/:id/update' element={<UpdateCandidate />} loader={ updateloader } />
+			<Route path='election/candidate/:candidateId/update' element={<UpdateCandidate />} loader={ updateloader } />
 		</Route>
 	</Route>
 ))
