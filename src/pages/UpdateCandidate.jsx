@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, Link } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useState } from "react";
 import { fireman } from '../utils/fireloader';
@@ -197,7 +197,7 @@ function UpdateCandidate() {
 						
 						<div className="my-2">
 							<input type="submit" className="Button violet" value={"Save"} />
-							<button className='Button red my-0 mx-3 w-20' onClick={closeUpdateCandidateModal}>Cancel</button>
+							<Link to={`../position/${position.position}`}> </Link> <button className='Button red my-0 mx-3 w-20'>Back</button>
 						</div>
 					</div>
 				</form>
