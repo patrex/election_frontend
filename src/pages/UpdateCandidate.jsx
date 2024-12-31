@@ -33,7 +33,7 @@ export async function updateloader({ params, request }) {
 		
 	}
 
-	return [election, candidate, position, positions]
+	return [candidate, position, positions]
 }
 
 function UpdateCandidate() {
