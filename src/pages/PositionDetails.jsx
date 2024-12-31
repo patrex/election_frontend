@@ -164,11 +164,12 @@ function PositionDetails() {
 			<div className="candidates-grid">
 				{
 					candidatesList.map(candidate => (
+				
 						<div className="candidate-card">
 							<div className="candidate-card-img"><img src={candidate.imgUrl} alt={candidate.firstname + ' ' + candidate.lastname} /></div>
 			
 							<div className="candidate-card-details">
-								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
+								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate._id}`}</div>
 								<div className="candidate-pos-label">{position} </div>
 								<div className="btn-group" role="group">
 									<Link to={`/user/${params.userId}/election/candidate/${candidate._id}/update`}><button className='Button violet'><i class="bi bi-pen-fill"></i></button></Link>

@@ -18,7 +18,7 @@ export async function updateloader({ params }) {
 	let candidate = undefined;
 
 	try {
-		const c = await fetch(`${backendUrl}/election/candidate/${params.id}`)
+		const c = await fetch(`${backendUrl}/election/candidate/${ params.id }`)
 		candidate = await c.json();
 
 		const pos_res = await fetch(`${backendUrl}/election/${candidate.electionId}/positions`)
