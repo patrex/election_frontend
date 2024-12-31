@@ -38,7 +38,6 @@ export async function updateloader({ params, request }) {
 
 function UpdateCandidate() {
 	const [candidate, position, positions] = useLoaderData();
-	console.log(election)
 
 	return ( 
 		<>
