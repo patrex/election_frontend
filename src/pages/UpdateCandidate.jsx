@@ -38,7 +38,7 @@ function UpdateCandidate() {
 
 	return ( 
 		<>
-			<p></p>
+			<p>{position.position}</p>
 		</>
 	);
 }
