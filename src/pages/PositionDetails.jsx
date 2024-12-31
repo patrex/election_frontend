@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import Swal from "sweetalert2";
 import { useState } from "react";
@@ -36,6 +36,7 @@ export async function loader({params}) {
 function PositionDetails() {
 	const [election, candidates, position, positions] = useLoaderData();
 	const [candidatesList, setCandidatesList] = useState(candidates);
+	const params = useParams()
 
 	const [candidate, setCandidate] = useState();
 	const [image, setImage] = useState('');
@@ -170,8 +171,7 @@ function PositionDetails() {
 								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
 								<div className="candidate-pos-label">{position} </div>
 								<div className="btn-group" role="group">
-									<button type="button" className='btn btn-secondary' onClick={() => editCandidate(candidate)}>
-										<i class="bi bi-pen-fill"></i></button>
+									<Link to={`/user/${params.userId}/election/candidate/${candidate._id}/update`}><button className='Button violet'><i class="bi bi-pen-fill"></i></button></Link>
 									<button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
 										<i className="bi bi-trash3"></i></button>
 								</div>

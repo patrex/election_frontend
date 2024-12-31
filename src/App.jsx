@@ -15,6 +15,7 @@ import PositionDetails, { loader } from './pages/PositionDetails';
 import ElectionResults, { resultsLoader } from './pages/ElectionResults';
 import CandidateSelfAdd, { candidateSelfAddLoader } from './pages/CandidateSelfAdd';
 import NotFound from './pages/NotFound';
+import UpdateCandidate, {updateloader} from './pages/UpdateCandidate';
 
 const router = createBrowserRouter(createRoutesFromElements(
 	<Route element={<Layout/>}>
@@ -32,6 +33,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 			<Route path='election/:id' element={<ElectionDetail />} loader={ electionDetailLoader } />
 			<Route path='election/:id/addcandidate' element={<AddCandidate />} />
 			<Route path='election/:id/position/:position' element={<PositionDetails />} loader={ loader } />
+			<Route path='election/candidate/:id/update' element={<UpdateCandidate />} loader={ updateloader } />
 		</Route>
 	</Route>
 ))

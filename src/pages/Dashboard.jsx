@@ -56,7 +56,6 @@ function Dashboard() {
 	}
 
 	
-
 	function addPhoneNosToDB (voterlist) {
 		fetch(`${backendUrl}/election/${election._id}/addvoters`, {
 			method: 'POST',
