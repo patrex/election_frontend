@@ -126,7 +126,7 @@ function UpdateCandidate() {
 	return ( 
 		<>
 			<div className="candidate-update-form">
-				<form className='form' onSubmit={handleSubmit(onSubmit)}>
+				<form onSubmit={handleSubmit(onSubmit)}>
 					<div className="update-cand-form-cont">
 						<div className="update-candidate-left">
 							<div>
@@ -137,8 +137,10 @@ function UpdateCandidate() {
 									name="firstname"
 									autoFocus
 									{...register('firstname')}
-								/>{errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>}
+								/>
 							</div>
+							{/* {errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>} */}
+							
 							<div>
 								<label htmlFor="lastname" className="form-label">Lastname: </label>
 								<input type="text" 
@@ -146,8 +148,9 @@ function UpdateCandidate() {
 									aria-describedby="lastname"
 									name="lastname"
 									{...register('lastname')}
-								/>{errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>}
+									/>
 							</div>
+							{/* {errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>} */}
 							
 							<div>
 								<label>
@@ -163,9 +166,10 @@ function UpdateCandidate() {
 												</option>
 											))
 										: "no positions.."}
-									</select> {errors.selectedPosition && <span className='error-msg'>Select a position</span>}
+									</select> 
 								</label>
 							</div>
+							{/* {errors.selectedPosition && <span className='error-msg'>Select a position</span>} */}
 
 							<div className="mb-3">
 								<textarea name="manifesto"
@@ -191,8 +195,8 @@ function UpdateCandidate() {
 									/>
 									<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
 								</div> 
-								{errors.imgUrl && <span className='error-msg'>Choose a picture</span>}
 							</div>
+							{/* {errors.imgUrl && <span className='error-msg'>Choose a picture</span>} */}
 						</div>
 						
 						<div className="my-2">
