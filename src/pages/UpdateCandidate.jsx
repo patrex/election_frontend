@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { fireman } from '../utils/fireloader';
 import { toast } from "sonner";
 
@@ -43,8 +43,8 @@ function UpdateCandidate() {
 	const [image, setImage] = useState("");
 
 	const schema = yup.object().shape({
-		firstname: yup.string().required(),
-		lastname: yup.string().required(),
+		firstname: yup.string().min(2).required(),
+		lastname: yup.string().min(2).required(),
 		selectedPosition: yup.string(),
 		manifesto: yup.string(),
 		imgUrl: yup.mixed().test('required', 'Choose a picture for the candidate', value => {
@@ -52,23 +52,22 @@ function UpdateCandidate() {
 		}),
 	})
 
-	const { register, handleSubmit, formState, reset, watch } = useForm({
-		resolver: yupResolver(schema)
+	const { register, handleSubmit, formState } = useForm({
+		resolver: yupResolver(schema),
+		defaultValues: {
+			firstname: candidate.firstname,
+			lastname: candidate.lastname,
+			manifesto: candidate.manifesto,
+			selectedPosition: position.position,
+			imgUrl: candidate.imgUrl
+		}
 	});
 
 	const { dirtyFields, isDirty, errors } = formState;
 
-	// preload the form with candidate data
-	setImage(candidate.imgUrl);
-
-	reset({
-		firstname: candidate.firstname,
-		lastname: candidate.lastname,
-		manifesto: candidate.manifesto,
-		selectedPosition: position.position,
-		imgUrl: candidate.imgUrl
-	})
-
+	useEffect(() => {
+		setImage(candidate.imgUrl);
+	}, [])
 
 	const convert64 = imgUrl => {
 		const reader = new FileReader()
