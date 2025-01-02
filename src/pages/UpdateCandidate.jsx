@@ -39,7 +39,7 @@ export async function updateloader({ params }) {
 
 function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
-	const [positions, setPositions] = useState(positions)
+	const [positions, setPositions] = useState(positionsList)
 	
 	const [image, setImage] = useState("");
 	setImage(candidate.imgUrl);
