@@ -68,7 +68,7 @@ function UpdateCandidate() {
 	useEffect(() => {
 		setImage(candidate.imgUrl);
 		setPositions(positionsList)
-	}, [])
+	}, [positionsList])
 
 	const convert64 = imgUrl => {
 		const reader = new FileReader()
