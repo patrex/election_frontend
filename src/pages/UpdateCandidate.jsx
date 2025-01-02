@@ -40,7 +40,7 @@ export async function updateloader({ params }) {
 function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
 	const [image, setImage] = useState("");
-	const [positions, setPositions] = useState([])
+	const [positions, setPositions] = useState([positionsList])
 	
 	const schema = yup.object().shape({
 		firstname: yup.string().min(2).required(),
@@ -67,7 +67,7 @@ function UpdateCandidate() {
 
 	useEffect(() => {
 		setImage(candidate.imgUrl);
-		setPositions(positionsList)
+		// setPositions(positionsList)
 	}, [positionsList])
 
 	const convert64 = imgUrl => {
