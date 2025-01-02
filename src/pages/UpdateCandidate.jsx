@@ -39,11 +39,9 @@ export async function updateloader({ params }) {
 
 function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
-	const [positions, setPositions] = useState(positionsList)
-	
 	const [image, setImage] = useState("");
-	setImage(candidate.imgUrl);
-
+	const [positions, setPositions] = useState([])
+	
 	const schema = yup.object().shape({
 		firstname: yup.string().min(2).required(),
 		lastname: yup.string().min(2).required(),
@@ -54,7 +52,7 @@ function UpdateCandidate() {
 		}),
 	})
 
-	const { register, handleSubmit, formState } = useForm({
+	const { register, handleSubmit, formState, errors } = useForm({
 		resolver: yupResolver(schema),
 		defaultValues: {
 			firstname: candidate.firstname,
@@ -65,10 +63,11 @@ function UpdateCandidate() {
 		}
 	});
 
-	const { dirtyFields, isDirty, errors } = formState;
+	const { dirtyFields, isDirty } = formState;
 
 	useEffect(() => {
-		console.log(positions);
+		setImage(candidate.imgUrl);
+		setPositions(positionsList)
 	}, [])
 
 	const convert64 = imgUrl => {
