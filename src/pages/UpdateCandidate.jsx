@@ -39,11 +39,11 @@ export async function updateloader({ params }) {
 
 function UpdateCandidate() {
 	const [candidate, position, positions, election] = useLoaderData();
-	setImage(candidate.imgUrl);
-
+	
 	console.log(positions);
-
+	
 	const [image, setImage] = useState("");
+	setImage(candidate.imgUrl);
 
 	const schema = yup.object().shape({
 		firstname: yup.string().min(2).required(),
