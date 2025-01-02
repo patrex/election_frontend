@@ -40,6 +40,8 @@ export async function updateloader({ params }) {
 function UpdateCandidate() {
 	const [candidate, position, positions, election] = useLoaderData();
 
+	console.log(positions);
+
 	const [image, setImage] = useState("");
 
 	const schema = yup.object().shape({
@@ -127,7 +129,80 @@ function UpdateCandidate() {
 	return ( 
 		<>
 			<div className="candidate-update-form">
-				Hey
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<div className="update-cand-form-cont">
+						<div className="update-candidate-left">
+							<div>
+								<label htmlFor="firstname" className="form-label">Firstname: </label>
+								<input type="text" 
+									id="firstname" 
+									aria-describedby="firstname"
+									name="firstname"
+									autoFocus
+									{...register('firstname')}
+								/>{errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>}
+							</div>
+							<div>
+								<label htmlFor="lastname" className="form-label">Lastname: </label>
+								<input type="text" 
+									id="lastname" 
+									aria-describedby="lastname"
+									name="lastname"
+									{...register('lastname')}
+								/>{errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>}
+							</div>
+							
+							<div>
+								<label>
+									Select position:
+									<select {...register('selectedPosition')}
+										className='form-select form-select-lg mb-3'
+									> 
+										<option value={position} selected>{position}</option>
+										{positions.length > 0 ? 
+											positions.filter(position => candidate.position != position._id).map((position) => (
+												<option key={position.position} value={position.position}>
+													{position.position}
+												</option>
+											))
+										: "no positions.."}
+									</select> {errors.selectedPosition && <span className='error-msg'>Select a position</span>}
+								</label>
+							</div>
+
+							<div className="mb-3">
+								<textarea name="manifesto"
+									id="" rows="3" cols="55"
+									className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
+									{...register('manifesto')}
+								/>
+							</div>
+						</div>
+
+						<div className="update-candidate-right">
+							{/*  candidate picture */}
+							<div className="w-full md:w-1/2 flex justify-center">
+								<div className="w-48 h-48 rounded-full overflow-hidden border border-gray-300">
+									<img src={image} name="candidateimgUrl" className="w-full h-full object-cover" />
+								</div>
+								<div>
+									<input className='fileupload form-control-file' 
+										type="file"
+										id="fileuploadr" 
+										style={{ display: 'none' }}
+										{...register("imgUrl") }
+									/>
+									<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
+								</div> 
+								{errors.imgUrl && <span className='error-msg'>Choose a picture</span>}
+							</div>
+						</div>
+						
+						<div className="my-2">
+							<input type="submit" className="Button violet" value={"Save"} />
+						</div>
+					</div>
+				</form>
 			</div>
 		</>
 	);
