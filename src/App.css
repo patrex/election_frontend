@@ -358,6 +358,11 @@ input[type=number] {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.candidate-update-form {
+	min-height: 100vh;
+	width: 90vw;
+}
+
 .update-cand-form-cont {
 	display: grid;
 	grid-template-rows: 90% 10%;
@@ -371,6 +376,7 @@ input[type=number] {
 
 .update-candidate-top {
 	display: grid;
+	height: 100%;
 	grid-template-columns: 70% 30%;
 	gap: 16px; /* Adjust spacing between the two divs */
 	padding: 16px; /* Optional: Add padding */
@@ -396,10 +402,7 @@ input[type=number] {
 	background-color: #f9f9f9; /* Optional: Add a background color for contrast */
 }
 
-.candidate-update-form {
-	min-height: 100vh;
-	width: 90vw;
-}
+
       
 /* Container styles */
 .home-container {
