@@ -366,7 +366,7 @@ input[type=number] {
 
 .update-cand-form-cont {
 	display: grid;
-	grid-template-rows: 70%;
+	grid-template-rows: 70% 30%;
 	grid-template-columns: 2fr 1fr;
 }
 
