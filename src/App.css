@@ -376,7 +376,7 @@ input[type=number] {
 
 .candidate-update-form-container {
 	min-height: 80vh;
-	width: 60vw;
+	width: 50vw;
 	display: grid;
 	grid-template-rows: 90% 10%;
 	border-radius: 5px; /* Optional: Add rounded corners */
