@@ -377,7 +377,7 @@ input[type=number] {
 }
 
 .update-candidate-left {
-	background-color: #e0e0e0; /* Optional: Add a background color for visibility */
+	background-color: #ff7e5f; /* Optional: Add a background color for visibility */
 	border-radius: 4px;
 }
 
