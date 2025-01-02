@@ -40,7 +40,7 @@ export async function updateloader({ params }) {
 function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
 	const [image, setImage] = useState("");
-	const [positions, setPositions] = useState([positionsList])
+	const [positions, setPositions] = useState(positionsList)
 	
 	const schema = yup.object().shape({
 		firstname: yup.string().min(2).required(),
@@ -156,7 +156,7 @@ function UpdateCandidate() {
 									<select {...register('selectedPosition', {required: "Select a position"})}
 										className='form-select form-select-lg mb-3'
 									> 
-										<option value={position} selected>{position}</option>
+										<option value={position.position} selected>{position.position}</option>
 										{positions.length > 0 ? 
 											positions.filter(position => candidate.position != position._id).map((position) => (
 												<option key={position.position} value={position.position}>
