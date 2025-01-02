@@ -126,7 +126,7 @@ function UpdateCandidate() {
 
 	return ( 
 		<>
-			<div className="candidate-update-form">
+			<div className="candidate-update-form-container">
 				<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="update-candidate-top">
 							<div className="update-candidate-left">
