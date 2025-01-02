@@ -137,8 +137,8 @@ function UpdateCandidate() {
 									aria-describedby="firstname"
 									name="firstname"
 									autoFocus
-									{...register('firstname')}
-								/>{errors.firstname && <span className='error-msg'>Firstname must be at least two characters</span>}
+									{...register('firstname', {required: "First name must be at least two characters"})}
+								/>
 							</div>
 							<div>
 								<label htmlFor="lastname" className="form-label">Lastname: </label>
@@ -146,14 +146,14 @@ function UpdateCandidate() {
 									id="lastname" 
 									aria-describedby="lastname"
 									name="lastname"
-									{...register('lastname')}
-								/>{errors.lastname && <span className='error-msg'>Lastname must be at least two characters</span>}
+									{...register('lastname', {required: "Lastname must be at least two characters"})}
+								/>
 							</div>
 							
 							<div>
 								<label>
 									Select position:
-									<select {...register('selectedPosition')}
+									<select {...register('selectedPosition', {required: "Select a position"})}
 										className='form-select form-select-lg mb-3'
 									> 
 										<option value={position} selected>{position}</option>
@@ -164,7 +164,7 @@ function UpdateCandidate() {
 												</option>
 											))
 										: "no positions.."}
-									</select> {errors.selectedPosition && <span className='error-msg'>Select a position</span>}
+									</select>
 								</label>
 							</div>
 
@@ -188,11 +188,11 @@ function UpdateCandidate() {
 										type="file"
 										id="fileuploadr" 
 										style={{ display: 'none' }}
-										{...register("imgUrl") }
+										{...register("imgUrl", {required: "Choose a picture"}) }
 									/>
 									<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
 								</div> 
-								{errors.imgUrl && <span className='error-msg'>Choose a picture</span>}
+								
 							</div>
 						</div>
 						
