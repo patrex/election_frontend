@@ -356,35 +356,49 @@ input[type=number] {
 	border-radius: 10px;
 	overflow: hidden;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-}
-
-.update-candidate-modal {
-	display: flex;
-	flex-direction: row;
 }
 
 .update-cand-form-cont {
 	display: grid;
-	grid-template-rows: 70% 30%;
-	grid-template-columns: 2fr 1fr;
+	grid-template-rows: 90% 10%;
+	width: 80%; /* Adjust width as needed */
+	height: 70%; /* Adjust height as needed */
+	background-color: #fff; /* Optional: Set a background color for the container */
+	border: 1px solid #ccc; /* Optional: Add a border */
+	border-radius: 8px; /* Optional: Add rounded corners */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+}
+
+.update-candidate-top {
+	display: grid;
+	grid-template-columns: 70% 30%;
+	gap: 16px; /* Adjust spacing between the two divs */
+	padding: 16px; /* Optional: Add padding */
 }
 
 .update-candidate-left {
-	grid-column: 1;
+	background-color: #e0e0e0; /* Optional: Add a background color for visibility */
+	border-radius: 4px;
 }
 
 .update-candidate-right {
-	grid-column: 2;
+	background-color: #d0d0d0; /* Optional: Add a background color for visibility */
+    	border-radius: 4px;
+}
+
+.candidate-update-bottom {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 8px;
+	padding: 16px;
+	border-top: 1px solid #ccc; /* Optional: Add a border to separate sections */
+	background-color: #f9f9f9; /* Optional: Add a background color for contrast */
 }
 
 .candidate-update-form {
 	min-height: 100vh;
 	width: 90vw;
-}
-
-.candidate-update-optns {
-	grid-row: 2;
 }
       
 /* Container styles */
