@@ -170,8 +170,6 @@ function UpdateCandidate() {
 
 							<div className="mb-3">
 								<textarea name="manifesto"
-									id="" rows="3" cols="55"
-									className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
 									{...register('manifesto')}
 								/>
 							</div>
@@ -196,6 +194,7 @@ function UpdateCandidate() {
 				</div>
 						
 				<div className="my-2 candidate-update-bottom">
+					<button className="Button red" value={"Back"} />
 					<input type="submit" className="Button violet" value={"Save"} />
 				</div>
 			</div>

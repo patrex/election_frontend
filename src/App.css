@@ -253,6 +253,22 @@ input[type="text"]:focus,
 		outline: none; 
 }
 
+textarea {
+	width: 95%; 
+	height: 100px;
+	padding: 10px; 
+	border: 1px solid goldenrod; 
+	border-radius: 5px; 
+	font-size: 16px;
+	margin: .5em 0;
+	resize: none;
+}
+
+textarea:focus {
+	box-shadow: 0 0 5px rgba(218, 165, 32, 0.5); 
+	outline: none;
+}
+
 /* remove the spinners on  */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -360,7 +376,7 @@ input[type=number] {
 
 .candidate-update-form-container {
 	min-height: 100vh;
-	width: 90vw;
+	width: 80vw;
 	display: grid;
 	grid-template-rows: 90% 10%;
 	border-radius: 5px; /* Optional: Add rounded corners */
@@ -369,7 +385,7 @@ input[type=number] {
 
 .update-candidate-top {
 	display: grid;
-	min-height: 100%;
+	min-height: 80%;
 	grid-template-columns: 70% 30%;
 	gap: 16px; /* Adjust spacing between the two divs */
 	padding: 16px; /* Optional: Add padding */
@@ -383,7 +399,7 @@ input[type=number] {
 }
 
 .update-candidate-right {
-	border-right: #feb47b 1px solid;
+	border-left: #feb47b 1px solid;
     	border-radius: 4px;
 	display: flex;
 	flex-direction: column;
