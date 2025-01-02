@@ -13,7 +13,7 @@ import backendUrl from '../utils/backendurl'
 
 export async function updateloader({ params }) {
 	let position = undefined;
-	let positions = undefined;
+	let positionsList = undefined;
 	let candidate = undefined;
 	let election = undefined;
 
@@ -22,7 +22,7 @@ export async function updateloader({ params }) {
 		candidate = await c.json();
 
 		const pos_res = await fetch(`${backendUrl}/election/${candidate.electionId}/positions`)
-		positions = await pos_res.json()
+		positionsList = await pos_res.json()
 
 		const e = await fetch(`${backendUrl}/election/${candidate.electionId}`)
 		election = await e.json();
@@ -34,13 +34,12 @@ export async function updateloader({ params }) {
 		
 	}
 
-	return [candidate, position, positions, election]
+	return [candidate, position, positionsList, election]
 }
 
 function UpdateCandidate() {
-	const [candidate, position, positions, election] = useLoaderData();
-	
-	console.log(positions);
+	const [candidate, position, positionsList, election] = useLoaderData();
+	const [positions, setPositions] = useState(positions)
 	
 	const [image, setImage] = useState("");
 	setImage(candidate.imgUrl);
@@ -69,7 +68,7 @@ function UpdateCandidate() {
 	const { dirtyFields, isDirty, errors } = formState;
 
 	useEffect(() => {
-
+		console.log(positions);
 	}, [])
 
 	const convert64 = imgUrl => {
