@@ -39,6 +39,7 @@ export async function updateloader({ params }) {
 
 function UpdateCandidate() {
 	const [candidate, position, positions, election] = useLoaderData();
+	setImage(candidate.imgUrl);
 
 	console.log(positions);
 
@@ -68,7 +69,6 @@ function UpdateCandidate() {
 	const { dirtyFields, isDirty, errors } = formState;
 
 	useEffect(() => {
-		setImage(candidate.imgUrl);
 
 	}, [])
 
