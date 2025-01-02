@@ -128,7 +128,6 @@ function UpdateCandidate() {
 		<>
 			<div className="candidate-update-form">
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<div className="update-cand-form-cont">
 						<div className="update-candidate-top">
 							<div className="update-candidate-left">
 								<div>
@@ -202,7 +201,6 @@ function UpdateCandidate() {
 						<div className="my-2 candidate-update-bottom">
 							<input type="submit" className="Button violet" value={"Save"} />
 						</div>
-					</div>
 				</form>
 			</div>
 		</>
