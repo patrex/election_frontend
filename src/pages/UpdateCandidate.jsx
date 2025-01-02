@@ -176,6 +176,7 @@ function UpdateCandidate() {
 						</form>
 					</div>
 				
+					<div className="vr-divider"></div>
 
 					<div className="update-candidate-right">
 						<div className="candidate-update-pic-holder">

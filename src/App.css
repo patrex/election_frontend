@@ -436,6 +436,14 @@ input[type=number] {
 	padding: 16px;
 	background-color: #f9f9f9; /* Optional: Add a background color for contrast */
 }
+
+.vr-divider {
+	width: 1px; /* Thin vertical line */
+	height: 100%; /* Full height */
+	background-color: #ccc; /* Neutral color */
+	margin: 0 8px; /* Space around the divider */
+}
+    
       
 /* Container styles */
 .home-container {
