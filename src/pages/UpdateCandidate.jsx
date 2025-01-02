@@ -196,7 +196,7 @@ function UpdateCandidate() {
 				</div>
 						
 				<div className="my-2 candidate-update-bottom">
-					<Link to={`./position/${position.position}`}><button className="Button red">Back</button></Link>
+					<Link to={`./election/${election._id}/position/${position._id}`}><button className="Button red">Back</button></Link>
 					<input type="submit" className="Button violet" value={"Save"} />
 				</div>
 			</div>
