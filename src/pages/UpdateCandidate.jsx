@@ -60,7 +60,6 @@ function UpdateCandidate() {
 			lastname: candidate.lastname,
 			manifesto: candidate.manifesto,
 			selectedPosition: position.position,
-			imgUrl: candidate.imgUrl
 		}
 	});
 
@@ -68,7 +67,6 @@ function UpdateCandidate() {
 
 	useEffect(() => {
 		setImage(candidate.imgUrl);
-		// setPositions(positionsList)
 	}, [positionsList])
 
 	const convert64 = imgUrl => {
@@ -196,7 +194,6 @@ function UpdateCandidate() {
 				</div>
 						
 				<div className="my-2 candidate-update-bottom">
-					<Link to={`./election/${election._id}/position/${position._id}`}><button className="Button red">Back</button></Link>
 					<input type="submit" className="Button violet" value={"Save"} />
 				</div>
 			</div>

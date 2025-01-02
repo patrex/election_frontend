@@ -376,7 +376,7 @@ input[type=number] {
 
 .candidate-update-form-container {
 	min-height: 100vh;
-	width: 80vw;
+	width: 70vw;
 	display: grid;
 	grid-template-rows: 90% 10%;
 	border-radius: 5px; /* Optional: Add rounded corners */
@@ -386,7 +386,7 @@ input[type=number] {
 .update-candidate-top {
 	display: grid;
 	min-height: 80%;
-	grid-template-columns: 50% 5% 30%;
+	grid-template-columns: 50% 2% 20%;
 	gap: 16px; /* Adjust spacing between the two divs */
 	padding: 16px; /* Optional: Add padding */
 }
