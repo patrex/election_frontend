@@ -399,13 +399,21 @@ input[type=number] {
 }
 
 .update-candidate-right {
-	border-left: #feb47b 1px solid;
     	border-radius: 4px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	min-height: 100%;
+}
+
+.candidate-update-pic-holder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: .5rem;
+	margin: 0 .5rem;
+	border-radius: 5px;
 }
 
 .candidate-update-bottom {
