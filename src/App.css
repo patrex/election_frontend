@@ -363,9 +363,7 @@ input[type=number] {
 	width: 90vw;
 	display: grid;
 	grid-template-rows: 90% 10%;
-	background-color: #fff; /* Optional: Set a background color for the container */
-	border: 1px solid #ccc; /* Optional: Add a border */
-	border-radius: 8px; /* Optional: Add rounded corners */
+	border-radius: 5px; /* Optional: Add rounded corners */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
 }
 
@@ -378,13 +376,20 @@ input[type=number] {
 }
 
 .update-candidate-left {
-	background-color: #ff7e5f; /* Optional: Add a background color for visibility */
 	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
 }
 
 .update-candidate-right {
 	border-right: #feb47b 1px solid;
     	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100%;
 }
 
 .candidate-update-bottom {
@@ -395,8 +400,6 @@ input[type=number] {
 	padding: 16px;
 	background-color: #f9f9f9; /* Optional: Add a background color for contrast */
 }
-
-
       
 /* Container styles */
 .home-container {
