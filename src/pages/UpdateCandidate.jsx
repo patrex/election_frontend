@@ -195,7 +195,7 @@ function UpdateCandidate() {
 						</div>
 					</div>
 							
-					<div className="my-2 candidate-update-bottom">
+					<div className="candidate-update-bottom">
 						<input type="submit" className="Button violet" value={"Save"} />
 					</div>
 				</div>
