@@ -125,78 +125,81 @@ function UpdateCandidate() {
 
 	return ( 
 		<>
-			<div className="candidate-update-form-container">
-				<div className="update-candidate-top">
-					<div className="update-candidate-left">
-						<form onSubmit={handleSubmit(onSubmit)}>
-							<div>
-								<label htmlFor="firstname" className="form-label">Firstname: </label>
-								<input type="text" 
-									id="firstname" 
-									aria-describedby="firstname"
-									name="firstname"
-									autoFocus
-									{...register('firstname', {required: "First name must be at least two characters"})}
-								/>
-							</div>
-							<div>
-								<label htmlFor="lastname" className="form-label">Lastname: </label>
-								<input type="text" 
-									id="lastname" 
-									aria-describedby="lastname"
-									name="lastname"
-									{...register('lastname', {required: "Lastname must be at least two characters"})}
-								/>
-							</div>
-							
-							<div>
-								<label>
-									Select position:
-									<select {...register('selectedPosition', {required: "Select a position"})}
-										className='form-select form-select-lg mb-3'
-									> 
-										<option value={position.position} selected>{position.position}</option>
-										{positions.length > 0 ? 
-											positions.filter(position => candidate.position != position._id).map((position) => (
-												<option key={position.position} value={position.position}>
-													{position.position}
-												</option>
-											))
-										: "no positions.."}
-									</select>
-								</label>
-							</div>
+			<div className="container">
 
-							<div className="mb-3">
-								<textarea name="manifesto"
-									{...register('manifesto')}
-								/>
-							</div>
-						</form>
-					</div>
-				
-					<div className="vr-divider"></div>
+				<div className="candidate-update-form-container">
+					<div className="update-candidate-top">
+						<div className="update-candidate-left">
+							<form onSubmit={handleSubmit(onSubmit)}>
+								<div>
+									<label htmlFor="firstname" className="form-label">Firstname: </label>
+									<input type="text" 
+										id="firstname" 
+										aria-describedby="firstname"
+										name="firstname"
+										autoFocus
+										{...register('firstname', {required: "First name must be at least two characters"})}
+									/>
+								</div>
+								<div>
+									<label htmlFor="lastname" className="form-label">Lastname: </label>
+									<input type="text" 
+										id="lastname" 
+										aria-describedby="lastname"
+										name="lastname"
+										{...register('lastname', {required: "Lastname must be at least two characters"})}
+									/>
+								</div>
+								
+								<div>
+									<label>
+										Select position:
+										<select {...register('selectedPosition', {required: "Select a position"})}
+											className='form-select form-select-lg mb-3'
+										> 
+											<option value={position.position} selected>{position.position}</option>
+											{positions.length > 0 ? 
+												positions.filter(position => candidate.position != position._id).map((position) => (
+													<option key={position.position} value={position.position}>
+														{position.position}
+													</option>
+												))
+											: "no positions.."}
+										</select>
+									</label>
+								</div>
 
-					<div className="update-candidate-right">
-						<div className="candidate-update-pic-holder">
-							<img src={image} name="candidateimgUrl" className="" />
+								<div className="mb-3">
+									<textarea name="manifesto"
+										{...register('manifesto')}
+									/>
+								</div>
+							</form>
 						</div>
-						<div>
-							<input className='fileupload form-control-file' 
-								type="file"
-								id="fileuploadr" 
-								style={{ display: 'none' }}
-								onChange={ (e) => {setImage(e.target.files[0])} }
-							/>
-							<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
-						</div> 
+					
+						<div className="vr-divider"></div>
+
+						<div className="update-candidate-right">
+							<div className="candidate-update-pic-holder">
+								<img src={image} name="candidateimgUrl" className="" />
+							</div>
+							<div>
+								<input className='fileupload form-control-file' 
+									type="file"
+									id="fileuploadr" 
+									style={{ display: 'none' }}
+									onChange={ (e) => {setImage(e.target.files[0])} }
+								/>
+								<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
+							</div> 
+						</div>
+					</div>
+							
+					<div className="my-2 candidate-update-bottom">
+						<input type="submit" className="Button violet" value={"Save"} />
 					</div>
 				</div>
-						
-				<div className="my-2 candidate-update-bottom">
-					<input type="submit" className="Button violet" value={"Save"} />
-				</div>
-			</div>
+			</div>	
 		</>
 	);
 }
