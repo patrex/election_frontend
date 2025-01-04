@@ -198,7 +198,7 @@ function UpdateCandidate() {
 								/>
 								<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
 							</div> 
-							<p>&gt; { newFile ? newFile : "" }</p>
+							<p style={ {overflow: 'hidden', fontSize: '12px'}}>&gt; { newFile ? newFile : "" }</p>
 						</div>
 					</div>
 							
