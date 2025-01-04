@@ -256,6 +256,14 @@ input[type="text"]:focus,
 		outline: none; 
 }
 
+input[type="datetime-local"] {
+	width: 30%;
+	padding: 10px;
+	margin: .5em 0;
+	border-radius: 5px;
+	background-color: #feb47b;
+}
+
 textarea {
 	width: 95%; 
 	height: 100px;

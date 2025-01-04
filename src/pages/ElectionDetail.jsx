@@ -209,7 +209,7 @@ function ElectionDetail() {
 								id='newposition' 
 								value={newPosition}
 								onChange={handlePositionChange}
-								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+								className='w-5/6 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
 							<div className="my-2">
 								<button className='Button violet my-2' onClick={handleAddPosition}>Add Position</button>
