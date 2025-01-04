@@ -81,7 +81,7 @@ function CreateElection() {
 						<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="startDate" className="form-label Button grey-dark"><i class="bi bi-calendar-date"></i> Start Date</label>
+						<label htmlFor="startDate" className="Button mauve my-2"><i class="bi bi-calendar-date"></i> Start Date</label>
 						<input type="datetime-local" 
 							id="startDate" 
 							name="startdate"
@@ -91,7 +91,7 @@ function CreateElection() {
 					</div>
 
 					<div className="mb-3">
-						<label htmlFor="endDate" className="form-label Button grey-dark my-2"><i class="bi bi-calendar-date"></i> End Date</label>
+						<label htmlFor="endDate" className="Button mauve my-2"><i class="bi bi-calendar-date"></i> End Date</label>
 						<input type="datetime-local" 
 							id="endDate" 
 							name="enddate"
