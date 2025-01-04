@@ -840,9 +840,10 @@ keyframes fadeIn {
 		width: auto;
 	}
 
-	.candidate-update-form-container {
+	.candidate-update-form-container, .update-candidate-top {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 	}
 
 	.vr-divider {
