@@ -80,7 +80,7 @@ function UpdateCandidate() {
 		if (isDirty) {
 			let photoUrl = ''
 			const imgRef =
-			 ref(fireman, `vote4me/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname) }`);
+			 ref(fireman, `vote4me/${election.title}/${selectedPosition}/${firstname.concat(lastname) }`);
 	
 			uploadBytes(imgRef, image)
 				.then(snapshot => getDownloadURL(snapshot.ref))
