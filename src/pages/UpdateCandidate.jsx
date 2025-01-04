@@ -176,6 +176,7 @@ function UpdateCandidate() {
 
 								<div className="mb-3">
 									<textarea name="manifesto"
+										className="p-2.5 my-2"
 										{...register('manifesto')}
 									/>
 								</div>

@@ -2,6 +2,9 @@
 @import '@radix-ui/colors/mauve.css';
 @import '@radix-ui/colors/red.css';
 @import '@radix-ui/colors/violet.css';
+@import "@radix-ui/colors/gray-dark.css";
+@import "@radix-ui/colors/blue-dark.css";
+@import "@radix-ui/colors/green-dark.css";
 
 
 /* Global styles */
@@ -749,7 +752,7 @@ button {
 	font-family: Arial, sans-serif; /* Clean font */
 	border: 1px solid #ccc; /* Subtle border */
 	border-radius: 6px; /* Rounded corners */
-	background-color: #f9f9f9; /* Light background */
+	background-color: #feb47b; /* Light background */
 	color: #333; /* Text color */
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
 	transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition */
@@ -776,8 +779,6 @@ button {
 .time-label {
 	display: block;
 	margin-bottom: 8px;
-	font-size: 14px;
-	font-weight: bold;
 }
     
 

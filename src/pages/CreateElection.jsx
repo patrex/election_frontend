@@ -81,19 +81,21 @@ function CreateElection() {
 						<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="startDate" className="form-label time-label">Start Date and time: </label>
+						<label htmlFor="startDate" className="form-label time-label"><button><i class="bi bi-calendar-date"></i> Start Date</button></label>
 						<input type="datetime-local" 
 							id="startDate" 
 							name="startdate"
+							style={ {display: 'none'} }
 							{...register('startdate')}
 						/>{errors.startdate && <span className='error-msg'>Start date cannot be less than current year</span>}
 					</div>
 
 					<div className="mb-3">
-						<label htmlFor="endDate" className="form-label time-label">End Date and time: </label>
+						<label htmlFor="endDate" className="form-label time-label"><button><i class="bi bi-calendar-date"></i> End Date</button></label>
 						<input type="datetime-local" 
 							id="endDate" 
 							name="enddate"
+							style={ {display: 'none'} }
 							{...register('enddate')}
 						/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
 					</div>
@@ -114,6 +116,7 @@ function CreateElection() {
 						id=""
 						placeholder="Describe the election"
 						{...register('description')}
+						className="p-2 my-2"
 					/> {errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
 
 					<textarea name="rules" 
