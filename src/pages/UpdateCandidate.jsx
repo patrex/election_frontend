@@ -132,7 +132,6 @@ function UpdateCandidate() {
 	return ( 
 		<>
 			<div className="container">
-
 				<div className="candidate-update-form-container">
 					<div className="update-candidate-top">
 						<div className="update-candidate-left">

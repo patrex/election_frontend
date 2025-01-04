@@ -166,113 +166,116 @@ function ElectionDetail() {
 	
 
 	return ( 
-		<div className="pos-detail-container">
-			<div className="pos-heading-banner">
-				<table className="table table-hover table-striped">
-					<thead>
-						<tr>
-							<th>Election</th>
-							<th>{election.title}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th scope='row'>Created On</th>
-							<td>{moment(election.dateCreated).format('LLL')}</td>
-						</tr>
-						<tr>
-							<th scope='row'>Starting On</th>
-							<td>{moment(election.startDate).format('LLL')}</td>
-						</tr>
-						<tr>
-							<th scope='row'>Ending On</th>
-							<td>{moment(election.endDate).format('LLL')}</td>
-						</tr>
-					</tbody>
-				</table>
-				<div className="position-action-btn-cont">
-					<p><button className='Button violet pos-act-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
-					<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button className='Button violet pos-act-item'>Add Candidate</button></Link></p>
-				</div>
-			</div>
+		<div className="container">
 
-			{positionModalOpen && (
-				<div className="modal-overlay">
-					<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
-						<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
-						<br />
-						<input 
-							type='text'
-							placeholder="Enter new position"
-							id='newposition' 
-							value={newPosition}
-							onChange={handlePositionChange}
-							className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
-						/>
-						<div className="my-2">
-							<button className='Button violet' onClick={handleAddPosition}>Add Position</button>
-							<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
-						</div>
+			<div className="pos-detail-container">
+				<div className="pos-heading-banner">
+					<table className="table table-hover table-striped">
+						<thead>
+							<tr>
+								<th>Election</th>
+								<th>{election.title}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope='row'>Created On</th>
+								<td>{moment(election.dateCreated).format('LLL')}</td>
+							</tr>
+							<tr>
+								<th scope='row'>Starting On</th>
+								<td>{moment(election.startDate).format('LLL')}</td>
+							</tr>
+							<tr>
+								<th scope='row'>Ending On</th>
+								<td>{moment(election.endDate).format('LLL')}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div className="position-action-btn-cont">
+						<p><button className='Button violet pos-act-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
+						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button className='Button violet pos-act-item'>Add Candidate</button></Link></p>
 					</div>
 				</div>
-			)}
 
-			{updatePositionModalOpen && (
-				<div className="modal-overlay">
-					<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
-						<span>Edit position for <strong>{`${election.title}`}</strong></span>
-						<br />
-						<input 
-							type='text'
-							id='updateposition' 
-							value={updatedPosition}
-							onChange={handlePositionUpdate}
-							className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
-						/>
-						<div className="my-2">
-							<button className='Button violet' onClick={handleUpdatePosition}>Update Position</button>
-							<button className='Button red my-0 mx-3 w-20' onClick={closeUpdatePositionModal}>Cancel</button>
+				{positionModalOpen && (
+					<div className="modal-overlay">
+						<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
+							<br />
+							<input 
+								type='text'
+								placeholder="Enter new position"
+								id='newposition' 
+								value={newPosition}
+								onChange={handlePositionChange}
+								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+							/>
+							<div className="my-2">
+								<button className='Button violet' onClick={handleAddPosition}>Add Position</button>
+								<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
+							</div>
 						</div>
 					</div>
+				)}
+
+				{updatePositionModalOpen && (
+					<div className="modal-overlay">
+						<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+							<span>Edit position for <strong>{`${election.title}`}</strong></span>
+							<br />
+							<input 
+								type='text'
+								id='updateposition' 
+								value={updatedPosition}
+								onChange={handlePositionUpdate}
+								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+							/>
+							<div className="my-2">
+								<button className='Button violet' onClick={handleUpdatePosition}>Update Position</button>
+								<button className='Button red my-0 mx-3 w-20' onClick={closeUpdatePositionModal}>Cancel</button>
+							</div>
+						</div>
+					</div>
+				)}
+
+				<div className="pos-list-container">
+					<table className="table table-hover table-striped">
+						<thead>
+							<tr>
+								<th scope='col'>Positions</th>
+								<th scope="col">Actions</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{	
+								positionsList.map(position => (
+									<tr className="position-row" key={position._id}>
+										<td>
+											<Link to={`./position/${position.position}`}>{position.position}</Link> 
+										</td>
+
+
+										<td>
+											<button className='Button red' 
+												onClick={() => editPosition(position)}>
+													<i className="bi bi-pen-fill"></i></button>
+										</td>
+
+										<td>
+											<button className='Button red' 
+												onClick={() => removePosition(position)}>
+													<i className="bi bi-trash3 m-1"></i></button>
+										</td>
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
 				</div>
-			)}
 
-			<div className="pos-list-container">
-				<table className="table table-hover table-striped">
-					<thead>
-						<tr>
-							<th scope='col'>Positions</th>
-							<th scope="col">Actions</th>
-							<th scope="col"></th>
-						</tr>
-					</thead>
-					<tbody>
-						{	
-							positionsList.map(position => (
-								<tr className="position-row" key={position._id}>
-									<td>
-										<Link to={`./position/${position.position}`}>{position.position}</Link> 
-									</td>
-
-
-									<td>
-										<button className='Button red' 
-											onClick={() => editPosition(position)}>
-												<i className="bi bi-pen-fill"></i></button>
-									</td>
-
-									<td>
-										<button className='Button red' 
-											onClick={() => removePosition(position)}>
-												<i className="bi bi-trash3 m-1"></i></button>
-									</td>
-								</tr>
-							))
-						}
-					</tbody>
-				</table>
 			</div>
-
 		</div>
 	 );
 }

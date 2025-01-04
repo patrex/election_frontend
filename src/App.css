@@ -839,6 +839,11 @@ keyframes fadeIn {
 		min-height: 80vh;
 		width: auto;
 	}
+
+	.candidate-update-form-container {
+		display: flex;
+		flex-direction: column;
+	}
 }
 
 
