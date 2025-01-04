@@ -365,7 +365,7 @@ input[type=number] {
 
 .candidate-update-form-container {
 	min-height: 80vh;
-	width: 100vw;
+	width: 80vw;
 	display: grid;
 	grid-template-rows: 90% 10%;
 	border-radius: 5px; /* Optional: Add rounded corners */
@@ -375,7 +375,7 @@ input[type=number] {
 .update-candidate-top {
 	display: grid;
 	min-height: 80%;
-	grid-template-columns: 50% 2% 30%;
+	grid-template-columns: 50% 1% 30%;
 	gap: 16px; /* Adjust spacing between the two divs */
 	padding: 16px; /* Optional: Add padding */
 }
@@ -397,9 +397,6 @@ input[type=number] {
 }
 
 .candidate-update-pic-holder {
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	padding: .5rem;
 	margin: 0 .5rem;
 	border-radius: 5px;
