@@ -186,7 +186,7 @@ function Home() {
 
 			{OTPOpen && 
 				<div className="modal-overlay">
-					<div className="w-full sm:w-1/2 max-w-full sm:max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+					<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
 						<span>{`${election.title}`}</span>
 						<p>You should have received a verification at the phone number you provided</p>
 						<h3>Enter Confirmation Code</h3>
