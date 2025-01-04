@@ -69,23 +69,14 @@ function UpdateCandidate() {
 
 	const handleFileUpload = (e) => {
 		const file = e.target.files[0];
-		if (file) setNewFile(file.name)
-	}
-
-	const convert64 = imgUrl => {
-		const reader = new FileReader()
-		reader.onloadend = () => {
-			setImage(reader.result.toString())
+		if (file) {
+			setImage(file)
+			setNewFile(file.name)
 		}
-
-		reader.readAsDataURL(imgUrl)
 	}
+	
 
-	const onSubmit = async (formdata) => {
-		if (formdata.imgUrl.length > 0) {
-			convert64(formdata.imgUrl[0]);
-		}
-
+	const onSubmit = async () => {
 		if (isDirty) {
 			let photoUrl = ''
 			const imgRef =
