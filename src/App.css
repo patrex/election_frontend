@@ -850,6 +850,10 @@ keyframes fadeIn {
 		min-height: 30vh;
 	}
 
+	.pos-detail-container {
+		width: 98vw;
+	}
+
 	.vr-divider {
 		display: none;
 	}
