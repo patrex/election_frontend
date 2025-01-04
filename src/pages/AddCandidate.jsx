@@ -20,12 +20,18 @@ function AddCandidate() {
 	const [selectedPosition, setSelectedPosition] = useState("");
 
 	const [image, setImage] = useState('');
+	const [filename, setFilename] = useState("");
 
 	const fetchPositions = () => {
 		fetch(`${backendUrl}/election/${params.id}/positions`)
 			.then(data => data.json())
 			.then(positions => setPositions(positions))
 			.catch(err => console.log(err))
+	}
+
+	const handleFileNameChange = (e) => {
+		const file = e.target.files[0];
+		if (file) setFilename(file.name)
 	}
 
 	const uploadImage = () => {
@@ -135,14 +141,17 @@ function AddCandidate() {
 						/>
 					</div>
 					
-					<div className="mb-3">
-						<input className='fileupload form-control-file' 
-							type="file"
-							id="" 
-							onChange={
-								e => setImage(e.target.files[0])
-							}
-						/>
+					<div>
+						<div className="mb-3">
+							<input className='fileupload form-control-file' 
+								type="file"
+								id="uploadpic" 
+								onChange={ handleFileNameChange }
+								style={ {display: 'none'} }
+							/>
+							<label htmlFor="uploadpic" className='Button violet'>Choose a picture</label>
+						</div>
+						<p>&gt; {filename}</p>
 					</div>
 					
 					<button type = 'submit' className="Button violet" onSubmit={handleSubmit}>Add Candidate</button>

@@ -81,7 +81,7 @@ function CreateElection() {
 						<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="startDate" className="form-label">Start Date and time: </label>
+						<label htmlFor="startDate" className="form-label time-label">Start Date and time: </label>
 						<input type="datetime-local" 
 							id="startDate" 
 							name="startdate"
@@ -90,7 +90,7 @@ function CreateElection() {
 					</div>
 
 					<div className="mb-3">
-						<label htmlFor="endDate" className="form-label">End Date and time: </label>
+						<label htmlFor="endDate" className="form-label time-label">End Date and time: </label>
 						<input type="datetime-local" 
 							id="endDate" 
 							name="enddate"
@@ -111,16 +111,14 @@ function CreateElection() {
 					</select>
 
 					<textarea name="description" 
-						id="" cols="55" rows="5" 
+						id=""
 						placeholder="Describe the election"
-						className="block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-blue-500 focus:outline-none"
 						{...register('description')}
 					/> {errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
 
 					<textarea name="rules" 
-						id="" cols="55" rows="5"  
+						id=""
 						placeholder="State any rules for this election"
-						className="block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-blue-500 focus:outline-none"
 						{...register('rules')}
 					/> {errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
 

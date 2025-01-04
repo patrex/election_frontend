@@ -740,6 +740,46 @@ button {
 	box-shadow: 0 0 0 2px var(--violet-8);
 }
 
+.datetime-local {
+	width: 100%; /* Full width for responsiveness */
+	max-width: 400px; /* Limit the width */
+	padding: 10px 15px; /* Inner padding */
+	font-size: 16px; /* Readable font size */
+	font-family: Arial, sans-serif; /* Clean font */
+	border: 1px solid #ccc; /* Subtle border */
+	border-radius: 6px; /* Rounded corners */
+	background-color: #f9f9f9; /* Light background */
+	color: #333; /* Text color */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+	transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition */
+}
+    
+.datetime-local:focus {
+	border-color: #007bff; /* Highlight border on focus */
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Glow effect */
+	outline: none; /* Remove default focus outline */
+	background-color: #fff; /* Brighter background */
+}
+    
+.datetime-local::-webkit-calendar-picker-indicator {
+	cursor: pointer; /* Pointer cursor for the calendar icon */
+	filter: invert(0.5); /* Subtle styling for better visibility */
+	opacity: 0.8; /* Reduced opacity for a softer look */
+	transition: opacity 0.3s;
+}
+    
+.datetime-local::-webkit-calendar-picker-indicator:hover {
+	opacity: 1; /* Fully visible on hover */
+}
+
+.time-label {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 14px;
+	font-weight: bold;
+}
+    
+
 @keyframes overlayShow {
 	from {
 		opacity: 0;

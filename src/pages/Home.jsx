@@ -177,7 +177,7 @@ function Home() {
 							placeholder="phone number"
 						/>
 						<div className="my-2">
-							<button className="Button violet" onClick={procPhoneNumber}>Continue</button>
+							<button className="Button violet my-2" onClick={procPhoneNumber}>Continue</button>
 							<button className="Button red my-0 mx-3 w-20" onClick={closePhoneNoModal}>Cancel</button>
 						</div>
 					</div>
@@ -198,7 +198,7 @@ function Home() {
 							placeholder="confirmation code"
 						/>
 						<div className="my-2">
-							<button className="Button violet" onClick={handleOTPSubmit}>Verify</button>
+							<button className="Button violet my-2" onClick={handleOTPSubmit}>Verify</button>
 							<button className="Button red my-0 mx-3 w-20" onClick={closeOTPModal}>Cancel</button>
 						</div>
 					</div>

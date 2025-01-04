@@ -200,7 +200,7 @@ function ElectionDetail() {
 
 				{positionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-1/2 max-w-[50vw] sm:w-[98%] p-4 rounded-lg shadow-md relative bg-white">
 							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<input 
@@ -212,7 +212,7 @@ function ElectionDetail() {
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
 							<div className="my-2">
-								<button className='Button violet' onClick={handleAddPosition}>Add Position</button>
+								<button className='Button violet my-2' onClick={handleAddPosition}>Add Position</button>
 								<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
 							</div>
 						</div>
@@ -221,7 +221,7 @@ function ElectionDetail() {
 
 				{updatePositionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-1/2 max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-1/2 max-w-[50vw] sm:w-[98%] p-4 rounded-lg shadow-md relative bg-white">
 							<span>Edit position for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<input 
@@ -232,7 +232,7 @@ function ElectionDetail() {
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
 							<div className="my-2">
-								<button className='Button violet' onClick={handleUpdatePosition}>Update Position</button>
+								<button className='Button violet my-2' onClick={handleUpdatePosition}>Update Position</button>
 								<button className='Button red my-0 mx-3 w-20' onClick={closeUpdatePositionModal}>Cancel</button>
 							</div>
 						</div>
