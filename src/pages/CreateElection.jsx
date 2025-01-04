@@ -81,7 +81,7 @@ function CreateElection() {
 						<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="startDate" className="">Start Date</label>
+						<label htmlFor="startDate" className="px-2">Start Date</label>
 						<span>
 							<input type="datetime-local" 
 								id="startDate" 
@@ -93,7 +93,7 @@ function CreateElection() {
 					</div>
 
 					<div className="mb-3">
-						<label htmlFor="endDate" className="Button mauve my-2">End Date</label>
+						<label htmlFor="endDate" className="px-2">End Date</label>
 						<span>
 							<input type="datetime-local" 
 								id="endDate" 
