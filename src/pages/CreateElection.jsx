@@ -81,23 +81,28 @@ function CreateElection() {
 						<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="startDate" className="Button mauve my-2"><i class="bi bi-calendar-date"></i> Start Date</label>
-						<input type="datetime-local" 
-							id="startDate" 
-							name="startdate"
-							
-							{...register('startdate')}
-						/>{errors.startdate && <span className='error-msg my-2'>Start date cannot be less than current year</span>}
+						<label htmlFor="startDate" className=""><i class="bi bi-calendar-date"></i> Start Date</label>
+						<span>
+							<input type="datetime-local" 
+								id="startDate" 
+								name="startdate"
+								className="Button mauve"
+								{...register('startdate')}
+							/>
+						</span>{errors.startdate && <span className='error-msg my-2'>Start date cannot be less than current year</span>}
 					</div>
 
 					<div className="mb-3">
 						<label htmlFor="endDate" className="Button mauve my-2"><i class="bi bi-calendar-date"></i> End Date</label>
-						<input type="datetime-local" 
-							id="endDate" 
-							name="enddate"
-							
-							{...register('enddate')}
-						/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
+						<span>
+							<input type="datetime-local" 
+								id="endDate" 
+								name="enddate"
+								className="Button mauve"
+								{...register('enddate')}
+							/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
+						</span>
+						
 					</div>
 
 					<label htmlFor="type">Select the election type</label>
