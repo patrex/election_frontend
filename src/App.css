@@ -846,6 +846,10 @@ keyframes fadeIn {
 		width: 100%;
 	}
 
+	.candidate-update-pic-holder {
+		min-height: 30vh;
+	}
+
 	.vr-divider {
 		display: none;
 	}
