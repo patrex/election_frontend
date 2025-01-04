@@ -3,7 +3,7 @@ function Footer() {
 		<>
 			<footer>
 				<div className="footer-content">
-					&copy; {new Date().getFullYear} made with &#10084; by silabs
+					&copy; {new Date().getFullYear()} made with &#10084; by silabs
 				</div>
 			</footer>
 		</>
