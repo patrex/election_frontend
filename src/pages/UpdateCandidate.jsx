@@ -48,10 +48,7 @@ function UpdateCandidate() {
 		firstname: yup.string().min(2).required(),
 		lastname: yup.string().min(2).required(),
 		selectedPosition: yup.string(),
-		manifesto: yup.string(),
-		imgUrl: yup.mixed().test('required', 'Choose a picture for the candidate', value => {
-			return value && value.length;
-		}),
+		manifesto: yup.string()
 	})
 
 	const { register, handleSubmit, formState, errors } = useForm({
@@ -203,7 +200,7 @@ function UpdateCandidate() {
 					</div>
 							
 					<div className="candidate-update-bottom">
-						<input type="submit" form="candidate-update-form" className="Button violet" value={"Save"} />
+						<button type="submit" form="candidate-update-form" className="Button violet">Save</button>
 					</div>
 				</div>
 			</div>	
