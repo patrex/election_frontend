@@ -85,7 +85,7 @@ function CreateElection() {
 						<input type="datetime-local" 
 							id="startDate" 
 							name="startdate"
-							style={ {display: 'none'} }
+							
 							{...register('startdate')}
 						/>{errors.startdate && <span className='error-msg my-2'>Start date cannot be less than current year</span>}
 					</div>
@@ -95,7 +95,7 @@ function CreateElection() {
 						<input type="datetime-local" 
 							id="endDate" 
 							name="enddate"
-							style={ {display: 'none'} }
+							
 							{...register('enddate')}
 						/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
 					</div>
