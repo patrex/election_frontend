@@ -124,7 +124,7 @@ function UpdateCandidate() {
 				})
 				.catch(err => toast(err))
 		} else {
-			toast.success("You did not make any changes");
+			toast.info("You did not make any changes");
 			return 
 		}
 	}
@@ -135,7 +135,7 @@ function UpdateCandidate() {
 				<div className="candidate-update-form-container">
 					<div className="update-candidate-top">
 						<div className="update-candidate-left">
-							<form onSubmit={handleSubmit(onSubmit)}>
+							<form id="candidate-update-form" onSubmit={handleSubmit(onSubmit)}>
 								<div>
 									<label htmlFor="firstname" className="form-label">Firstname: </label>
 									<input type="text" 
@@ -203,7 +203,7 @@ function UpdateCandidate() {
 					</div>
 							
 					<div className="candidate-update-bottom">
-						<input type="submit" className="Button violet" value={"Save"} />
+						<input type="submit" form="candidate-update-form" className="Button violet" value={"Save"} />
 					</div>
 				</div>
 			</div>	
