@@ -81,7 +81,7 @@ function CreateElection() {
 						<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="startDate" className=""><i class="bi bi-calendar-date"></i> Start Date</label>
+						<label htmlFor="startDate" className="">Start Date</label>
 						<span>
 							<input type="datetime-local" 
 								id="startDate" 
@@ -89,11 +89,11 @@ function CreateElection() {
 								className="Button mauve"
 								{...register('startdate')}
 							/>
-						</span>{errors.startdate && <span className='error-msg my-2'>Start date cannot be less than current year</span>}
+						</span>{errors.startdate && <span className='error-msg'>Start date cannot be less than current year</span>}
 					</div>
 
 					<div className="mb-3">
-						<label htmlFor="endDate" className="Button mauve my-2"><i class="bi bi-calendar-date"></i> End Date</label>
+						<label htmlFor="endDate" className="Button mauve my-2">End Date</label>
 						<span>
 							<input type="datetime-local" 
 								id="endDate" 
