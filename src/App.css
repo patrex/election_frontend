@@ -375,7 +375,7 @@ input[type=number] {
 .update-candidate-top {
 	display: grid;
 	min-height: 80%;
-	grid-template-columns: 60% 1% 39%;
+	grid-template-columns: 60% 1% 30%;
 	gap: 16px; /* Adjust spacing between the two divs */
 	padding: 16px; /* Optional: Add padding */
 }

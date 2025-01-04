@@ -41,6 +41,7 @@ function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
 	const [image, setImage] = useState("");
 	const [positions, setPositions] = useState(positionsList)
+	const [newFile, setNewFile] = useState("")
 	const params = useParams()
 	
 	const schema = yup.object().shape({
@@ -68,6 +69,11 @@ function UpdateCandidate() {
 	useEffect(() => {
 		setImage(candidate.imgUrl);
 	}, [positionsList])
+
+	const handleFileUpload = (e) => {
+		const file = e.target.files[0];
+		if (file) setNewFile(file.name)
+	}
 
 	const convert64 = imgUrl => {
 		const reader = new FileReader()
@@ -188,10 +194,11 @@ function UpdateCandidate() {
 									type="file"
 									id="fileuploadr" 
 									style={{ display: 'none' }}
-									onChange={ (e) => {setImage(e.target.files[0])} }
+									onChange={ handleFileUpload }
 								/>
 								<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
 							</div> 
+							<p>&gt; { newFile ? newFile : "" }</p>
 						</div>
 					</div>
 							
