@@ -200,7 +200,7 @@ function ElectionDetail() {
 
 				{positionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-1/2 max-w-[50vw] sm:w-[98%] p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
 							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<input 
@@ -221,7 +221,7 @@ function ElectionDetail() {
 
 				{updatePositionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-1/2 max-w-[50vw] sm:w-[98%] p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
 							<span>Edit position for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<input 

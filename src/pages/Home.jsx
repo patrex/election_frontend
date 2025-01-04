@@ -166,7 +166,7 @@ function Home() {
 		<>
 			{phoneModalOpen && 
 				<div className="modal-overlay">
-					<div className="w-full sm:w-1/2 max-w-full sm:max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+					<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
 						<span>{`${election.title}`}</span>
 						<h3>Enter your phone number to continue</h3>
 						<input 
