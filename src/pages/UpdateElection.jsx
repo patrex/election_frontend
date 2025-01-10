@@ -43,8 +43,8 @@ function UpdateElection() {
 		resolver: yupResolver(schema),
 		defaultValues: {
 			electiontitle: election.title,
-			startdate: election.startDate,
-			enddate: election.endDate,
+			startdate: new Date(election.startDate),
+			enddate: new Date(election.endDate),
 			electiontype: election.type,
 			description: election.desc,
 			rules: election.rules
