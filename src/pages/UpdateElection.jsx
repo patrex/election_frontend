@@ -91,8 +91,8 @@ function UpdateElection() {
 								aria-describedby="electionName" 
 								name="electiontitle"
 								autoFocus
-								{...register('electiontitle')}
-							/>{errors.electiontitle && <span className='error-msg'>You need at least two characters</span>}
+								{...register('electiontitle', {required: "You need at least two characters"})}
+							/>
 							<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 						</div>
 						<div className="mb-3">
@@ -102,9 +102,9 @@ function UpdateElection() {
 									id="startDate" 
 									name="startdate"
 									className="Button mauve"
-									{...register('startdate')}
+									{...register('startdate', {required: "Start date cannot be less than current year"})}
 								/>
-							</span>{errors.startdate && <span className='error-msg'>Start date cannot be less than current year</span>}
+							</span>
 						</div>
 
 						<div className="mb-3">
@@ -114,8 +114,8 @@ function UpdateElection() {
 									id="endDate" 
 									name="enddate"
 									className="Button mauve"
-									{...register('enddate')}
-								/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
+									{...register('enddate', {required: "Cannot be more than 3000"})}
+								/>
 							</span>
 							
 						</div>
@@ -136,16 +136,16 @@ function UpdateElection() {
 						<textarea name="description" 
 							id=""
 							placeholder="Describe the election"
-							{...register('description')}
+							{...register('description', {required: "Cannot be more than 200 characters"})}
 							className="p-2 my-2"
-						/> {errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
+						/>
 
 						<textarea name="rules" 
 							id=""
 							placeholder="State any rules for this election"
 							className="p-2 my-2"
-							{...register('rules')}
-						/> {errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
+							{...register('rules', {required: "Cannot be more than 1000 characters"})}
+						/>
 						
 						<button className="Button violet" type="submit">Save</button>
 					</form>
