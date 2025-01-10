@@ -30,7 +30,7 @@ function AddCandidate() {
 	}
 
 	const handleFileNameChange = (e) => {
-		const file = e.target.files[0];
+		const file = setImage(e.target.files[0]);
 		if (file) setFilename(file.name)
 	}
 

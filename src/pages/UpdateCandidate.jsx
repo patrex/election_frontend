@@ -40,9 +40,10 @@ export async function updateloader({ params }) {
 function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
 	const [image, setImage] = useState("");
-	const [positions, setPositions] = useState(positionsList)
-	const [newFile, setNewFile] = useState("")
-	const params = useParams()
+	const [newPicture, setNewPicture] = useState("");
+	const [positions, setPositions] = useState(positionsList);
+	const [newFile, setNewFile] = useState("");
+	const params = useParams();
 	
 	const schema = yup.object().shape({
 		firstname: yup.string().min(2).required(),
@@ -70,47 +71,54 @@ function UpdateCandidate() {
 	const handleFileUpload = (e) => {
 		const file = e.target.files[0];
 		if (file) {
-			setImage(file)
+			setNewPicture(file)
 			setNewFile(file.name)
+		}
+	}
+
+	const patchCandidate = async function(formdata, photoUrl) {
+		try {
+			const response = await fetch(`${backendUrl}/election/updatecandidate`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				      },
+				      mode: 'cors',
+				      body: JSON.stringify({
+					      electionId: election._id,
+					      candidate_id: candidate._id,
+					      ...formdata,
+					      photoUrl
+				      }),
+			})
+
+			if (response.ok) {
+				toast.success("Candidate data was updated");
+			}
+		} catch (error) {
+			toast.error("Update failed")
 		}
 	}
 	
 
-	const onSubmit = async () => {
-		if (isDirty) {
+	const onSubmit = async (formdata) => {
+		if (isDirty || newPicture) {
 			let photoUrl = ''
-			const imgRef =
-			 ref(fireman, `vote4me/${election.title}/${selectedPosition}/${firstname.concat(lastname) }`);
-	
-			uploadBytes(imgRef, image)
-				.then(snapshot => getDownloadURL(snapshot.ref))
-				.then(imgUrl => {
-					photoUrl = imgUrl;
-				})
-				.then( async (data) => {
-					try {
-						const response = await fetch(`${backendUrl}/election/updatecandidate`, {
-							method: 'PATCH',
-							headers: {
-								'Content-Type': 'application/json',
-							      },
-							      mode: 'cors',
-							      body: JSON.stringify({
-								      electionId: election._id,
-								      candidate_id: candidate._id,
-								      ...formdata,
-								      photoUrl
-							      }),
-						})
 			
-						if (response.ok) {
-							toast.success("Candidate data was updated");
-						}
-					} catch (error) {
-						toast.error("Update failed")
-					}
-				})
-				.catch(err => toast(err))
+			if (newPicture) {
+				const imgRef = ref(fireman, `vote4me/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname)}`);
+				uploadBytes(imgRef, newPicture)
+					.then(snapshot => getDownloadURL(snapshot.ref))
+					.then(imgUrl => {
+						photoUrl = imgUrl;
+					})
+					.then( async (data) => {
+						patchCandidate(formdata, photoUrl)
+					})
+					.catch(err => toast(err))
+			} else {
+				patchCandidate(formdata, image)
+			}
 		} else {
 			toast.info("You did not make any changes");
 			return 
