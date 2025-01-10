@@ -16,16 +16,15 @@ export async function updateElectionLoader({ params }) {
 	try {
 		const e = await fetch(`${backendUrl}/election/${params.electionId}`)
 		election = await e.json();
-
 	} catch (error) {
 		
 	}
 
-	return election;
+	return [election];
 }
 
 function UpdateElection() {
-	const election = useLoaderData();
+	const [election] = useLoaderData();
 	const electionTypes = ['Open', 'Closed']
 
 	const schema = yup.object().shape({
