@@ -134,6 +134,7 @@ function Dashboard() {
 							<th scope="col"></th>
 							<th scope="col"></th>
 							<th scope="col"></th>
+							<th scope="col"></th>
 	
 						</tr>
 					</thead>
@@ -149,6 +150,8 @@ function Dashboard() {
 								
 								<td><button className="Button violet" onClick={() => copyLink(election._id)}>Copy ID</button></td>
 								<td><button className="Button violet" onClick={() => copyLink(election.shareLink)}>Copy Link</button></td>
+								<td><Link to={`/user/${params.userId}/election/${election._id}/update`}><button className='Button violet'><i class="bi bi-pen-fill"></i></button></Link></td>
+
 								<td><button className='Button red' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 							</tr>
 						)) || <p>No elections to show</p>}

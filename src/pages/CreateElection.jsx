@@ -113,8 +113,8 @@ function CreateElection() {
 						{...register('electiontype')}
 					>
 						<option value="" disabled>Select type</option>
-						<option value="open">Open</option>
-						<option value="closed">Closed</option>
+						<option value="Open">Open</option>
+						<option value="Closed">Closed</option>
 					</select>
 
 					<textarea name="description" 
