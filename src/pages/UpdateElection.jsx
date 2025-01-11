@@ -143,7 +143,7 @@ function UpdateElection() {
 						</div>
 
 						<label htmlFor="type">Select the election type</label>
-						<select className="form-select form-select-lg mb-3"
+						<select className="form-select form-select-lg mb-3 w-50"
 							id="type" 
 							aria-label="Select election type"
 							name="electiontype"
