@@ -293,6 +293,7 @@ input[type=number] {
 
 .closed-event {
 	border:#feb47b solid 1px;
+	border-radius: 5px;
 }
 
 /* modal ******************************************&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/ 

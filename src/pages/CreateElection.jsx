@@ -91,7 +91,7 @@ function CreateElection() {
 
 					<div className="mb-3">
 						<label htmlFor="type">Select the election type</label>
-						<select className="form-select form-select-lg mb-3"
+						<select className="form-select form-select-lg mb-3 w-50"
 							id="type" 
 							aria-label="Large select example"
 							name="electiontype"
@@ -105,12 +105,12 @@ function CreateElection() {
 					</div>
 
 					{eventIsClosed === "Closed" && 
-						<div className="closed-event my-2 p-2.5">
+						<div className="closed-event my-2 p-2.5 w-3/5">
 							<p>Select the method of user participation</p>
 							<input {...register('userAuthType')} type="radio" name="authtype" id="auth-email" value='email'/>
-							<label htmlFor="auth-email">Email</label>
+							<label htmlFor="auth-email" className="block my-2 p-2.5">Email</label>
 							<input {...register('userAuthType')} type="radio" name="authtype" id="auth-phone" value='phone'/>
-							<label htmlFor="auth-phone">Phone</label>
+							<label htmlFor="auth-phone" className="block my-2 p-2.5">Phone</label>
 						</div>
 					}
 
