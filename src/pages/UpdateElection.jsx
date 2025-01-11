@@ -122,8 +122,8 @@ function UpdateElection() {
 								aria-describedby="electionName" 
 								name="electiontitle"
 								autoFocus
-								{...register('electiontitle', {required: "You need at least two characters"})}
-							/> {errors.electiontitle && <span className='error-msg'>Firstname must be at least two characters</span>}
+								{...register('electiontitle')}
+							/> {errors.electiontitle && <span className='error-msg'>Title must be at least two characters</span>}
 							<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 						</div>
 						<div className="mb-3">
