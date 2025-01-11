@@ -22,17 +22,14 @@ function CreateElection() {
 		userAuthType: Joi.string()
 	})
 	
-	const { register, handleSubmit, formState: {errors}, watch, reset } = useForm({
-		resolver: joiResolver(schema)
+	const { register, handleSubmit, formState: {errors}, watch } = useForm({
+		resolver: joiResolver(schema),
+		defaultValues: {
+			userAuthType: ''
+		}
 	});
 
 	const eventIsClosed = watch('electiontype');
-
-	const handleCloseEventSelect = (e) => {
-		if (e.target.value === 'Open') {
-			reset({ userAuthType: '' })
-		}
-	}
 
 	async function onSubmit(formData) {
 		console.log(formData);
@@ -99,12 +96,11 @@ function CreateElection() {
 
 					<div className="mb-3">
 						<label htmlFor="type">Select the election type</label>
-						<select className="form-select form-select-lg mb-3 w-50"
+						<select className="form-select form-select-lg mb-3 w-3/5"
 							id="type" 
 							aria-label="Large select example"
 							name="electiontype"
 							{...register('electiontype')}
-							
 						>
 							<option value="" disabled>Select type</option>
 							<option value="Open">Open</option>
@@ -117,8 +113,8 @@ function CreateElection() {
 						<div className="closed-event my-2 p-2.5 w-3/5">
 							<p>Select the method of user participation</p>
 							
-							<label htmlFor="auth-email" className="auth-type-label"><input {...register('userAuthType')} type="radio" name="authtype" id="auth-email" value='email'/><span>Email</span></label>
-							<label htmlFor="auth-phone" className="auth-type-label"><input {...register('userAuthType')} type="radio" name="authtype" id="auth-phone" value='phone'/><span>Phone</span></label>
+							<label htmlFor="auth-email" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-email" value='email'/><span>Email</span></label>
+							<label htmlFor="auth-phone" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-phone" value='phone'/><span>Phone</span></label>
 						</div>
 					}
 
@@ -137,7 +133,7 @@ function CreateElection() {
 					/> {errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
 
 					
-					<input className="Button violet" type="submit" value="Create Election" />
+					<button type="submit" className="Button violet">Create Election</button>
 					
 				</form>
 			</div>
