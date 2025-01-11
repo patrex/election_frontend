@@ -19,6 +19,7 @@ function CreateElection() {
 		electiontype: Joi.string(),
 		description: Joi.string().max(200),
 		rules: Joi.string().max(1000),
+		userAuthType: Joi.string()
 	})
 	
 	const { register, handleSubmit, formState: {errors}, watch, reset } = useForm({
