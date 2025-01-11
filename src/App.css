@@ -271,7 +271,6 @@ input[type="datetime-local"] {
 	display: block;
 	cursor: pointer;
 	margin: 1em 0;
-	font-size: 1.3em;
 }
 
 .auth-type-label span {
