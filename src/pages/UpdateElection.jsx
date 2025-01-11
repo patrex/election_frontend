@@ -1,4 +1,4 @@
-import { useLoaderData, Link, useParams } from "react-router-dom";
+import { useLoaderData, Link, useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useState, useEffect } from "react";
 import { fireman } from '../utils/fireloader';
@@ -27,6 +27,7 @@ function UpdateElection() {
 	const [election] = useLoaderData();
 	const electionTypes = ['Open', 'Closed']
 	const params = useParams();
+	const navigate = useNavigate();
 
 	const schema = yup.object().shape({
 		electiontitle: yup.string().min(2).required(),
@@ -77,7 +78,6 @@ function UpdateElection() {
 	const { dirtyFields, isDirty, errors } = formState;
 
 	async function onSubmit(formData) {
-		console.log(formData);
 		if (isDirty) {
 			const res = await fetch(`${backendUrl}/elections/${election._id}`, {
 				method: 'PATCH',
@@ -90,7 +90,10 @@ function UpdateElection() {
 				})
 			    })
 	
-			if(res.ok) navigate(`/user/${params.userId}`)
+			if(res.ok) {
+				toast.success("Event was updated")
+				navigate(`/user/${params.userId}`)
+			}
 			
 			else if (res.status === '404') {
 				toast.warning('Event not found')
@@ -130,7 +133,7 @@ function UpdateElection() {
 									id="startDate" 
 									name="startdate"
 									className="Button mauve"
-									{...register('startdate', {required: "Start date cannot be less than current year"})}
+									{...register('startdate')}
 								/>
 							</span>{errors.startdate && <span className='error-msg'>Start date cannot be less than current year</span>}
 						</div>
@@ -139,11 +142,10 @@ function UpdateElection() {
 							<label htmlFor="endDate" className="px-2">End Date</label>
 							<span>
 								<input type="datetime-local" 
-									id="endDate" 
-									name="enddate"
+									id="endDate"
 									className="Button mauve"
-									{...register('enddate', {required: "Cannot be more than 3000"})}
-								/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
+									{...register('enddate')}
+								/>{errors.enddate && <span className='error-msg'>Cannot be less than start date</span>}
 							</span>
 							
 						</div>
@@ -152,7 +154,6 @@ function UpdateElection() {
 						<select className="form-select form-select-lg mb-3 w-50"
 							id="type" 
 							aria-label="Select election type"
-							name="electiontype"
 							{...register('electiontype')}
 						>
 							<option value={election.type} selected>{election.type}</option>
@@ -161,10 +162,10 @@ function UpdateElection() {
 							))}
 						</select>
 
-						<textarea name="description" 
+						<textarea
 							id=""
 							placeholder="Describe the election"
-							{...register('description', {required: "Cannot be more than 200 characters"})}
+							{...register('description')}
 							className="p-2 my-2"
 						/>{errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
 
@@ -172,7 +173,7 @@ function UpdateElection() {
 							id=""
 							placeholder="State any rules for this election"
 							className="p-2 my-2"
-							{...register('rules', {required: "Cannot be more than 1000 characters"})}
+							{...register('rules')}
 						/>{errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
 						
 						<button className="Button violet" type="submit">Save</button>
