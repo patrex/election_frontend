@@ -261,6 +261,7 @@ input[type="datetime-local"] {
 	padding: 5px;
 	margin: .5em 0;
 	border-radius: 5px;
+	border: solid sandybrown 1px;
 }
 
 textarea {

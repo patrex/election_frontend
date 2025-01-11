@@ -61,7 +61,7 @@ function UpdateElection() {
 		return formattedDate;
 	}
 
-	const { register, handleSubmit, formState, errors } = useForm({
+	const { register, handleSubmit, formState } = useForm({
 		resolver: yupResolver(schema),
 		defaultValues: {
 			electiontitle: election.title,
@@ -73,7 +73,7 @@ function UpdateElection() {
 		}
 	});
 
-	const { dirtyFields, isDirty } = formState;
+	const { dirtyFields, isDirty, errors } = formState;
 
 	async function onSubmit(formData) {
 		if (isDirty) {
@@ -114,7 +114,7 @@ function UpdateElection() {
 								name="electiontitle"
 								autoFocus
 								{...register('electiontitle', {required: "You need at least two characters"})}
-							/>
+							/> {errors.electiontitle && <span className='error-msg'>Firstname must be at least two characters</span>}
 							<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 						</div>
 						<div className="mb-3">
@@ -126,7 +126,7 @@ function UpdateElection() {
 									className="Button mauve"
 									{...register('startdate', {required: "Start date cannot be less than current year"})}
 								/>
-							</span>
+							</span>{errors.startdate && <span className='error-msg'>Start date cannot be less than current year</span>}
 						</div>
 
 						<div className="mb-3">
@@ -137,7 +137,7 @@ function UpdateElection() {
 									name="enddate"
 									className="Button mauve"
 									{...register('enddate', {required: "Cannot be more than 3000"})}
-								/>
+								/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
 							</span>
 							
 						</div>
@@ -160,14 +160,14 @@ function UpdateElection() {
 							placeholder="Describe the election"
 							{...register('description', {required: "Cannot be more than 200 characters"})}
 							className="p-2 my-2"
-						/>
+						/>{errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
 
 						<textarea name="rules" 
 							id=""
 							placeholder="State any rules for this election"
 							className="p-2 my-2"
 							{...register('rules', {required: "Cannot be more than 1000 characters"})}
-						/>
+						/>{errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
 						
 						<button className="Button violet" type="submit">Save</button>
 					</form>
