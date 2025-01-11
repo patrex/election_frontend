@@ -77,17 +77,16 @@ function UpdateElection() {
 	const { dirtyFields, isDirty, errors } = formState;
 
 	async function onSubmit(formData) {
-		console.log(formData)
+		console.log(election._id)
 		if (isDirty) {
-			const res = await fetch(`${backendUrl}/elections`, {
+			const res = await fetch(`${backendUrl}/elections/${election._id}`, {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				mode: 'cors',
 				      body: JSON.stringify({
-					...formData,
-					electionId: election._id	
+					...formData,	
 				})
 			    })
 	
