@@ -137,7 +137,7 @@ function CreateElection() {
 					/> {errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
 
 					
-					<button className="Button violet" type="submit">Create Election</button>
+					<input className="Button violet" type="submit" value="Create Election" />
 					
 				</form>
 			</div>
