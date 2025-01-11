@@ -34,6 +34,7 @@ function CreateElection() {
 	}
 
 	async function onSubmit(formData) {
+		console.log(formData);
 		const res = await fetch(`${backendUrl}/elections`, {
       			method: 'POST',
       			headers: {
