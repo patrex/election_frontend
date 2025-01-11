@@ -164,14 +164,12 @@ function UpdateElection() {
 
 						<textarea
 							id=""
-							placeholder="Describe the election"
 							{...register('description')}
 							className="p-2 my-2"
 						/>{errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
 
 						<textarea name="rules" 
 							id=""
-							placeholder="State any rules for this election"
 							className="p-2 my-2"
 							{...register('rules')}
 						/>{errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
