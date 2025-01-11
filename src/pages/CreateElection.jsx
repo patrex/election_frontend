@@ -105,45 +105,13 @@ function CreateElection() {
 					</div>
 
 					{eventIsClosed === "Closed" && 
-						<div className="flex items-center gap-4">
-							<div className="flex items-center">
-								<input
-									{...register('userAuthType')}
-									className="hidden peer"
-									type="radio"
-									name="authtype"
-									id="auth-email"
-									value="email"
-								/>
-								<label
-									htmlFor="auth-email"
-									className="flex items-center gap-2 p-2.5 cursor-pointer border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-blue-500 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-								>
-								<span className="w-4 h-4 border rounded-full flex items-center justify-center peer-checked:border-transparent">
-									<span className="w-2 h-2 bg-blue-500 rounded-full hidden peer-checked:block"></span>
-								</span>Email
-								</label>
-							</div>
-					      
-							<div className="flex items-center">
-								<input
-									{...register('userAuthType')}
-									className="hidden peer"
-									type="radio"
-									name="authtype"
-									id="auth-phone"
-									value="phone"
-								/>
-								<label
-									htmlFor="auth-phone"
-									className="flex items-center gap-2 p-2.5 cursor-pointer border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-blue-500 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-								>
-								<span className="w-4 h-4 border rounded-full flex items-center justify-center peer-checked:border-transparent">
-									<span className="w-2 h-2 bg-blue-500 rounded-full hidden peer-checked:block"></span>
-								</span>Phone
-								</label>
-							</div>
-					      </div>
+						<div className="closed-event my-2 p-2.5 w-3/5">
+							<p>Select the method of user participation</p>
+							
+							<label htmlFor="auth-email" className="auth-type-label"><input {...register('userAuthType')} type="radio" name="authtype" id="auth-email" value='email'/><span>Email</span></label>
+							
+							<label htmlFor="auth-phone" className="auth-type-label"><input {...register('userAuthType')} type="radio" name="authtype" id="auth-phone" value='phone'/><span>Phone</span></label>
+						</div>
 					}
 
 					<textarea name="description" 
