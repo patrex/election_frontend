@@ -82,14 +82,14 @@ function UpdateCandidate() {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'application/json',
-				      },
-				      mode: 'cors',
-				      body: JSON.stringify({
-					      electionId: election._id,
-					      candidate_id: candidate._id,
-					      ...formdata,
-					      photoUrl
-				      }),
+				},
+				mode: 'cors',
+				body: JSON.stringify({
+					electionId: election._id,
+					candidate_id: candidate._id,
+					...formdata,
+					photoUrl
+				}),
 			})
 
 			if (response.ok) {

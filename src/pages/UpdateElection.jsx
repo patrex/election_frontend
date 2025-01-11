@@ -26,6 +26,7 @@ export async function updateElectionLoader({ params }) {
 function UpdateElection() {
 	const [election] = useLoaderData();
 	const electionTypes = ['Open', 'Closed']
+	const params = useParams();
 
 	const schema = yup.object().shape({
 		electiontitle: yup.string().min(2).required(),
@@ -76,14 +77,13 @@ function UpdateElection() {
 	const { dirtyFields, isDirty, errors } = formState;
 
 	async function onSubmit(formData) {
+		console.log(formData)
 		if (isDirty) {
 			const res = await fetch(`${backendUrl}/elections`, {
 				method: 'PATCH',
 				headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Z-Key',
-				'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS, PATCH'},
+					'Content-Type': 'application/json',
+				},
 				mode: 'cors',
 				      body: JSON.stringify({
 					...formData,
@@ -93,9 +93,15 @@ function UpdateElection() {
 	
 			if(res.ok) navigate(`/user/${params.userId}`)
 			
-			else {
-				toast.warning('There was an error')
+			else if (res.status === '404') {
+				toast.warning('Event not found')
+				return;
 			}
+
+			else if (res.status === '500') {
+				toast.error("There was a problem in the app")
+			}
+
 		} else {
 			toast.info("No updates made")
 		}
