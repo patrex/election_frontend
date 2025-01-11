@@ -291,6 +291,10 @@ input[type=number] {
     -moz-appearance:textfield;
 }
 
+.closed-event {
+	border:#feb47b solid 1px;
+}
+
 /* modal ******************************************&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/ 
 .modal-overlay {
 	position: fixed;

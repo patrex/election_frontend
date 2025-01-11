@@ -18,7 +18,6 @@ function Dashboard() {
 	const elections = useLoaderData();
 
 	const [electionsList, setElectionsList] = useState(elections);
-	const [modalOpen, setModalOpen] = useState(false);
 	const [phoneNos, setPhoneNos] = useState('')
 	const [election, setElection] = useState({});
 
@@ -157,30 +156,7 @@ function Dashboard() {
 						)) || <p>No elections to show</p>}
 					</tbody>
 				</table>
-
-				{modalOpen && ( 
-					<div className="modal-overlay">
-						<div className="w-full sm:w-1/2 max-w-full sm:max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
-							<span>Enter list of participants for <strong>{`${election.title}`}</strong></span>
-							<br />
-							<textarea 
-								placeholder="Enter/paste phone numbers. Seperate with commas"
-								id='phonenos' 
-								rows={5} 
-								cols={30}
-								value={phoneNos}
-								onChange={handleChange}
-								className='block resize-none p-2.5 my-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:border-transparent focus:outline-none'
-							/>
-							<div className="my-2">
-								<button className='Button violet' onClick={procPhoneNos}>Add Numbers</button>
-								<button className='Button red my-0 mx-3 w-20' onClick={closeModal}>Cancel</button>
-							</div>
-						</div>
-					</div>
-				)}
 			</div>
-		
 		</>
 	);
 }

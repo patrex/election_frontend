@@ -21,18 +21,11 @@ function CreateElection() {
 		rules: Joi.string().max(1000),
 	})
 	
-	const { register, handleSubmit, formState: {errors} } = useForm({
+	const { register, handleSubmit, formState: {errors}, watch } = useForm({
 		resolver: joiResolver(schema)
 	});
 
-	// const [formData, setFormData] = useState({ 
-	// 	electiontitle: "",
-	// 	startdate: "",
-	// 	enddate: "",
-	// 	electiontype: "",
-	// 	description: "",
-	// 	rules: "",
-	// });
+	const eventIsClosed = watch('electiontype');
 
 	async function onSubmit(formData) {
 		const res = await fetch(`${backendUrl}/elections`, {
@@ -56,14 +49,6 @@ function CreateElection() {
 			toast.warning('There was an error')
 		}
 	}
-
-	// const handleChange = (e) => {
-	// 	const {name, value, type, checked} = e.target
-	// 	setFormData(prev => ({
-	// 		...prev, 
-	// 		[name]: type === 'checkbox' ? checked : value
-	// 	}));
-	// }
 
 	return (
 		<div className="container">
@@ -102,20 +87,32 @@ function CreateElection() {
 								{...register('enddate')}
 							/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
 						</span>
-						
 					</div>
 
-					<label htmlFor="type">Select the election type</label>
-					<select className="form-select form-select-lg mb-3"
-						id="type" 
-						aria-label="Large select example"
-						name="electiontype"
-						{...register('electiontype')}
-					>
-						<option value="" disabled>Select type</option>
-						<option value="Open">Open</option>
-						<option value="Closed">Closed</option>
-					</select>
+					<div className="mb-3">
+						<label htmlFor="type">Select the election type</label>
+						<select className="form-select form-select-lg mb-3"
+							id="type" 
+							aria-label="Large select example"
+							name="electiontype"
+							{...register('electiontype')}
+						>
+							<option value="" disabled>Select type</option>
+							<option value="Open">Open</option>
+							<option value="Closed">Closed</option>
+						</select>
+
+					</div>
+
+					{eventIsClosed === "Closed" && 
+						<div className="closed-event my-2 p-2.5">
+							<p>Select the method of user participation</p>
+							<input {...register('userAuthType')} type="radio" name="authtype" id="auth-email" value='email'/>
+							<label htmlFor="auth-email">Email</label>
+							<input {...register('userAuthType')} type="radio" name="authtype" id="auth-phone" value='phone'/>
+							<label htmlFor="auth-phone">Phone</label>
+						</div>
+					}
 
 					<textarea name="description" 
 						id=""

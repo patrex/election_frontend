@@ -29,6 +29,7 @@ function ElectionDetail() {
 	const params = useParams()
 
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
+	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false)
 	const [newPosition, setNewPosition] = useState("");
 	const [updatedPosition, setUpdatedPosition] = useState("");
 	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
@@ -195,6 +196,9 @@ function ElectionDetail() {
 					<div className="position-action-btn-cont">
 						<p><button className='Button violet pos-act-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
 						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button className='Button violet pos-act-item'>Add Candidate</button></Link></p>
+						{ election.type === "Closed" && <p><button className='Button violet pos-act-item' onClick={ () => setAddParticipantsModalOpen(true)}>Add Voters</button></p> }
+						
+
 					</div>
 				</div>
 
@@ -234,6 +238,27 @@ function ElectionDetail() {
 							<div className="my-2">
 								<button className='Button violet my-2' onClick={handleUpdatePosition}>Update Position</button>
 								<button className='Button red my-0 mx-3 w-20' onClick={closeUpdatePositionModal}>Cancel</button>
+							</div>
+						</div>
+					</div>
+				)}
+
+				{addParticipantsModalOpen && ( 
+					<div className="modal-overlay">
+						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
+							<span>Enter list of participants for <strong>{`${election.title}`}</strong></span>
+							<br />
+							<textarea 
+								placeholder={`Enter/paste ${election.userAuthType == 'email' ? 'emails' : 'phone numbers'}. Seperate with commas`}
+								id='phonenos'
+								value={phoneNos}
+								onChange={handleChange}
+								className='block resize-none p-2.5 my-2.5'
+							/>
+							<div className="my-2">
+								{election.userAuthType === 'email' && <button className='Button violet' onClick={procEmails}>Add Emails</button>}
+								{election.userAuthType === 'phone' && <button className='Button violet' onClick={procPhones}>Add Phone #s</button>}
+								<button className='Button red my-0 mx-3 w-20' onClick={setAddParticipantsModalOpen(false)}>Cancel</button>
 							</div>
 						</div>
 					</div>
