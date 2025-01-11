@@ -77,7 +77,7 @@ function UpdateElection() {
 	const { dirtyFields, isDirty, errors } = formState;
 
 	async function onSubmit(formData) {
-		console.log(election._id)
+		console.log(formData);
 		if (isDirty) {
 			const res = await fetch(`${backendUrl}/elections/${election._id}`, {
 				method: 'PATCH',
@@ -86,7 +86,7 @@ function UpdateElection() {
 				},
 				mode: 'cors',
 				      body: JSON.stringify({
-					...formData,	
+					...formData,
 				})
 			    })
 	
@@ -99,6 +99,7 @@ function UpdateElection() {
 
 			else if (res.status === '500') {
 				toast.error("There was a problem in the app")
+				return;
 			}
 
 		} else {
