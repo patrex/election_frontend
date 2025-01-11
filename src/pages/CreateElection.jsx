@@ -21,11 +21,17 @@ function CreateElection() {
 		rules: Joi.string().max(1000),
 	})
 	
-	const { register, handleSubmit, formState: {errors}, watch } = useForm({
+	const { register, handleSubmit, formState: {errors}, watch, reset } = useForm({
 		resolver: joiResolver(schema)
 	});
 
 	const eventIsClosed = watch('electiontype');
+
+	const handleCloseEventSelect = (e) => {
+		if (e.target.value === 'Open') {
+			reset({ userAuthType: '' })
+		}
+	}
 
 	async function onSubmit(formData) {
 		const res = await fetch(`${backendUrl}/elections`, {
@@ -96,6 +102,7 @@ function CreateElection() {
 							aria-label="Large select example"
 							name="electiontype"
 							{...register('electiontype')}
+							onChange={handleCloseEventSelect}
 						>
 							<option value="" disabled>Select type</option>
 							<option value="Open">Open</option>
@@ -109,7 +116,6 @@ function CreateElection() {
 							<p>Select the method of user participation</p>
 							
 							<label htmlFor="auth-email" className="auth-type-label"><input {...register('userAuthType')} type="radio" name="authtype" id="auth-email" value='email'/><span>Email</span></label>
-							
 							<label htmlFor="auth-phone" className="auth-type-label"><input {...register('userAuthType')} type="radio" name="authtype" id="auth-phone" value='phone'/><span>Phone</span></label>
 						</div>
 					}
