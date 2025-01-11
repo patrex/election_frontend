@@ -102,7 +102,7 @@ function CreateElection() {
 							aria-label="Large select example"
 							name="electiontype"
 							{...register('electiontype')}
-							onChange={handleCloseEventSelect}
+							
 						>
 							<option value="" disabled>Select type</option>
 							<option value="Open">Open</option>
