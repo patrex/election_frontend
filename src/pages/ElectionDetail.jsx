@@ -199,7 +199,7 @@ function ElectionDetail() {
 
 	async function removeVoter(voter) {
 		Swal.fire({
-			title: `Remove ${voter.email ? voter.email : voter.phoneNo}?`,
+			title: `Remove ${election.userAuthType == 'email' ? voter.email : voter.phoneNo}?`,
 			showDenyButton: true,
 			confirmButtonText: "Remove",
 			denyButtonText: `Cancel`
@@ -321,19 +321,18 @@ function ElectionDetail() {
 						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
 							<p>Registered participants</p>
 
-							<table className="table table-striped table-hover table-sm table-responsive">
-								<tbody>
-									{votersList && (
-										votersList.map(voter => (
-											<tr key={voter._id}>
-												<td>{election.userAuthType == 'email' ? voter.email: voter.phoneNo}</td>
-												<td><button className='Button red' onClick={() => removeVoter(voter)}><i className="bi bi-trash3 m-1"></i></button></td>
-											</tr>
-										))
-									)}
-								</tbody>
-							</table>
-							<div className="my-2">
+							<ul>
+								{votersList && (
+									votersList.map(voter => (
+										<li key={voter._id}>
+											{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
+											<button className='Button red' onClick={() => removeVoter(voter)}><i className="bi bi-trash3 m-1"></i></button>
+										</li>
+									))
+								)}
+							</ul>
+							
+							<div className="my-2" style={{display: 'flex', justifyContent: 'flex-end'}}>
 								<button className='Button violet my-0 mx-3 w-20' onClick={ () => setViewUsersModal(false)}>Close</button>
 							</div>
 						</div>
