@@ -17,7 +17,7 @@ export async function electionDetailLoader({params}) {
 		positions = await res2.json()
 
 		if (election.type == 'Closed') {
-			v = await fetch(`${backendUrl}/election/${election._id}/voterlist`)
+			const v = await fetch(`${backendUrl}/election/${election._id}/voterlist`)
 			voters = await v.json()
 		}
 
@@ -334,7 +334,7 @@ function ElectionDetail() {
 								</tbody>
 							</table>
 							<div className="my-2">
-								<button className='Button green-dark my-0 mx-3 w-20' onClick={ () => setViewUsersModal(false)}>Close</button>
+								<button className='Button violet my-0 mx-3 w-20' onClick={ () => setViewUsersModal(false)}>Close</button>
 							</div>
 						</div>
 					</div>
