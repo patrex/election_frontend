@@ -272,10 +272,8 @@ function ElectionDetail() {
 					</table>
 					<div className="position-action-btn-cont">
 						<p><button className='Button violet pos-act-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
-						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button className='Button violet pos-act-item'>Add Candidate</button></Link></p>
+						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={positions.length > 0 ? false : true}className='Button violet pos-act-item'>Add Candidate</button></Link></p>
 						{ election.type === "Closed" && <p><button className='Button violet pos-act-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
-						
-
 					</div>
 				</div>
 
