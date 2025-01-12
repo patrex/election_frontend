@@ -333,8 +333,8 @@ function ElectionDetail() {
 								onChange={ (e) => { setParticipantsList(e.target.value)} }
 							/>
 							<div className="my-2">
-								{election.userAuthType === 'email' && <button className='Button violet' onClick={() => procList('email')}>Add Emails</button>}
-								{election.userAuthType === 'phone' && <button className='Button violet' onClick={() => procList('phone')}>Add Phone #s</button>}
+								{election.userAuthType == 'email' && <button className='Button violet' onClick={() => procList('email')}>Add Emails</button>}
+								{election.userAuthType == 'phone' && <button className='Button violet' onClick={() => procList('phone')}>Add Phone #s</button>}
 								<button className='Button red my-0 mx-3 w-20' onClick={ () => setAddParticipantsModalOpen(false) }>Cancel</button>
 							</div>
 						</div>
