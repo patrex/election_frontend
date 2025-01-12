@@ -18,10 +18,6 @@ function Dashboard() {
 	const elections = useLoaderData();
 
 	const [electionsList, setElectionsList] = useState(elections);
-	const [phoneNos, setPhoneNos] = useState('')
-	const [election, setElection] = useState({});
-
-	
 
 	const removeElection = async (election) => {
 		Swal.fire({
@@ -49,66 +45,6 @@ function Dashboard() {
 			}
 		});
 	}
-
-	function handleChange(e) {
-		setPhoneNos(e.target.value)
-	}
-
-	
-	function addPhoneNosToDB (voterlist) {
-		fetch(`${backendUrl}/election/${election._id}/addvoters`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			mode: 'cors',
-			body: JSON.stringify({
-				election: election._id,
-				voterList: voterlist
-			}),
-		}).then(r => {
-			toast.success('Your list of voters was added')
-			setPhoneNos('');
-		}).catch(err => toast.warning(err))	
-	}
-
-	function procPhoneNos () {
-		if (!phoneNos) {
-			toast.warning("you need to enter at least one phone number");
-			return;
-		}
-		
-		const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
-		const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
-
-		let invalid = false;
-		const voterList = phoneNos.split(',')
-			.map(phoneno => {
-				const phoneNumber = phoneno.trim();
-
-				if (phoneNumber.match(countryCodePattern)) return phoneNumber;
-				if (phoneNumber.match(phoneNumberPattern)) return phoneNumber.replace(phoneNumberPattern, '234$2');
-
-				invalid = true;
-
-				return phoneNumber;
-			});
-		
-		if (invalid) toast.warning("One or more phone numbers not properly formatted")
-		
-		closeModal()
-		addPhoneNosToDB(voterList)
-	}
-
-	const openModal = (election) => {
-		setElection(election);
-		setModalOpen(true);
-	}
-
-	const closeModal = () => {
-		setModalOpen(false);
-	}
-	
 
 	function copyLink(link) {
 		let text = '';

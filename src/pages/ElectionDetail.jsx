@@ -28,12 +28,14 @@ function ElectionDetail() {
 	const [positionsList, setPositionsList] = useState(positions);
 	const params = useParams()
 
-	const [positionModalOpen, setPositionModalOpen] = useState(false);
-	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false)
 	const [newPosition, setNewPosition] = useState("");
 	const [updatedPosition, setUpdatedPosition] = useState("");
-	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
 	const [currentlySelectedPosition, setCurrentlySelectedPosition] = useState("");
+	const [participantsList, setParticipantsList] = useState("");
+	
+	const [positionModalOpen, setPositionModalOpen] = useState(false);
+	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false)
+	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
 
 	const [elec, setElection] = useState(election);
 
@@ -164,7 +166,82 @@ function ElectionDetail() {
 			}
 		});	
 	}
+
+	async function sendListToDB (voterlist) {
+		try {
+			const res = await fetch(`${backendUrl}/election/${election._id}/addvoters`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				mode: 'cors',
+				body: JSON.stringify({
+					election: election._id,
+					voterList: voterlist
+				}),
+			})
+
+			if (res.ok) {
+				toast.success("List was added")
+				setParticipantsList('');
+			}
+		} catch (error) {
+			toast.error("An error occured. Try again")
+		}	
+	}
+
+	function procList (participantsAuthType) {
+		if (!participantsList) {
+			toast.warning("You did not enter any participants");
+			return;
+		}
+
+		if (participantsAuthType === 'email') {
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			let invalid = false;
+
+			const voterList = participantsList.split(',')
+				.map(email => {
+					const emailAddr = email.trim();
+
+					if (emailAddr.match(emailRegex)) return emailAddr;
+
+					invalid = true;
+					return emailAddr;
+				});
+			if (invalid) {
+				toast.warning("One or more emails not properly formatted")
+				return;
+			}
+
+			setAddParticipantsModalOpen(false)
+			sendListToDB(voterList)
+
+		} else if (participantsAuthType === 'phone') {
+			const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
+			const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
 	
+			let invalid = false;
+			const voterList = participantsList.split(',')
+				.map(phoneno => {
+					const phoneNumber = phoneno.trim();
+	
+					if (phoneNumber.match(countryCodePattern)) return phoneNumber;
+					if (phoneNumber.match(phoneNumberPattern)) return phoneNumber.replace(phoneNumberPattern, '234$2');
+	
+					invalid = true;
+	
+					return phoneNumber;
+				});
+			
+			if (invalid) toast.warning("One or more phone numbers not properly formatted")
+			
+			setAddParticipantsModalOpen(false)
+			sendListToDB(voterList)
+		}
+	}
+
+	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	return ( 
 		<div className="container">
@@ -196,7 +273,7 @@ function ElectionDetail() {
 					<div className="position-action-btn-cont">
 						<p><button className='Button violet pos-act-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
 						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button className='Button violet pos-act-item'>Add Candidate</button></Link></p>
-						{ election.type === "Closed" && <p><button className='Button violet pos-act-item' onClick={ () => setAddParticipantsModalOpen(true)}>Add Voters</button></p> }
+						{ election.type === "Closed" && <p><button className='Button violet pos-act-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
 						
 
 					</div>
@@ -251,14 +328,14 @@ function ElectionDetail() {
 							<textarea 
 								placeholder={`Enter/paste ${election.userAuthType == 'email' ? 'emails' : 'phone numbers'}. Seperate with commas`}
 								id='phonenos'
-								value={phoneNos}
-								onChange={handleChange}
+								value={ participantsList }
 								className='block resize-none p-2.5 my-2.5'
+								onChange={ (e) => { setParticipantsList(e.target.value)} }
 							/>
 							<div className="my-2">
-								{election.userAuthType === 'email' && <button className='Button violet' onClick={procEmails}>Add Emails</button>}
-								{election.userAuthType === 'phone' && <button className='Button violet' onClick={procPhones}>Add Phone #s</button>}
-								<button className='Button red my-0 mx-3 w-20' onClick={setAddParticipantsModalOpen(false)}>Cancel</button>
+								{election.userAuthType === 'email' && <button className='Button violet' onClick={() => procList('email')}>Add Emails</button>}
+								{election.userAuthType === 'phone' && <button className='Button violet' onClick={() => procList('phone')}>Add Phone #s</button>}
+								<button className='Button red my-0 mx-3 w-20' onClick={ () => setAddParticipantsModalOpen(false) }>Cancel</button>
 							</div>
 						</div>
 					</div>
