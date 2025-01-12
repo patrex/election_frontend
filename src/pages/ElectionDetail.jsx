@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import backendUrl from '../utils/backendurl'
 
 export async function electionDetailLoader({params}) {
-	let election, positions = undefined;
+	let election, positions, voters = undefined;
 
 	try {
 		const res1 = await fetch(`${backendUrl}/election/${params.id}`)
@@ -16,16 +16,22 @@ export async function electionDetailLoader({params}) {
 		election = await res1.json()
 		positions = await res2.json()
 
+		if (election.type == 'Closed') {
+			v = await fetch(`${backendUrl}/election/${election._id}/voterlist`)
+			voters = await v.json()
+		}
+
 	} catch (error) {
 		console.log(error);
 	}
 
-	return [election, positions]
+	return [election, positions, voters]
 }
 
 function ElectionDetail() {
-	const [election, positions] = useLoaderData();
+	const [election, positions, voters] = useLoaderData();
 	const [positionsList, setPositionsList] = useState(positions);
+	const [votersList, setVotersList] = useState(voters)
 	const params = useParams()
 
 	const [newPosition, setNewPosition] = useState("");
@@ -36,6 +42,7 @@ function ElectionDetail() {
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false)
 	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
+	const [viewUsersModal, setViewUsersModal] = useState(false);
 
 	const [elec, setElection] = useState(election);
 
@@ -190,6 +197,38 @@ function ElectionDetail() {
 		}	
 	}
 
+	async function removeVoter(voter) {
+		Swal.fire({
+			title: `Remove ${voter.email ? voter.email : voter.phoneNo}?`,
+			showDenyButton: true,
+			confirmButtonText: "Remove",
+			denyButtonText: `Cancel`
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				try {
+					const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
+						method: 'delete',
+						headers: {
+							'Content-Type': 'application/json',
+							'Access-Control-Allow-Origin': '*',
+							'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Z-Key',
+							'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS'
+						},
+						mode: 'cors',
+					})
+		
+					if(res.ok) {
+						setVotersList(votersList.filter(e => e._id != voter._id ));
+						toast.success('The participant was removed successfully')
+					}
+					
+				} catch (error) {
+					toast.error("There was an error removing the participant")
+				}
+			}
+		});
+	}
+
 	function procList (participantsAuthType) {
 		if (!participantsList) {
 			toast.warning("You did not enter any participants");
@@ -245,7 +284,6 @@ function ElectionDetail() {
 
 	return ( 
 		<div className="container">
-
 			<div className="pos-detail-container">
 				<div className="pos-heading-banner">
 					<table className="table table-hover table-striped">
@@ -272,10 +310,35 @@ function ElectionDetail() {
 					</table>
 					<div className="position-action-btn-cont">
 						<p><button className='Button violet pos-act-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
-						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={positions.length > 0 ? false : true}className='Button violet pos-act-item'>Add Candidate</button></Link></p>
+						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={!positions} className='Button violet pos-act-item'>Add Candidate</button></Link></p>
 						{ election.type === "Closed" && <p><button className='Button violet pos-act-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
+						{ election.type === "Closed" && <p><button className='Button violet pos-act-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
 					</div>
 				</div>
+
+				{viewUsersModal && (
+					<div className="modal-overlay">
+						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
+							<p>Registered participants</p>
+
+							<table className="table table-striped table-hover table-sm table-responsive">
+								<tbody>
+									{votersList && (
+										votersList.map(voter => (
+											<tr key={voter._id}>
+												<td>{election.userAuthType == 'email' ? voter.email: voter.phoneNo}</td>
+												<td><button className='Button red' onClick={() => removeVoter(voter)}><i className="bi bi-trash3 m-1"></i></button></td>
+											</tr>
+										))
+									)}
+								</tbody>
+							</table>
+							<div className="my-2">
+								<button className='Button green-dark my-0 mx-3 w-20' onClick={ () => setViewUsersModal(false)}>Close</button>
+							</div>
+						</div>
+					</div>
+				)}
 
 				{positionModalOpen && (
 					<div className="modal-overlay">
