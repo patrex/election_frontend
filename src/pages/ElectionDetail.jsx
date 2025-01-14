@@ -17,7 +17,7 @@ export async function electionDetailLoader({params}) {
 		positions = await res2.json()
 
 		if (election.type == 'Closed') {
-			const v = await fetch(`${backendUrl}/election/${election._id}/voterlist`)
+			const v = await fetch(`${backendUrl}/election/${params.id}/voterlist`)
 			voters = await v.json()
 		}
 
@@ -38,10 +38,16 @@ function ElectionDetail() {
 	const [updatedPosition, setUpdatedPosition] = useState("");
 	const [currentlySelectedPosition, setCurrentlySelectedPosition] = useState("");
 	const [participantsList, setParticipantsList] = useState("");
+	const [participant, setParticipant] = useState();
+	const [updatedParticipantInfo, setUpdatedParticipantInfo] = useState("");
+	const [validationMsg, setValidationMsg] = useState("");
+	
+	const [validationErr, setValidationErr] = useState(false);
 	
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
-	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false)
 	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
+	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false);
+	const [updateParticipantModal, setUpdateParticipantModal] = useState(false);
 	const [viewUsersModal, setViewUsersModal] = useState(false);
 
 	const [elec, setElection] = useState(election);
@@ -206,13 +212,10 @@ function ElectionDetail() {
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				try {
-					const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
+					const res = await fetch(`${backendUrl}/election/${voter._id}/voter/delete`, {
 						method: 'delete',
 						headers: {
 							'Content-Type': 'application/json',
-							'Access-Control-Allow-Origin': '*',
-							'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Z-Key',
-							'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS'
 						},
 						mode: 'cors',
 					})
@@ -280,6 +283,96 @@ function ElectionDetail() {
 		}
 	}
 
+	function editParticipant(participant) {
+		setParticipant(participant)
+		setUpdateParticipantModal(true);
+	}
+
+	async function patchVoterEmail () {
+		if (updatedParticipantInfo) {
+			const emailAddr = String(updatedParticipantInfo).trim()
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailAddr.match(emailRegex)) {
+				setValidationErr(true);
+				setValidationMsg("Email is invalid")
+				return;
+			}
+			setUpdateParticipantModal(false);
+			try {
+				const response = await fetch(`${backendUrl}/election/voter/update`, {
+					method: 'PATCH',
+					headers: {
+					  'Content-Type': 'application/json',
+					},
+					mode: 'cors',
+					body: JSON.stringify({
+						email: emailAddr,
+						participantId: participant._id,
+						electionId: election._id
+					}),
+				});
+
+				if (response.ok) {
+					const updated_participant = await response.json();
+					setParticipantsList((prev) => 
+						prev.map((participant) => participant._id === updated_participant._id ? updated_participant : participant
+					))
+				} else {
+					toast.warning("Could not update the position")
+				}
+			} catch (error) {
+				toast.error("There was an error with the request")
+			}
+		}
+	}
+
+	async function patchVoterPhone() {
+		if (updatedParticipantInfo) {
+			const phoneNumber = String(updatedParticipantInfo).trim()
+			let validatedPhoneNo = ''
+
+			const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
+			const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
+			
+			if (phoneNumber.match(countryCodePattern)) {
+				validatedPhoneNo = phoneNumber
+			} else if (phoneNumber.match(phoneNumberPattern)) {
+				validatedPhoneNo = phoneNumber.replace(phoneNumberPattern, '234$2');
+			} else {
+				setValidationErr(true);
+				setValidationMsg("Phone number is invalid")
+				return;
+			}
+
+			try {
+				const response = await fetch(`${backendUrl}/election/voter/update`, {
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					mode: 'cors',
+					body: JSON.stringify({
+						phoneNo: validatedPhoneNo,
+						participantId: participant._id,
+						electionId: election._id
+					}),
+				});
+				
+				if (response.ok) {
+					setUpdateParticipantModal(false);
+					const updated_participant = await response.json();
+					setParticipantsList((prev) => 
+						prev.map((participant) => participant._id === updated_participant._id ? updated_participant : participant
+					))
+				} else {
+					toast.warning("Could not update the voter")
+				}
+			} catch (error) {
+				toast.error("There was an error with the request")
+			}
+		}
+	}
+
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	return ( 
@@ -326,12 +419,13 @@ function ElectionDetail() {
 									votersList.map(voter => (
 										<li key={voter._id}>
 											{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
-											<button className='Button red' onClick={() => removeVoter(voter)}><i className="bi bi-trash3 m-1"></i></button>
+											<button className='Button violet' onClick={ () => editParticipant(voter) }><i class="bi bi-pen-fill"></i></button>
+											<button className='Button red' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
 										</li>
 									))
 								)}
 							</ul>
-							
+
 							<div className="my-2" style={{display: 'flex', justifyContent: 'flex-end'}}>
 								<button className='Button violet my-0 mx-3 w-20' onClick={ () => setViewUsersModal(false)}>Close</button>
 							</div>
@@ -355,6 +449,28 @@ function ElectionDetail() {
 							<div className="my-2">
 								<button className='Button violet my-2' onClick={handleAddPosition}>Add Position</button>
 								<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
+							</div>
+						</div>
+					</div>
+				)}
+
+				{updateParticipantModal && (
+					<div className="modal-overlay">
+						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-gray-200">
+							<span>Update participant info: <strong>{`${election.userAuthType == 'email' ? participant.email : participant.phoneNo}`}</strong></span>
+							<br />
+							<input 
+								type='text'
+								id='updateparticipant' 
+								value={ updatedParticipantInfo }
+								onChange={ (e) => {setUpdatedParticipantInfo(e.target.value)} }
+								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+							/>
+							<div className="status-bar">{validationErr && <p style={{color: 'red'}}>{ validationMsg }</p>}</div>
+							<div className="my-2" style={{display: 'flex', justifyContent: 'flex-end'}}>
+								{election.userAuthType == 'email' && <button className='Button violet my-2' onClick={ patchVoterEmail }>Save</button>}
+								{election.userAuthType == 'phone' && <button className='Button violet my-2' onClick={ patchVoterPhone }>Save</button>}
+								<button className='Button red my-0 mx-3 w-20' onClick={ () => setUpdateParticipantModal(false) }>Cancel</button>
 							</div>
 						</div>
 					</div>
