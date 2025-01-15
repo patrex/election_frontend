@@ -40,9 +40,6 @@ function ElectionDetail() {
 	const [participantsList, setParticipantsList] = useState("");
 	const [participant, setParticipant] = useState();
 	const [updatedParticipantInfo, setUpdatedParticipantInfo] = useState("");
-	const [validationMsg, setValidationMsg] = useState("");
-	
-	const [validationErr, setValidationErr] = useState(false);
 	
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
@@ -293,8 +290,7 @@ function ElectionDetail() {
 			const emailAddr = String(updatedParticipantInfo).trim()
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			if (!emailAddr.match(emailRegex)) {
-				setValidationErr(true);
-				setValidationMsg("Email is invalid")
+				toast.error("Email is invalid")
 				return;
 			}
 			setUpdateParticipantModal(false);
@@ -306,7 +302,7 @@ function ElectionDetail() {
 					},
 					mode: 'cors',
 					body: JSON.stringify({
-						email: emailAddr,
+						emailAddr: emailAddr,
 						participantId: participant._id,
 						electionId: election._id
 					}),
@@ -339,8 +335,7 @@ function ElectionDetail() {
 			} else if (phoneNumber.match(phoneNumberPattern)) {
 				validatedPhoneNo = phoneNumber.replace(phoneNumberPattern, '234$2');
 			} else {
-				setValidationErr(true);
-				setValidationMsg("Phone number is invalid")
+				toast.warning("Phone number is invalid")
 				return;
 			}
 
@@ -419,8 +414,10 @@ function ElectionDetail() {
 									votersList.map(voter => (
 										<li key={voter._id}>
 											{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
-											<button className='Button violet' onClick={ () => editParticipant(voter) }><i class="bi bi-pen-fill"></i></button>
-											<button className='Button red' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+											<div>
+												<button className='Button violet' onClick={ () => editParticipant(voter) }><i class="bi bi-pen-fill"></i></button>
+												<button className='Button red' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+											</div>
 										</li>
 									))
 								)}
@@ -463,10 +460,9 @@ function ElectionDetail() {
 								type='text'
 								id='updateparticipant' 
 								value={ updatedParticipantInfo }
-								onChange={ (e) => {setUpdatedParticipantInfo(e.target.value)} }
+								onChange={ (e) => { setUpdatedParticipantInfo(e.target.value) } }
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
-							<div className="status-bar">{validationErr && <p style={{color: 'red'}}>{ validationMsg }</p>}</div>
 							<div className="my-2" style={{display: 'flex', justifyContent: 'flex-end'}}>
 								{election.userAuthType == 'email' && <button className='Button violet my-2' onClick={ patchVoterEmail }>Save</button>}
 								{election.userAuthType == 'phone' && <button className='Button violet my-2' onClick={ patchVoterPhone }>Save</button>}
