@@ -209,7 +209,7 @@ function ElectionDetail() {
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				try {
-					const res = await fetch(`${backendUrl}/election/${voter._id}/voter/delete`, {
+					const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
 						method: 'delete',
 						headers: {
 							'Content-Type': 'application/json',
@@ -311,7 +311,7 @@ function ElectionDetail() {
 				if (response.ok) {
 					const updated_participant = await response.json();
 					setParticipantsList((prev) => 
-						prev.map((participant) => participant._id === updated_participant._id ? updated_participant : participant
+						prev.map( (participant) => participant._id === updated_participant._id ? updated_participant : participant
 					))
 				} else {
 					toast.warning("Could not update the position")
