@@ -396,11 +396,11 @@ function ElectionDetail() {
 							</tr>
 						</tbody>
 					</table>
-					<div className="position-action-btn-cont">
-						<p><button className='Button violet pos-act-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
-						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={!positions} className='Button violet pos-act-item'>Add Candidate</button></Link></p>
-						{ election.type === "Closed" && <p><button className='Button violet pos-act-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
-						{ election.type === "Closed" && <p><button className='Button violet pos-act-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
+					<div className="action-btn-container">
+						<p><button className='Button violet action-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
+						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={!positions} className='Button violet action-item'>Add Candidate</button></Link></p>
+						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
+						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
 					</div>
 				</div>
 
@@ -415,7 +415,7 @@ function ElectionDetail() {
 										<li key={voter._id}>
 											{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
 											<div>
-												<button className='Button violet' onClick={ () => editParticipant(voter) }><i class="bi bi-pen-fill"></i></button>
+												<button className='Button violet' style={ {margin: '0 10px'} } onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>
 												<button className='Button red' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
 											</div>
 										</li>
@@ -423,8 +423,8 @@ function ElectionDetail() {
 								)}
 							</ul>
 
-							<div className="my-2" style={{display: 'flex', justifyContent: 'flex-end'}}>
-								<button className='Button violet my-0 mx-3 w-20' onClick={ () => setViewUsersModal(false)}>Close</button>
+							<div className='action-btn-container'>
+								<button className='Button violet action-item' onClick={ () => setViewUsersModal(false) }>Close</button>
 							</div>
 						</div>
 					</div>
@@ -443,9 +443,9 @@ function ElectionDetail() {
 								onChange={handlePositionChange}
 								className='w-5/6 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
-							<div className="my-2">
-								<button className='Button violet my-2' onClick={handleAddPosition}>Add Position</button>
-								<button className='Button red my-0 mx-3 w-20' onClick={closePositionModal}>Cancel</button>
+							<div className="action-btn-container">
+								<button className='Button violet action-item' onClick={handleAddPosition}>Add Position</button>
+								<button className='Button red action-item' onClick={closePositionModal}>Cancel</button>
 							</div>
 						</div>
 					</div>
@@ -463,10 +463,10 @@ function ElectionDetail() {
 								onChange={ (e) => { setUpdatedParticipantInfo(e.target.value) } }
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
-							<div className="my-2" style={{display: 'flex', justifyContent: 'flex-end'}}>
-								{election.userAuthType == 'email' && <button className='Button violet my-2' onClick={ patchVoterEmail }>Save</button>}
-								{election.userAuthType == 'phone' && <button className='Button violet my-2' onClick={ patchVoterPhone }>Save</button>}
-								<button className='Button red my-0 mx-3 w-20' onClick={ () => setUpdateParticipantModal(false) }>Cancel</button>
+							<div className="action-btn-container" >
+								{election.userAuthType == 'email' && <button className='Button violet action-item' onClick={ patchVoterEmail }>Save</button>}
+								{election.userAuthType == 'phone' && <button className='Button violet action-item' onClick={ patchVoterPhone }>Save</button>}
+								<button className='Button red action-item' onClick={ () => setUpdateParticipantModal(false) }>Cancel</button>
 							</div>
 						</div>
 					</div>
@@ -484,9 +484,9 @@ function ElectionDetail() {
 								onChange={handlePositionUpdate}
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
-							<div className="my-2">
-								<button className='Button violet my-2' onClick={handleUpdatePosition}>Update Position</button>
-								<button className='Button red my-0 mx-3 w-20' onClick={closeUpdatePositionModal}>Cancel</button>
+							<div className="action-btn-container">
+								<button className='Button violet action-item' onClick={handleUpdatePosition}>Update Position</button>
+								<button className='Button red action-item' onClick={closeUpdatePositionModal}>Cancel</button>
 							</div>
 						</div>
 					</div>
@@ -504,10 +504,10 @@ function ElectionDetail() {
 								className='block resize-none p-2.5 my-2.5'
 								onChange={ (e) => { setParticipantsList(e.target.value)} }
 							/>
-							<div className="my-2">
-								{election.userAuthType == 'email' && <button className='Button violet' onClick={() => procList('email')}>Add Emails</button>}
-								{election.userAuthType == 'phone' && <button className='Button violet' onClick={() => procList('phone')}>Add Phone #s</button>}
-								<button className='Button red my-0 mx-3 w-20' onClick={ () => setAddParticipantsModalOpen(false) }>Cancel</button>
+							<div className="action-btn-container">
+								{election.userAuthType == 'email' && <button className='Button violet action-item' onClick={() => procList('email')}>Add Emails</button>}
+								{election.userAuthType == 'phone' && <button className='Button violet action-item' onClick={() => procList('phone')}>Add Phone #s</button>}
+								<button className='Button red action-item' onClick={ () => setAddParticipantsModalOpen(false) }>Cancel</button>
 							</div>
 						</div>
 					</div>
