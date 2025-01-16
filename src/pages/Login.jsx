@@ -11,6 +11,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 
 function Login() {
 	const navigate = useNavigate();
+	const { setUser } = useContext(AppContext)
 
 	const schema = Joi.object({
 		username: Joi.string().email({ minDomainSegments: 2, tlds: { deny: ['xxx'] } }).required(),
@@ -20,10 +21,6 @@ function Login() {
 	const { register, handleSubmit, formState: {errors} } = useForm({
 		resolver: joiResolver(schema)
 	});
-
-	const color = useContext(AppContext)
-
-	useEffect( () => console.log(color) )
 
 	const onSubmit = async (formData) => {
 		const res = await fetch(`${backendUrl}/user/auth/login`, {
@@ -37,6 +34,7 @@ function Login() {
 		
 		if (res.ok) {
 			let user = await res.json();
+			setUser(user)
 			navigate(`/user/${user._id}`)
 		} else if (res.status == 401) {
 			toast.warning('Username or password is incorrect')

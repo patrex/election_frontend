@@ -45,11 +45,11 @@ const router = createBrowserRouter(createRoutesFromElements(
 
 
 function App() {
-	const [col, setCol] = useState('black')
+	const [ user, setUser ] = useState(null)
 	
 	return (
-		<AppContext.Provider value={col}>
-			<RouterProvider router={router} />
+		<AppContext.Provider value={ { user, setUser} }>
+			<RouterProvider router={ router } />
 		</AppContext.Provider>
 	);
 }
