@@ -1,10 +1,11 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Toaster, toast } from 'sonner';
 import { AppContext } from "@/App";
 import { useContext } from "react";
 
 
 function Header() {
+	const navigate = useNavigate()
 	const {user, setUser} = useContext(AppContext);
 
 	const linkStyles = {
@@ -15,7 +16,10 @@ function Header() {
 		fontSize: '1.2em'
 	}
 
-	
+	function logout(){
+		setUser(null);
+		navigate('/')
+	}
 
 	return ( 
 		<header>
@@ -23,7 +27,7 @@ function Header() {
 			<h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2>
 			{user ? 
 				<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center'} }>
-					<pre style={ {color: 'white'}}>Welcome, { user.firstname } <span className="logout" onClick={() => setUser(null)}>Logout</span></pre>
+					<pre style={ {color: 'white'}}>Welcome, { user.firstname } <span className="logout" onClick={ logout }>Logout</span></pre>
 				</div>
 				 : 
 				<nav>
