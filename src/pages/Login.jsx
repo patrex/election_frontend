@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useContext, useEffect } from 'react';
 
 import { toast } from 'sonner'
 import backendUrl from '../utils/backendurl'
@@ -18,6 +19,10 @@ function Login() {
 	const { register, handleSubmit, formState: {errors} } = useForm({
 		resolver: joiResolver(schema)
 	});
+
+	const color = useContext(AppContext)
+
+	useEffect( () => console.log(color) )
 
 	const onSubmit = async (formData) => {
 		const res = await fetch(`${backendUrl}/user/auth/login`, {

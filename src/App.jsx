@@ -1,4 +1,5 @@
 import { Route, createBrowserRouter,RouterProvider, createRoutesFromElements } from 'react-router-dom';
+import { createContext, useState } from 'react';
 import './App.css'
 
 import Home, { homeLoader } from './pages/Home'
@@ -17,6 +18,8 @@ import CandidateSelfAdd, { candidateSelfAddLoader } from './pages/CandidateSelfA
 import NotFound from './pages/NotFound';
 import UpdateCandidate, {updateloader} from './pages/UpdateCandidate';
 import UpdateElection, {updateElectionLoader} from './pages/UpdateElection';
+
+export const AppContext = createContext();
 
 const router = createBrowserRouter(createRoutesFromElements(
 	<Route element={<Layout/>}>
@@ -42,8 +45,12 @@ const router = createBrowserRouter(createRoutesFromElements(
 
 
 function App() {
+	const [col, setCol] = useState('black')
+	
 	return (
-		<RouterProvider router={router} />
+		<AppContext.Provider value={col}>
+			<RouterProvider router={router} />
+		</AppContext.Provider>
 	);
 }
 

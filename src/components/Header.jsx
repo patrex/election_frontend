@@ -1,5 +1,8 @@
+import { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import {Toaster, toast} from 'sonner';
+import { Toaster, toast } from 'sonner';
+import { AppContext } from "@/App";
+
 
 function Header() {
 	const linkStyles = {
@@ -9,6 +12,8 @@ function Header() {
 		fontFamily: 'sans-serif',
 		fontSize: '1.2em'
 	}
+
+	
 
 	return ( 
 		<header>
