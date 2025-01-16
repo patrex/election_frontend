@@ -23,7 +23,7 @@ function Header() {
 			<h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2>
 			{user ? 
 				<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center'} }>
-					<pre style={ {color: 'white'}}>Welcome, { user.firstname } <span className="logout">Logout</span></pre>
+					<pre style={ {color: 'white'}}>Welcome, { user.firstname } <span className="logout" onClick={() => setUser(null)}>Logout</span></pre>
 				</div>
 				 : 
 				<nav>

@@ -656,7 +656,7 @@ button {
 	cursor: pointer;
 }
 
-.logout :hover {
+.logout:hover {
 	text-decoration: underline;
 	font-weight: bold;
 }
