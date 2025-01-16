@@ -22,7 +22,10 @@ function Header() {
 			<Toaster position="top-right" richColors/>
 			<h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2>
 			{user ? 
-				<pre>Welcome, { user.firstname } <span>Logout</span></pre> : 
+				<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center'} }>
+					<pre style={ {color: 'white'}}>Welcome, { user.firstname } <span style={ {textDecoration: 'underline'}}>Logout</span></pre>
+				</div>
+				 : 
 				<nav>
 				
 					<NavLink to="/login"

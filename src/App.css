@@ -651,6 +651,15 @@ button {
 	overflow: hidden;
 	min-width: 100%;
 }
+
+.logout {
+	cursor: pointer;
+}
+
+.logout :hover {
+	text-decoration: underline;
+	font-weight: bold;
+}
       
 .Button {
 	display: inline-flex;
