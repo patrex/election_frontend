@@ -519,7 +519,6 @@ function ElectionDetail() {
 							<tr>
 								<th scope='col'>Positions</th>
 								<th scope="col">Actions</th>
-								<th scope="col"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -530,17 +529,17 @@ function ElectionDetail() {
 											<Link to={`./position/${position.position}`}>{position.position}</Link> 
 										</td>
 
-
 										<td>
-											<button className='Button red' 
-												onClick={() => editPosition(position)}>
-													<i className="bi bi-pen-fill"></i></button>
-										</td>
+											<div className="action-btn-container">
+												<button className='Button violet action-item' 
+													onClick={() => editPosition(position)}>
+														<i className="bi bi-pen-fill"></i></button>
+												
+												<button className='Button red action-item' 
+													onClick={() => removePosition(position)}>
+														<i className="bi bi-trash3 m-1"></i></button>
+											</div>
 
-										<td>
-											<button className='Button red' 
-												onClick={() => removePosition(position)}>
-													<i className="bi bi-trash3 m-1"></i></button>
 										</td>
 									</tr>
 								))
