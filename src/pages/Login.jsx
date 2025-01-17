@@ -8,7 +8,7 @@ import backendUrl from '../utils/backendurl'
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
-import { json } from 'd3';
+
 
 function Login() {
 	const navigate = useNavigate();
@@ -49,7 +49,7 @@ function Login() {
 
 	return (
 		<div className="container">
-			<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 2xl:w-2/5 rounded border border-yellow-600">
+			<div className="form-container">
 				<form onSubmit={ handleSubmit(onSubmit) }>
 					<div className="mb-3">
 						Email

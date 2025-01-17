@@ -239,7 +239,8 @@ header a:hover {
 	/* background-color: #ffd700; Light gold background color */
 	padding: 20px;
 	border-radius: 10px;
-	width: 70%;
+	width: 40%;
+	border: 1px solid #feb47b;
 }
 
 .logo {
