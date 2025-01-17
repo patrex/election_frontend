@@ -44,7 +44,7 @@ function CreateAccount() {
 
 	return (
 		<div className="container">
-			<div className="form-container">
+			<div className="form-container" style={ {border: 'none'} }>
 				<form onSubmit={ handleSubmit(onSubmit) }>
 					<div className="form-group">
 						<div className="mb-3">

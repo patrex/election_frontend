@@ -40,7 +40,7 @@ function Login() {
 			setUser(user)
 			navigate(`/user/${user._id}`)
 		} else if (res.status == 401) {
-			setErrMsg('Username or password is incorrect')
+			toast.warning('Username or password is incorrect')
 			return;
 		} else {
 			setErrMsg('Something went wrong...')
