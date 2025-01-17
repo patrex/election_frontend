@@ -210,7 +210,7 @@ function ElectionDetail() {
 			if (result.isConfirmed) {
 				try {
 					const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
-						method: 'delete',
+						method: 'post',
 						headers: {
 							'Content-Type': 'application/json',
 						},
