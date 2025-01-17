@@ -46,7 +46,7 @@ function Login() {
 
 	return (
 		<div className="container">
-			<div className="w-5/6 md:w-1/2 lg:w-1/2 xl:w-1/2 2xl:w-1/2">
+			<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-3/5 2xl:w-2/3 rounded border-yellow-600">
 				<form onSubmit={ handleSubmit(onSubmit) }>
 					<div className="mb-3">
 						Email
