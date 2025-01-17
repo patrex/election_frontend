@@ -396,7 +396,7 @@ function ElectionDetail() {
 							</tr>
 						</tbody>
 					</table>
-					<div style={ {display: 'flex', justifyContent: 'space-around'} }>
+					<div style={ {display: 'flex', justifyContent: 'flex-start'} }>
 						<p><button className='Button violet action-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
 						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={!positions} className='Button violet action-item'>Add Candidate</button></Link></p>
 						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
