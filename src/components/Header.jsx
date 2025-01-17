@@ -28,7 +28,7 @@ function Header() {
 			
 			{user ? 
 				<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '0 1.5rem'} }>
-					<pre style={ {color: 'white'}}>Welcome, { user.firstname } <span className="logout" onClick={ logout }>Logout</span></pre>
+					<pre style={ {color: 'white'} }>Welcome, { user.firstname } | <span className="logout" onClick={ logout }>Logout</span></pre>
 				</div>
 				 : 
 				<nav>
