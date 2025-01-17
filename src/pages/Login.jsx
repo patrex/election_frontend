@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useContext, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from '@/App';
 
 import { toast } from 'sonner'
@@ -8,10 +8,13 @@ import backendUrl from '../utils/backendurl'
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
+import { json } from 'd3';
 
 function Login() {
 	const navigate = useNavigate();
 	const { setUser } = useContext(AppContext)
+	const [errMsg, setErrMsg] = useState('')
+
 
 	const schema = Joi.object({
 		username: Joi.string().email({ minDomainSegments: 2, tlds: { deny: ['xxx'] } }).required(),
@@ -37,10 +40,10 @@ function Login() {
 			setUser(user)
 			navigate(`/user/${user._id}`)
 		} else if (res.status == 401) {
-			toast.warning('Username or password is incorrect')
+			setErrMsg('Username or password is incorrect')
 			return;
 		} else {
-			toast.error('Something went wrong...')
+			setErrMsg('Something went wrong...')
 		}
 	}
 
@@ -54,7 +57,7 @@ function Login() {
 							placeholder="email"
 							autoFocus
 							{...register('username')}
-						/>{errors.email && <span className='error-msg'>You need to enter a valid email</span>}
+						/>
 					</div>
 
 					<div className="mb-3">
@@ -68,6 +71,10 @@ function Login() {
 					<div className="mb-3">
 						<button type="submit" className="Button violet">Login</button>
 					</div>
+
+					{errors.username && <div className='status bg-red-200 text-red-500'>You need to enter a valid email</div>}
+					{errors.password && <div className='status bg-red-200 text-red-500'>{errors.password.message}</div>}
+					{errMsg && <div className='status bg-red-200 text-red-500'>{errMsg}</div>}
 				</form>
 			</div>
 			
