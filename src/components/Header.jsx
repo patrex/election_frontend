@@ -24,7 +24,8 @@ function Header() {
 	return ( 
 		<header>
 			<Toaster position="top-right" richColors/>
-			<h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2>
+			<div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
+			
 			{user ? 
 				<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center'} }>
 					<pre style={ {color: 'white'}}>Welcome, { user.firstname } <span className="logout" onClick={ logout }>Logout</span></pre>
