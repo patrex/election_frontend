@@ -16,7 +16,7 @@ function Home() {
 	const [id, setId] = useState('');
 	const [OTPOpen, setOTPOpen] = useState(false);
 	const [OTPVal, setOTPVal] = useState('');
-	const [phoneNo, setPhoneNo] = useState('');
+	const [participant, setParticipant] = useState('');
 	const [phoneModalOpen, setPhoneModalOpen] = useState(false);
 	const [election, setElection] = useState({});
 
@@ -36,12 +36,12 @@ function Home() {
 			let e = await fetch(`${backendUrl}/election/${electionid}`)
 
 			if (e.ok) election = await e.json();
+			setElection(election)
 
 			let start_date = new Date(election.startDate);
 			let end_date = new Date(election.endDate);
 			let current_date = new Date();
 
-			setElection(election)
 
 			if (end_date < current_date) {
 				toast.warning("This event has been concluded");
@@ -55,18 +55,10 @@ function Home() {
 		}
 	}
 
-	function handleOTPChange(e) {
-		setOTPVal(e.target.value)
-	}
-
-	const closeOTPModal = () => {
-		setOTPOpen(false)
-	}
-
 	const handleOTPSubmit = async () => {
 		let s = await fetch(`${backendUrl}/election/${OTPVal}/verifyOTP`);
 		if (s.ok) {
-			closeOTPModal();
+			setOTPOpen(false);
 			setOTPVal('');
 			addVoterToDB();
 		} else {
@@ -75,44 +67,36 @@ function Home() {
 		}
 	};
 
-	function collectPhoneNo(e) {
-		setPhoneNo(e.target.value)
-	}
-
-	function closePhoneNoModal() {
-		setPhoneModalOpen(false);
-	}
-
 	async function addVoterToDB () {
 		try {
-			await fetch(`${backendUrl}/election/${election._id}/voter/phone`, {
+			await fetch(`${backendUrl}/election/${election._id}/voter/participant`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				mode: 'cors',
-				body: JSON.stringify({ phoneNumber: phoneNo, electionId: election._id }),
+				body: JSON.stringify({ participant, electionId: election._id }),
 			})
 			
-			navigate(`/election/${election._id}/${phoneNo}`)
+			navigate(`/election/${election._id}/${participant}`)
 		} catch (error) {
 			toast.warning('An error occured')
 		}
 	}
 
-	async function procOTP (phoneNumber) {
+	async function procOTP () {
 		try {
 			let list = await fetch(`${backendUrl}/election/${election._id}/voterlist`);
 
 			let voterlist = await list.json();
-			const votersList = voterlist.map(v => v.phoneNo);
+			const votersList = voterlist.map(v => v.participant);
 			
 			// create a new voter
-			if (!(votersList.includes(phoneNumber))) {
+			if (!(votersList.includes(participant))) {
 				// if election is closed, no further processing: user has to be added by the creator
 				// of the election
 	
-				if (election.type == 'closed') {
+				if (election.type == 'Closed') {
 					toast.warning('This is a closed event. Ensure your admin has added your number and try again')
 					return;
 				}
@@ -125,7 +109,8 @@ function Home() {
 					},
 					mode: 'cors',
 					body: JSON.stringify({
-						phoneNumber
+						participant,
+						electionId: election._id
 					}),
 				})
 	
@@ -134,31 +119,44 @@ function Home() {
 					setOTPOpen(true) //open otp modal
 				}
 			} else {
-				navigate(`/election/${election._id}/${phoneNo}`)
+				navigate(`/election/${election._id}/${participant}`)
 			}
 		} catch (error) {
 			toast.error("An error occured")
 		}
 	}
 
-	async function procPhoneNumber() {
-		if (phoneNo) {
-			const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
-			const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
+	async function procParticipant() {
+		if (participant) {
+			if (election.userAuthType == 'email') {
+				let emailAddr = String(participant).trim()
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailAddr.match(emailRegex)) {
+					toast.warning("The email address is invalid")
+					return;
+				}
+				setParticipant(emailAddr)
+				procOTP()
+			}
 
-			let phoneNumber = '';
-			
-			if (phoneNo.match(countryCodePattern)) {
-				procOTP(phoneNo)
-			} else if(phoneNo.match(phoneNumberPattern)) {
-				phoneNumber = phoneNo.replace(phoneNumberPattern, '234$2');
-
-				setPhoneNo(phoneNumber)
-				procOTP(phoneNumber)
-			} else {
-				toast.warning("A valid phone number is required to continue")
-				return;
-			} 
+			else if (election.userAuthType == 'phone') {
+				const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
+				const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
+	
+				let phoneNumber = String(participant).trim();
+				
+				if (phoneNumber.match(countryCodePattern)) {
+					procOTP(participant)
+				} else if(phoneNumber.match(phoneNumberPattern)) {
+					phoneNumber = participant.replace(phoneNumberPattern, '234$2');
+	
+					setParticipant(phoneNumber)
+					procOTP()
+				} else {
+					toast.warning("A valid phone number is required to continue")
+					return;
+				}
+			}
 		} else toast.warning("You must enter a phone number to continue")
 	}
 
@@ -168,17 +166,17 @@ function Home() {
 				<div className="modal-overlay">
 					<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
 						<span>{`${election.title}`}</span>
-						<h3>Enter your phone number to continue</h3>
+						<h3>{`Enter your ${election.userAuthType == 'email' ? 'email' : 'phone number'} to continue`}</h3>
 						<input 
 							type="text"
 							id="phone-field"
-							onChange={collectPhoneNo}
-							value={phoneNo}
-							placeholder="phone number"
+							onChange={ (e) => setParticipant(e.target.value) }
+							value={participant}
+							placeholder={`Enter your ${election.userAuthType == 'email' ? 'email' : 'phone number'}`}
 						/>
-						<div className="my-2">
-							<button className="Button violet my-2" onClick={procPhoneNumber}>Continue</button>
-							<button className="Button red my-0 mx-3 w-20" onClick={closePhoneNoModal}>Cancel</button>
+						<div className="action-btn-container">
+							<button className="Button violet action-item" onClick={procParticipant}>Continue</button>
+							<button className="Button red action-item" onClick={ () => setPhoneModalOpen(false)}>Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -188,18 +186,18 @@ function Home() {
 				<div className="modal-overlay">
 					<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
 						<span>{`${election.title}`}</span>
-						<p>You should have received a verification at the phone number you provided</p>
+						<p>{`You should have received a verification at the ${election.userAuthType == 'email' ? 'email' : 'phone number'} you provided`}</p>
 						<h3>Enter Confirmation Code</h3>
 						<input 
 							type="number" 
 							id="opt-field"
-							onChange={handleOTPChange}
+							onChange={(e) => setOTPVal(e.target.value)}
 							value={OTPVal}
 							placeholder="confirmation code"
 						/>
-						<div className="my-2">
-							<button className="Button violet my-2" onClick={handleOTPSubmit}>Verify</button>
-							<button className="Button red my-0 mx-3 w-20" onClick={closeOTPModal}>Cancel</button>
+						<div className="action-btn-container">
+							<button className="Button violet action-item" onClick={handleOTPSubmit}>Verify</button>
+							<button className="Button red action-item" onClick={ () => setOTPOpen(false)}>Cancel</button>
 						</div>
 					</div>
 				</div>

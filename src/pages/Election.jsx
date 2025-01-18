@@ -37,20 +37,6 @@ export default function Election() {
 	const [positions, setPositions] = useState(p);
 	const [selectedPosition, setSelectedPosition] = useState("");
 
-	// const fetchPositions = () => {
-	// 	fetch(`/election/${params.id}/positions`)
-	// 		.then(data => data.json())
-	// 		.then(positions => setPositions(positions))
-	// 		.catch(err => console.log(err))
-	// }
-
-	// const fetchElectionData = () => {
-	// 	fetch(`/election/${params.id}`)
-	// 		.then((election) => election.json())
-	// 		.then(data => setElectionData(data))
-	// 		.catch(err => console.log(err))
-	// }
-
 	async function sendVote(candidate, voterId) {
 		try {
 			const userVotes = await fetch(`${backendUrl}/election/${electionData._id}/${voterId}/votes`);
@@ -100,12 +86,6 @@ export default function Election() {
 		}
 			
 	}
-
-
-	// useEffect(() => {
-	// 	// fetchElectionData()
-	// 	// fetchPositions()
-	// }, [])
 
 	const handleChange = async (e) => {
 		const selected = e.target.value;

@@ -22,14 +22,9 @@ function CreateElection() {
 		userAuthType: Joi.string()
 	})
 	
-	const { register, handleSubmit, formState: {errors}, watch } = useForm({
+	const { register, handleSubmit, formState: {errors} } = useForm({
 		resolver: joiResolver(schema),
-		defaultValues: {
-			userAuthType: ''
-		}
 	});
-
-	const eventIsClosed = watch('electiontype');
 
 	async function onSubmit(formData) {
 		const res = await fetch(`${backendUrl}/elections`, {
@@ -108,14 +103,14 @@ function CreateElection() {
 
 					</div>
 
-					{eventIsClosed === "Closed" && 
-						<div className="closed-event my-2 p-2.5 w-3/5">
-							<p>Select the method of user participation</p>
-							
-							<label htmlFor="auth-email" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-email" value='email'/><span>Email</span></label>
-							<label htmlFor="auth-phone" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-phone" value='phone'/><span>Phone</span></label>
-						</div>
-					}
+					
+					<div className="closed-event my-2 p-2.5 w-3/5">
+						<p>How will voters participate?</p>
+						
+						<label htmlFor="auth-email" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-email" value='email'/><span>Email</span></label>
+						<label htmlFor="auth-phone" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-phone" value='phone'/><span>Phone</span></label>
+					</div>
+					
 
 					<textarea name="description" 
 						id=""
