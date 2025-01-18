@@ -86,6 +86,7 @@ function Home() {
 
 	async function procOTP (participant) {
 		try {
+			console.log(participant);
 			let list = await fetch(`${backendUrl}/election/${election._id}/voterlist`);
 
 			let voterlist = await list.json();
