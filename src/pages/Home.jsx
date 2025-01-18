@@ -84,7 +84,7 @@ function Home() {
 		}
 	}
 
-	async function procOTP () {
+	async function procOTP (participant) {
 		try {
 			let list = await fetch(`${backendUrl}/election/${election._id}/voterlist`);
 
@@ -136,7 +136,7 @@ function Home() {
 					return;
 				}
 				setParticipant(emailAddr)
-				procOTP()
+				procOTP(emailAddr)
 			}
 
 			else if (election.userAuthType == 'phone') {
@@ -151,7 +151,7 @@ function Home() {
 					phoneNumber = participant.replace(phoneNumberPattern, '234$2');
 	
 					setParticipant(phoneNumber)
-					procOTP()
+					procOTP(phoneNumber)
 				} else {
 					toast.warning("A valid phone number is required to continue")
 					return;
@@ -228,8 +228,9 @@ function Home() {
 						autoFocus
 					/>
 						
-					<br />
-					<button className="Button violet" onClick={() => procElection(id)}>Continue</button>
+					<div className="action-btn-container">
+						<button className="Button violet action-item" onClick={() => procElection(id)}>Continue</button>
+					</div>
 				</div>
 			</div>
 		</>
