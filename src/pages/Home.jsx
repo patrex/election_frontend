@@ -146,7 +146,7 @@ function Home() {
 				let phoneNumber = String(participant).trim();
 				
 				if (phoneNumber.match(countryCodePattern)) {
-					procOTP(participant)
+					procOTP(phoneNumber)
 				} else if(phoneNumber.match(phoneNumberPattern)) {
 					phoneNumber = participant.replace(phoneNumberPattern, '234$2');
 	
