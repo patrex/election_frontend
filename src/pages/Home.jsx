@@ -56,18 +56,23 @@ function Home() {
 	}
 
 	const handleOTPSubmit = async () => {
-		let s = await fetch(`${backendUrl}/election/${OTPVal}/verifyOTP`);
-		if (s.ok) {
-			setOTPOpen(false);
-			setOTPVal('');
-			addVoterToDB();
-		} else {
-			toast.warning("That was invalid. Check the number and try again");
-			return;
+		try {
+			let s = await fetch(`${backendUrl}/election/${OTPVal}/verifyOTP`);
+			if (s.ok) {
+				setOTPOpen(false);
+				setOTPVal('');
+				addVoterToDB(participant);
+			} else {
+				toast.warning("That was invalid. Check the number and try again");
+				return;
+			}
+		} catch (error) {
+			console.log(error)
 		}
 	};
 
-	async function addVoterToDB () {
+	async function addVoterToDB (participant) {
+		console.log(participant + " add to db");
 		try {
 			await fetch(`${backendUrl}/election/${election._id}/voter/participant`, {
 				method: 'POST',
@@ -81,6 +86,7 @@ function Home() {
 			navigate(`/election/${election._id}/${participant}`)
 		} catch (error) {
 			toast.warning('An error occured')
+			console.log(error)
 		}
 	}
 
@@ -90,7 +96,7 @@ function Home() {
 			let list = await fetch(`${backendUrl}/election/${election._id}/voterlist`);
 
 			let voterlist = await list.json();
-			const votersList = voterlist.map(v => v.participant);
+			const votersList = election.userAuthType == 'phone' ? voterlist.map(v => v.phoneNo) : voterlist.map(v => v.email)
 			
 			// create a new voter
 			if (!(votersList.includes(participant))) {
@@ -124,10 +130,11 @@ function Home() {
 			}
 		} catch (error) {
 			toast.error("An error occured")
+			console.log(error)
 		}
 	}
 
-	async function procParticipant() {
+	async function procParticipant(voter) {
 		if (participant) {
 			if (election.userAuthType == 'email') {
 				let emailAddr = String(participant).trim()
@@ -136,7 +143,7 @@ function Home() {
 					toast.warning("The email address is invalid")
 					return;
 				}
-				setParticipant(emailAddr)
+	
 				procOTP(emailAddr)
 			}
 
@@ -149,9 +156,9 @@ function Home() {
 				if (phoneNumber.match(countryCodePattern)) {
 					procOTP(phoneNumber)
 				} else if(phoneNumber.match(phoneNumberPattern)) {
-					phoneNumber = participant.replace(phoneNumberPattern, '234$2');
+					const phoneNumber = participant.replace(phoneNumberPattern, '234$2');
 	
-					setParticipant(phoneNumber)
+	
 					procOTP(phoneNumber)
 				} else {
 					toast.warning("A valid phone number is required to continue")
