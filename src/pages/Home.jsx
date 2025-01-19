@@ -151,7 +151,7 @@ function Home() {
 				if (phoneNumber.match(countryCodePattern)) {
 					procOTP(phoneNumber)
 				} else if(phoneNumber.match(phoneNumberPattern)) {
-					const phone = participant.replace(phoneNumberPattern, '234$2');
+					const phone = phoneNumber.replace(phoneNumberPattern, '234$2');
 	
 					setParticipant(phone)
 					procOTP(phone)
