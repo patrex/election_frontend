@@ -22,10 +22,6 @@ function Home() {
 
 	let electionFromQueryParams = useLoaderData()
 	
-	function handleChange(e) {
-		setId(e.target.value)
-	}
-	
 	useEffect (() => {
 		if (electionFromQueryParams) procElection(electionFromQueryParams)
 	}, [])
@@ -61,7 +57,7 @@ function Home() {
 			if (s.ok) {
 				setOTPOpen(false);
 				setOTPVal('');
-				addVoterToDB(participant);
+				addVoterToDB();
 			} else {
 				toast.warning("That was invalid. Check the number and try again");
 				return;
@@ -71,10 +67,9 @@ function Home() {
 		}
 	};
 
-	async function addVoterToDB (participant) {
-		console.log(participant + " add to db");
+	async function addVoterToDB () {
 		try {
-			await fetch(`${backendUrl}/election/${election._id}/voter/participant`, {
+			await fetch(`${backendUrl}/election/${election._id}/addvoter/participant`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -92,7 +87,6 @@ function Home() {
 
 	async function procOTP (participant) {
 		try {
-			console.log(participant);
 			let list = await fetch(`${backendUrl}/election/${election._id}/voterlist`);
 
 			let voterlist = await list.json();
@@ -102,7 +96,6 @@ function Home() {
 			if (!(votersList.includes(participant))) {
 				// if election is closed, no further processing: user has to be added by the creator
 				// of the election
-	
 				if (election.type == 'Closed') {
 					toast.warning('This is a closed event. Ensure your admin has added your number and try again')
 					return;
@@ -134,7 +127,7 @@ function Home() {
 		}
 	}
 
-	async function procParticipant(voter) {
+	async function procParticipant(participant) {
 		if (participant) {
 			if (election.userAuthType == 'email') {
 				let emailAddr = String(participant).trim()
@@ -145,6 +138,7 @@ function Home() {
 				}
 	
 				procOTP(emailAddr)
+				setParticipant(emailAddr)
 			}
 
 			else if (election.userAuthType == 'phone') {
@@ -156,10 +150,10 @@ function Home() {
 				if (phoneNumber.match(countryCodePattern)) {
 					procOTP(phoneNumber)
 				} else if(phoneNumber.match(phoneNumberPattern)) {
-					const phoneNumber = participant.replace(phoneNumberPattern, '234$2');
+					const phone = participant.replace(phoneNumberPattern, '234$2');
 	
-	
-					procOTP(phoneNumber)
+					procOTP(phone)
+					setParticipant(phone)
 				} else {
 					toast.warning("A valid phone number is required to continue")
 					return;
@@ -183,7 +177,7 @@ function Home() {
 							placeholder={`Enter your ${election.userAuthType == 'email' ? 'email' : 'phone number'}`}
 						/>
 						<div className="action-btn-container">
-							<button className="Button violet action-item" onClick={procParticipant}>Continue</button>
+							<button className="Button violet action-item" onClick={() => procParticipant(participant) }>Continue</button>
 							<button className="Button red action-item" onClick={ () => setPhoneModalOpen(false)}>Cancel</button>
 						</div>
 					</div>
@@ -199,13 +193,13 @@ function Home() {
 						<input 
 							type="number" 
 							id="opt-field"
-							onChange={(e) => setOTPVal(e.target.value)}
+							onChange={ (e) => setOTPVal(e.target.value) }
 							value={OTPVal}
 							placeholder="confirmation code"
 						/>
 						<div className="action-btn-container">
-							<button className="Button violet action-item" onClick={handleOTPSubmit}>Verify</button>
-							<button className="Button red action-item" onClick={ () => setOTPOpen(false)}>Cancel</button>
+							<button className="Button violet action-item" onClick={() => handleOTPSubmit(OTPVal)}>Verify</button>
+							<button className="Button red action-item" onClick={ () => setOTPOpen(false) }>Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -231,12 +225,12 @@ function Home() {
 						type="text" 
 						name="electionid" 
 						value={id} 
-						onChange={handleChange}
+						onChange={ (e) => setId(e.target.value) }
 						id="electionIdEntry" 
 						autoFocus
 					/>
 						
-					<div className="action-btn-container">
+					<div className="my-2">
 						<button className="Button violet action-item" onClick={() => procElection(id)}>Continue</button>
 					</div>
 				</div>

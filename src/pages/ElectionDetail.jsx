@@ -179,7 +179,7 @@ function ElectionDetail() {
 
 	async function sendListToDB (voterlist) {
 		try {
-			const res = await fetch(`${backendUrl}/election/${election._id}/addvoters`, {
+			const res = await fetch(`${backendUrl}/election/${election._id}/closed_event/addvoters`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
