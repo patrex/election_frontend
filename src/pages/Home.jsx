@@ -103,7 +103,17 @@ function Home() {
 				}
 	
 				// create an OTP for verification
-				const s = await fetch(`${backendUrl}/election/getOTP`, {
+				const response = election.userAuthType == "phone" ? await fetch(`${backendUrl}/election/getOTP`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					mode: 'cors',
+					body: JSON.stringify({
+						participant,
+						electionId: election._id
+					}),
+				}) : await fetch(`${backendUrl}/election/getOTP/email`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -115,7 +125,7 @@ function Home() {
 					}),
 				})
 	
-				if (s.ok) {
+				if (response.ok) {
 					closePhoneNoModal()
 					setOTPOpen(true) //open otp modal
 				}
