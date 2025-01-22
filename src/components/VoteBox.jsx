@@ -1,6 +1,4 @@
-import Swal from "sweetalert2";
-
-function VoteBox({candidate}, userId) {
+function VoteBox({candidate}, options) {
 	const handleClick = (e) => {
 		
 	}

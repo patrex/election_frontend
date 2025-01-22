@@ -114,6 +114,11 @@ body {
         margin-bottom: 20px;
 }
 
+.vote-card:hover {
+	background-color: #007bff;
+	color: #ccc;
+}
+
 .vote-card img {
 	width: 100px; 
         height: auto; /* Maintain aspect ratio */
