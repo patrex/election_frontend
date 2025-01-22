@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useLoaderData } from "react-router-dom";
 import moment from "moment";
 import {toast} from 'sonner'
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
+import { AppContext } from "@/App";
 
 import backendUrl from '../utils/backendurl'
       
@@ -33,6 +34,7 @@ export default function Election() {
 	const [candidates, setCandidates] = useState([]);
 
 	const [owner, setOwner] = useState(o);
+	const { voter } = useContext(AppContext)
 
 	const [positions, setPositions] = useState(p);
 	const [selectedPosition, setSelectedPosition] = useState("");
@@ -83,8 +85,7 @@ export default function Election() {
 			 }
 		} catch (error) {
 			toast.warning(error)
-		}
-			
+		}	
 	}
 
 	const handleChange = async (e) => {
@@ -100,6 +101,10 @@ export default function Election() {
 			toast.warning(error)
 		}
 	}
+
+	useEffect(() => {
+		if (!voter) navigate(`/`)
+	}, [])
 
 	return (
 		<>

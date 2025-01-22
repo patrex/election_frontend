@@ -1,6 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from 'sonner'
+import { AppContext } from "@/App";
 
 import backendUrl from '../utils/backendurl'
 
@@ -21,6 +22,7 @@ function Home() {
 	const [election, setElection] = useState({});
 
 	let electionFromQueryParams = useLoaderData()
+	const { setVoter } = useContext(AppContext)
 	
 	useEffect (() => {
 		if (electionFromQueryParams) procElection(electionFromQueryParams)
@@ -76,6 +78,8 @@ function Home() {
 				mode: 'cors',
 				body: JSON.stringify({ participant, electionId: election._id }),
 			})
+
+			setVoter(participant)
 			
 			navigate(`/election/${election._id}/${participant}`)
 		} catch (error) {
