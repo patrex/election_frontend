@@ -126,8 +126,8 @@ function Home() {
 				})
 	
 				if (response.ok) {
-					closePhoneNoModal()
-					setOTPOpen(true) //open otp modal
+					setPhoneModalOpen(false)
+					setOTPOpen(true)	//open otp modal
 				}
 			} else {
 				navigate(`/election/${election._id}/${participant}`)
