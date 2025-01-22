@@ -1,9 +1,10 @@
-import  { useState } from 'react';
-import { Link, useLoaderData, useParams } from 'react-router-dom';
+import  { useState, useContext, useEffect } from 'react';
+import { Link, useLoaderData, useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner'
 import backendUrl from '../utils/backendurl'
+import { AppContext } from '@/App';
 
 export async function dashboardLoader({params}) {
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`)
@@ -16,6 +17,9 @@ export async function dashboardLoader({params}) {
 function Dashboard() {
 	const params = useParams();
 	const elections = useLoaderData();
+	const navigate = useNavigate()
+
+	const { user } = useContext(AppContext);
 
 	const [electionsList, setElectionsList] = useState(elections);
 
@@ -52,6 +56,13 @@ function Dashboard() {
 
 		if (text) toast.success("copied")
 	}
+
+	useEffect(() => {
+		if (!user) {
+			toast.warning("You need to login first")
+			navigate("/login")
+		}
+	})
 
 
 
