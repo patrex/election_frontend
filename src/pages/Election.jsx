@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, useLoaderData } from "react-router-dom";
+import { useParams, useLoaderData, useNavigate } from "react-router-dom";
 import moment from "moment";
 import {toast} from 'sonner'
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
@@ -29,6 +29,7 @@ export async function electionLoader({ params }) {
 export default function Election() {
 	const params = useParams();
 	const [e, p, o] = useLoaderData();
+	const navigate = useNavigate();
 
 	const [electionData, setElectionData] = useState(e);
 	const [candidates, setCandidates] = useState([]);
@@ -128,8 +129,8 @@ export default function Election() {
 						<label>
 							<select name="position" 
 								className='form-select form-select-lg mb-3'
-								value={selectedPosition} 
-								onChange={handleChange}
+								value={ selectedPosition } 
+								onChange={ handleChange }
 							>
 								<option value="" disabled>Select a position</option>
 								{positions.length > 0 ? 
