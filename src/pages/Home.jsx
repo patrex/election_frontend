@@ -1,5 +1,5 @@
-import { useLoaderData, useNavigate, useContext } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
 import { toast } from 'sonner'
 import { AppContext } from "@/App";
 
@@ -22,6 +22,7 @@ function Home() {
 	const [election, setElection] = useState({});
 
 	let electionFromQueryParams = useLoaderData()
+
 	const { setVoter } = useContext(AppContext)
 	
 	useEffect (() => {

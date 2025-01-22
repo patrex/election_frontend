@@ -104,7 +104,10 @@ export default function Election() {
 	}
 
 	useEffect(() => {
-		if (!voter) navigate(`/`)
+		if (!voter) {
+			toast.warning("You need to register as a voter first")
+			navigate(`/`)
+		} 
 	}, [])
 
 	return (
