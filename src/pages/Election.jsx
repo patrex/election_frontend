@@ -35,7 +35,7 @@ export default function Election() {
 	const [candidates, setCandidates] = useState([]);
 
 	const [owner, setOwner] = useState(o);
-	const { voter } = useContext(AppContext)
+	const { voter } = useContext(AppContext);
 
 	const [positions, setPositions] = useState(p);
 	const [selectedPosition, setSelectedPosition] = useState("");
@@ -46,8 +46,8 @@ export default function Election() {
 			let userHasVoted = false;
 
 			if (userVotes.ok) {
-				let currentPosition = positions.filter(p => p._id == candidate.position)
 				// let availablePositions = positions.map(p => p._id);
+				let currentPosition = positions.filter(p => p._id == candidate.position)
 				const votesByUser = await userVotes.json();
 
 				let voteList = votesByUser.votes;
@@ -95,11 +95,11 @@ export default function Election() {
 		try {
 			// attempt to fetch candidates for selected position
 			const req = await fetch(`${backendUrl}/election/${params.id}/${selected}/candidates`);
-			const c = await req.json()
+			const c = await req.json();
 			setCandidates(c)
 		} catch (error) {
 			setCandidates([]);
-			toast.warning(error)
+			toast.warning(error);
 		}
 	}
 

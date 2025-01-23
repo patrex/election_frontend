@@ -100,7 +100,6 @@ function CreateElection() {
 							<option value="Open">Open</option>
 							<option value="Closed">Closed</option>
 						</select>
-
 					</div>
 
 					
@@ -125,10 +124,8 @@ function CreateElection() {
 						className="p-2 my-2"
 						{...register('rules')}
 					/> {errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
-
 					
 					<button type="submit" className="Button violet">Create Election</button>
-					
 				</form>
 			</div>
 		</div>

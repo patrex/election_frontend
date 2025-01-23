@@ -74,8 +74,6 @@ function Login() {
 						<button type="submit" className="Button violet">Login</button>
 					</div>
 
-					
-					
 					{errMsg && <div className='status bg-red-200 text-red-500'>{errMsg}</div>}
 				</form>
 			</div>
