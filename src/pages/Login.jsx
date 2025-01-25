@@ -14,6 +14,7 @@ function Login() {
 	const navigate = useNavigate();
 	const { setUser } = useContext(AppContext)
 	const [errMsg, setErrMsg] = useState('')
+	const [loading, setLoading] = useState(false);
 
 
 	const schema = Joi.object({
@@ -26,6 +27,8 @@ function Login() {
 	});
 
 	const onSubmit = async (formData) => {
+		setLoading(true);
+
 		const res = await fetch(`${backendUrl}/user/auth/login`, {
 			method: 'POST',
 			headers: {
@@ -41,9 +44,11 @@ function Login() {
 			navigate(`/user/${user._id}`)
 		} else if (res.status == 401) {
 			toast.warning('Username or password is incorrect')
+			setLoading(false);
 			return;
 		} else {
 			setErrMsg('Something went wrong...')
+			setLoading(false)
 		}
 	}
 
@@ -71,7 +76,7 @@ function Login() {
 					</div>
 					
 					<div className="mb-3">
-						<button type="submit" className="Button violet">Login</button>
+						<button type="submit" disabled={loading} className="Button violet">Login</button>
 					</div>
 
 					{errMsg && <div className='status bg-red-200 text-red-500'>{errMsg}</div>}
