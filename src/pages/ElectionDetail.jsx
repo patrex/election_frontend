@@ -406,7 +406,7 @@ function ElectionDetail() {
 
 				{viewUsersModal && (
 					<div className="modal-overlay">
-						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 							<p>Registered participants</p>
 
 							<ul>
@@ -415,8 +415,8 @@ function ElectionDetail() {
 										<li key={voter._id}>
 											{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
 											<div>
-												<button className='Button violet' style={ {margin: '0 10px'} } onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>
-												<button className='Button red' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+												<button className='Button violet action-item' onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>
+												<button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
 											</div>
 										</li>
 									))
@@ -432,7 +432,7 @@ function ElectionDetail() {
 
 				{positionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<input 
@@ -453,7 +453,7 @@ function ElectionDetail() {
 
 				{updateParticipantModal && (
 					<div className="modal-overlay">
-						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-gray-200">
+						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-gray-200">
 							<span>Update participant info: <strong>{`${election.userAuthType == 'email' ? participant.email : participant.phoneNo}`}</strong></span>
 							<br />
 							<input 
@@ -474,7 +474,7 @@ function ElectionDetail() {
 
 				{updatePositionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 							<span>Edit position for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<input 
@@ -494,7 +494,7 @@ function ElectionDetail() {
 
 				{addParticipantsModalOpen && ( 
 					<div className="modal-overlay">
-						<div className="w-5/6 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 							<span>Enter list of participants for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<textarea 
