@@ -680,6 +680,10 @@ button {
 	height: 35px;
 }
 
+.Button.violet:disabled {
+	cursor: not-allowed
+}
+
 .Button.violet {
 	background-color: #6a0dad;
 	color: #fff;
