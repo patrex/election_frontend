@@ -78,8 +78,6 @@ function Login() {
 						<button type="submit" disabled={loading} className="Button violet">Login</button>
 					</div>
 
-					<div className="hr-divider"></div>
-
 					{errMsg && <div className='status bg-red-200 text-red-500'>{errMsg}</div>}
 					{errors.username && <div className='status bg-red-200 px-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
 					{errors.password && <div className='status bg-red-200 px-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
