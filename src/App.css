@@ -501,6 +501,13 @@ input[type=number] {
 	background-color: #ccc; /* Neutral color */
 	margin: 0 8px; /* Space around the divider */
 }
+
+.hr-divider {
+	width: 60%; /* Thin vertical line */
+	height: 1px; /* Full height */
+	background-color: #ccc; /* Neutral color */
+	margin: 5px 2px; /* Space around the divider */
+}
     
       
 /* Container styles */

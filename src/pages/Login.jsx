@@ -19,7 +19,7 @@ function Login() {
 
 	const schema = Joi.object({
 		username: Joi.string().email({ minDomainSegments: 2, tlds: { deny: ['xxx'] } }).required(),
-		password: Joi.string().min(6).max(200)
+		password: Joi.string().min(6).max(200).required()
 	})
 	
 	const { register, handleSubmit, formState: {errors} } = useForm({
@@ -77,6 +77,8 @@ function Login() {
 					<div className="mb-3">
 						<button type="submit" disabled={loading} className="Button violet">Login</button>
 					</div>
+
+					div.hr
 
 					{errMsg && <div className='status bg-red-200 text-red-500'>{errMsg}</div>}
 					{errors.username && <div className='status bg-red-200 px-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
