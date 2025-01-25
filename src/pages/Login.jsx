@@ -63,7 +63,6 @@ function Login() {
 							autoFocus
 							{...register('username')}
 						/>
-						{errors.username && <div className='status bg-red-200 text-red-500'>You need to enter a valid email</div>}
 					</div>
 
 					<div className="mb-3">
@@ -72,7 +71,7 @@ function Login() {
 							placeholder="password"
 							{...register('password')}
 						/>
-						{errors.password && <div className='status bg-red-200 text-red-500'>{errors.password.message}</div>}
+						
 					</div>
 					
 					<div className="mb-3">
@@ -80,6 +79,8 @@ function Login() {
 					</div>
 
 					{errMsg && <div className='status bg-red-200 text-red-500'>{errMsg}</div>}
+					{errors.username && <div className='status bg-red-200 text-red-500'>You need to enter a valid email</div>}
+					{errors.password && <div className='status bg-red-200 text-red-500'>{errors.password.message}</div>}
 				</form>
 			</div>
 			
