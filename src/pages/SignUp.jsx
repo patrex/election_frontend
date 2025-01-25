@@ -6,10 +6,12 @@ import { toast } from 'sonner'
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
+import { useState } from "react";
 
 
 function CreateAccount() { 
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
 
 	const schema = Joi.object({
 		firstname: Joi.string().min(2).required(),
@@ -26,6 +28,7 @@ function CreateAccount() {
 	});
 
 	const onSubmit = async (formData) => {
+		setLoading(true)
 		const res = await fetch(`${backendUrl}/user/auth/signup`, {
 			method: 'POST',
 			headers: {
@@ -38,6 +41,7 @@ function CreateAccount() {
 			navigate('/login');
 		}
 		else {
+			setLoading(false)
 			toast.error("There was an error");
 		}
 	}
@@ -115,7 +119,7 @@ function CreateAccount() {
 						</div>
 					</div> 
 					
-					<button type="submit" className="Button violet">Create Account</button>
+					<button type="submit" disabled={loading} className="Button violet">Create Account</button>
 				</form>
 			</div>
 		</div>
