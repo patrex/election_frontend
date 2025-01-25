@@ -85,7 +85,7 @@ function ElectionResults() {
 		<>
 			{eventException &&
 				<div className="modal-overlay">
-					<div className="w-full sm:w-1/2 max-w-full sm:max-w-1/2vw p-4 rounded-lg shadow-md relative bg-white">
+					<div className="w-full w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 						<h5>{`${election.title}`}</h5>
 						<hr />
 						
