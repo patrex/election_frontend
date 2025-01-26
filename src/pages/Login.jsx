@@ -38,7 +38,6 @@ function Login() {
 				'X-CSRF-Token': csrf
       			},
 			credentials: 'include',
-			mode: 'cors',
       			body: JSON.stringify(formData),
 		})
 		
