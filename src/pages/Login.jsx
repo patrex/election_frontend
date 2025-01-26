@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useContext, useState } from 'react';
 import { AppContext } from '@/App';
+import axios from 'axios'
 
 import { toast } from 'sonner'
 import backendUrl from '../utils/backendurl'
@@ -15,6 +16,7 @@ function Login() {
 	const { setUser } = useContext(AppContext)
 	const [errMsg, setErrMsg] = useState('')
 	const [loading, setLoading] = useState(false);
+	const [csrf, setCsrf] = useState('');
 
 
 	const schema = Joi.object({
@@ -33,7 +35,9 @@ function Login() {
 			method: 'POST',
 			headers: {
         			'Content-Type': 'application/json',
+				'X-CSRF-Token': csrf
       			},
+			credentials: 'include',
 			mode: 'cors',
       			body: JSON.stringify(formData),
 		})
@@ -51,6 +55,20 @@ function Login() {
 			setLoading(false)
 		}
 	}
+
+	useEffect(() => {
+		const getCSRF = async () => {
+			try {
+				const res = await axios.get(`${backendUrl}/csrf-token`, { withCredentials: true });
+				setCsrf(res.data.csrfToken);
+			} catch (error) {
+				toast.error("Could not initialize form");
+				navigate('/');
+			}
+		}
+
+		getCSRF();
+	}, [])
 
 	return (
 		<div className="container">
