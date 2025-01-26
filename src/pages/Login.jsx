@@ -60,6 +60,7 @@ function Login() {
 		const getCSRF = async () => {
 			try {
 				const res = await axios.get(`${backendUrl}/csrf-token`, { withCredentials: true });
+				console.log(res);
 				setCsrf(res.data.csrfToken);
 			} catch (error) {
 				toast.error("Could not initialize form");
