@@ -30,13 +30,12 @@ function Login() {
 
 	const onSubmit = async (formData) => {
 		setLoading(true);
-		console.log(csrf);
 
 		const res = await fetch(`${backendUrl}/user/auth/login`, {
 			method: 'POST',
 			headers: {
         			'Content-Type': 'application/json',
-				'X-CSRF-Token': csrf
+				'X-Csrf-Token': csrf
       			},
 			credentials: 'include',
       			body: JSON.stringify(formData),
