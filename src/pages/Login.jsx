@@ -38,6 +38,7 @@ function Login() {
 				'X-CSRF-Token': csrf
       			},
 			credentials: 'include',
+			mode: 'cors',
       			body: JSON.stringify(formData),
 		})
 		
@@ -59,7 +60,6 @@ function Login() {
 		const getCSRF = async () => {
 			try {
 				const res = await axios.get(`${backendUrl}/csrf-token`, { withCredentials: true });
-				console.log(res);
 				setCsrf(res.data.csrfToken);
 			} catch (error) {
 				toast.error("Could not initialize form");
@@ -96,7 +96,7 @@ function Login() {
 						<button type="submit" disabled={loading} className="Button violet">Login</button>
 					</div>
 
-					{errMsg && <div className='status bg-red-200 text-red-500'>{errMsg}</div>}
+					{errMsg && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errMsg}</div>}
 					{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
 					{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
 				</form>
