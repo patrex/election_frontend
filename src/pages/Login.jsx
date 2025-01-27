@@ -30,6 +30,7 @@ function Login() {
 
 	const onSubmit = async (formData) => {
 		setLoading(true);
+		console.log(csrf);
 
 		const res = await fetch(`${backendUrl}/user/auth/login`, {
 			method: 'POST',
@@ -38,7 +39,6 @@ function Login() {
 				'X-CSRF-Token': csrf
       			},
 			credentials: 'include',
-			mode: 'cors',
       			body: JSON.stringify(formData),
 		})
 		
