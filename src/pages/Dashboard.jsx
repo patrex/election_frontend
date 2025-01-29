@@ -80,7 +80,7 @@ function Dashboard() {
 					<tbody className='table-group-divider'>
 						{electionsList && electionsList.map(election => (
 							<tr key={election._id}>
-								<div className='flex items-center justify-center h-full'>
+								<div className='flex items-center h-full'>
 									<td><Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link></td>
 									<td>{moment(election.startDate).format('MMM[-]Do[-]YY')}</td>
 									<td>{moment(election.endDate).format('MMM[-]Do[-]YY')}</td>
