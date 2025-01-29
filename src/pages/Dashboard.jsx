@@ -80,18 +80,17 @@ function Dashboard() {
 					<tbody className='table-group-divider'>
 						{electionsList && electionsList.map(election => (
 							<tr key={election._id}>
-								<div className='flex items-center h-full'>
-									<td><Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link></td>
-									<td>{moment(election.startDate).format('MMM[-]Do[-]YY')}</td>
-									<td>{moment(election.endDate).format('MMM[-]Do[-]YY')}</td>
-									<td>{election.type}</td>
-									
-									<div className="list-btn-items">
-										<td><button className="Button violet action-item" onClick={() => copyLink(election._id)}>Copy ID</button></td>
-										<td><button className="Button violet action-item" onClick={() => copyLink(election.shareLink)}>Copy Link</button></td>
-										<td><Link to={`/user/${params.userId}/election/${election._id}/update`}><button className='Button violet action-item'><i class="bi bi-pen-fill"></i></button></Link></td>
-										<td><button className='Button red action-item' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
-									</div>
+								
+								<td><Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link></td>
+								<td>{moment(election.startDate).format('MMM[-]Do[-]YY')}</td>
+								<td>{moment(election.endDate).format('MMM[-]Do[-]YY')}</td>
+								<td>{election.type}</td>
+								
+								<div className="list-btn-items">
+									<td><button className="Button violet action-item" onClick={() => copyLink(election._id)}>Copy ID</button></td>
+									<td><button className="Button violet action-item" onClick={() => copyLink(election.shareLink)}>Copy Link</button></td>
+									<td><Link to={`/user/${params.userId}/election/${election._id}/update`}><button className='Button violet action-item'><i class="bi bi-pen-fill"></i></button></Link></td>
+									<td><button className='Button red action-item' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 								</div>
 							</tr>
 						)) || <p>No elections to show</p>}
