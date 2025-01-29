@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from '@/App';
-import axios from 'axios'
 
 import { toast } from 'sonner'
 import backendUrl from '../utils/backendurl'
@@ -14,10 +13,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 function Login() {
 	const navigate = useNavigate();
 	const { setUser } = useContext(AppContext)
-	const [errMsg, setErrMsg] = useState('')
 	const [loading, setLoading] = useState(false);
-	const [csrf, setCsrf] = useState('');
-
 
 	const schema = Joi.object({
 		username: Joi.string().email({ minDomainSegments: 2, tlds: { deny: ['xxx'] } }).required(),
@@ -35,39 +31,23 @@ function Login() {
 			method: 'POST',
 			headers: {
         			'Content-Type': 'application/json',
-				'X-Csrf-Token': csrf
       			},
-			credentials: 'include',
       			body: JSON.stringify(formData),
 		})
 		
+		setLoading(false);
+
 		if (res.ok) {
 			let user = await res.json();
 			setUser(user)
 			navigate(`/user/${user._id}`)
 		} else if (res.status == 401) {
 			toast.warning('Username or password is incorrect')
-			setLoading(false);
 			return;
 		} else {
-			setErrMsg('Something went wrong...')
-			setLoading(false)
+			toast.warning('Something went wrong...')
 		}
 	}
-
-	useEffect(() => {
-		const getCSRF = async () => {
-			try {
-				const res = await axios.get(`${backendUrl}/csrf-token`, { withCredentials: true });
-				setCsrf(res.data.csrfToken);
-			} catch (error) {
-				toast.error("Could not initialize form");
-				navigate('/');
-			}
-		}
-
-		getCSRF();
-	}, [])
 
 	return (
 		<div className="container">
@@ -95,15 +75,12 @@ function Login() {
 						<button type="submit" disabled={loading} className="Button violet">Login</button>
 					</div>
 
-					{errMsg && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errMsg}</div>}
 					{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
 					{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
 				</form>
 			</div>
-			
 		</div>
 	);
-	
 }
  
 export default Login;

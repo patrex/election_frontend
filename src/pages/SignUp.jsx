@@ -37,11 +37,13 @@ function CreateAccount() {
 			mode: 'cors',
       			body: JSON.stringify(formData),
 		})
+		
+		setLoading(false)
+
 		if(res.ok) {
 			navigate('/login');
 		}
 		else {
-			setLoading(false)
 			toast.error("There was an error");
 		}
 	}
