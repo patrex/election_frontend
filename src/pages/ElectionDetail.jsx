@@ -41,6 +41,7 @@ function ElectionDetail() {
 	const [participantsList, setParticipantsList] = useState("");
 	const [participant, setParticipant] = useState();
 	const [updatedParticipantInfo, setUpdatedParticipantInfo] = useState("");
+	const [searchTerm, setSearchTerm] = useState("");
 	
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
@@ -410,9 +411,11 @@ function ElectionDetail() {
 						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 							<p>Registered participants</p>
 
-							<div className="max-h-96 overflow-y-auto p-4">
+							<div className="max-h-96 overflow-y-auto p-2">
 								<ul>
-									{votersList ? (
+									{votersList.length === 0 ? (
+										<p>No voters added</p>
+										) : (
 										votersList.map(voter => (
 											<li key={voter._id}>
 												{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
@@ -421,14 +424,25 @@ function ElectionDetail() {
 													<button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
 												</div>
 											</li>
-										))
-									) : (<p>No voters added</p>) }
+										)))
+									}
 								</ul>
 							</div>
 
 
-							<div className='action-btn-container'>
-								<button className='Button violet action-item' onClick={ () => setViewUsersModal(false) }>Close</button>
+							<div className='flex flex-col sm:flex-row items-center justify-between w-full p-4 border-t gap-2'>
+								<div className='p-2'>
+									<input
+										type="text"
+										placeholder="Search..."
+										className="w-full p-2 border rounded-md"
+										value={searchTerm}
+  										onChange={(e) => setSearchTerm(e.target.value)}
+									/>
+								</div>
+								<div>
+									<button className='Button violet action-item' onClick={ () => setViewUsersModal(false) }>Close</button>
+								</div>
 							</div>
 						</div>
 					</div>
