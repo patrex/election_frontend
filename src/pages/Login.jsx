@@ -14,6 +14,7 @@ function Login() {
 	const navigate = useNavigate();
 	const { setUser } = useContext(AppContext)
 	const [loading, setLoading] = useState(false);
+	const [err, setErr] = useState("")
 
 	const schema = Joi.object({
 		username: Joi.string().email({ minDomainSegments: 2, tlds: { deny: ['xxx'] } }).required(),
@@ -42,10 +43,17 @@ function Login() {
 			setUser(user)
 			navigate(`/user/${user._id}`)
 		} else if (res.status == 401) {
-			Toast.warning('Username or password is incorrect')
+			setErr('Username or password is incorrect')
+			setTimeout(() => {
+				setErr('')
+			}, 3000);
 			return;
 		} else {
-			Toast.error('Something went wrong...')
+			setErr('Something went wrong...')
+			setTimeout(() => {
+				setErr('')
+			}, 3000);
+			return
 		}
 	}
 
@@ -75,6 +83,7 @@ function Login() {
 						<button type="submit" disabled={loading} className="Button violet">Login</button>
 					</div>
 
+					{err && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{err}</div>}
 					{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
 					{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
 				</form>
