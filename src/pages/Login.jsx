@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useContext, useState } from 'react';
 import { AppContext } from '@/App';
 
-import { toast } from 'sonner'
+import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
 
 import Joi from 'joi';
@@ -42,10 +42,10 @@ function Login() {
 			setUser(user)
 			navigate(`/user/${user._id}`)
 		} else if (res.status == 401) {
-			toast.warning('Username or password is incorrect')
+			Toast.warning('Username or password is incorrect')
 			return;
 		} else {
-			toast.warning('Something went wrong...')
+			Toast.error('Something went wrong...')
 		}
 	}
 

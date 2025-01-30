@@ -2,7 +2,8 @@ import { Link, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
-import { toast } from 'sonner';
+
+import Toast from '@/utils/ToastMsg';
 
 import backendUrl from '../utils/backendurl'
 
@@ -99,16 +100,16 @@ function ElectionDetail() {
 				if (response.ok) {
 					const newEntry = await response.json();
 					setPositionsList(prev => [...prev, newEntry])
-					toast.success('Position was added')
+					Toast.success('Position was added')
 				} else if (response.status == 409) {
-					toast.warning('Position already exists')
+					Toast.warning('Position already exists')
 				} else {
-					toast.warning('Could not add the position')
+					Toast.warning('Could not add the position')
 				}
 			} catch (error) {
-				toast.warning('Could not add the position')
+				Toast.warning('Could not add the position')
 			}
-		} else toast.warning("you need to enter a new position to continue")
+		} else Toast.warning("you need to enter a new position to continue")
 	}
 
 	const handleUpdatePosition = async (e) => {
@@ -136,10 +137,10 @@ function ElectionDetail() {
 						prev.map((position) => position._id === updated_position._id ? updated_position: position
 					))
 				} else {
-					toast.warning("Could not update the position")
+					Toast.warning("Could not update the position")
 				}
 			} catch (error) {
-				toast.error("There was an error updating the position")
+				Toast.error("There was an error updating the position")
 			}
 		}
 	}
@@ -171,8 +172,8 @@ function ElectionDetail() {
 
 				if(res.ok) {
 					setPositionsList(positionsList.filter(p => p._id != position._id))
-					toast.success("The position was removed")	
-				} else toast.warning('Could not remove the position: ')
+					Toast.success("The position was removed")	
+				} else Toast.warning('Could not remove the position: ')
 			}
 		});	
 	}
@@ -192,11 +193,11 @@ function ElectionDetail() {
 			})
 
 			if (res.ok) {
-				toast.success("List was added")
+				Toast.success("List was added")
 				setParticipantsList('');
 			}
 		} catch (error) {
-			toast.error("An error occured. Try again")
+			Toast.error("An error occured. Try again")
 		}	
 	}
 
@@ -219,11 +220,11 @@ function ElectionDetail() {
 		
 					if(res.ok) {
 						setVotersList(votersList.filter(e => e._id != voter._id ));
-						toast.success('The participant was removed successfully')
+						Toast.success('The participant was removed successfully')
 					}
 					
 				} catch (error) {
-					toast.error("There was an error removing the participant")
+					Toast.error("There was an error removing the participant")
 				}
 			}
 		});
@@ -231,7 +232,7 @@ function ElectionDetail() {
 
 	function procList (participantsAuthType) {
 		if (!participantsList) {
-			toast.warning("You did not enter any participants");
+			Toast.warning("You did not enter any participants");
 			return;
 		}
 
@@ -249,7 +250,7 @@ function ElectionDetail() {
 					return emailAddr;
 				});
 			if (invalid) {
-				toast.warning("One or more emails not properly formatted")
+				Toast.warning("One or more emails not properly formatted")
 				return;
 			}
 
@@ -273,7 +274,7 @@ function ElectionDetail() {
 					return phoneNumber;
 				});
 			
-			if (invalid) toast.warning("One or more phone numbers not properly formatted")
+			if (invalid) Toast.warning("One or more phone numbers not properly formatted")
 			
 			setAddParticipantsModalOpen(false)
 			sendListToDB(voterList)
@@ -290,7 +291,7 @@ function ElectionDetail() {
 			const emailAddr = String(updatedParticipantInfo).trim()
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			if (!emailAddr.match(emailRegex)) {
-				toast.error("Email is invalid")
+				Toast.error("Email is invalid")
 				return;
 			}
 			setUpdateParticipantModal(false);
@@ -314,10 +315,10 @@ function ElectionDetail() {
 						prev.map( (participant) => participant._id === updated_participant._id ? updated_participant : participant
 					))
 				} else {
-					toast.warning("Could not update the position")
+					Toast.warning("Could not update the position")
 				}
 			} catch (error) {
-				toast.error("There was an error with the request")
+				Toast.error("There was an error with the request")
 			}
 		}
 	}
@@ -335,7 +336,7 @@ function ElectionDetail() {
 			} else if (phoneNumber.match(phoneNumberPattern)) {
 				validatedPhoneNo = phoneNumber.replace(phoneNumberPattern, '234$2');
 			} else {
-				toast.warning("Phone number is invalid")
+				Toast.warning("Phone number is invalid")
 				return;
 			}
 
@@ -360,10 +361,10 @@ function ElectionDetail() {
 						prev.map((participant) => participant._id === updated_participant._id ? updated_participant : participant
 					))
 				} else {
-					toast.warning("Could not update the voter")
+					Toast.warning("Could not update the voter")
 				}
 			} catch (error) {
-				toast.error("There was an error with the request")
+				Toast.error("There was an error with the request")
 			}
 		}
 	}

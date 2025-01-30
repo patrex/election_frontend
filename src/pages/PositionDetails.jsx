@@ -1,7 +1,7 @@
 import { useLoaderData, useParams, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useState } from "react";
-import { toast } from "sonner";
+import Toast from "@/utils/ToastMsg";
 
 
 
@@ -50,7 +50,7 @@ function PositionDetails() {
 	
 				if(res.ok) {
 					setCandidatesList(candidatesList.filter(c => c._id != candidate._id))
-					toast.success('Candidate was removed')
+					Toast.success('Candidate was removed')
 				}
 			}
 		});	

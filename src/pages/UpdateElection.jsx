@@ -2,7 +2,7 @@ import { useLoaderData, Link, useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useState, useEffect } from "react";
 import { fireman } from '../utils/fireloader';
-import { toast } from "sonner";
+import Toast from "@/utils/ToastMsg";
 
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -91,22 +91,22 @@ function UpdateElection() {
 			    })
 	
 			if(res.ok) {
-				toast.success("Event was updated")
+				Toast.success("Event was updated")
 				navigate(`/user/${params.userId}`)
 			}
 			
 			else if (res.status === '404') {
-				toast.warning('Event not found')
+				Toast.warning('Event not found')
 				return;
 			}
 
 			else if (res.status === '500') {
-				toast.error("There was a problem in the app")
+				Toast.error("There was a problem in the app")
 				return;
 			}
 
 		} else {
-			toast.info("No updates made")
+			Toast.info("No updates made")
 		}
 	}
 

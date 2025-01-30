@@ -2,7 +2,7 @@ import { useLoaderData, Link, useParams } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useState, useEffect } from "react";
 import { fireman } from '../utils/fireloader';
-import { toast } from "sonner";
+import Toast from "@/utils/ToastMsg";
 
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -93,10 +93,10 @@ function UpdateCandidate() {
 			})
 
 			if (response.ok) {
-				toast.success("Candidate data was updated");
+				Toast.success("Candidate data was updated");
 			}
 		} catch (error) {
-			toast.error("Update failed")
+			Toast.error("Update failed")
 		}
 	}
 	
@@ -115,12 +115,12 @@ function UpdateCandidate() {
 					.then( async (data) => {
 						patchCandidate(formdata, photoUrl)
 					})
-					.catch(err => toast(err))
+					.catch(err => Toast.error(err))
 			} else {
 				patchCandidate(formdata, image)
 			}
 		} else {
-			toast.info("You did not make any changes");
+			Toast.info("You did not make any changes");
 			return 
 		}
 	}

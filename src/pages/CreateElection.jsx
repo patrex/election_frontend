@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import backendUrl from '../utils/backendurl'
 
-import { toast } from 'sonner'
+import Toast from "@/utils/ToastMsg";
 
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
@@ -50,17 +50,7 @@ function CreateElection() {
 	
 			if(res.ok) navigate(`/user/${params.userId}`)
 		} catch (error) {
-			toast.error('There was an error', {
-				position: "bottom-right",
-				autoClose: 3000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: "dark",
-				transition: Slide,
-			})
+			Toast.error('There was an error')
 		}
 	}
 

@@ -19,7 +19,8 @@ import NotFound from './pages/NotFound';
 import UpdateCandidate, {updateloader} from './pages/UpdateCandidate';
 import UpdateElection, {updateElectionLoader} from './pages/UpdateElection';
 
-import {ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css";
 
 export const AppContext = createContext();
 

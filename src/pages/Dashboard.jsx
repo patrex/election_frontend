@@ -2,8 +2,8 @@ import  { useState, useContext, useEffect } from 'react';
 import { Link, useLoaderData, useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Swal from 'sweetalert2';
-import { toast } from 'sonner'
 import backendUrl from '../utils/backendurl'
+import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
 
 export async function dashboardLoader({params}) {
@@ -40,7 +40,7 @@ function Dashboard() {
 	
 				if(res.ok) {
 					setElectionsList(electionsList.filter(e => e._id != election._id ));
-					toast.success('The event was removed successfully')
+					Toast.success('The event was removed successfully')
 				}
 			}
 		});
@@ -50,12 +50,12 @@ function Dashboard() {
 		let text = '';
 		text = navigator.clipboard.writeText(link);
 
-		if (text) toast.success("copied")
+		if (text) Toast.success("copied")
 	}
 
 	useEffect(() => {
 		if (!user) {
-			toast.warning("You need to login first")
+			Toast.warning("You need to login first")
 			navigate("/login")
 		}
 	})

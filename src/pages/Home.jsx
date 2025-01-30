@@ -1,8 +1,8 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import { toast } from 'react-toastify'
 import { AppContext } from "@/App";
 
+import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
 
 export async function homeLoader({ request }) {
@@ -42,14 +42,14 @@ function Home() {
 			let current_date = new Date();
 
 			if (end_date < current_date) {
-				toast.warning("This event has been concluded");
+				Toast.warning("This event has been concluded");
 				navigate(`election/${election._id}/results`)
 			} else if (start_date > current_date) {
-				toast.warning("This event has not started")
+				Toast.warning("This event has not started")
 				return;
 			} else setPhoneModalOpen(true);	
 		} catch (error) {
-			toast.warning("Event not found. Ensure you got the correct id")
+			Toast.warning("Event not found. Ensure you got the correct id")
 		}
 	}
 
@@ -61,7 +61,7 @@ function Home() {
 				setOTPVal('');
 				addVoterToDB();
 			} else {
-				toast.warning("That was invalid. Check the number and try again");
+				Toast.warning("That was invalid. Check the number and try again");
 				return;
 			}
 		} catch (error) {
@@ -84,7 +84,7 @@ function Home() {
 			
 			navigate(`/election/${election._id}/${participant}`)
 		} catch (error) {
-			toast.warning('An error occured')
+			Toast.warning('An error occured')
 			console.log(error)
 		}
 	}
@@ -103,17 +103,7 @@ function Home() {
 				// if election is closed, no further processing: user has to be added by the creator
 				// of the election
 				if (election.type == 'Closed') {
-					toast.warn(`This is a closed event. Ensure your admin has added your ${election.userAuthType == 'email' ? 'email' : 'number'} and try again`, {
-						position: "top-right",
-						autoClose: 3000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-						theme: "dark",
-						transition: Slide,
-					})
+					Toast.warning(`This is a closed event. Ensure your admin has added your ${election.userAuthType == 'email' ? 'email' : 'number'} and try again`)
 					return;
 				}
 	
@@ -148,17 +138,7 @@ function Home() {
 				navigate(`/election/${election._id}/${participant}`)
 			}
 		} catch (error) {
-			toast.error('Something went wrong', {
-				position: "top-right",
-				autoClose: 3000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: "dark",
-				transition: Slide,
-			})
+			Toast.error('Something went wrong')
 			console.log(error)
 		}
 	}
@@ -169,18 +149,7 @@ function Home() {
 				let emailAddr = String(participant).trim()
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailAddr.match(emailRegex)) {
-					
-					toast.warning("The email address is invalid", {
-						position: "top-right",
-						autoClose: 3000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-						theme: "dark",
-						transition: Slide,
-					})
+					Toast.warning("The email address is invalid")
 					return;
 				}
 	
@@ -202,31 +171,11 @@ function Home() {
 					setParticipant(phone)
 					procOTP(phone)
 				} else {
-					toast.warning("A valid phone number is required to continue", {
-						position: "top-right",
-						autoClose: 3000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-						theme: "dark",
-						transition: Slide,
-					})
+					Toast.warning("A valid phone number is required to continue")
 					return;
 				}
 			}
-		} else toast.warning("You must enter a phone number to continue", {
-				position: "top-right",
-				autoClose: 3000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: "dark",
-				transition: Slide,
-			})
+		} else Toast.warning("You must enter a phone number to continue")
 	}
 
 	return (

@@ -1,8 +1,6 @@
 import  { useState, useRef, useEffect } from 'react';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
-import { toast } from 'sonner';
-import * as d3 from 'd3'
 
 import backendUrl from '../utils/backendurl'
 
@@ -31,13 +29,6 @@ function ElectionResults() {
 	const [winner, setWinner] = useState({});
 	const [runnerUps, setRunnerUps] = useState([]);
 	const [eventException, setEventException] = useState(false);
-
-	const [colorSpace] = useState([
-		'aqua', 'azure', 'beige', 'blue',
-		'cyan', 'red', 'fuchsia', 'navy',
-		'pink', 'gold', 'violet', 'lime',
-		'magenta', 'olive', 'pink', 'green',
-	]);
 	
 	const svgRef = useRef();
 

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
-import { toast } from 'sonner';
 import backendUrl from '../utils/backendurl'
 
 import { fireman } from '../utils/fireloader';
+import Toast from '@/utils/ToastMsg';
 
 function AddCandidate() {
 	const params = useParams();
@@ -62,7 +62,7 @@ function AddCandidate() {
 					navigate(`/user/${params.userId}/election/${params.id}`)
 				}
 			})
-			.catch(err => toast(err))
+			.catch(err => Toast.error(err))
 	}
 
 	let handleSubmit = function (e) {

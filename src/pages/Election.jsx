@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useLoaderData, useNavigate } from "react-router-dom";
 import moment from "moment";
-import {toast} from 'sonner'
+import Toast from "@/utils/ToastMsg";
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { AppContext } from "@/App";
 
@@ -76,16 +76,16 @@ export default function Election() {
 				})
 	
 				if (v.ok ) {
-					toast.success('Your vote was recorded')
+					Toast.success('Your vote was recorded')
 				} else {
-					toast.warning('Your vote could not be recorded');
+					Toast.warning('Your vote could not be recorded');
 					return;
 				}
 			} else { 
-				toast.warning('You already voted for this position');
+				Toast.warning('You already voted for this position');
 			 }
 		} catch (error) {
-			toast.warning(error)
+			Toast.warning(error)
 		}	
 	}
 
@@ -99,13 +99,13 @@ export default function Election() {
 			setCandidates(c)
 		} catch (error) {
 			setCandidates([]);
-			toast.warning(error);
+			Toast.warning(error);
 		}
 	}
 
 	useEffect(() => {
 		if (!voter) {
-			toast.warning("You need to register as a voter first")
+			Toast.warning("You need to register as a voter first")
 			navigate(`/`)
 		} 
 	}, [])

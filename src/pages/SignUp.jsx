@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import backendUrl from '../utils/backendurl'
-import { toast } from 'sonner'
+import Toast from "@/utils/ToastMsg";
 
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
@@ -44,7 +44,7 @@ function CreateAccount() {
 			navigate('/login');
 		}
 		else {
-			toast.error("There was an error");
+			Toast.error("There was an error");
 		}
 	}
 
