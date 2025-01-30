@@ -19,6 +19,8 @@ import NotFound from './pages/NotFound';
 import UpdateCandidate, {updateloader} from './pages/UpdateCandidate';
 import UpdateElection, {updateElectionLoader} from './pages/UpdateElection';
 
+import {ToastContainer, toast } from 'react-toastify'
+
 export const AppContext = createContext();
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -51,6 +53,7 @@ function App() {
 	return (
 		<AppContext.Provider value={ { user, setUser, voter, setVoter} }>
 			<RouterProvider router={ router } />
+			<ToastContainer />
 		</AppContext.Provider>
 	);
 }

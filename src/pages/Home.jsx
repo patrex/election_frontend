@@ -1,6 +1,6 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 import { AppContext } from "@/App";
 
 import backendUrl from '../utils/backendurl'
@@ -103,7 +103,17 @@ function Home() {
 				// if election is closed, no further processing: user has to be added by the creator
 				// of the election
 				if (election.type == 'Closed') {
-					toast.warning('This is a closed event. Ensure your admin has added your number and try again')
+					toast.warn(`This is a closed event. Ensure your admin has added your ${election.userAuthType == 'email' ? 'email' : 'number'} and try again`, {
+						position: "top-right",
+						autoClose: 3000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+						theme: "dark",
+						transition: Slide,
+					})
 					return;
 				}
 	
@@ -138,7 +148,17 @@ function Home() {
 				navigate(`/election/${election._id}/${participant}`)
 			}
 		} catch (error) {
-			toast.error("An error occured")
+			toast.error('Something went wrong', {
+				position: "top-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+				transition: Slide,
+			})
 			console.log(error)
 		}
 	}
@@ -149,7 +169,18 @@ function Home() {
 				let emailAddr = String(participant).trim()
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailAddr.match(emailRegex)) {
-					toast.warning("The email address is invalid")
+					
+					toast.warning("The email address is invalid", {
+						position: "top-right",
+						autoClose: 3000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+						theme: "dark",
+						transition: Slide,
+					})
 					return;
 				}
 	
@@ -171,11 +202,31 @@ function Home() {
 					setParticipant(phone)
 					procOTP(phone)
 				} else {
-					toast.warning("A valid phone number is required to continue")
+					toast.warning("A valid phone number is required to continue", {
+						position: "top-right",
+						autoClose: 3000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+						theme: "dark",
+						transition: Slide,
+					})
 					return;
 				}
 			}
-		} else toast.warning("You must enter a phone number to continue")
+		} else toast.warning("You must enter a phone number to continue", {
+				position: "top-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+				transition: Slide,
+			})
 	}
 
 	return (

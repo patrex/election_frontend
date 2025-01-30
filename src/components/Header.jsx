@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Toaster, toast } from 'sonner';
+import { Toaster } from 'sonner';
 import { AppContext } from "@/App";
 import { useContext } from "react";
 
@@ -23,7 +23,7 @@ function Header() {
 
 	return ( 
 		<header>
-			<Toaster position="top-right" richColors/>
+			<Toaster position="bottom-right" richColors/>
 			<div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
 			
 			{user ? 

@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 import backendUrl from '../utils/backendurl'
 
 import { toast } from 'sonner'
@@ -12,13 +12,16 @@ function CreateElection() {
 	const params = useParams();
 	const navigate = useNavigate();
 
+	const [loading, setLoading] = useState(false);
+
+
 	const schema = Joi.object({
 		electiontitle: Joi.string().min(2).required(),
 		startdate: Joi.date().iso().min(new Date().getFullYear()).required(),
 		enddate: Joi.date().iso().min(new Date().getFullYear()).required(),
 		electiontype: Joi.string(),
-		description: Joi.string().max(200),
-		rules: Joi.string().max(1000),
+		description: Joi.string().min(2).max(200),
+		rules: Joi.string().min(2).max(1000),
 		userAuthType: Joi.string()
 	})
 	
@@ -27,31 +30,43 @@ function CreateElection() {
 	});
 
 	async function onSubmit(formData) {
-		const res = await fetch(`${backendUrl}/elections`, {
-      			method: 'POST',
-      			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Z-Key',
-				'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS'},
-			mode: 'cors',
-      			body: JSON.stringify({
-				...formData,
-				userId: params.userId,
-				host_name: window.location.origin
-			})
-    		})
+		setLoading(true)
 
-		if(res.ok) navigate(`/user/${params.userId}`)
-		
-		else {
-			toast.warning('There was an error')
+		try {
+			const res = await fetch(`${backendUrl}/elections`, {
+				      method: 'POST',
+				      headers: {
+					'Content-Type': 'application/json',
+				},
+				mode: 'cors',
+				      body: JSON.stringify({
+					...formData,
+					userId: params.userId,
+					host_name: window.location.origin
+				})
+			    })
+	
+			setLoading(false)
+	
+			if(res.ok) navigate(`/user/${params.userId}`)
+		} catch (error) {
+			toast.error('There was an error', {
+				position: "bottom-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+				transition: Slide,
+			})
 		}
 	}
 
 	return (
 		<div className="container">
-			<div className="form-container">
+			<div className="form-container" style={ {border: 'none'} }>
 				<form onSubmit={ handleSubmit(onSubmit) }>
 					<div className="mb-3">
 						<label htmlFor="electionTitle" className="form-label">Election Name: </label>
@@ -103,7 +118,7 @@ function CreateElection() {
 					</div>
 
 					
-					<div className="closed-event my-2 p-2.5 w-3/5">
+					<div className="closed-event my-2 p-2.5 w-4/5">
 						<p>How will voters participate?</p>
 						
 						<label htmlFor="auth-email" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-email" value='email'/><span>Email</span></label>
@@ -125,7 +140,9 @@ function CreateElection() {
 						{...register('rules')}
 					/> {errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
 					
-					<button type="submit" className="Button violet">Create Election</button>
+					<div className="action-btn-container">
+						<button type="submit" disabled={loading} className="Button violet">Create Election</button>
+					</div>
 				</form>
 			</div>
 		</div>
