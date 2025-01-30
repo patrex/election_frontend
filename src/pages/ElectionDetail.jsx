@@ -411,7 +411,7 @@ function ElectionDetail() {
 							<p>Registered participants</p>
 
 							<ul>
-								{votersList && (
+								{votersList ? (
 									votersList.map(voter => (
 										<li key={voter._id}>
 											{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
@@ -421,7 +421,7 @@ function ElectionDetail() {
 											</div>
 										</li>
 									))
-								)}
+								) : (<p>No voters added</p>) }
 							</ul>
 
 							<div className='action-btn-container'>
