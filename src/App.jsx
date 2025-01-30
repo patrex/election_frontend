@@ -52,7 +52,6 @@ function App() {
 	return (
 		<AppContext.Provider value={ { user, setUser, voter, setVoter} }>
 			<RouterProvider router={ router } />
-			<ToastContainer />
 		</AppContext.Provider>
 	);
 }

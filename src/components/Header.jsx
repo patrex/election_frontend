@@ -21,27 +21,33 @@ function Header() {
 	}
 
 	return ( 
-		<header>
-			<div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
-			
-			{user ? 
-				<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '0 1.5rem'} }>
-					<pre style={ {color: 'white'} }>Welcome, { user.firstname } | <span className="logout" onClick={ logout }>Logout</span></pre>
-				</div>
-				 : 
-				<nav>
-				
-					<NavLink to="/login"
-						style={({isActive}) => isActive ? linkStyles: null}
-					>Login</NavLink>
+		<>
+			<ToastContainer />
+			<header>
 
-					<NavLink to="/signup"
-						style={({isActive}) => isActive ? linkStyles: null}
-					>Signup</NavLink>
-				</nav>
-			}
-			
-		</header>
+				<div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
+				
+				{user ? 
+					<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '0 1.5rem'} }>
+						<pre style={ {color: 'white'} }>Welcome, { user.firstname } | <span className="logout" onClick={ logout }>Logout</span></pre>
+					</div>
+					: 
+					<nav>
+					
+						<NavLink to="/login"
+							style={({isActive}) => isActive ? linkStyles: null}
+						>Login</NavLink>
+
+						<NavLink to="/signup"
+							style={({isActive}) => isActive ? linkStyles: null}
+						>Signup</NavLink>
+					</nav>
+				}
+				
+			</header>
+
+		</>
+		
 	 );
 }
 
