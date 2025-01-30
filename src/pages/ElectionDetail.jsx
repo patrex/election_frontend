@@ -407,22 +407,25 @@ function ElectionDetail() {
 
 				{viewUsersModal && (
 					<div className="modal-overlay">
-						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 max-h-96 overflow-y-auto p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 							<p>Registered participants</p>
 
-							<ul>
-								{votersList ? (
-									votersList.map(voter => (
-										<li key={voter._id}>
-											{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
-											<div>
-												<button className='Button violet action-item' onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>
-												<button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
-											</div>
-										</li>
-									))
-								) : (<p>No voters added</p>) }
-							</ul>
+							<div className="max-h-96 overflow-y-auto p-4">
+								<ul>
+									{votersList ? (
+										votersList.map(voter => (
+											<li key={voter._id}>
+												{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
+												<div>
+													<button className='Button violet action-item' onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>
+													<button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+												</div>
+											</li>
+										))
+									) : (<p>No voters added</p>) }
+								</ul>
+							</div>
+
 
 							<div className='action-btn-container'>
 								<button className='Button violet action-item' onClick={ () => setViewUsersModal(false) }>Close</button>
