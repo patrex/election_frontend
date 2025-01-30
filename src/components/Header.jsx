@@ -22,7 +22,7 @@ function Header() {
 
 	return ( 
 		<>
-			<ToastContainer />
+			
 			<header>
 
 				<div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
