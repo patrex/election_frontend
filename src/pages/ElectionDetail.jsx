@@ -407,7 +407,7 @@ function ElectionDetail() {
 
 				{viewUsersModal && (
 					<div className="modal-overlay">
-						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 max-h-96 overflow-y-auto p-4 rounded-lg shadow-md relative bg-white">
 							<p>Registered participants</p>
 
 							<ul>
