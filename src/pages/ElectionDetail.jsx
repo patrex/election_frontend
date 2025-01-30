@@ -411,7 +411,7 @@ function ElectionDetail() {
 						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 							<p>Registered participants</p>
 
-							<div className="max-h-96 overflow-y-auto p-2">
+							<div className="max-h-96 overflow-auto p-2">
 								<ul>
 									{votersList.length === 0 ? (
 										<p>No voters added</p>
@@ -430,7 +430,7 @@ function ElectionDetail() {
 							</div>
 
 
-							<div className='flex flex-col sm:flex-row items-center justify-between w-full p-4 border-t gap-2'>
+							<div className='flex flex-col sm:flex-row items-center justify-between w-full p-1 gap-2'>
 								<div className='p-2'>
 									<input
 										type="text"
