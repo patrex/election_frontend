@@ -27,6 +27,7 @@ function Login() {
 
 	const onSubmit = async (formData) => {
 		setLoading(true);
+		setErr('')
 
 		const res = await fetch(`${backendUrl}/user/auth/login`, {
 			method: 'POST',
@@ -44,15 +45,9 @@ function Login() {
 			navigate(`/user/${user._id}`)
 		} else if (res.status == 401) {
 			setErr('Username or password is incorrect')
-			setTimeout(() => {
-				setErr('')
-			}, 3000);
 			return;
 		} else {
 			setErr('Something went wrong...')
-			setTimeout(() => {
-				setErr('')
-			}, 3000);
 			return
 		}
 	}
