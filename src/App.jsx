@@ -14,7 +14,6 @@ import UserLayout from './components/UserLayout'
 import ElectionDetail, {electionDetailLoader} from './pages/ElectionDetail';
 import PositionDetails, { loader } from './pages/PositionDetails';
 import ElectionResults, { resultsLoader } from './pages/ElectionResults';
-import CandidateSelfAdd, { candidateSelfAddLoader } from './pages/CandidateSelfAdd';
 import NotFound from './pages/NotFound';
 import UpdateCandidate, {updateloader} from './pages/UpdateCandidate';
 import UpdateElection, {updateElectionLoader} from './pages/UpdateElection';
@@ -32,7 +31,6 @@ const router = createBrowserRouter(createRoutesFromElements(
 
 		<Route path='/election/:id/results' element={<ElectionResults />} loader={ resultsLoader } />
 		<Route path='/election/:id/:voterId' element={<Election />} loader={ electionLoader }/>
-		<Route path='/join-contest/:id' element={<CandidateSelfAdd />} loader={ candidateSelfAddLoader } errorElement={<NotFound />}/>
 
 		<Route path='user/:userId' element={<UserLayout />}>
 			<Route index element={<Dashboard />} loader={ dashboardLoader }/>
