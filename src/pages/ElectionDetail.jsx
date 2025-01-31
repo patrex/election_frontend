@@ -434,13 +434,15 @@ function ElectionDetail() {
 
 							<div className='flex flex-col sm:flex-row items-center justify-between w-full p-1 gap-2'>
 								<div className='p-2'>
-									<input
-										type="text"
-										placeholder="Search..."
-										className="w-full p-2 border rounded-md"
-										value={searchTerm}
-  										onChange={(e) => setSearchTerm(e.target.value)}
-									/>
+									{votersList.length > 0 && (
+										<input
+											type="text"
+											placeholder="Search..."
+											className="w-full p-2 border rounded-md"
+											value={searchTerm}
+											  onChange={(e) => setSearchTerm(e.target.value)}
+										/>
+									)}
 								</div>
 								<div>
 									<button className='Button violet action-item' onClick={ () => setViewUsersModal(false) }>Close</button>
