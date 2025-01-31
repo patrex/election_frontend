@@ -194,7 +194,12 @@ function ElectionDetail() {
 				}),
 			})
 
+			const updated_voter = await res.json();
+
 			if (res.ok) {
+				setVotersList((prev) => 
+						prev.map((voter) => voter._id === updated_voter._id ? updated_voter: voter
+					))
 				Toast.success("List was added")
 				setParticipantsList('');
 			}
