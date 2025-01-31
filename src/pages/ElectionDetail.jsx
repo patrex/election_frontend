@@ -43,6 +43,7 @@ function ElectionDetail() {
 	const [updatedParticipantInfo, setUpdatedParticipantInfo] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
 	
+	
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
 	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false);
@@ -370,6 +371,10 @@ function ElectionDetail() {
 		}
 	}
 
+	const votersFiltered = election.userAuthType == 'email' ?
+		votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
+		votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
+
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	return ( 
@@ -413,10 +418,10 @@ function ElectionDetail() {
 
 							<div className="max-h-96 overflow-auto p-2">
 								<ul>
-									{votersList.length === 0 ? (
+									{votersFiltered.length === 0 ? (
 										<p>No voters added</p>
 										) : (
-										votersList.map(voter => (
+										votersFiltered.map(voter => (
 											<li key={voter._id}>
 												<div>
 													{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
@@ -434,16 +439,17 @@ function ElectionDetail() {
 
 							<div className='flex flex-col sm:flex-row items-center justify-between w-full p-1 gap-2'>
 								<div className='p-2'>
-									{votersList.length > 0 && (
+									{votersFiltered.length > 0 && (
 										<input
 											type="text"
 											placeholder="Search..."
 											className="w-full p-2 border rounded-md"
 											value={searchTerm}
-											  onChange={(e) => setSearchTerm(e.target.value)}
+											onChange={(e) => setSearchTerm(e.target.value)}
 										/>
 									)}
 								</div>
+
 								<div>
 									<button className='Button violet action-item' onClick={ () => setViewUsersModal(false) }>Close</button>
 								</div>
