@@ -456,7 +456,7 @@ function ElectionDetail() {
 								</div>
 
 								<div>
-									<button className='Button violet action-item' onClick={ () => setViewUsersModal(false) }>Close</button>
+									<button className='Button violet action-item' onClick={  () => {setViewUsersModal(false); () => setSearchTerm('')} }>Close</button>
 								</div>
 							</div>
 						</div>
