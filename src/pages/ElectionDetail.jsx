@@ -418,10 +418,12 @@ function ElectionDetail() {
 										) : (
 										votersList.map(voter => (
 											<li key={voter._id}>
-												{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
 												<div>
-													<button className='Button violet action-item' onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>
-													<button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+													{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
+													<div>
+														<button className='Button violet action-item' onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>
+														<button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+													</div>
 												</div>
 											</li>
 										)))
