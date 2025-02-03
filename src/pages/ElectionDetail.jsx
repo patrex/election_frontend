@@ -194,14 +194,21 @@ function ElectionDetail() {
 				}),
 			})
 
-			const updated_voter = await res.json();
-
 			if (res.ok) {
-				setVotersList((prev) => 
-						prev.map((voter) => voter._id === updated_voter._id ? updated_voter: voter
+				try {
+					const new_list = await fetch(`${backendUrl}/election/${params.id}/voterlist`)
+					const new_voters_list = new_list.json();
+					// setVotersList(new_voters_list)
+
+					setVotersList((prev) => 
+						prev.map((voter) => voter._id === new_voters_list._id ? new_voters_list: voter
 					))
-				Toast.success("List was added")
-				setParticipantsList('');
+
+					Toast.success("List was added")
+					setParticipantsList('');
+				} catch (error) {
+					throw new Error(error)
+				}
 			}
 		} catch (error) {
 			Toast.error("An error occured. Try again")
@@ -262,6 +269,7 @@ function ElectionDetail() {
 			}
 
 			setAddParticipantsModalOpen(false)
+			voterList = [...new Set(voterList)]
 			sendListToDB(voterList)
 
 		} else if (participantsAuthType === 'phone') {
@@ -284,6 +292,7 @@ function ElectionDetail() {
 			if (invalid) Toast.warning("One or more phone numbers not properly formatted")
 			
 			setAddParticipantsModalOpen(false)
+			voterList = [...new Set(voterList)]
 			sendListToDB(voterList)
 		}
 	}
@@ -424,7 +433,7 @@ function ElectionDetail() {
 							<div className="max-h-96 overflow-auto p-2">
 								<ul>
 									{votersFiltered.length === 0 ? (
-										<p>No voters added</p>
+										<p>No voters found</p>
 										) : (
 										votersFiltered.map(voter => (
 											<li key={voter._id}>
@@ -444,15 +453,13 @@ function ElectionDetail() {
 
 							<div className='flex flex-col sm:flex-row items-center justify-between w-full p-1 gap-2'>
 								<div className='p-2'>
-									{votersFiltered.length > 0 && (
-										<input
-											type="text"
-											placeholder="Search..."
-											className="w-full p-2 border rounded-md"
-											value={searchTerm}
-											onChange={(e) => setSearchTerm(e.target.value)}
-										/>
-									)}
+									<input
+										type="text"
+										placeholder="Search..."
+										className="w-full p-2 border rounded-md"
+										value={searchTerm}
+										onChange={(e) => setSearchTerm(e.target.value)}
+									/>
 								</div>
 
 								<div>
