@@ -196,7 +196,8 @@ function ElectionDetail() {
 
 			if (res.ok) {
 				try {
-					const new_list = await fetch(`${backendUrl}/election/${election._id}/voterlist`)
+					const resp = await res.json()
+					console.log(resp);
 
 					Toast.success("List was added")
 					setParticipantsList('');
