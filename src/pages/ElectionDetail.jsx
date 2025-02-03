@@ -197,12 +197,12 @@ function ElectionDetail() {
 			const new_list = await post_list.json()
 
 			if (post_list.ok) {
-				const updated_list = [...voterlist, ...new_list.voters];
+				const updated_list = [...votersList, ...new_list.voters];
 				setVotersList(updated_list)
+				setVotersFiltered(updated_list)
 
 				Toast.success("List was added")
 				setParticipantsList('');
-			
 			}
 		} catch (error) {
 			Toast.error("An error occured. Try again")
