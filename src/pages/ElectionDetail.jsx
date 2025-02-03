@@ -33,6 +33,7 @@ function ElectionDetail() {
 	const [election, positions, voters] = useLoaderData();
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters)
+	const [votersFiltered, setVotersFiltered] = useState([])
 	const params = useParams()
 
 	const [newPosition, setNewPosition] = useState("");
@@ -187,7 +188,6 @@ function ElectionDetail() {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				mode: 'cors',
 				body: JSON.stringify({
 					election: election._id,
 					voterList: voterlist
@@ -384,6 +384,7 @@ function ElectionDetail() {
 		const votersFiltered = election.userAuthType == 'email' ?
 			votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
 			votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
+			setVotersFiltered(votersFiltered)
 	}, [searchTerm, votersList])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
