@@ -254,7 +254,7 @@ function ElectionDetail() {
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			let invalid = false;
 
-			const voterList = participantsList.split(',')
+			let voterList = participantsList.split(',')
 				.map(email => {
 					const emailAddr = email.trim();
 
@@ -277,7 +277,7 @@ function ElectionDetail() {
 			const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
 	
 			let invalid = false;
-			const voterList = participantsList.split(',')
+			let voterList = participantsList.split(',')
 				.map(phoneno => {
 					const phoneNumber = phoneno.trim();
 	
