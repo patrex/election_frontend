@@ -196,7 +196,7 @@ function ElectionDetail() {
 
 			const new_list = await post_list.json()
 
-			if (res.ok) {
+			if (post_list.ok) {
 				const updated_list = [...voterlist, ...new_list.voters];
 				setVotersList(updated_list)
 
