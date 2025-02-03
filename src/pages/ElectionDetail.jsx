@@ -1,6 +1,6 @@
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 import Toast from '@/utils/ToastMsg';
@@ -182,7 +182,7 @@ function ElectionDetail() {
 
 	async function sendListToDB (voterlist) {
 		try {
-			const res = await fetch(`${backendUrl}/election/${election._id}/closed_event/addvoters`, {
+			const post_list = await fetch(`${backendUrl}/election/${election._id}/closed_event/addvoters`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -194,16 +194,15 @@ function ElectionDetail() {
 				}),
 			})
 
-			if (res.ok) {
-				try {
-					const resp = await res.json()
-					console.log(resp);
+			const new_list = await post_list.json()
 
-					Toast.success("List was added")
-					setParticipantsList('');
-				} catch (error) {
-					throw new Error(error)
-				}
+			if (res.ok) {
+				const updated_list = [...voterlist, ...new_list.voters];
+				setVotersList(updated_list)
+
+				Toast.success("List was added")
+				setParticipantsList('');
+			
 			}
 		} catch (error) {
 			Toast.error("An error occured. Try again")
@@ -380,9 +379,12 @@ function ElectionDetail() {
 		}
 	}
 
-	const votersFiltered = election.userAuthType == 'email' ?
-		votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
-		votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
+	
+	useEffect(() => {
+		const votersFiltered = election.userAuthType == 'email' ?
+			votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
+			votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
+	}, [searchTerm, votersList])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
