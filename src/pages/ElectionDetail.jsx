@@ -404,7 +404,7 @@ function ElectionDetail() {
 	}
 
 	useEffect( () => {
-		setIsActive(election.endDate > new Date.now())
+		setIsActive(election.endDate > Date.now())
 	}, [isActive])
 
 	
