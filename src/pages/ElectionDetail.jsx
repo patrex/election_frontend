@@ -227,8 +227,7 @@ function ElectionDetail() {
 						method: 'post',
 						headers: {
 							'Content-Type': 'application/json',
-						},
-						mode: 'cors',
+						}
 					})
 		
 					if(res.ok) {
@@ -361,7 +360,6 @@ function ElectionDetail() {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					mode: 'cors',
 					body: JSON.stringify({
 						phoneNo: validatedPhoneNo,
 						participantId: participant._id,
@@ -404,7 +402,10 @@ function ElectionDetail() {
 	}
 
 	useEffect( () => {
-		setIsActive(election.endDate > Date.now())
+		const currentTime = Date.now();
+		const endDate = new Date(election.endDate);
+
+		setIsActive( endDate < currentTime )
 	}, [isActive])
 
 	
