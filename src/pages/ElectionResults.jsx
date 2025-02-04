@@ -1,23 +1,20 @@
-import  { useState, useRef, useEffect } from 'react';
-import { Link, useLoaderData, useParams } from 'react-router-dom';
+import  { useState, useEffect, useMemo } from 'react';
+import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
 
 import backendUrl from '../utils/backendurl'
 
 export async function resultsLoader({params}) {
-	const e = await fetch(`${backendUrl}/election/${params.id}`);
-	const p = await fetch(`${backendUrl}/election/${params.id}/positions`);
-	const c = await fetch(`${backendUrl}/election/${params.id}/candidates`);
-	const v = await fetch(`${backendUrl}/election/${params.id}/votes`);
-	const o = await fetch(`${backendUrl}/election/${params.id}/ownerinfo`);
 
-	const election = await e.json();
-	const positions = await p.json();
-	const candidates = await c.json();
-	const votes = await v.json();
-	let owner = await o.json();
+	const [election, positions, candidates, votes, owner] = await Promise.all([
+		fetch(`${backendUrl}/election/${params.id}`).then(res => res.json()),
+		fetch(`${backendUrl}/election/${params.id}/positions`).then(res => res.json()),
+		fetch(`${backendUrl}/election/${params.id}/candidates`).then(res => res.json()),
+		fetch(`${backendUrl}/election/${params.id}/votes`).then(res => res.json()),
+		fetch(`${backendUrl}/election/${params.id}/ownerinfo`).then(res => res.json()),
+	])
 
-	return [election, positions, candidates, votes, owner];
+	return { election, positions, candidates, votes, owner };
 }
 
 function ElectionResults() {
@@ -26,51 +23,46 @@ function ElectionResults() {
 	const [votesList, setVotesList] = useState([])
 	const [candidatesList, setCandidatesList] = useState([])
 	const [selectedPosition, setSelectedPosition] = useState("");
-	const [winner, setWinner] = useState({});
-	const [runnerUps, setRunnerUps] = useState([]);
 	const [eventException, setEventException] = useState(false);
-	
-	const svgRef = useRef();
 
 	const [data, setData] = useState([]);
-
-	//	chart dimensions
-	const width = 300;
-	const height = 300;
-	const radius = width / 2;
 
 	const handleChange = (e) => {
 		const selected = e.target.value;
 		setSelectedPosition(selected)
 		
-		const position = positions.find(position => position.position == selected);
-		setCandidatesList(candidates.filter(candidate => candidate.position == position._id))
-		setVotesList(votes.filter(vote => vote.position == position._id))
+		const position = positions.find(pos => pos.position === selected);
+		if (!position) return;
+
+		const filteredCandidates = candidates.filter(candidate => candidate.position == position._id)
+		const filteredVotes = votes.filter(vote => vote.position === position._id)
+
+		setCandidatesList(filteredCandidates)
+		setVotesList(filteredVotes)
 	}
 
 	useEffect(() => {
-		moment(election.endDate).isAfter(new Date()) && setEventException(true)
+		if (election?.endDate && moment(election.endDate).isAfter(new Date()))
+			setEventException(true)
 	}, [election.endDate])
 
 	useEffect( () => {
-		setData([])
+		const updatedData = candidatesList.map(candidate => ({
+			id: candidate._id,
+			candidateName: `${candidate.firstname} ${candidate.lastname}`,
+			votes: votesList.filter(vote => vote.candidateId === candidate._id).length
+		})).sort((a, b) => b.votes - a.votes)
 		
-		candidatesList.forEach(candidate => {
-			const row = {}
+		// Identify the winner (first in sorted list)
+		const winnerId = updatedData.length > 0 ? updatedData[0].id : null;
 
-			const candidateName = `${candidate.firstname} ${candidate.lastname}`;
-			let voteCount = votesList.filter(vote => vote.candidateId == candidate._id).length;
-			
-			row.id = candidate._id;
-			row.candidateName = candidateName;
-			row.votes = voteCount;
-			
-			setData(prev => [...prev, row])
-		})
-		
-	}, [selectedPosition])
+		setData(updatedData.map(candidate => ({
+		    ...candidate,
+		    isWinner: candidate.id === winnerId
+		})));
+	}, [selectedPosition, candidatesList, votesList])
 
-	
+	const totalVotes = useMemo(() => votesList.length, [votesList])
 
 	return ( 
 		<>
@@ -89,15 +81,15 @@ function ElectionResults() {
 						</div>
 					</div>
 				</div>
-
 			}
+
 			<div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 ease-in-out">
 				<div className="p-5">
 					<h2><strong>{ election.title }</strong></h2>
 					<h4><strong>Description:</strong> { election.desc ? election.desc : '' }</h4>
 					<h4><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</h4>
 					<h4><strong>Start date:</strong> { election.startDate ? moment(election.startDate).format('LLL') : ''}</h4>
-					<h4><strong>End date:</strong> { election.endDate ? moment(election.endDate).format('LLL') : ''}</h4>
+					<h4><strong>End date:</strong> { election?.endDate ? moment(election.endDate).format('LLL') : ''}</h4>
 				</div>
 			</div>
 
@@ -124,7 +116,7 @@ function ElectionResults() {
 
 					<div className="voteInfo">
 						<h3>Results for {selectedPosition}</h3>
-						<h4>Total votes: {votesList.length}</h4>
+						<h4>Total votes: {totalVotes}</h4>
 
 						<div className='dashboard-container table-responsive'>
 							<table className="table table-hover table-striped">
@@ -137,10 +129,10 @@ function ElectionResults() {
 								</thead>
 
 								<tbody className='table-group-divider'>
-									{data.sort((a, b) => b.votes - a.votes)
+									{data
 									     .map(datum => (
 										<tr key={datum.id}>
-											<td>{datum.candidateName}</td>
+											<td>{datum.candidateName} {datum.isWinner && <span className="winner-badge">🏆 Winner</span>}</td>
 											<td>{selectedPosition}</td>
 											<td>{datum.votes}</td>
 										</tr>
@@ -152,12 +144,7 @@ function ElectionResults() {
 				</div>
 
 				<div className="resultsRight">
-					<svg
-						ref={svgRef}
-						width={width}
-						height={height}
-					>
-					</svg>
+					<p>Hello</p>
 				</div>
 			</div>
 		</>
