@@ -405,7 +405,7 @@ function ElectionDetail() {
 		const currentTime = Date.now();
 		const endDate = new Date(election.endDate);
 
-		setIsActive( endDate < currentTime )
+		setIsActive( endDate > currentTime )
 	}, [isActive])
 
 	
