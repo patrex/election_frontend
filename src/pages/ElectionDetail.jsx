@@ -449,7 +449,7 @@ function ElectionDetail() {
 						{isActive && <p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={!positions} className='Button violet action-item'>Add Candidate</button></Link></p>}
 						{isActive && election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
 						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
-						{isActive && <p><button className='Button red action-item' onClick={ () => endElectionModalOpen(true) }>End This Election!</button></p>}
+						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
 					</div>
 				</div>
 
