@@ -53,6 +53,10 @@ function ElectionDetail() {
 
 	const [elec, setElection] = useState(election);
 
+	function closeAddParticipant () {
+		setSearchTerm("")
+		setAddParticipantsModalOpen(false)
+	}
 
 	function handlePositionChange(e) {
 		setNewPosition(e.target.value);
@@ -201,7 +205,9 @@ function ElectionDetail() {
 				setVotersList(updated_list)
 				setVotersFiltered(updated_list)
 
-				Toast.success("List was added")
+				// const duplicatesFound = new_list.existing_voters.length
+
+				Toast.success(`List was updated`)
 				setParticipantsList('');
 			}
 		} catch (error) {
@@ -461,7 +467,7 @@ function ElectionDetail() {
 								</div>
 
 								<div>
-									<button className='Button violet action-item' onClick={  () => {setViewUsersModal(false); () => setSearchTerm('')} }>Close</button>
+									<button className='Button violet action-item' onClick={  () => { closeAddParticipant } }>Close</button>
 								</div>
 							</div>
 						</div>
