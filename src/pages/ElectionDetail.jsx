@@ -50,6 +50,7 @@ function ElectionDetail() {
 	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false);
 	const [updateParticipantModal, setUpdateParticipantModal] = useState(false);
 	const [viewUsersModal, setViewUsersModal] = useState(false);
+	const [isActive, setIsActive] = useState();
 
 	const [elec, setElection] = useState(election);
 
@@ -171,10 +172,7 @@ function ElectionDetail() {
 					method: 'delete',
 					headers: {
 						'Content-Type': 'application/json',
-						'Access-Control-Allow-Origin': '*',
-						'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Z-Key',
-						'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS'},
-					mode: 'cors',
+					}
 				})
 
 				if(res.ok) {
@@ -385,6 +383,29 @@ function ElectionDetail() {
 		}
 	}
 
+	async function endElection () {
+		try {
+			const end_res = await fetch(`${backendUrl}/elections/${election._id}/end`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+
+			if (end_res.ok) {
+				setIsActive(false)
+				Toast.success("Election Ended")
+			}
+			
+		} catch (error) {
+			Toast.error("Could not end the election")
+		}
+	}
+
+	useEffect( () => {
+		setIsActive(election.endDate > new Date.now())
+	}, [isActive])
+
 	
 	useEffect(() => {
 		const votersFiltered = election.userAuthType == 'email' ?
@@ -422,10 +443,11 @@ function ElectionDetail() {
 						</tbody>
 					</table>
 					<div style={ {display: 'flex', justifyContent: 'flex-start'} }>
-						<p><button className='Button violet action-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
-						<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={!positions} className='Button violet action-item'>Add Candidate</button></Link></p>
-						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
+						{isActive && <p><button className='Button violet action-item' onClick={() => openPostionModal(election)}>Add Position</button></p>}
+						{isActive && <p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={!positions} className='Button violet action-item'>Add Candidate</button></Link></p>}
+						{isActive && election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
 						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
+						{isActive && <p><button className='Button red action-item' onClick={ endElection }>End This Election!</button></p>}
 					</div>
 				</div>
 
@@ -444,8 +466,8 @@ function ElectionDetail() {
 												<div>
 													{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
 													<div>
-														<button className='Button violet action-item' onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>
-														<button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+														{isActive && <button className='Button violet action-item' onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>}
+														{isActive && <button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>}
 													</div>
 												</div>
 											</li>
@@ -473,6 +495,20 @@ function ElectionDetail() {
 						</div>
 					</div>
 				)}
+
+				{endElectionModalOpen && (
+					<div className="modal-overlay">
+						<div className="w-5/6 md:w-1/5 lg:w-1/5 xl:w-1/5 p-4 rounded-lg shadow-md relative bg-white">
+							<p><em>Are you sure you want to End this election. This cannot be undone!</em></p>
+							<div className="action-btn-container">
+								<button className='Button red action-item' onClick={ endElection }>Yes, End it</button>
+								<button className='Button violet action-item' onClick={ () => setEndElectionModalOpen(false) }>No, JK</button>
+							</div>
+						</div>
+					</div>
+				)}
+
+
 
 				{positionModalOpen && (
 					<div className="modal-overlay">
