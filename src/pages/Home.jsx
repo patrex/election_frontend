@@ -113,7 +113,6 @@ function Home() {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					mode: 'cors',
 					body: JSON.stringify({
 						participant,
 						electionId: election._id
@@ -123,7 +122,6 @@ function Home() {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					mode: 'cors',
 					body: JSON.stringify({
 						participant,
 						electionId: election._id
@@ -135,6 +133,7 @@ function Home() {
 					setOTPOpen(true)	//open otp modal
 				}
 			} else {
+				setVoter(participant)
 				navigate(`/election/${election._id}/${participant}`)
 			}
 		} catch (error) {
