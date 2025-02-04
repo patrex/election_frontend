@@ -14,7 +14,7 @@ export async function resultsLoader({params}) {
 		fetch(`${backendUrl}/election/${params.id}/ownerinfo`).then(res => res.json()),
 	])
 
-	return { election, positions, candidates, votes, owner };
+	return [ election, positions, candidates, votes, owner ];
 }
 
 function ElectionResults() {
