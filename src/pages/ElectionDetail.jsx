@@ -411,10 +411,12 @@ function ElectionDetail() {
 
 	
 	useEffect(() => {
-		const votersFiltered = election.userAuthType == 'email' ?
-			votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
-			votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
-			setVotersFiltered(votersFiltered)
+		if (election.type == 'Closed'){
+			const votersFiltered = election.userAuthType == 'email' ?
+				votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
+				votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
+				setVotersFiltered(votersFiltered)
+		}
 	}, [searchTerm, votersList])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
