@@ -467,7 +467,7 @@ function ElectionDetail() {
 								</div>
 
 								<div>
-									<button className='Button violet action-item' onClick={  () => { closeAddParticipant } }>Close</button>
+									<button className='Button violet action-item' onClick={ closeAddParticipant }>Close</button>
 								</div>
 							</div>
 						</div>
