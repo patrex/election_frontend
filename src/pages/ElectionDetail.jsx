@@ -55,7 +55,7 @@ function ElectionDetail() {
 
 	function closeAddParticipant () {
 		setSearchTerm("")
-		setAddParticipantsModalOpen(false)
+		setViewUsersModal(false)
 	}
 
 	function handlePositionChange(e) {
