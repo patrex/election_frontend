@@ -51,7 +51,7 @@ function ElectionDetail() {
 	const [updateParticipantModal, setUpdateParticipantModal] = useState(false);
 	const [viewUsersModal, setViewUsersModal] = useState(false);
 	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false)
-	const [isActive, setIsActive] = useState();
+	const [isActive, setIsActive] = useState(new Date(election.endDate) > Date.now());
 
 	const [elec, setElection] = useState(election);
 
@@ -402,12 +402,12 @@ function ElectionDetail() {
 		}
 	}
 
-	useEffect( () => {
-		const currentTime = Date.now();
-		const endDate = new Date(election.endDate);
+	// useEffect( () => {
+	// 	const currentTime = Date.now();
+	// 	const endDate = new Date(election.endDate);
 
-		setIsActive( endDate > currentTime )
-	}, [isActive])
+	// 	setIsActive( endDate > currentTime )
+	// }, [isActive])
 
 	
 	useEffect(() => {
