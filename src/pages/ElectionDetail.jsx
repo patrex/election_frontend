@@ -393,6 +393,7 @@ function ElectionDetail() {
 
 			if (end_res.ok) {
 				setIsActive(false)
+				setEndElectionModalOpen(false)
 				Toast.success("Election Ended")
 			}
 			
@@ -500,7 +501,7 @@ function ElectionDetail() {
 
 				{endElectionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-5/6 md:w-1/5 lg:w-1/5 xl:w-1/5 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-2 rounded-lg shadow-md relative bg-white">
 							<p><em>Are you sure you want to End this election. This cannot be undone!</em></p>
 							<div className="action-btn-container">
 								<button className='Button red action-item' onClick={ endElection }>Yes, End it</button>
