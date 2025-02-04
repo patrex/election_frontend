@@ -510,7 +510,7 @@ input[type=number] {
 }
 
 .winner-badge {
-	background-color: gold;
+	background-color: green;
 	color: black;
 	font-weight: bold;
 	padding: 3px 6px;
