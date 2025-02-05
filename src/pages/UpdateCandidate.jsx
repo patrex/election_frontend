@@ -199,6 +199,7 @@ function UpdateCandidate() {
 													</option>
 												))
 											: "no positions.."} */}
+											<option value={position.position} selected>{position.position}</option>
 											{state.positions.length > 0 &&
 												state.positions.filter((pos) => pos._id !== candidate.position) // Better filtering
 													.map((pos) => (
@@ -236,7 +237,7 @@ function UpdateCandidate() {
 								/>
 								<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
 							</div> 
-							<p style={ {overflow: 'hidden', fontSize: '12px'}}>&gt; { state.newFile ? state.newFile : "" }</p>
+							<p style={ {overflow: 'hidden', fontSize: '12px'}}>&gt; { state.newFile ? "File selected " + <i style={{color: 'goldenrod'}} className="bi bi-file-earmark-check-fill"></i> : "" }</p>
 						</div>
 					</div>
 							
