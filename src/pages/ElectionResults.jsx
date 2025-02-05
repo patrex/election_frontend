@@ -1,5 +1,6 @@
 import  { useState, useEffect, useMemo } from 'react';
 import { useLoaderData } from 'react-router-dom';
+import ResultRow from '@/components/ResultRow';
 import moment from 'moment';
 
 import backendUrl from '../utils/backendurl'
@@ -128,16 +129,14 @@ function ElectionResults() {
 									</tr>
 								</thead>
 
-								<tbody className='table-group-divider'>
-									{data
-									     .map(datum => (
-										<tr key={datum.id}>
-											<td>{datum.candidateName} {datum.isWinner && <span className="winner-badge">🏆 Winner</span>}</td>
-											<td>{selectedPosition}</td>
-											<td>{datum.votes}</td>
-										</tr>
-									))}
-								</tbody>
+								
+								{data
+									.map(datum => (
+										<ResultRow key={datum.id} candidate = {datum} selectedPosition={selectedPosition} />
+										)
+									)
+								}
+								
 							</table>
 						</div>
 					</div>
