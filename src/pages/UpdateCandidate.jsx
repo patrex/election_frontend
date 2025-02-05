@@ -112,31 +112,6 @@ function UpdateCandidate() {
 			Toast.error("Update failed")
 		}
 	}
-	
-
-	// const onSubmit = async (formdata) => {
-	// 	if (isDirty || newPicture) {
-	// 		let photoUrl = ''
-			
-	// 		if (newPicture) {
-	// 			const imgRef = ref(fireman, `vote4me/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname)}`);
-	// 			uploadBytes(imgRef, newPicture)
-	// 				.then(snapshot => getDownloadURL(snapshot.ref))
-	// 				.then(imgUrl => {
-	// 					photoUrl = imgUrl;
-	// 				})
-	// 				.then( async (data) => {
-	// 					patchCandidate(formdata, photoUrl)
-	// 				})
-	// 				.catch(err => Toast.error(err))
-	// 		} else {
-	// 			patchCandidate(formdata, image)
-	// 		}
-	// 	} else {
-	// 		Toast.info("You did not make any changes");
-	// 		return 
-	// 	}
-	// }
 
 	const onSubmit = async (formdata) => {
 		if (!isDirty && !state.newPicture) {
@@ -190,18 +165,10 @@ function UpdateCandidate() {
 								<div>
 									<label>
 										Select position:
-										<select {...register('selectedPosition')} className='form-select form-select-lg mb-3'> 
-											{/* <option value={position.position} selected>{position.position}</option>
-											{positions.length > 0 ? 
-												positions.filter(position => candidate.position != position._id).map((position) => (
-													<option key={position.position} value={position.position}>
-														{position.position}
-													</option>
-												))
-											: "no positions.."} */}
+										<select {...register('selectedPosition')} className='form-select form-select-lg mb-3'>
 											<option value={position.position} selected>{position.position}</option>
 											{state.positions.length > 0 &&
-												state.positions.filter((pos) => pos._id !== candidate.position) // Better filtering
+												state.positions.filter((pos) => pos._id !== candidate.position)
 													.map((pos) => (
 														<option key={pos.position} value={pos.position}>
 															{pos.position}
@@ -225,7 +192,7 @@ function UpdateCandidate() {
 						<div className="vr-divider"></div>
 
 						<div className="update-candidate-right">
-							<div className="candidate-update-pic-holder w-64 h-64 rounded-xl shadow-lg overflow-hidden">
+							<div className="candidate-update-pic-holder">
 								<img src={state.image} name="candidateimgUrl" className="" />
 							</div>
 							<div>

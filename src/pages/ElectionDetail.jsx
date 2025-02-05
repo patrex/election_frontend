@@ -393,7 +393,6 @@ function ElectionDetail() {
 			const new_res = await end_res.json();
 			election = new_res;
 
-			setIsActive(false)
 			setEndElectionModalOpen(false)
 			Toast.success("Election Ended")
 		} catch (error) {
@@ -412,7 +411,7 @@ function ElectionDetail() {
 
 	useEffect(() => {
 		setIsActive(new Date(election.endDate) > Date.now())
-	}, [isActive])
+	}, [election])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -448,6 +447,7 @@ function ElectionDetail() {
 						{isActive && election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
 						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
 						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
+						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>View Results</button></p>}
 					</div>
 				</div>
 
