@@ -132,7 +132,7 @@ function ElectionResults() {
 													className="w-10 h-10 rounded-full object-cover mr-3"
 												/>
 												{/* Name */}
-												<div className="flex-1 font-bold">{ datum.candidateName }</div>
+												<div className="flex-1 font-bold">{ datum.candidateName } {datum.isWinner && <span className="winner-badge">🏆 Winner</span>}</div>
 												{/* Position */}
 												<div className="flex-1 text-gray-600">{selectedPosition}</div>
 												{/* Count */}
