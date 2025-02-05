@@ -1,6 +1,6 @@
 import { useLoaderData, Link, useParams } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fireman } from '../utils/fireloader';
 import Toast from "@/utils/ToastMsg";
 
@@ -12,38 +12,29 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import backendUrl from '../utils/backendurl'
 
 export async function updateloader({ params }) {
-	let position = undefined;
-	let positionsList = undefined;
-	let candidate = undefined;
-	let election = undefined;
-
-	try {
-		const c = await fetch(`${backendUrl}/election/candidate/${params.candidateId}`)
-		candidate = await c.json();
-
-		const pos_res = await fetch(`${backendUrl}/election/${candidate.electionId}/positions`)
-		positionsList = await pos_res.json()
-
-		const e = await fetch(`${backendUrl}/election/${candidate.electionId}`)
-		election = await e.json();
-
-		const pos_name_res = await fetch(`${backendUrl}/election/positions/${candidate.position}`)
-		position = await pos_name_res.json()
-
-	} catch (error) {
-		
-	}
+	const [candidate, position, positionsList, election] = Promise.all([
+		fetch(`${backendUrl}/election/candidate/${params.candidateId}`).then(res => res.json()),
+		fetch(`${backendUrl}/election/${candidate.electionId}/positions`).then(res => res.json()),
+		fetch(`${backendUrl}/election/${candidate.electionId}`).then(res => res.json()),
+		fetch(`${backendUrl}/election/positions/${candidate.position}`).then(res => res.json()),
+	])
 
 	return [candidate, position, positionsList, election]
 }
 
 function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
-	const [image, setImage] = useState("");
-	const [newPicture, setNewPicture] = useState("");
-	const [positions, setPositions] = useState(positionsList);
-	const [newFile, setNewFile] = useState("");
-	const params = useParams();
+	// const [image, setImage] = useState("");
+	// const [newPicture, setNewPicture] = useState("");
+	// const [positions, setPositions] = useState(positionsList);
+	// const [newFile, setNewFile] = useState("");
+	const [state, setState] = useState({
+		image: candidate.imgUrl || "",
+		newPicture: "",
+		newFile: "",
+		positions: positionsList || [],
+	});
+
 	
 	const schema = yup.object().shape({
 		firstname: yup.string().min(2).required(),
@@ -52,29 +43,34 @@ function UpdateCandidate() {
 		manifesto: yup.string()
 	})
 
-	const { register, handleSubmit, formState, errors } = useForm({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, dirtyFields, isDirty },
+	    } = useForm({
 		resolver: yupResolver(schema),
-		defaultValues: {
-			firstname: candidate.firstname,
-			lastname: candidate.lastname,
-			manifesto: candidate.manifesto,
-			selectedPosition: position.position,
-		}
-	});
-
-	const { dirtyFields, isDirty } = formState;
+		defaultValues: useMemo(() => ({
+		    firstname: candidate.firstname || "",
+		    lastname: candidate.lastname || "",
+		    manifesto: candidate.manifesto || "",
+		    selectedPosition: position.position || "",
+		}), [candidate, position]), // Prevent unnecessary re-renders
+	    });
 
 	useEffect(() => {
 		setImage(candidate.imgUrl);
-	}, [positionsList])
+	}, [candidate])
 
-	const handleFileUpload = (e) => {
+	const handleFileUpload = useCallback((e) => {
 		const file = e.target.files[0];
 		if (file) {
-			setNewPicture(file)
-			setNewFile(file.name)
+			setState((prev) => ({
+				...prev,
+				newPicture: file,
+				newFile: file.name
+			}))
 		}
-	}
+	}, [])
 
 	const patchCandidate = async function(formdata, photoUrl) {
 		try {
@@ -83,7 +79,6 @@ function UpdateCandidate() {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				mode: 'cors',
 				body: JSON.stringify({
 					electionId: election._id,
 					candidate_id: candidate._id,
@@ -92,38 +87,60 @@ function UpdateCandidate() {
 				}),
 			})
 
-			if (response.ok) {
-				Toast.success("Candidate data was updated");
-			}
+			if (!response.ok) throw new Error("Failed to update candidate");
+
+        		Toast.success("Candidate updated successfully!");
 		} catch (error) {
 			Toast.error("Update failed")
 		}
 	}
 	
 
-	const onSubmit = async (formdata) => {
-		if (isDirty || newPicture) {
-			let photoUrl = ''
+	// const onSubmit = async (formdata) => {
+	// 	if (isDirty || newPicture) {
+	// 		let photoUrl = ''
 			
-			if (newPicture) {
-				const imgRef = ref(fireman, `vote4me/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname)}`);
-				uploadBytes(imgRef, newPicture)
-					.then(snapshot => getDownloadURL(snapshot.ref))
-					.then(imgUrl => {
-						photoUrl = imgUrl;
-					})
-					.then( async (data) => {
-						patchCandidate(formdata, photoUrl)
-					})
-					.catch(err => Toast.error(err))
-			} else {
-				patchCandidate(formdata, image)
-			}
-		} else {
-			Toast.info("You did not make any changes");
-			return 
+	// 		if (newPicture) {
+	// 			const imgRef = ref(fireman, `vote4me/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname)}`);
+	// 			uploadBytes(imgRef, newPicture)
+	// 				.then(snapshot => getDownloadURL(snapshot.ref))
+	// 				.then(imgUrl => {
+	// 					photoUrl = imgUrl;
+	// 				})
+	// 				.then( async (data) => {
+	// 					patchCandidate(formdata, photoUrl)
+	// 				})
+	// 				.catch(err => Toast.error(err))
+	// 		} else {
+	// 			patchCandidate(formdata, image)
+	// 		}
+	// 	} else {
+	// 		Toast.info("You did not make any changes");
+	// 		return 
+	// 	}
+	// }
+
+	const onSubmit = async (formdata) => {
+		if (!isDirty && !state.newPicture) {
+		    Toast.info("You did not make any changes");
+		    return;
 		}
-	}
+	    
+		try {
+		    let photoUrl = state.image; // Default to existing image
+	    
+		    if (state.newPicture) {
+			const imgRef = ref(fireman, `vote4me/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname)}`);
+			const snapshot = await uploadBytes(imgRef, state.newPicture);
+			photoUrl = await getDownloadURL(snapshot.ref);
+		    }
+	    
+		    await patchCandidate(formdata, photoUrl);
+		} catch (err) {
+		    Toast.error("An error occurred while updating candidate.");
+		}
+	};
+	    
 
 	return ( 
 		<>
@@ -158,14 +175,23 @@ function UpdateCandidate() {
 										<select {...register('selectedPosition', {required: "Select a position"})}
 											className='form-select form-select-lg mb-3'
 										> 
-											<option value={position.position} selected>{position.position}</option>
+											{/* <option value={position.position} selected>{position.position}</option>
 											{positions.length > 0 ? 
 												positions.filter(position => candidate.position != position._id).map((position) => (
 													<option key={position.position} value={position.position}>
 														{position.position}
 													</option>
 												))
-											: "no positions.."}
+											: "no positions.."} */}
+											{state.positions
+												.filter((pos) => pos._id !== candidate.position) // Better filtering
+												.map((pos) => (
+													<option key={pos.position} value={pos.position}>
+														{pos.position}
+													</option>
+													)
+												)
+											}
 										</select>
 									</label>
 								</div>
@@ -199,7 +225,12 @@ function UpdateCandidate() {
 					</div>
 							
 					<div className="candidate-update-bottom">
-						<button type="submit" form="candidate-update-form" className="Button violet">Save</button>
+						<button 
+							type="submit" 
+							form="candidate-update-form" 
+							className="Button violet"
+							disabled={!isDirty && !state.newPicture}
+						>Save</button>
 					</div>
 				</div>
 			</div>	

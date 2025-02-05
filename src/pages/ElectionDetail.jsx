@@ -402,14 +402,6 @@ function ElectionDetail() {
 		}
 	}
 
-	// useEffect( () => {
-	// 	const currentTime = Date.now();
-	// 	const endDate = new Date(election.endDate);
-
-	// 	setIsActive( endDate > currentTime )
-	// }, [isActive])
-
-	
 	useEffect(() => {
 		if (election.type == 'Closed'){
 			const votersFiltered = election.userAuthType == 'email' ?

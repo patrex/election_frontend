@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import backendUrl from '../utils/backendurl'
@@ -21,6 +21,7 @@ function AddCandidate() {
 
 	const [image, setImage] = useState('');
 	const [filename, setFilename] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const fetchPositions = () => {
 		fetch(`${backendUrl}/election/${params.id}/positions`)
@@ -30,60 +31,60 @@ function AddCandidate() {
 	}
 
 	const handleFileNameChange = (e) => {
-		const file = setImage(e.target.files[0]);
-		if (file) setFilename(file.name)
+		const file = e.target.files[0];
+		if (file) {
+			setImage(file)
+			setFilename(file.name)
+		}
 	}
 
-	const uploadImage = () => {
-		let photoUrl = ''
-		const imgRef =
-		 ref(fireman, `votersystem/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname) }`);
-
-		uploadBytes(imgRef, image)
-			.then(snapshot => getDownloadURL(snapshot.ref))
-			.then(imgUrl => {
-				photoUrl = imgUrl;
-			})
-			.then( async (data) => {
-				const res = await fetch(`${backendUrl}/election/${params.id}/add-candidate`, {
-					method: 'POST',
-					headers: {
-					  'Content-Type': 'application/json',
-					},
-					mode: 'cors',
-					body: JSON.stringify({
-						...formData,
-						photoUrl,
-						selectedPosition
-					}),
-				})
-
-				if(res.ok) {
-					navigate(`/user/${params.userId}/election/${params.id}`)
-				}
-			})
-			.catch(err => Toast.error(err))
+	const uploadImage = async () => {
+		try {
+			const imgRef = ref(
+			    fireman, 
+			    `votersystem/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname)}`
+			);
+		
+			const snapshot = await uploadBytes(imgRef, image);
+			const photoUrl = await getDownloadURL(snapshot.ref);
+		
+			const res = await fetch(`${backendUrl}/election/${params.id}/add-candidate`, {
+			    method: 'POST',
+			    headers: { 'Content-Type': 'application/json' },
+			    body: JSON.stringify({ ...formData, photoUrl, selectedPosition }),
+			});
+		
+			if (res.ok) {
+			    navigate(`/user/${params.userId}/election/${params.id}`);
+			}
+		    } catch (err) {
+			Toast.error(err.message || "An error occurred");
+		}
 	}
 
-	let handleSubmit = function (e) {
+	const handleSubmit = async function (e) {
 		e.preventDefault();
 
-		uploadImage();
+		if (isSubmitting) return; 
+
+		setIsSubmitting(true);
+		await uploadImage();
+		setIsSubmitting(false);
 	}
 
-	let handleSelect = function(e) {
+	const handleSelect = useCallback(() => {
 		const selected = e.target.value;
 		setSelectedPosition(selected);
-	}
 
-	let handleChange = function(e) {
-		const { name, value } = e.target;
-		setFormData(prev => ({...prev, [name]: value}))
-	}
+	}, [])
+
+	const handleChange = useCallback(({ target: { name, value}}) => {
+		setFormData((prev) => ({...prev, [name]: value}))
+	}, [])
 
 	useEffect(() => {
 		fetchPositions();
-	}, []);
+	}, [params.id]);
 
 	return (
 		<div className='container'>
@@ -154,7 +155,7 @@ function AddCandidate() {
 						<p>&gt; {filename}</p>
 					</div>
 					
-					<button type = 'submit' className="Button violet" onSubmit={handleSubmit}>Add Candidate</button>
+					<button type = 'submit' disabled={isSubmitting} className="Button violet">{isSubmitting ? "Adding..." : "Add Candidate"}</button>
 				</form>
 			</div>
 		</div>

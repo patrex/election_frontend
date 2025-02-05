@@ -14,7 +14,6 @@ function CreateElection() {
 
 	const [loading, setLoading] = useState(false);
 
-
 	const schema = Joi.object({
 		electiontitle: Joi.string().min(2).required(),
 		startdate: Joi.date().iso().min(new Date().getFullYear()).required(),
@@ -44,7 +43,7 @@ function CreateElection() {
 					userId: params.userId,
 					host_name: window.location.origin
 				})
-			    })
+			})
 	
 			setLoading(false)
 	
