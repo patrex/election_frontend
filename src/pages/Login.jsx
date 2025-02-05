@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { useContext, useState } from 'react';
 import { AppContext } from '@/App';
 
+import { PulseLoader } from 'react-spinners';
+
 import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
 
@@ -79,7 +81,7 @@ function Login() {
 					</div>
 					
 					<div className="mb-3">
-						<button type="submit" disabled={loading} className="Button violet">Login</button>
+						<button type="submit" disabled={loading} className="Button violet">{loading ? <PulseLoader  color="#ffb500" size={5} loading={loading}/> : "Login"}</button>
 					</div>
 
 					{err && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{err}</div>}
