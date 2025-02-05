@@ -86,11 +86,11 @@ function ElectionResults() {
 
 			<div className="bg-slate-300 shadow-md overflow-hidden transition-transform duration-300 ease-in-out">
 				<div className="p-2">
-					<p className='my-1 py-2'><strong>{ election.title }</strong></p>
-					<p className='my-1 py-2'><strong>Description:</strong> { election.desc ? election.desc : '' }</p>
-					<p className='my-1 py-2'><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
-					<p className='my-1 py-2'><strong>Start date:</strong> { election.startDate ? moment(election.startDate).format('LLL') : ''}</p>
-					<p className='my-1 py-2'><strong>End date:</strong> { election?.endDate ? moment(election.endDate).format('LLL') : ''}</p>
+					<p className='my-0 py-1'><strong>{ election.title }</strong></p>
+					<p className='my-0 py-1'><strong>Description:</strong> { election.desc ? election.desc : '' }</p>
+					<p className='my-0 py-1'><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
+					<p className='my-0 py-1'><strong>Start date:</strong> { election.startDate ? moment(election.startDate).format('LLL') : ''}</p>
+					<p className='my-0 py-1'><strong>End date:</strong> { election?.endDate ? moment(election.endDate).format('LLL') : ''}</p>
 				</div>
 			</div>
 
