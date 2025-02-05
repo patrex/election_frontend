@@ -391,7 +391,6 @@ function ElectionDetail() {
 			if (!end_res.ok) Toast.info("Not found")
 
 			const new_res = await end_res.json();
-			election = new_res;
 
 			setEndElectionModalOpen(false)
 			Toast.success("Election Ended")
@@ -411,7 +410,7 @@ function ElectionDetail() {
 
 	useEffect(() => {
 		setIsActive(new Date(election.endDate) > Date.now())
-	}, [election])
+	}, [isActive])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -447,7 +446,7 @@ function ElectionDetail() {
 						{isActive && election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
 						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
 						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
-						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>View Results</button></p>}
+						{!isActive && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item'>View Results</Link></p>}
 					</div>
 				</div>
 
@@ -611,13 +610,13 @@ function ElectionDetail() {
 
 										<td>
 											<div className="action-btn-container">
-												<button className='Button violet action-item' 
+												{isActive && <button className='Button violet action-item' 
 													onClick={() => editPosition(position)}>
-														<i className="bi bi-pen-fill"></i></button>
+														<i className="bi bi-pen-fill"></i></button>}
 												
-												<button className='Button red action-item' 
+												{isActive && <button className='Button red action-item' 
 													onClick={() => removePosition(position)}>
-														<i className="bi bi-trash3 m-1"></i></button>
+														<i className="bi bi-trash3 m-1"></i></button>}
 											</div>
 
 										</td>
