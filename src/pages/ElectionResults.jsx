@@ -132,7 +132,7 @@ function ElectionResults() {
 								
 								{data
 									.map(datum => (
-										<ResultRow key={datum.id} candidate = {datum} selectedPosition={selectedPosition} count={vote} />
+										<ResultRow key={datum.id} candidate = {datum} selectedPosition={selectedPosition} />
 										)
 									)
 								}
