@@ -196,8 +196,8 @@ function UpdateCandidate() {
 													</option>
 												))
 											: "no positions.."} */}
-											{positions.length > 0 &&
-												positions.filter((pos) => pos._id !== candidate.position) // Better filtering
+											{state.positions.length > 0 &&
+												state.positions.filter((pos) => pos._id !== candidate.position) // Better filtering
 													.map((pos) => (
 														<option key={pos.position} value={pos.position}>
 															{pos.position}
