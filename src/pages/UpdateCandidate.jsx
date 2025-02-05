@@ -27,12 +27,12 @@ function UpdateCandidate() {
 	// const [image, setImage] = useState("");
 	// const [newPicture, setNewPicture] = useState("");
 	// const [newFile, setNewFile] = useState("");
+	const [positions, setPositions] = useState(positionsList);
 
 	const [state, setState] = useState({
 		image: candidate.imgUrl || "",
 		newPicture: "",
 		newFile: "",
-		positions: positionsList || [],
 	});
 
 	
@@ -55,7 +55,7 @@ function UpdateCandidate() {
 		    manifesto: candidate.manifesto || "",
 		    selectedPosition: position.position || "",
 		}), [candidate, position]), // Prevent unnecessary re-renders
-	    });
+	});
 
 	useEffect(() => {
 		setImage(candidate.imgUrl);
@@ -183,14 +183,14 @@ function UpdateCandidate() {
 													</option>
 												))
 											: "no positions.."} */}
-											{state.positions
-												.filter((pos) => pos._id !== candidate.position) // Better filtering
-												.map((pos) => (
-													<option key={pos.position} value={pos.position}>
-														{pos.position}
-													</option>
+											{positions.length > 0 &&
+												positions.filter((pos) => pos._id !== candidate.position) // Better filtering
+													.map((pos) => (
+														<option key={pos.position} value={pos.position}>
+															{pos.position}
+														</option>
+														)
 													)
-												)
 											}
 										</select>
 									</label>
