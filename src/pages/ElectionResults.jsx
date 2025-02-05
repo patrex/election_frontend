@@ -134,7 +134,7 @@ function ElectionResults() {
 									{data
 									     .map(datum => (
 										<tr key={datum.id}>
-											<td>{datum.imgUrl}</td>
+											<td><img src={datum.imgUr} alt="" /></td>
 											<td>{datum.candidateName} {datum.isWinner && <span className="winner-badge">🏆 Winner</span>}</td>
 											<td>{selectedPosition}</td>
 											<td>{datum.votes}</td>
