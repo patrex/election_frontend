@@ -49,6 +49,7 @@ function ElectionResults() {
 
 	useEffect( () => {
 		const updatedData = candidatesList.map(candidate => ({
+			imgUrl: candidate.imgUrl,
 			id: candidate._id,
 			candidateName: `${candidate.firstname} ${candidate.lastname}`,
 			votes: votesList.filter(vote => vote.candidateId === candidate._id).length
