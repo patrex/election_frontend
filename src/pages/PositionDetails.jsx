@@ -3,8 +3,6 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import Toast from "@/utils/ToastMsg";
 
-
-
 import backendUrl from '../utils/backendurl'
 
 export async function loader({params}) {

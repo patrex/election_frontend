@@ -12,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import backendUrl from '../utils/backendurl'
 
 export async function updateloader({ params }) {
-	const [candidate, position, positionsList, election] = Promise.all([
+	const [candidate, position, positionsList, election] = await Promise.all([
 		fetch(`${backendUrl}/election/candidate/${params.candidateId}`).then(res => res.json()),
 		fetch(`${backendUrl}/election/${candidate.electionId}/positions`).then(res => res.json()),
 		fetch(`${backendUrl}/election/${candidate.electionId}`).then(res => res.json()),
@@ -26,13 +26,13 @@ function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
 	// const [image, setImage] = useState("");
 	// const [newPicture, setNewPicture] = useState("");
-	const [positions, setPositions] = useState(positionsList);
 	// const [newFile, setNewFile] = useState("");
 
 	const [state, setState] = useState({
 		image: candidate.imgUrl || "",
 		newPicture: "",
 		newFile: "",
+		positions: positionsList || [],
 	});
 
 	
@@ -183,7 +183,7 @@ function UpdateCandidate() {
 													</option>
 												))
 											: "no positions.."} */}
-											{positions
+											{state.positions
 												.filter((pos) => pos._id !== candidate.position) // Better filtering
 												.map((pos) => (
 													<option key={pos.position} value={pos.position}>
