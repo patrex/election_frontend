@@ -73,7 +73,10 @@ function UpdateCandidate() {
 	});
 
 	useEffect(() => {
-		setImage(candidate.imgUrl);
+		setState((prev) => ({
+			...prev,
+			imgage: candidate.imgUrl
+		}));
 	}, [candidate])
 
 	const handleFileUpload = useCallback((e) => {
