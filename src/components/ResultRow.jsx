@@ -12,7 +12,7 @@ function ResultRow({ candidate }, position) {
 		  {/* Position */}
 		  <div className="flex-1 text-gray-600">{position}</div>
 		  {/* Count */}
-		  <div className="ml-3 font-bold text-gray-800">{count}</div>
+		  <div className="ml-3 font-bold text-gray-800">{candidate.votes}</div>
 		</div>
 	      );
 }
