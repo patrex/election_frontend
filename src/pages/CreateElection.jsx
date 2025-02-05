@@ -18,10 +18,10 @@ function CreateElection() {
 		electiontitle: Joi.string().min(2).required(),
 		startdate: Joi.date().iso().min(new Date().getFullYear()).required(),
 		enddate: Joi.date().iso().min(new Date().getFullYear()).required(),
-		electiontype: Joi.string(),
-		description: Joi.string().min(2).max(200),
-		rules: Joi.string().min(2).max(1000),
-		userAuthType: Joi.string()
+		electiontype: Joi.string().required(),
+		description: Joi.string(),
+		rules: Joi.string(),
+		userAuthType: Joi.string().required()
 	})
 	
 	const { register, handleSubmit, formState: {errors} } = useForm({
@@ -44,10 +44,13 @@ function CreateElection() {
 					host_name: window.location.origin
 				})
 			})
+
+			if (!res.ok) {
+				Toast.warning("Could not complete the request")
+				return
+			}
 	
-			
-	
-			if(res.ok) navigate(`/user/${params.userId}`)
+			navigate(`/user/${params.userId}`)
 		} catch (error) {
 			Toast.error('There was an error')
 		} finally {
@@ -119,7 +122,7 @@ function CreateElection() {
 
 					<textarea name="description" 
 						id=""
-						placeholder="Describe the election"
+						placeholder="Describe the election(optional)"
 						{...register('description')}
 						className="p-2 my-2"
 					/> {errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
