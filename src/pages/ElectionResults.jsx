@@ -121,23 +121,27 @@ function ElectionResults() {
 
 						<div className='dashboard-container table-responsive'>
 							<table className="table table-hover table-striped">
-								<thead>
-									<tr>
-										<th scope="col"></th>
-										<th scope="col"></th>
-										<th scope="col"></th>
-										<th scope="col"></th>
-									</tr>
-								</thead>
-
 								<tbody className='table-group-divider'>
 									{data
 									     .map(datum => (
 										<tr key={datum.id}>
-											<td><img src={datum.imgUr} alt="" /></td>
+											<div className="flex items-center py-2 px-3 border-b border-gray-200">
+												{/* Picture */}
+												<img
+													src={ datum.imgUrl }
+													className="w-10 h-10 rounded-full object-cover mr-3"
+												/>
+												{/* Name */}
+												<div className="flex-1 font-bold">{ datum.candidateName }</div>
+												{/* Position */}
+												<div className="flex-1 text-gray-600">{selectedPosition}</div>
+												{/* Count */}
+												<div className="ml-3 font-bold text-gray-800">{datum.votes}</div>
+											</div>
+											{/* <td><img src={datum.imgUr} alt="" /></td>
 											<td>{datum.candidateName} {datum.isWinner && <span className="winner-badge">🏆 Winner</span>}</td>
 											<td>{selectedPosition}</td>
-											<td>{datum.votes}</td>
+											<td>{datum.votes}</td> */}
 										</tr>
 									))}
 								</tbody>
