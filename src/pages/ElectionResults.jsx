@@ -130,15 +130,16 @@ function ElectionResults() {
 									</tr>
 								</thead>
 
-								
-								{data
-									.map(datum => (
-										<ResultRow key={datum.id} candidate = {datum} selectedPosition={selectedPosition} />
-										)
-									)
-								}
-								
+								<tbody>
+
+								</tbody>
 							</table>
+							{data
+								.map(datum => (
+									<ResultRow key={datum.id} candidate = {datum} selectedPosition={selectedPosition} />
+									)
+								)
+							}
 						</div>
 					</div>
 				</div>
