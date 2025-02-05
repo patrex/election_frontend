@@ -53,8 +53,6 @@ function ElectionDetail() {
 	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false)
 	const [isActive, setIsActive] = useState(new Date(election.endDate) > Date.now());
 
-	const [elec, setElection] = useState(election);
-
 	function closeAddParticipant () {
 		setSearchTerm("")
 		setViewUsersModal(false)
@@ -80,7 +78,6 @@ function ElectionDetail() {
 	const openPostionModal = () => {
 		setNewPosition("")
 		setPositionModalOpen(true);
-		setElection(elec)
 	}
 
 	const closePositionModal = () => {
@@ -391,12 +388,14 @@ function ElectionDetail() {
 				}
 			})
 
-			if (end_res.ok) {
-				setIsActive(false)
-				setEndElectionModalOpen(false)
-				Toast.success("Election Ended")
-			}
-			
+			if (!end_res.ok) Toast.info("Not found")
+
+			const new_res = await end_res.json();
+			election = new_res;
+
+			setIsActive(false)
+			setEndElectionModalOpen(false)
+			Toast.success("Election Ended")
 		} catch (error) {
 			Toast.error("Could not end the election")
 		}
@@ -410,6 +409,10 @@ function ElectionDetail() {
 				setVotersFiltered(votersFiltered)
 		}
 	}, [searchTerm, votersList])
+
+	useEffect(() => {
+		setIsActive(new Date(election.endDate) > Date.now())
+	}, [isActive])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
