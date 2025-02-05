@@ -237,7 +237,7 @@ function UpdateCandidate() {
 								/>
 								<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
 							</div> 
-							<p style={ {overflow: 'hidden', fontSize: '12px'}}>&gt; { state.newFile ? "File selected " + <i style={{color: 'goldenrod'}} className="bi bi-file-earmark-check-fill"></i> : "" }</p>
+							<p style={ {overflow: 'hidden', fontSize: '12px'}}>&gt; { state.newFile ?  <em>New file selected <i class="bi bi-file-earmark-check-fill"></i></em> : "Using your previous image" }</p>
 						</div>
 					</div>
 							
