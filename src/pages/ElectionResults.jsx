@@ -84,13 +84,13 @@ function ElectionResults() {
 				</div>
 			}
 
-			<div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 ease-in-out">
-				<div className="p-5">
-					<h2><strong>{ election.title }</strong></h2>
-					<h4><strong>Description:</strong> { election.desc ? election.desc : '' }</h4>
-					<h4><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</h4>
-					<h4><strong>Start date:</strong> { election.startDate ? moment(election.startDate).format('LLL') : ''}</h4>
-					<h4><strong>End date:</strong> { election?.endDate ? moment(election.endDate).format('LLL') : ''}</h4>
+			<div className="bg-slate-500 rounded-lg shadow-md overflow-hidden transition-transform duration-300 ease-in-out">
+				<div className="p-2">
+					<p><strong>{ election.title }</strong></p>
+					<p><strong>Description:</strong> { election.desc ? election.desc : '' }</p>
+					<p><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
+					<p><strong>Start date:</strong> { election.startDate ? moment(election.startDate).format('LLL') : ''}</p>
+					<p><strong>End date:</strong> { election?.endDate ? moment(election.endDate).format('LLL') : ''}</p>
 				</div>
 			</div>
 
@@ -138,10 +138,6 @@ function ElectionResults() {
 												{/* Count */}
 												<div className="ml-3 font-bold text-gray-800">{datum.votes}</div>
 											</div>
-											{/* <td><img src={datum.imgUr} alt="" /></td>
-											<td>{datum.candidateName} {datum.isWinner && <span className="winner-badge">🏆 Winner</span>}</td>
-											<td>{selectedPosition}</td>
-											<td>{datum.votes}</td> */}
 										</tr>
 									))}
 								</tbody>
@@ -151,7 +147,7 @@ function ElectionResults() {
 				</div>
 
 				<div className="resultsRight">
-					<p>Hello</p>
+					
 				</div>
 			</div>
 		</>
