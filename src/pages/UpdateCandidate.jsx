@@ -28,6 +28,7 @@ function UpdateCandidate() {
 	// const [newPicture, setNewPicture] = useState("");
 	// const [positions, setPositions] = useState(positionsList);
 	// const [newFile, setNewFile] = useState("");
+
 	const [state, setState] = useState({
 		image: candidate.imgUrl || "",
 		newPicture: "",
@@ -209,7 +210,7 @@ function UpdateCandidate() {
 
 						<div className="update-candidate-right">
 							<div className="candidate-update-pic-holder">
-								<img src={image} name="candidateimgUrl" className="" />
+								<img src={state.image} name="candidateimgUrl" className="" />
 							</div>
 							<div>
 								<input className='fileupload form-control-file' 
@@ -220,7 +221,7 @@ function UpdateCandidate() {
 								/>
 								<label htmlFor="fileuploadr" className="Button violet" style={{cursor: 'pointer', margin: "0.5rem 0rem"}}>Choose different picture</label>
 							</div> 
-							<p style={ {overflow: 'hidden', fontSize: '12px'}}>&gt; { newFile ? newFile : "" }</p>
+							<p style={ {overflow: 'hidden', fontSize: '12px'}}>&gt; { state.newFile ? state.newFile : "" }</p>
 						</div>
 					</div>
 							
