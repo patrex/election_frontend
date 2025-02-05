@@ -477,7 +477,6 @@ input[type=number] {
 	height: 60%;
 	overflow: hidden;
 	position: relative;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .candidate-update-pic-holder img {

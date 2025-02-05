@@ -225,7 +225,7 @@ function UpdateCandidate() {
 						<div className="vr-divider"></div>
 
 						<div className="update-candidate-right">
-							<div className="candidate-update-pic-holder">
+							<div className="candidate-update-pic-holder w-64 h-64 rounded-xl shadow-lg overflow-hidden">
 								<img src={state.image} name="candidateimgUrl" className="" />
 							</div>
 							<div>
