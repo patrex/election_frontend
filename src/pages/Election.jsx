@@ -115,12 +115,12 @@ export default function Election() {
 			<div className="main">
 				<div className="electioninfo">
 					<div className="electioninfo-content">
-						<h1><strong>{electionData.title}</strong></h1>
-						<h4><strong>Description:</strong> {electionData.desc ? electionData.desc : ''}</h4>
-						<h4><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</h4>
-						<h4><strong>Start date:</strong> {electionData.startDate ? moment(electionData.startDate).format('LLL') : ''}</h4>
-						<h4><strong>End date:</strong> {electionData.endDate ? moment(electionData.endDate).format('LLL') : ''}</h4>
-						<h4><strong>Time left:</strong> {moment(electionData.endDate).endOf('day').fromNow()}</h4>
+						<p className='my-0 py-1'><strong>{ e.title }</strong></p>
+						<p className='my-0 py-1'><strong>Description:</strong> { electionData.desc ? electionData.desc : '' }</p>
+						<p className='my-0 py-1'><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
+						<p className='my-0 py-1'><strong>Start date:</strong> { electionData.startDate ? moment(electionData.startDate).format('LLL') : ''}</p>
+						<p className='my-0 py-1'><strong>End date:</strong> { electionData?.endDate ? moment(electionData.endDate).format('LLL') : ''}</p>
+						<p><strong>Time left:</strong> {moment(electionData.endDate).endOf('day').fromNow()}</p>
 					</div>
 				</div>
 		
