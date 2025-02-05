@@ -511,7 +511,7 @@ input[type=number] {
 
 .winner-badge {
 	background-color: green;
-	color: black;
+	color: whitesmoke;
 	font-weight: bold;
 	padding: 3px 6px;
 	border-radius: 5px;
