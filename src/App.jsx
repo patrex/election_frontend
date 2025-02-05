@@ -53,9 +53,7 @@ function App() {
 	
 	return (
 		<AppContext.Provider value={ { user, setUser, voter, setVoter} }>
-			<ErrorBoundary>
-				<RouterProvider router={ router } />
-			</ErrorBoundary>
+			<RouterProvider router={ router } />
 			<ToastContainer />
 		</AppContext.Provider>
 	);

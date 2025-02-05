@@ -12,13 +12,27 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import backendUrl from '../utils/backendurl'
 
 export async function updateloader({ params }) {
-	const [candidate, position, positionsList, election] = await Promise.all([
-		fetch(`${backendUrl}/election/candidate/${params.candidateId}`).then(res => res.json()),
-		fetch(`${backendUrl}/election/${candidate.electionId}/positions`).then(res => res.json()),
-		fetch(`${backendUrl}/election/${candidate.electionId}`).then(res => res.json()),
-		fetch(`${backendUrl}/election/positions/${candidate.position}`).then(res => res.json()),
-	])
+	let position = undefined;
+	let positionsList = undefined;
+	let candidate = undefined;
+	let election = undefined;
 
+	try {
+		const c = await fetch(`${backendUrl}/election/candidate/${params.candidateId}`)
+		candidate = await c.json();
+
+		const pos_res = await fetch(`${backendUrl}/election/${candidate.electionId}/positions`)
+		positionsList = await pos_res.json()
+
+		const e = await fetch(`${backendUrl}/election/${candidate.electionId}`)
+		election = await e.json();
+
+		const pos_name_res = await fetch(`${backendUrl}/election/positions/${candidate.position}`)
+		position = await pos_name_res.json()
+
+	} catch (error) {
+		
+	}
 	return [candidate, position, positionsList, election]
 }
 
@@ -27,12 +41,13 @@ function UpdateCandidate() {
 	// const [image, setImage] = useState("");
 	// const [newPicture, setNewPicture] = useState("");
 	// const [newFile, setNewFile] = useState("");
-	const [positions, setPositions] = useState(positionsList);
+	// const [positions, setPositions] = useState(positionsList);
 
 	const [state, setState] = useState({
 		image: candidate.imgUrl || "",
 		newPicture: "",
 		newFile: "",
+		positions: positionsList || []
 	});
 
 	
@@ -172,9 +187,7 @@ function UpdateCandidate() {
 								<div>
 									<label>
 										Select position:
-										<select {...register('selectedPosition', {required: "Select a position"})}
-											className='form-select form-select-lg mb-3'
-										> 
+										<select {...register('selectedPosition')} className='form-select form-select-lg mb-3'> 
 											{/* <option value={position.position} selected>{position.position}</option>
 											{positions.length > 0 ? 
 												positions.filter(position => candidate.position != position._id).map((position) => (
