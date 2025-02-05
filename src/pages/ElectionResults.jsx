@@ -1,6 +1,5 @@
 import  { useState, useEffect, useMemo } from 'react';
 import { useLoaderData } from 'react-router-dom';
-import ResultRow from '@/components/ResultRow';
 import moment from 'moment';
 
 import backendUrl from '../utils/backendurl'
@@ -124,22 +123,25 @@ function ElectionResults() {
 							<table className="table table-hover table-striped">
 								<thead>
 									<tr>
-										<th scope="col">Name</th>
-										<th scope="col">Position</th>
-										<th scope="col">Vote Count</th>
+										<th scope="col"></th>
+										<th scope="col"></th>
+										<th scope="col"></th>
+										<th scope="col"></th>
 									</tr>
 								</thead>
 
-								<tbody>
-
+								<tbody className='table-group-divider'>
+									{data
+									     .map(datum => (
+										<tr key={datum.id}>
+											<td>{datum.imgUrl}</td>
+											<td>{datum.candidateName} {datum.isWinner && <span className="winner-badge">🏆 Winner</span>}</td>
+											<td>{selectedPosition}</td>
+											<td>{datum.votes}</td>
+										</tr>
+									))}
 								</tbody>
 							</table>
-							{data
-								.map(datum => (
-									<ResultRow key={datum.id} candidate = {datum} selectedPosition={selectedPosition} />
-									)
-								)
-							}
 						</div>
 					</div>
 				</div>
