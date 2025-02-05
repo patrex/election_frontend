@@ -29,22 +29,29 @@ function CreateAccount() {
 
 	const onSubmit = async (formData) => {
 		setLoading(true)
-		const res = await fetch(`${backendUrl}/user/auth/signup`, {
-			method: 'POST',
-			headers: {
-        			'Content-Type': 'application/json',
-      			},
-			mode: 'cors',
-      			body: JSON.stringify(formData),
-		})
-		
-		setLoading(false)
 
-		if(res.ok) {
+		try {
+			const res = await fetch(`${backendUrl}/user/auth/signup`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				      },
+				mode: 'cors',
+				      body: JSON.stringify(formData),
+			})
+
+			if (!res.ok) {
+				Toast.warning("Could not complete request")
+				return;
+			}
+			
 			navigate('/login');
-		}
-		else {
+		} catch (error) {
 			Toast.error("There was an error");
+			console.error(error);
+			
+		} finally {
+			setLoading(false)
 		}
 	}
 

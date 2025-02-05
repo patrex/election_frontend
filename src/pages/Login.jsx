@@ -29,26 +29,30 @@ function Login() {
 		setLoading(true);
 		setErr('')
 
-		const res = await fetch(`${backendUrl}/user/auth/login`, {
-			method: 'POST',
-			headers: {
-        			'Content-Type': 'application/json',
-      			},
-      			body: JSON.stringify(formData),
-		})
-		
-		setLoading(false);
+		try {
+			const res = await fetch(`${backendUrl}/user/auth/login`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				      },
+				      body: JSON.stringify(formData),
+			})
 
-		if (res.ok) {
+			if (!res.ok) {
+				Toast.warning("Could not complete the request")
+				return;
+			} else if (res.status == 401) {
+				setErr('Username or password is incorrect')
+				return;
+			}
+
 			let user = await res.json();
 			setUser(user)
 			navigate(`/user/${user._id}`)
-		} else if (res.status == 401) {
-			setErr('Username or password is incorrect')
-			return;
-		} else {
+		} catch (error) {
 			setErr('Something went wrong...')
-			return
+		} finally {
+			setLoading(false)
 		}
 	}
 

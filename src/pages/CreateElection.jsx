@@ -45,11 +45,13 @@ function CreateElection() {
 				})
 			})
 	
-			setLoading(false)
+			
 	
 			if(res.ok) navigate(`/user/${params.userId}`)
 		} catch (error) {
 			Toast.error('There was an error')
+		} finally {
+			setLoading(false)
 		}
 	}
 
