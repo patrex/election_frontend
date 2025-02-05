@@ -26,14 +26,13 @@ function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
 	// const [image, setImage] = useState("");
 	// const [newPicture, setNewPicture] = useState("");
-	// const [positions, setPositions] = useState(positionsList);
+	const [positions, setPositions] = useState(positionsList);
 	// const [newFile, setNewFile] = useState("");
 
 	const [state, setState] = useState({
 		image: candidate.imgUrl || "",
 		newPicture: "",
 		newFile: "",
-		positions: positionsList || [],
 	});
 
 	
@@ -184,7 +183,7 @@ function UpdateCandidate() {
 													</option>
 												))
 											: "no positions.."} */}
-											{state.positions
+											{positions
 												.filter((pos) => pos._id !== candidate.position) // Better filtering
 												.map((pos) => (
 													<option key={pos.position} value={pos.position}>
