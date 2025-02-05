@@ -84,7 +84,7 @@ function ElectionResults() {
 				</div>
 			}
 
-			<div className="bg-slate-500 rounded-lg shadow-md overflow-hidden transition-transform duration-300 ease-in-out">
+			<div className="bg-slate-100 shadow-md overflow-hidden transition-transform duration-300 ease-in-out">
 				<div className="p-2">
 					<p><strong>{ election.title }</strong></p>
 					<p><strong>Description:</strong> { election.desc ? election.desc : '' }</p>
