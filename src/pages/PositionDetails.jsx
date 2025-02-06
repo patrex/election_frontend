@@ -2,7 +2,6 @@ import { useLoaderData, useParams, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import Toast from "@/utils/ToastMsg";
-import PulseLoader from "react-spinners/PulseLoader";
 
 import backendUrl from '../utils/backendurl'
 
@@ -27,7 +26,6 @@ export async function loader({params}) {
 function PositionDetails() {
 	const [election, candidates, position] = useLoaderData();
 	const [candidatesList, setCandidatesList] = useState(candidates);
-	const [imgLoading, setImgLoading] = useState(true)
 	const params = useParams()
 
 	function removeCandidate(candidate) {
@@ -59,14 +57,10 @@ function PositionDetails() {
 			<div className="candidates-grid">
 				{
 					candidatesList.map(candidate => (
-				
 						<div className="candidate-card">
 							<div className="candidate-card-img">
-								{imgLoading && (<PulseLoader  color="#ffb500" size={5} loading={imgLoading}/>)  }
 								<img 
-									src={candidate.imgUrl} 
-									className={`${imgLoading ? 'invisible' : 'visible' }`}
-									onLoad={setImgLoading(false)}
+									src={candidate.imgUrl}
 								/>
 							</div>
 			
@@ -74,11 +68,13 @@ function PositionDetails() {
 								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
 								<div className="candidate-pos-label">{position} </div>
 								<div className="btn-group" role="group">
-									<Link to={`/user/${params.userId}/election/candidate/${candidate._id}/update`}><button className='Button violet'><i class="bi bi-pen-fill"></i></button></Link>
-									<button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
-										<i className="bi bi-trash3"></i></button>
+									{new Date(election?.endDate) > Date.now() && <Link to={`/user/${params.userId}/election/candidate/${candidate._id}/update`}>
+										 <button className='Button violet'><i class="bi bi-pen-fill"></i></button>
+									</Link>}
+
+									{new Date(election?.endDate) > Date.now() && <button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
+										<i className="bi bi-trash3"></i></button>}
 								</div>
-								
 							</div>
 						</div>
 					))
