@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import backendUrl from '../utils/backendurl'
 import Toast from "@/utils/ToastMsg";
+import PulseLoader from "react-spinners/PulseLoader";
 
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
@@ -128,7 +129,7 @@ function CreateAccount() {
 						</div>
 					</div> 
 					
-					<button type="submit" disabled={loading} className="Button violet">Create Account</button>
+					<button type="submit" disabled={loading} className="Button violet">{loading ? <PulseLoader  color="#ffb500" size={5} loading={loading}/> : "Sign Up"}</button>
 				</form>
 			</div>
 		</div>

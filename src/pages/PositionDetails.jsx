@@ -2,6 +2,7 @@ import { useLoaderData, useParams, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import Toast from "@/utils/ToastMsg";
+import PulseLoader from "react-spinners/PulseLoader";
 
 import backendUrl from '../utils/backendurl'
 
@@ -26,6 +27,7 @@ export async function loader({params}) {
 function PositionDetails() {
 	const [election, candidates, position] = useLoaderData();
 	const [candidatesList, setCandidatesList] = useState(candidates);
+	const [imgLoading, setImgLoading] = useState(true)
 	const params = useParams()
 
 	function removeCandidate(candidate) {
@@ -59,7 +61,14 @@ function PositionDetails() {
 					candidatesList.map(candidate => (
 				
 						<div className="candidate-card">
-							<div className="candidate-card-img"><img src={candidate.imgUrl} alt={candidate.firstname + ' ' + candidate.lastname} /></div>
+							<div className="candidate-card-img">
+								{imgLoading && (<PulseLoader  color="#ffb500" size={5} loading={imgLoading}/>)  }
+								<img 
+									src={candidate.imgUrl} 
+									className={`${imgLoading ? 'invisible' : 'visible' }`}
+									onLoad={setImgLoading(false)}
+								/>
+							</div>
 			
 							<div className="candidate-card-details">
 								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
