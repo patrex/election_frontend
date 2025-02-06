@@ -72,7 +72,7 @@ function AddCandidate() {
 		setIsSubmitting(false);
 	}
 
-	const handleSelect = useCallback(() => {
+	const handleSelect = useCallback((e) => {
 		const selected = e.target.value;
 		setSelectedPosition(selected);
 
