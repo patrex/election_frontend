@@ -31,16 +31,24 @@ function Dashboard() {
 			denyButtonText: `Cancel`
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				const res = await fetch(`${backendUrl}/election/${election._id}/delete`, {
-					method: 'delete',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-	
-				if(res.ok) {
+				try {
+					const res = await fetch(`${backendUrl}/election/${election._id}/delete`, {
+						method: 'delete',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					})
+
+					if (!res.ok) {
+						Toast.warning("Could not complete the request")
+						return;
+					}
+
 					setElectionsList(electionsList.filter(e => e._id != election._id ));
 					Toast.success('The event was removed successfully')
+				} catch (error) {
+					Toast.error("An error occured")
+					console.error(error);
 				}
 			}
 		});
@@ -89,7 +97,7 @@ function Dashboard() {
 								<div className="list-btn-items">
 									<td><button className="Button violet action-item" onClick={() => copyLink(election._id)}>Copy ID</button></td>
 									<td><button className="Button violet action-item" onClick={() => copyLink(election.shareLink)}>Copy Link</button></td>
-									<td><Link to={`/user/${params.userId}/election/${election._id}/update`}><button className='Button violet action-item' disabled={new Date(election?.endDate) > Date.now()}><i class="bi bi-pen-fill"></i></button></Link></td>
+									<td><Link to={`/user/${params.userId}/election/${election._id}/update`}><button className='Button violet action-item' disabled={new Date(election.startDate) < Date.now()}><i class="bi bi-pen-fill"></i></button></Link></td>
 									<td><button className='Button red action-item' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 								</div>
 							</tr>
