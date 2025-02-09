@@ -67,7 +67,7 @@ function Login() {
 			{/* <!-- Left Section (Hidden on Mobile) --> */}
 			<div className="hidden md:flex w-1/2 bg-gray-200 items-center justify-center">
 			<img 
-				src="gs://votersystem-0.appspot.com/assets/svg/undraw_secure-login_m11a.svg" alt="Login graphic" 
+				src="https://firebasestorage.googleapis.com/v0/b/votersystem-0.appspot.com/assets/svg/undraw_secure-login_m11a.svg" alt="Login graphic" 
 				className="w-3/4" />
 			</div>
 
