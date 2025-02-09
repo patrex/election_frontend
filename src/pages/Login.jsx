@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { useContext, useState } from 'react';
 import { AppContext } from '@/App';
 
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
 import { PulseLoader } from 'react-spinners';
 
 import Toast from '@/utils/ToastMsg';
@@ -31,65 +33,78 @@ function Login() {
 		setLoading(true);
 		setErr('')
 
-		try {
-			const res = await fetch(`${backendUrl}/user/auth/login`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				      },
-				      body: JSON.stringify(formData),
-			})
+		
 
-			if (!res.ok) {
-				Toast.warning("Could not complete the request")
-				return;
-			} else if (res.status == 401) {
-				setErr('Username or password is incorrect')
-				return;
-			}
+		// try {
+		// 	const res = await fetch(`${backendUrl}/user/auth/login`, {
+		// 		method: 'POST',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 		      },
+		// 		      body: JSON.stringify(formData),
+		// 	})
 
-			let user = await res.json();
-			setUser(user)
-			navigate(`/user/${user._id}`)
-		} catch (error) {
-			setErr('Something went wrong...')
-		} finally {
-			setLoading(false)
-		}
+		// 	if (!res.ok) {
+		// 		Toast.warning("Could not complete the request")
+		// 		return;
+		// 	} else if (res.status == 401) {
+		// 		setErr('Username or password is incorrect')
+		// 		return;
+		// 	}
+
+		// 	let user = await res.json();
+		// 	setUser(user)
+		// 	navigate(`/user/${user._id}`)
+		// } catch (error) {
+		// 	setErr('Something went wrong...')
+		// } finally {
+		// 	setLoading(false)
+		// }
 	}
 
 	return (
-		<div className="container">
-			<div className="form-container">
-				<form onSubmit={ handleSubmit(onSubmit) }>
-					<div className="mb-3">
-						Email
-						<input type="email"
-							placeholder="email"
-							autoFocus
-							{...register('username')}
-						/>
-					</div>
+		<div className="flex min-h-screen">
+			{/* <!-- Left Section (Hidden on Mobile) --> */}
+			<div className="hidden md:flex w-1/2 bg-gray-200 items-center justify-center">
+			<img 
+				src="gs://votersystem-0.appspot.com/assets/svg/undraw_secure-login_m11a.svg" alt="Login graphic" 
+				className="w-3/4" />
+			</div>
 
-					<div className="mb-3">
-						Password
-						<input type="password" 
-							placeholder="password"
-							{...register('password')}
-						/>
+			{/* <!-- Right Section (Login Form) --> */}
+			<div className="w-full md:w-1/2 flex items-center justify-center p-6">
+				<div className="max-w-md w-full">
+					<h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
+					<form>
+						<div className="mb-4">
+							<label className="block text-gray-700">Email</label>
+							<input 
+								type="email" 
+								className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+								{...register('username')}
+							/>
+						</div>
+						<div className="mb-4">
+							<label className="block text-gray-700">Password</label>
+							<input type="password" 
+								className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+								{...register('password')}
+							/>
+						</div>
 						
-					</div>
-					
-					<div className="mb-3">
-						<button type="submit" disabled={loading} className="Button violet">{loading ? <PulseLoader  color="#ffb500" size={5} loading={loading}/> : "Login"}</button>
-					</div>
+						<button 
+							className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+							disabled={loading}
+						>{ loading ? <PulseLoader  color="#ffb500" size={5} loading={loading}/> : "Login" }</button>
 
-					{err && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{err}</div>}
-					{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
-					{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
-				</form>
+						{err && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{err}</div>}
+						{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
+						{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
+					</form>
+				</div>
 			</div>
 		</div>
+
 	);
 }
  

@@ -17,7 +17,7 @@ export async function dashboardLoader({params}) {
 function Dashboard() {
 	const params = useParams();
 	const elections = useLoaderData();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	const { user } = useContext(AppContext);
 
