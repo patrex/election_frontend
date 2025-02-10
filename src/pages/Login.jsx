@@ -87,14 +87,14 @@ function Login() {
 							<label className="block text-gray-700">Email</label>
 							<input 
 								type="email" 
-								className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+								className="w-full p-2 rounded-md focus:ring-2" 
 								{...register('username')}
 							/>
 						</div>
 						<div className="mb-4">
 							<label className="block text-gray-700">Password</label>
 							<input type="password" 
-								className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+								className="w-full p-2 rounded-md focus:ring-2" 
 								{...register('password')}
 							/>
 						</div>
