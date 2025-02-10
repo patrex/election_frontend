@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '@/App';
+import login from '../assets/login.svg'
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -20,6 +21,8 @@ function Login() {
 	const [loading, setLoading] = useState(false);
 	const [err, setErr] = useState("")
 
+	const [img, setImg] = useState("")
+
 	const schema = Joi.object({
 		username: Joi.string().email({ minDomainSegments: 2, tlds: { deny: ['xxx'] } }).required(),
 		password: Joi.string().min(6).max(200).required()
@@ -28,6 +31,10 @@ function Login() {
 	const { register, handleSubmit, formState: {errors} } = useForm({
 		resolver: joiResolver(schema)
 	});
+
+	useEffect(() => {
+		
+	}, [])
 
 	const onSubmit = async (formData) => {
 		setLoading(true);
@@ -67,7 +74,7 @@ function Login() {
 			{/* <!-- Left Section (Hidden on Mobile) --> */}
 			<div className="hidden md:flex w-1/2 bg-gray-200 items-center justify-center">
 			<img 
-				src="https://firebasestorage.googleapis.com/v0/b/votersystem-0.appspot.com/assets/svg/undraw_secure-login_m11a.svg" alt="Login graphic" 
+				src={login} alt="Login graphic" 
 				className="w-3/4" />
 			</div>
 
