@@ -100,7 +100,7 @@ function Login() {
 						</div>
 						
 						<button 
-							className="w-1/2 mx-auto block bg-blue-500 text-white py-2 rounded-md text-center hover:bg-blue-600"
+							className="w-1/2 mx-auto block bg-orange-500 text-white py-2 rounded-md text-center hover:bg-blue-600"
 							disabled={loading}
 						>{ loading ? <PulseLoader  color="#ffb500" size={5} loading={loading}/> : "Login" }</button>
 
