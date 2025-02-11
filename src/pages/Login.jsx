@@ -4,7 +4,10 @@ import { AppContext } from '@/App';
 import loginImg from '../assets/login_banner.svg'
 import { authman } from '@/utils/fireloader';
 
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, 
+	 signInWithPopup, 
+	 GoogleAuthProvider 
+} from 'firebase/auth';
 
 import { PulseLoader } from 'react-spinners';
 
@@ -23,6 +26,7 @@ function Login() {
 	const [err, setErr] = useState("")
 
 	const [img, setImg] = useState("")
+	const provider = new GoogleAuthProvider();
 
 	const schema = Joi.object({
 		username: Joi.string().email({ minDomainSegments: 2, tlds: { deny: ['xxx'] } }).required(),
@@ -37,44 +41,40 @@ function Login() {
 		
 	}, [])
 
+	async function setAndRedirectUser (user) {
+		setUser(user);
+		navigate(`/user/${user.email}`)
+	}
+
+	const handleGoogleSignIn = async () => {
+		try {
+			const result = await signInWithPopup(auth, provider);
+			setAndRedirectUser(result?.user)
+		} catch (error) {
+		  	console.error("Error signing in:", error);
+		}
+	}
+
 	const onSubmit = async (formData) => {
 		const [username, password] = formData;
-
 
 		setLoading(true);
 		setErr('')
 
 		try {
 			const login_res = await signInWithEmailAndPassword(authman, username, password);
+			const user = login_res.user;
+			setAndRedirectUser(user);
 		} catch (error) {
-			
+			if (error.code == AuthErrorCodes.INVALID_PASSWORD) {
+				setErr('Username or password is incorrect')
+			} else {
+				setErr('Something went wrong...')
+				console.error(`Error: ${error}` );
+			}
+		} finally {
+			setLoading(false)
 		}
-
-		// try {
-		// 	const res = await fetch(`${backendUrl}/user/auth/login`, {
-		// 		method: 'POST',
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 		      },
-		// 		      body: JSON.stringify(formData),
-		// 	})
-
-		// 	if (!res.ok) {
-		// 		Toast.warning("Could not complete the request")
-		// 		return;
-		// 	} else if (res.status == 401) {
-		// 		setErr('Username or password is incorrect')
-		// 		return;
-		// 	}
-
-		// 	let user = await res.json();
-		// 	setUser(user)
-		// 	navigate(`/user/${user._id}`)
-		// } catch (error) {
-		// 	setErr('Something went wrong...')
-		// } finally {
-		// 	setLoading(false)
-		// }
 	}
 
 	return (
@@ -90,7 +90,7 @@ function Login() {
 			<div className="w-full md:w-1/2 flex items-center justify-center p-6">
 				<div className="max-w-md w-full">
 					<h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
-					<form>
+					<form onSubmit={ handleSubmit(onSubmit)}>
 						<div className="mb-4">
 							<label className="block text-gray-700">Email</label>
 							<input type="email" 
@@ -107,7 +107,7 @@ function Login() {
 						</div>
 						
 						<button 
-							className="w-1/2 mx-auto block bg-orange-500 text-white py-2 rounded-md text-center hover:bg-blue-600"
+							className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
 							disabled={loading}
 						>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
 
@@ -115,6 +115,20 @@ function Login() {
 						{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
 						{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
 					</form>
+
+					<div>
+						<button
+							onClick={handleGoogleSignIn}
+							className="mt-4 flex items-center justify-center w-64 px-6 py-3 bg-white text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
+							>
+							<img
+								src="https://www.svgrepo.com/show/475656/google-color.svg"
+								alt="Google Logo"
+								className="w-6 h-6 mr-2"
+							/>
+							Sign in with Google
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

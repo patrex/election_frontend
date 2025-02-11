@@ -10,7 +10,7 @@ function Header() {
 	const linkStyles = {
 		fontWeight: 'bold',
 		textDecoration: 'underline',
-		color: '#161616',
+		color: '',
 		fontFamily: 'sans-serif',
 		fontSize: '1.2em'
 	}

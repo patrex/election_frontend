@@ -129,7 +129,10 @@ function CreateAccount() {
 						</div>
 					</div> 
 					
-					<button type="submit" disabled={loading} className="Button violet">{loading ? <PulseLoader  color="#ffb500" size={5} loading={loading}/> : "Sign Up"}</button>
+					<button type="submit" disabled={loading} 
+						className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200">
+						{loading ? <PulseLoader  color="#ffb500" size={5} loading={loading}/> : "Sign Up"}
+					</button>
 				</form>
 			</div>
 		</div>
