@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '@/App';
-import login from '../assets/login.svg'
+import loginImg from '../assets/login_banner.svg'
 import { authman } from '@/utils/fireloader';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -39,14 +39,13 @@ function Login() {
 
 	const onSubmit = async (formData) => {
 		const [username, password] = formData;
-		
-		console.log(username, password);
+
 
 		setLoading(true);
 		setErr('')
 
 		try {
-			const login_res = await signInWithEmailAndPassword(authman, formData.usename, formData.password)
+			const login_res = await signInWithEmailAndPassword(authman, username, password);
 		} catch (error) {
 			
 		}
@@ -83,7 +82,7 @@ function Login() {
 			{/* <!-- Left Section (Hidden on Mobile) --> */}
 			<div className="hidden md:flex w-1/2 bg-gray-200 items-center justify-center">
 			<img 
-				src={login} alt="Login graphic" 
+				src={loginImg} alt="Login graphic" 
 				className="w-3/4" />
 			</div>
 
