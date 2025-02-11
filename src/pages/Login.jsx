@@ -48,7 +48,7 @@ function Login() {
 
 	const handleGoogleSignIn = async () => {
 		try {
-			const result = await signInWithPopup(auth, provider);
+			const result = await signInWithPopup(authman, provider);
 			setAndRedirectUser(result?.user)
 		} catch (error) {
 		  	console.error("Error signing in:", error);
