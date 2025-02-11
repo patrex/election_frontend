@@ -179,7 +179,77 @@ function Home() {
 
 	return (
 		<>
-			
+			{phoneModalOpen && 
+				<div className="modal-overlay">
+					<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
+						<span>{`${election.title}`}</span>
+						<h3>{`Enter your ${election.userAuthType == 'email' ? 'email' : 'phone number'} to continue`}</h3>
+						<input 
+							type="text"
+							id="phone-field"
+							onChange={ (e) => setParticipant(e.target.value) }
+							value={ participant }
+							placeholder={ `${election.userAuthType == 'email' ? 'email' : 'phone number'}` }
+						/>
+						<div className="action-btn-container">
+							<button className="Button violet action-item" onClick={ procParticipant }>Continue</button>
+							<button className="Button red action-item" onClick={ () => setPhoneModalOpen(false)}>Cancel</button>
+						</div>
+					</div>
+				</div>
+			}
+
+			{OTPOpen && 
+				<div className="modal-overlay">
+					<div className="w-5/6 p-4 md:w-2/5 lg:w-2/5 xl:w-2/5 rounded-lg shadow-md relative bg-white">
+						<span>{`${election.title}`}</span>
+						<p>{`You should have received a verification at the ${ election.userAuthType == 'email' ? 'email' : 'phone number' } you provided`}</p>
+						<h3>Enter Confirmation Code</h3>
+						<input 
+							type="number" 
+							id="otp-field"
+							onChange={ (e) => setOTPVal(e.target.value) }
+							value={ OTPVal }
+							placeholder="confirmation code"
+						/>
+						<div className="action-btn-container">
+							<button className="Button violet action-item" onClick={ handleOTPSubmit }>Verify</button>
+							<button className="Button red action-item" onClick={ () => setOTPOpen(false) }>Cancel</button>
+						</div>
+					</div>
+				</div>
+			}
+
+			<div className="home-container">
+				<div className="home-left">
+					<h2>With us you no longer need lengthy processes to vote for your stars</h2>
+					<h4>Set up an election here and now!</h4>
+					<h4>Fans do not need to set up an account</h4>
+
+					<br />
+					<br />
+
+					<h2>Choose the type of voting</h2>
+					<h3>An open election is open to anyone with an id</h3>
+					<h3>A closed election needs you need to be in a list</h3>
+				</div>
+
+				<div className="home-right">
+					<h3>Got an ID? Paste it in</h3> 
+					<input 
+						type="text" 
+						name="electionid" 
+						value={id} 
+						onChange={ (e) => setId(e.target.value) }
+						id="electionIdEntry" 
+						autoFocus
+					/>
+						
+					<div className="my-2">
+						<button className="Button violet action-item" onClick={() => procElection(id)}>Continue</button>
+					</div>
+				</div>
+			</div>
 		</>
 	);
 }
