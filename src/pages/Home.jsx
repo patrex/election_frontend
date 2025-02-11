@@ -179,31 +179,7 @@ function Home() {
 
 	return (
 		<>
-			<div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8 text-center">
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">Vote with Confidence</h1>
-        <p className="text-gray-600 text-lg mb-6">
-          Participate in open or closed elections securely and fairly.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-blue-500 text-white rounded-xl p-6 shadow-md">
-            <h2 className="text-2xl font-semibold mb-2">Open Elections</h2>
-            <p className="text-lg">Anyone can vote. Make your voice heard!</p>
-            <button className="mt-4 w-full bg-white text-blue-500 hover:bg-gray-200 p-2 rounded">
-              Participate
-            </button>
-          </div>
-          <div className="bg-green-500 text-white rounded-xl p-6 shadow-md">
-            <h2 className="text-2xl font-semibold mb-2">Closed Elections</h2>
-            <p className="text-lg">Only registered participants can vote.</p>
-            <button className="mt-4 w-full bg-white text-green-500 hover:bg-gray-200 p-2 rounded">
-              Register
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+			
 		</>
 	);
 }
