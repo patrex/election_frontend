@@ -180,7 +180,7 @@ function Home() {
 	return (
 		<>
 			{phoneModalOpen && 
-				<div className="modal-overlay">
+				<div className="modal-overlay dark:bg-gray-800 dark:text-white">
 					<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 						<span>{`${election.title}`}</span>
 						<h3>{`Enter your ${election.userAuthType == 'email' ? 'email' : 'phone number'} to continue`}</h3>
@@ -200,7 +200,7 @@ function Home() {
 			}
 
 			{OTPOpen && 
-				<div className="modal-overlay">
+				<div className="modal-overlay dark:bg-gray-800 dark:text-white">
 					<div className="w-5/6 p-4 md:w-2/5 lg:w-2/5 xl:w-2/5 rounded-lg shadow-md relative bg-white">
 						<span>{`${election.title}`}</span>
 						<p>{`You should have received a verification at the ${ election.userAuthType == 'email' ? 'email' : 'phone number' } you provided`}</p>
@@ -220,36 +220,21 @@ function Home() {
 				</div>
 			}
 
-			<div className="home-container">
-				<div className="home-left">
-					<h2>With us you no longer need lengthy processes to vote for your stars</h2>
-					<h4>Set up an election here and now!</h4>
-					<h4>Fans do not need to set up an account</h4>
 
-					<br />
-					<br />
 
-					<h2>Choose the type of voting</h2>
-					<h3>An open election is open to anyone with an id</h3>
-					<h3>A closed election needs you need to be in a list</h3>
-				</div>
-
-				<div className="home-right">
-					<h3>Got an ID? Paste it in</h3> 
+			<div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
+      				<div className="w-full max-w-3xl text-center">
+        				<h1 className="text-5xl font-bold text-gray-800 dark:text-white mb-6">Vote with Confidence</h1>
+       					 <p className="text-gray-600 dark:text-gray-300 text-lg mb-8">
+         				 	Participate in open or closed elections securely and fairly.
+        				</p>
 					<input 
 						type="text" 
-						name="electionid" 
-						value={id} 
-						onChange={ (e) => setId(e.target.value) }
-						id="electionIdEntry" 
-						autoFocus
+						className="w-4/5 p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400" 
+						placeholder="Enter your text here..." 
 					/>
-						
-					<div className="my-2">
-						<button className="Button violet action-item" onClick={() => procElection(id)}>Continue</button>
-					</div>
-				</div>
-			</div>
+     				</div>
+   			</div>
 		</>
 	);
 }
