@@ -105,7 +105,7 @@ function Login() {
 						</div>
 						
 						<button 
-							className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
+							className="w-full px-3 py-2 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
 							disabled={loading}
 						>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
 
@@ -113,6 +113,13 @@ function Login() {
 						{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
 						{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
 					</form>
+
+					<div className="flex items-center w-2/3 my-6">
+						<hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
+						<span className="mx-4 text-gray-500 dark:text-gray-400">or</span>
+						<hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
+					</div>
+
 
 					<div>
 						<button
