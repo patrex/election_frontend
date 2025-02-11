@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '@/App';
 import login from '../assets/login.svg'
+import { authman } from '@/utils/fireloader';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -37,10 +38,18 @@ function Login() {
 	}, [])
 
 	const onSubmit = async (formData) => {
+		const [username, password] = formData;
+		
+		console.log(username, password);
+
 		setLoading(true);
 		setErr('')
 
-		
+		try {
+			const login_res = await signInWithEmailAndPassword(authman, formData.usename, formData.password)
+		} catch (error) {
+			
+		}
 
 		// try {
 		// 	const res = await fetch(`${backendUrl}/user/auth/login`, {
@@ -85,8 +94,7 @@ function Login() {
 					<form>
 						<div className="mb-4">
 							<label className="block text-gray-700">Email</label>
-							<input 
-								type="email" 
+							<input type="email" 
 								className="w-full p-2 rounded-md focus:ring-2" 
 								{...register('username')}
 							/>
@@ -102,7 +110,7 @@ function Login() {
 						<button 
 							className="w-1/2 mx-auto block bg-orange-500 text-white py-2 rounded-md text-center hover:bg-blue-600"
 							disabled={loading}
-						>{ loading ? <PulseLoader  color="#ffb500" size={5} loading={loading}/> : "Login" }</button>
+						>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
 
 						{err && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{err}</div>}
 						{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
