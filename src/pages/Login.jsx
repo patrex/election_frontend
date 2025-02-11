@@ -6,7 +6,8 @@ import { authman } from '@/utils/fireloader';
 
 import { signInWithEmailAndPassword, 
 	 signInWithPopup, 
-	 GoogleAuthProvider 
+	 GoogleAuthProvider,
+	 AuthErrorCodes
 } from 'firebase/auth';
 
 import { PulseLoader } from 'react-spinners';
