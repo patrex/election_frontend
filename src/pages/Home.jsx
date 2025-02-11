@@ -222,19 +222,22 @@ function Home() {
 
 
 
-			<div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      				<div className="w-full max-w-3xl text-center">
-        				<h1 className="text-5xl font-bold text-gray-800 dark:text-white mb-6">Vote with Confidence</h1>
-       					 <p className="text-gray-600 dark:text-gray-300 text-lg mb-8">
-         				 	Participate in open or closed elections securely and fairly.
-        				</p>
+			<div className="h-screen flex flex-col justify-between bg-gray-100 dark:bg-gray-900 p-4">
+				<div className="flex flex-col items-center justify-center flex-grow text-center">
+					<h1 className="text-5xl font-bold text-gray-800 dark:text-white mb-6">Votify</h1>
+					<p className="text-gray-600 dark:text-gray-300 text-lg mb-8">
+						Participate in open or closed elections securely and fairly.
+					</p>
 					<input 
 						type="text" 
-						className="w-4/5 p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400" 
-						placeholder="Enter your text here..." 
+						className="w-4/5 p-3  dark:border-gray-600 bg-white text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none mb-4" 
+						placeholder="Enter/paste in an election ID..." 
 					/>
-     				</div>
-   			</div>
+					<button className="px-6 py-3 bg-blue-500 text-white text-lg rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+						Continue
+					</button>
+				</div>
+			</div>
 		</>
 	);
 }
