@@ -230,7 +230,7 @@ function Home() {
 					</p>
 					<input 
 						type="text" 
-						className="w-4/5 p-3  dark:border-gray-600 bg-white text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none mb-4" 
+						className="w-2/3 p-3  dark:border-gray-600 bg-white text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none mb-4" 
 						placeholder="Enter/paste in an election ID..." 
 					/>
 					<button className="px-6 py-3 bg-blue-500 text-white text-lg rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
