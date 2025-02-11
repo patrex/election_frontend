@@ -57,6 +57,7 @@ function Login() {
 
 	const onSubmit = async (formData) => {
 		const [username, password] = formData;
+		console.log(username);
 
 		setLoading(true);
 		setErr('')
