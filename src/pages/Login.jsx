@@ -56,14 +56,11 @@ function Login() {
 	}
 
 	const onSubmit = async (formData) => {
-		const [username, password] = formData;
-		console.log(username);
-
 		setLoading(true);
 		setErr('')
 
 		try {
-			const login_res = await signInWithEmailAndPassword(authman, username, password);
+			const login_res = await signInWithEmailAndPassword(authman, formData.username, formData.password);
 			const user = login_res.user;
 			setAndRedirectUser(user);
 		} catch (error) {
@@ -91,7 +88,7 @@ function Login() {
 			<div className="w-full md:w-1/2 flex items-center justify-center p-6">
 				<div className="max-w-md w-full">
 					<h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
-					<form onSubmit={ handleSubmit(onSubmit)}>
+					<form onSubmit={ handleSubmit(onSubmit) }>
 						<div className="mb-4">
 							<label className="block text-gray-700">Email</label>
 							<input type="email" 
