@@ -151,7 +151,7 @@ function CreateAccount() {
 							<img
 								src="https://www.svgrepo.com/show/475656/google-color.svg"
 								alt="Google Logo"
-								className="w-6 h-6 mr-2"
+								className="w-4 h-4 mr-2"
 							/>
 							Sign up with Google
 						</button>
