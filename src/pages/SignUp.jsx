@@ -63,7 +63,7 @@ function CreateAccount() {
 			<div className="w-full md:w-1/2 flex items-center justify-center p-6 dark:bg-gray-900 p-6">
 				<div className="max-w-md w-full">
 					<h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-6">Create Your Account</h2>
-					<form onSubmit={handleSubmit(onSubmit)} className="w-2/3 max-w-md bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+					<form onSubmit={handleSubmit(onSubmit)} >
 						<div className="space-y-4">
 							{/* Firstname */}
 							<div>
@@ -75,7 +75,7 @@ function CreateAccount() {
 									id="firstname"
 									placeholder="Enter your firstname"
 									autoFocus
-									className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+									className="w-2/3 p-2 rounded-md focus:ring-2"
 									{...register("firstname")}
 								/>
 								{errors.firstname && <span className="text-red-500 text-sm">Firstname must be at least two characters</span>}
@@ -91,7 +91,7 @@ function CreateAccount() {
 									type="email"
 									id="email"
 									placeholder="Enter your email"
-									className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+									className="w-2/3 p-2 rounded-md focus:ring-2"
 									{...register("email")}
 								/>
 								{errors.email && <span className="text-red-500 text-sm">You need to enter a valid email</span>}
@@ -108,7 +108,7 @@ function CreateAccount() {
 									id="password"
 									placeholder="Enter a secure password"
 									{...register("password")}
-									className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+									className="w-2/3 p-2 rounded-md focus:ring-2"
 								/>
 								{errors.password && <span className="text-red-500 text-sm">Password must be at least 6 characters and contain symbols</span>}
 							</div>
@@ -122,7 +122,7 @@ function CreateAccount() {
 									type="password"
 									id="repeat_password"
 									placeholder="Re-enter your password"
-									className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+									className="w-2/3 p-2 rounded-md focus:ring-2"
 									{...register("repeat_password")}
 								/>
 								{errors.repeat_password && <span className="text-red-500 text-sm">Passwords don't match</span>}
