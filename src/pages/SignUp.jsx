@@ -122,14 +122,14 @@ function CreateAccount() {
 							/>
 							{errors.repeat_password && <span className="text-red-500 text-sm">Passwords don't match</span>}
 						</div>
-					</div>
 
-					<button
-						type="submit"
-						disabled={loading}
-						className="w-full mt-6 flex items-center justify-center px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
-					> {loading ? <PulseLoader color="#ffffff" size={6} loading={loading} /> : "Sign Up"}
-					</button>
+						<button
+							type="submit"
+							disabled={loading}
+							className="w-full mt-6 flex items-center justify-center px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
+							> {loading ? <PulseLoader color="#ffffff" size={6} loading={loading} /> : "Sign Up"}
+						</button>
+					</div>
 				</form>
 			</div>
 
