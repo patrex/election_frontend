@@ -62,80 +62,78 @@ function CreateAccount() {
 			{/* Right Side (Signup Form) */}
 			<div className="w-full md:w-1/2 flex items-center justify-center p-6 dark:bg-gray-900 p-6">
 				<div className="max-w-md w-full">
-					<h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-6">Create Your Account</h2>
+					<h2 className="text-2xl font-semibold text-center mb-4">Create Your Account</h2>
 					<form onSubmit={handleSubmit(onSubmit)} >
-						<div className="space-y-4">
-							{/* Firstname */}
-							<div>
-								<label htmlFor="firstname" className="block text-left text-gray-700 dark:text-gray-300 font-medium">
-									Firstname
-								</label>
-								<input
-									type="text"
-									id="firstname"
-									placeholder="Enter your firstname"
-									autoFocus
-									className="w-2/3 p-2 rounded-md focus:ring-2"
-									{...register("firstname")}
-								/>
-								{errors.firstname && <span className="text-red-500 text-sm">Firstname must be at least two characters</span>}
-							</div>
-						
-
-							<div>
-								{/* Email */}
-								<label htmlFor="email" className="block text-left text-gray-700 dark:text-gray-300 font-medium">
-									Email
-								</label>
-								<input
-									type="email"
-									id="email"
-									placeholder="Enter your email"
-									className="w-2/3 p-2 rounded-md focus:ring-2"
-									{...register("email")}
-								/>
-								{errors.email && <span className="text-red-500 text-sm">You need to enter a valid email</span>}
-								<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">We'll never share your email.</p>
-							</div>
-
-							{/* Password */}
-							<div>
-								<label htmlFor="password" className="block text-left text-gray-700 dark:text-gray-300 font-medium">
-									Password
-								</label>
-								<input
-									type="password"
-									id="password"
-									placeholder="Enter a secure password"
-									{...register("password")}
-									className="w-2/3 p-2 rounded-md focus:ring-2"
-								/>
-								{errors.password && <span className="text-red-500 text-sm">Password must be at least 6 characters and contain symbols</span>}
-							</div>
-
-							{/* Confirm Password */}
-							<div>
-								<label htmlFor="repeat_password" className="block text-left text-gray-700 dark:text-gray-300 font-medium">
-									Confirm Password
-								</label>
-								<input
-									type="password"
-									id="repeat_password"
-									placeholder="Re-enter your password"
-									className="w-2/3 p-2 rounded-md focus:ring-2"
-									{...register("repeat_password")}
-								/>
-								{errors.repeat_password && <span className="text-red-500 text-sm">Passwords don't match</span>}
-							</div>
-
-							{/* Submit Button */}
-							<button
-								type="submit"
-								disabled={loading}
-								className="w-full flex items-center justify-center px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
-							> {loading ? "Loading..." : "Sign Up"}
-							</button>
+						{/* Firstname */}
+						<div>
+							<label htmlFor="firstname" className="block text-left text-gray-700 dark:text-gray-300 font-medium">
+								Firstname
+							</label>
+							<input
+								type="text"
+								id="firstname"
+								placeholder="Enter your firstname"
+								autoFocus
+								className="w-2/3 p-2 rounded-md focus:ring-2"
+								{...register("firstname")}
+							/>
+							{errors.firstname && <span className="text-red-500 text-sm">Firstname must be at least two characters</span>}
 						</div>
+					
+
+						<div>
+							{/* Email */}
+							<label htmlFor="email" className="block text-left text-gray-700 dark:text-gray-300 font-medium">
+								Email
+							</label>
+							<input
+								type="email"
+								id="email"
+								placeholder="Enter your email"
+								className="w-2/3 p-2 rounded-md focus:ring-2"
+								{...register("email")}
+							/>
+							{errors.email && <span className="text-red-500 text-sm">You need to enter a valid email</span>}
+							<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">We'll never share your email.</p>
+						</div>
+
+						{/* Password */}
+						<div>
+							<label htmlFor="password" className="block text-left text-gray-700 dark:text-gray-300 font-medium">
+								Password
+							</label>
+							<input
+								type="password"
+								id="password"
+								placeholder="Enter a secure password"
+								{...register("password")}
+								className="w-2/3 p-2 rounded-md focus:ring-2"
+							/>
+							{errors.password && <span className="text-red-500 text-sm">Password must be at least 6 characters and contain symbols</span>}
+						</div>
+
+						{/* Confirm Password */}
+						<div>
+							<label htmlFor="repeat_password" className="block text-left text-gray-700 dark:text-gray-300 font-medium">
+								Confirm Password
+							</label>
+							<input
+								type="password"
+								id="repeat_password"
+								placeholder="Re-enter your password"
+								className="w-2/3 p-2 rounded-md focus:ring-2"
+								{...register("repeat_password")}
+							/>
+							{errors.repeat_password && <span className="text-red-500 text-sm">Passwords don't match</span>}
+						</div>
+
+						{/* Submit Button */}
+						<button
+							type="submit"
+							disabled={loading}
+							className="w-full flex items-center justify-center px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
+						> {loading ? "Loading..." : "Sign Up"}
+						</button>
 					</form>
 
 					<div className="flex items-center w-2/3 my-6 mx-auto" >
