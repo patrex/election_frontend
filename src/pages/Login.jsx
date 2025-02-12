@@ -106,7 +106,7 @@ function Login() {
 						</div>
 						
 						<button 
-							className="w-2/3 px-3 py-2 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
+							className="w-2/3 px-3 py-2 bg-blue-600 text-white text-center mx-auto text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
 							disabled={loading}
 						>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
 
