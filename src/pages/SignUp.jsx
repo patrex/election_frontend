@@ -33,25 +33,16 @@ function CreateAccount() {
 		resolver: joiResolver(schema)
 	});
 
+	const signUpWithGoogle = async () => {
+
+	}
+
 	const onSubmit = async (formData) => {
 		setLoading(true)
 
 		try {
-			const res = await fetch(`${backendUrl}/user/auth/signup`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				      },
-				mode: 'cors',
-				      body: JSON.stringify(formData),
-			})
-
-			if (!res.ok) {
-				Toast.warning("Could not complete request")
-				return;
-			}
 			
-			navigate('/login');
+			
 		} catch (error) {
 			Toast.error("There was an error");
 			console.error(error);
@@ -148,7 +139,7 @@ function CreateAccount() {
 				</div>
 				<div>
 					<button
-						onClick={handleGoogleSignIn}
+						onClick={signUpWithGoogle}
 						className="mt-4 flex items-center justify-center w-2/3 px-6 py-3 bg-white block mx-auto text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
 						>
 						<img
