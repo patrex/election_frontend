@@ -263,7 +263,7 @@ input[type="text"],
 	input[type="email"], 
 	input[type="tel"],
 	input[type="number"]  {
-		width: 95%; 
+		width: 100%; 
 		padding: 10px; 
 		border: 1px solid goldenrod; 
 		border-radius: 5px; 
