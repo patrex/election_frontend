@@ -62,7 +62,7 @@ function CreateAccount() {
 			{/* Right Side (Signup Form) */}
 			<div className="w-full md:w-1/2 flex items-center justify-center p-6 dark:bg-gray-900 p-6">
 				<div className="max-w-md w-full">
-					<h2 className="text-2xl font-semibold text-center mb-4">Create Your Account</h2>
+					<h2 className="text-xl font-semibold text-center mb-2 mt-2">Create Your Account</h2>
 					<form onSubmit={handleSubmit(onSubmit)} >
 						{/* Firstname */}
 						<div>
@@ -121,7 +121,7 @@ function CreateAccount() {
 								type="password"
 								id="repeat_password"
 								placeholder="Re-enter your password"
-								className="w-2/3 p-2 rounded-md focus:ring-2"
+								className="w-2/3 p-2 rounded-md focus:ring-2 mb-2"
 								{...register("repeat_password")}
 							/>
 							{errors.repeat_password && <span className="text-red-500 text-sm">Passwords don't match</span>}
@@ -131,12 +131,12 @@ function CreateAccount() {
 						<button
 							type="submit"
 							disabled={loading}
-							className="w-full flex items-center justify-center px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
+							className="w-full flex items-center justify-center px-4 py-2 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
 						> {loading ? "Loading..." : "Sign Up"}
 						</button>
 					</form>
 
-					<div className="flex items-center w-2/3 my-6 mx-auto" >
+					<div className="flex items-center w-2/3 my-4 mx-auto" >
 						<hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
 						<span className="mx-4 text-gray-500 dark:text-gray-400">or</span>
 						<hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
