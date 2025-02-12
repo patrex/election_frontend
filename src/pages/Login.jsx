@@ -106,7 +106,7 @@ function Login() {
 						</div>
 						
 						<button 
-							className="w-2/3 px-3 py-2 bg-blue-600 text-white text-center mx-auto text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
+							className="w-2/3 px-3 py-2 bg-blue-600 text-white text-center mx-auto block text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
 							disabled={loading}
 						>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
 
@@ -115,7 +115,7 @@ function Login() {
 						{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
 					</form>
 
-					<div className="flex items-center w-2/3 my-6">
+					<div className="flex items-center w-2/3 my-6 mx-auto" >
 						<hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
 						<span className="mx-4 text-gray-500 dark:text-gray-400">or</span>
 						<hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
@@ -125,7 +125,7 @@ function Login() {
 					<div>
 						<button
 							onClick={handleGoogleSignIn}
-							className="mt-4 flex items-center justify-center w-2/3 px-6 py-3 bg-white text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
+							className="mt-4 flex items-center justify-center w-2/3 px-6 py-3 bg-white block mx-auto text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
 							>
 							<img
 								src="https://www.svgrepo.com/show/475656/google-color.svg"
