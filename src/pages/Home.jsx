@@ -220,8 +220,6 @@ function Home() {
 				</div>
 			}
 
-
-
 			<div className="h-screen flex flex-col justify-between bg-gray-100 dark:bg-gray-900 p-4">
 				<div className="flex flex-col items-center justify-center flex-grow text-center">
 					<h1 className="text-5xl font-bold text-gray-800 dark:text-white mb-6">Votify</h1>
@@ -230,7 +228,7 @@ function Home() {
 					</p>
 					<input 
 						type="text" 
-						className="w-2/3 p-3  dark:border-gray-600 bg-white text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none mb-4" 
+						className="w-3/5 p-3  dark:border-gray-600 bg-white text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none mb-4" 
 						placeholder="Enter/paste in an election ID..." 
 						value={id}
 						onChange={ (e) => setId(e.target.value) }
