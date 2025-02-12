@@ -93,20 +93,20 @@ function Login() {
 						<div className="mb-4">
 							<label className="block text-gray-700">Email</label>
 							<input type="email" 
-								className="w-full p-2 rounded-md focus:ring-2" 
+								className="w-2/3 p-2 rounded-md focus:ring-2" 
 								{...register('username')}
 							/>
 						</div>
 						<div className="mb-4">
 							<label className="block text-gray-700">Password</label>
 							<input type="password" 
-								className="w-full p-2 rounded-md focus:ring-2" 
+								className="w-2/3 p-2 rounded-md focus:ring-2" 
 								{...register('password')}
 							/>
 						</div>
 						
 						<button 
-							className="w-full px-3 py-2 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
+							className="w-2/3 px-3 py-2 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
 							disabled={loading}
 						>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
 
@@ -125,7 +125,7 @@ function Login() {
 					<div>
 						<button
 							onClick={handleGoogleSignIn}
-							className="mt-4 flex items-center justify-center w-64 px-6 py-3 bg-white text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
+							className="mt-4 flex items-center justify-center w-2/3 px-6 py-3 bg-white text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
 							>
 							<img
 								src="https://www.svgrepo.com/show/475656/google-color.svg"
