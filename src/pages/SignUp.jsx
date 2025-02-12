@@ -136,7 +136,7 @@ function CreateAccount() {
 						</button>
 					</form>
 
-					<div className="flex items-center w-2/3 my-4 mx-auto" >
+					<div className="flex items-center w-2/3 my-2 mx-auto" >
 						<hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
 						<span className="mx-4 text-gray-500 dark:text-gray-400">or</span>
 						<hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
@@ -146,7 +146,7 @@ function CreateAccount() {
 					<div>
 						<button
 							onClick={signUpWithGoogle}
-							className="mt-4 flex items-center justify-center w-2/3 px-6 py-3 bg-white block mx-auto text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
+							className="mt-2 flex items-center justify-center w-2/3 px-6 py-3 bg-white block mx-auto text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
 							>
 							<img
 								src="https://www.svgrepo.com/show/475656/google-color.svg"
