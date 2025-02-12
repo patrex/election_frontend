@@ -5,9 +5,9 @@ import loginImg from '../assets/login_banner.svg'
 import { authman } from '@/utils/fireloader';
 
 import { signInWithEmailAndPassword, 
-	 signInWithPopup, 
 	 GoogleAuthProvider,
-	 AuthErrorCodes
+	 AuthErrorCodes,
+	 signInWithRedirect
 } from 'firebase/auth';
 
 import { PulseLoader } from 'react-spinners';
@@ -49,7 +49,7 @@ function Login() {
 
 	const handleGoogleSignIn = async () => {
 		try {
-			const result = await signInWithPopup(authman, provider);
+			const result = await signInWithRedirect(authman, provider);
 			setAndRedirectUser(result?.user)
 		} catch (error) {
 		  	console.error("Error signing in:", error);
