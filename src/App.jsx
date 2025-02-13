@@ -1,5 +1,5 @@
 import { Route, createBrowserRouter,RouterProvider, createRoutesFromElements } from 'react-router-dom';
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import './App.css'
 
 import Home, { homeLoader } from './pages/Home'
@@ -17,9 +17,9 @@ import ElectionResults, { resultsLoader } from './pages/ElectionResults';
 import NotFound from './pages/NotFound';
 import UpdateCandidate, {updateloader} from './pages/UpdateCandidate';
 import UpdateElection, {updateElectionLoader} from './pages/UpdateElection';
+
 import Verifier from './pages/Verifier'
 import { getAuth } from "firebase/auth";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const vDashboard = Verifier(Dashboard);
