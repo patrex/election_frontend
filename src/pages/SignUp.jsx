@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import backendUrl from '../utils/backendurl'
+import { authman } from "@/utils/fireloader";
 
 import { createUserWithEmailAndPassword, 
-	signInWithPopup, 
 	GoogleAuthProvider,
-	AuthErrorCodes
+	AuthErrorCodes,
+	signInWithRedirect
 } from 'firebase/auth';
 
 import Toast from "@/utils/ToastMsg";
@@ -41,12 +42,11 @@ function CreateAccount() {
 		setLoading(true)
 
 		try {
-			
-			
+			const res = await createUserWithEmailAndPassword(authman, formData.email, formData.password)
+			navigate('/login')
 		} catch (error) {
 			Toast.error("There was an error");
 			console.error(error);
-			
 		} finally {
 			setLoading(false)
 		}

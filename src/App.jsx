@@ -17,6 +17,18 @@ import ElectionResults, { resultsLoader } from './pages/ElectionResults';
 import NotFound from './pages/NotFound';
 import UpdateCandidate, {updateloader} from './pages/UpdateCandidate';
 import UpdateElection, {updateElectionLoader} from './pages/UpdateElection';
+import Verifier from './pages/Verifier'
+import { getAuth } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const vDashboard = Verifier(Dashboard);
+const vCreateElection = Verifier(CreateElection);
+const vAddCandidate = Verifier(AddCandidate);
+const vElectionDetail = Verifier(ElectionDetail);
+const vPositionDetail = Verifier(PositionDetails);
+const vUpdateCandidate = Verifier(UpdateCandidate);
+const vUpdateElection = Verifier(UpdateElection);
 
 import ErrorBoundary from './pages/ErrorBoundary';
 
@@ -35,21 +47,35 @@ const router = createBrowserRouter(createRoutesFromElements(
 		<Route path='/election/:id/:voterId' element={<Election />} loader={ electionLoader }/>
 
 		<Route path='user/:userId' element={<UserLayout />}>
-			<Route index element={<Dashboard />} loader={ dashboardLoader }/>
-			<Route path='create-election' element={<CreateElection />} />
-			<Route path='election/:id' element={<ElectionDetail />} loader={ electionDetailLoader } />
-			<Route path='election/:electionId/update' element={<UpdateElection />} loader={ updateElectionLoader } />
-			<Route path='election/:id/addcandidate' element={<AddCandidate />} />
-			<Route path='election/:id/position/:position' element={<PositionDetails />} loader={ loader } />
-			<Route path='election/candidate/:candidateId/update' element={<UpdateCandidate />} loader={ updateloader } />
+			<Route index element={<vDashboard />} loader={ dashboardLoader }/>
+			<Route path='create-election' element={<vCreateElection />} />
+			<Route path='election/:id' element={<vElectionDetail />} loader={ electionDetailLoader } />
+			<Route path='election/:electionId/update' element={<vUpdateElection />} loader={ updateElectionLoader } />
+			<Route path='election/:id/addcandidate' element={<vAddCandidate />} />
+			<Route path='election/:id/position/:position' element={<vPositionDetails />} loader={ loader } />
+			<Route path='election/candidate/:candidateId/update' element={<vUpdateCandidate />} loader={ updateloader } />
 		</Route>
 	</Route>
 ))
 
 
 function App() {
-	const [ user, setUser ] = useState(null);
+	// const [ user, setUser ] = useState(null);
 	const [voter, setVoter] = useState();
+	const auth = getAuth();
+	const navigate = useNavigate();
+	const [user, setUser] = useState(null);
+
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			setUser(user);
+			if (!user) {
+				navigate('/login');
+			}
+		});
+
+		return () => unsubscribe();
+	}, [auth, navigate]);
 	
 	return (
 		<AppContext.Provider value={ { user, setUser, voter, setVoter} }>

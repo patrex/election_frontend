@@ -7,7 +7,8 @@ import { authman } from '@/utils/fireloader';
 import { signInWithEmailAndPassword, 
 	 GoogleAuthProvider,
 	 AuthErrorCodes,
-	 signInWithRedirect
+	 signInWithRedirect,
+	 sendEmailVerification
 } from 'firebase/auth';
 
 import { PulseLoader } from 'react-spinners';
@@ -38,10 +39,6 @@ function Login() {
 		resolver: joiResolver(schema)
 	});
 
-	useEffect(() => {
-		
-	}, [])
-
 	async function setAndRedirectUser (user) {
 		setUser(user);
 		navigate(`/user/${user.email}`)
@@ -50,7 +47,9 @@ function Login() {
 	const handleGoogleSignIn = async () => {
 		try {
 			const result = await signInWithRedirect(authman, provider);
-			setAndRedirectUser(result?.user)
+			const user = result.user;
+			if (user.emailVerified)
+				setAndRedirectUser(result?.user)
 		} catch (error) {
 		  	console.error("Error signing in:", error);
 		}
@@ -63,12 +62,13 @@ function Login() {
 		try {
 			const login_res = await signInWithEmailAndPassword(authman, formData.username, formData.password);
 			const user = login_res.user;
-			setAndRedirectUser(user);
+			if (user.emailVerified)
+				setAndRedirectUser(user)
 		} catch (error) {
-			if (error.code == AuthErrorCodes.INVALID_PASSWORD) {
+			if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
 				setErr('Username or password is incorrect')
 			} else {
-				setErr('Something went wrong...')
+				setErr('Something went wrong...');
 				console.error(`Error: ${error}` );
 			}
 		} finally {
