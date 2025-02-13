@@ -26,7 +26,7 @@ const vDashboard = Verifier(Dashboard);
 const vCreateElection = Verifier(CreateElection);
 const vAddCandidate = Verifier(AddCandidate);
 const vElectionDetail = Verifier(ElectionDetail);
-const vPositionDetail = Verifier(PositionDetails);
+const vPositionDetails = Verifier(PositionDetails);
 const vUpdateCandidate = Verifier(UpdateCandidate);
 const vUpdateElection = Verifier(UpdateElection);
 
@@ -36,28 +36,6 @@ import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css";
 
 export const AppContext = createContext();
-
-const router = createBrowserRouter(createRoutesFromElements(
-	<Route element={<Layout/>}>
-		<Route path='/' element={<Home />} loader={ homeLoader }/>
-		<Route path='login' element={<Login />} />
-		<Route path='signup' element={<SignUp />} />
-
-		<Route path='/election/:id/results' element={<ElectionResults />} loader={ resultsLoader } />
-		<Route path='/election/:id/:voterId' element={<Election />} loader={ electionLoader }/>
-
-		<Route path='user/:userId' element={<UserLayout />}>
-			<Route index element={<vDashboard />} loader={ dashboardLoader }/>
-			<Route path='create-election' element={<vCreateElection />} />
-			<Route path='election/:id' element={<vElectionDetail />} loader={ electionDetailLoader } />
-			<Route path='election/:electionId/update' element={<vUpdateElection />} loader={ updateElectionLoader } />
-			<Route path='election/:id/addcandidate' element={<vAddCandidate />} />
-			<Route path='election/:id/position/:position' element={<vPositionDetails />} loader={ loader } />
-			<Route path='election/candidate/:candidateId/update' element={<vUpdateCandidate />} loader={ updateloader } />
-		</Route>
-	</Route>
-))
-
 
 function App() {
 	// const [ user, setUser ] = useState(null);
@@ -79,7 +57,30 @@ function App() {
 	
 	return (
 		<AppContext.Provider value={ {voter, setVoter} }>
-			<RouterProvider router={ router } />
+			<RouterProvider router = {
+				createBrowserRouter(createRoutesFromElements(
+					<Route element={<Layout/>}>
+						<Route path='/' element={<Home />} loader={ homeLoader }/>
+						<Route path='login' element={<Login />} />
+						<Route path='signup' element={<SignUp />} />
+
+						<Route path='/election/:id/results' element={<ElectionResults />} loader={ resultsLoader } />
+						<Route path='/election/:id/:voterId' element={<Election />} loader={ electionLoader }/>
+						{user && (
+							<Route path='user/:userId' element={<UserLayout />}>
+								<Route index element={<vDashboard />} loader={ dashboardLoader }/>
+								<Route path='create-election' element={<vCreateElection />} />
+								<Route path='election/:id' element={<vElectionDetail />} loader={ electionDetailLoader } />
+								<Route path='election/:electionId/update' element={<vUpdateElection />} loader={ updateElectionLoader } />
+								<Route path='election/:id/addcandidate' element={<vAddCandidate />} />
+								<Route path='election/:id/position/:position' element={<vPositionDetails />} loader={ loader } />
+								<Route path='election/candidate/:candidateId/update' element={<vUpdateCandidate />} loader={ updateloader } />
+							</Route>
+							)
+						}
+					</Route>
+				)) 
+			}/>
 			<ToastContainer />
 		</AppContext.Provider>
 	);
