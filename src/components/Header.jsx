@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "@/App";
 import { useContext } from "react";
+import Navbar from "./Navbar";
 
 
 function Header() {
@@ -24,8 +25,9 @@ function Header() {
 		<>
 			
 			<header>
+				<Navbar user={user} onLogout={logout} />
 
-				<div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
+				{/* <div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
 				
 				{user ? 
 					<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '0 1.5rem'} }>
@@ -42,7 +44,7 @@ function Header() {
 							style={({isActive}) => isActive ? linkStyles: null}
 						>Signup</NavLink>
 					</nav>
-				}
+				} */}
 				
 			</header>
 

@@ -41,7 +41,7 @@ function Login() {
 
 	async function setAndRedirectUser (user) {
 		setUser(user);
-		navigate(`/user/${user.email}`)
+		navigate(`/user/${user.uid}`)
 	}
 
 	const handleGoogleSignIn = async () => {
