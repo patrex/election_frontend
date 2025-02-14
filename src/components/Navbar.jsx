@@ -13,12 +13,12 @@ const Navbar = ({ user, onLogout }) => {
 				{/* Logo */}
 				<div className="flex-shrink-0">
 					<Link to="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-						MyApp
+						Votify
 					</Link>
 				</div>
 
 				{/* Desktop Navigation */}
-				<div className="hidden md:flex space-x-8">
+				<div className="hidden md:flex space-x-8 ml-auto">
 					<Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">Home</Link>
 					<Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">
 						About
@@ -29,7 +29,7 @@ const Navbar = ({ user, onLogout }) => {
 				</div>
 
 				{/* Right Side: Auth Buttons / User Menu */}
-				<div className="hidden md:flex items-center space-x-4">
+				<div className="hidden md:flex items-center space-x-4 ml-auto">
 					{user ? (
 						// User Dropdown Menu
 						<div className="relative">
@@ -70,7 +70,7 @@ const Navbar = ({ user, onLogout }) => {
 
 				{/* Mobile Menu Button */}
 				<button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
-				{menuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+					{menuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
 				</button>
 			</div>
 		</div>
