@@ -8,9 +8,21 @@ function NavBar({ user, onLogout}) {
 						<h2>Votify</h2>
 					</div>
 					<ul className="nav-link">
-						<li><a href="">Hello</a></li>
-						<li><a href="">Dashboard</a></li>
-						<li><a href="">Create Election</a></li>
+						<li><Link to={`/`}></Link></li>
+
+						{user ? (
+							<>
+								<li><Link to="" className="link-item">Dashboard</Link></li>
+								<li><Link to="" className="link-item">Create Election</Link></li>
+							</>
+						) : (
+							<>
+								<li><Link to={`/login`} className="link-item">Login</Link></li>
+								<li><Link to={`/signup`} className="link-item">Sign Up</Link></li>
+							</>
+						)}
+
+						
 					</ul>
 				</nav>
 			</div>

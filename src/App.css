@@ -216,7 +216,7 @@ header {
 	margin: 0 .5rem
 }
 
-.nav-container ul li a {
+.nav-container ul li .link-item {
 	color: #212a3c;
 	font-size: 1.3rem;
 	padding: .7rem 1rem;
