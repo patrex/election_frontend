@@ -155,7 +155,7 @@ body {
         background-color: #0056b3;
 }
 /* ############  navbar styles */
-/* ul {
+ul {
 	list-style-type: none;
 	padding: 0;
 }
@@ -170,7 +170,7 @@ li {
 
 li:hover {
 	background-color: #f9f9f9;
-} */
+}
 
 .subnav {
 	height: 2em;
