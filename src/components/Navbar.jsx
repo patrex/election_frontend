@@ -3,7 +3,7 @@ function NavBar({ user, onLogout}) {
 	return ( 
 		<>
 			<div className="nav-container">
-				<nav className="nav-container">
+				<nav>
 					<div className="logo">
 						<h2>Votify</h2>
 					</div>
