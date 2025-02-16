@@ -242,26 +242,6 @@ header {
 	border-radius: 10px;
 }
 
-header .site-logo {
-	color: black;
-	margin-right: auto;
-	text-transform: uppercase;
-	font-weight: 900;
-	font-size: 25px;
-}
-    
-header a {
-	text-decoration: none;
-	color: #fff;
-	font-weight: 600;
-	padding: 5px 20px;
-}
-    
-header a:hover {
-	color: #161616;
-	text-decoration: underline;
-}
-
 /* ############################### Form styles ###############################*/
 .container {
 	display: flex;

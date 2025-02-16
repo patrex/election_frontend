@@ -7,10 +7,10 @@ function NavBar({ user, onLogout}) {
 					<div className="logo">
 						<h2>Votify</h2>
 					</div>
-					<ul>
-						<li className="nav-link"><a href="">Gello</a></li>
-						<li className="nav-link"><a href="">Dashboard</a></li>
-						<li className="nav-link"><a href="">Create Election</a></li>
+					<ul className="nav-link">
+						<li><a href="">Gello</a></li>
+						<li><a href="">Dashboard</a></li>
+						<li><a href="">Create Election</a></li>
 					</ul>
 				</nav>
 			</div>
