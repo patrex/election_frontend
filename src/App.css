@@ -184,7 +184,7 @@ li:hover {
 }
 
 header {
-	height: 40px;
+	background-color: #fff;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 	padding: 2rem 0;
 }
@@ -223,6 +223,7 @@ header {
 	padding: .7rem 1rem;
 	display: block;
 	border-radius: 10px;
+	text-decoration: none;
 }
 
 /* ############################### Form styles ###############################*/

@@ -8,7 +8,7 @@ function NavBar({ user, onLogout}) {
 						<h2>Votify</h2>
 					</div>
 					<ul className="nav-link">
-						<li><a href="">Gello</a></li>
+						<li><a href="">Hello</a></li>
 						<li><a href="">Dashboard</a></li>
 						<li><a href="">Create Election</a></li>
 					</ul>
