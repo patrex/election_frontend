@@ -16,7 +16,7 @@ function NavBar({ user, onLogout}) {
 							</>
 							) : (
 							<>
-								<li><Link to={`/login`} className="link-item">Login</Link></li>
+								<li><Link to={`/login`} className="link-item active">Login</Link></li>
 								<li><Link to={`/signup`} className="link-item">Sign Up</Link></li>
 							</>
 						)}

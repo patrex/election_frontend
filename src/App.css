@@ -225,6 +225,13 @@ header {
 	text-decoration: none;
 }
 
+.nav-container ul li .link-item:hover,
+.nav-container ul li .link-item.active {
+	background-color: lightskyblue;
+}
+
+
+
 /* ############################### Form styles ###############################*/
 .container {
 	display: flex;
