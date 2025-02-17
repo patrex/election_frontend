@@ -25,15 +25,7 @@ function Header() {
 			
 			<header>
 				<Navbar user={user} onLogout={logout} />
-				<section>
-					<div className="nav-container">
-						<div className="res-bar">
-							<div className="res-banner">
-								<h2>Menu</h2>
-							</div>
-						</div>
-					</div>
-				</section>
+				
 
 				{/* <div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
 				
@@ -55,6 +47,15 @@ function Header() {
 				} */}
 				
 			</header>
+			<section>
+				<div className="nav-container">
+					<div className="res-bar">
+						<div className="res-banner">
+							<h2>Menu</h2>
+						</div>
+					</div>
+				</div>
+			</section>
 
 		</>
 		
