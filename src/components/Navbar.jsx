@@ -1,4 +1,6 @@
 import { NavLink, Link } from "react-router-dom";
+import {X, Menu} from 'lucide-react'
+
 function NavBar({ user, onLogout}) {
 	return ( 
 		<>
@@ -23,6 +25,11 @@ function NavBar({ user, onLogout}) {
 
 						
 					</ul>
+
+					<div className="icons md:block">
+						<Menu />
+						<X />
+					</div>
 				</nav>
 			</div>
 		</>

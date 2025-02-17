@@ -234,9 +234,18 @@ header {
 
 .res-bar {
 	position: absolute;
-	top: 45px;
+	top: 45%;
 	left: 50%;
 	transform: translate(-50%, 0%);
+}
+
+.res-bar h2 {
+	font-size: 6rem;	
+}
+
+.icons {
+	font-size: 1.5rem;
+	cursor: pointer;
 }
 
 
