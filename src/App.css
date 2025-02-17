@@ -216,12 +216,13 @@ header {
 	margin: 0 .5rem
 }
 
-.nav-container ul li .link-item {
+.nav-container ul li .link-item,
+.nav-container .logo .link-item {
 	color: #212a3c;
 	font-size: 1.3rem;
-	padding: .7rem 1rem;
+	padding: .2rem 1rem;
 	display: block;
-	border-radius: 10px;
+	border-radius: 5px;
 	text-decoration: none;
 }
 
