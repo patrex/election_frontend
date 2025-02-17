@@ -229,7 +229,7 @@ header {
 
 .nav-container ul li .link-item:hover,
 .nav-container ul li .link-item.active {
-	background-color: lightskyblue;
+	border-bottom: lightskyblue 5px solid;
 }
 
 .res-bar {
