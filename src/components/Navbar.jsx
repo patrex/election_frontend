@@ -26,9 +26,9 @@ function NavBar({ user, onLogout}) {
 						
 					</ul>
 
-					<div className="icons md:block">
-						<Menu />
-						<X />
+					<div className="res-menu-icons">
+						<Menu className="menu-bar"/>
+						<X className="close-menu"/>
 					</div>
 				</nav>
 			</div>

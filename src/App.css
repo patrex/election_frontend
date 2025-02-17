@@ -243,9 +243,13 @@ header {
 	font-size: 6rem;	
 }
 
-.icons {
-	font-size: 1.5rem;
+.res-menu-icons .menu-bar {
 	cursor: pointer;
+	font-size: 1.5rem;
+}
+
+.res-menu-icons .close-menu {
+	display: none;
 }
 
 
