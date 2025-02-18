@@ -16,7 +16,7 @@ function NavBar({ user, onLogout}) {
 					<div className="logo">
 						<h2><Link to={`/`} className="link-item">Votify</Link></h2>
 					</div>
-					<ul className={navOpen ? 'nav-link active' : 'nav-lin'}>
+					<ul className={navOpen ? 'nav-link active' : 'nav-link'}>
 						{user ? (
 							<>
 								<li><Link to="" className="link-item">Dashboard</Link></li>
