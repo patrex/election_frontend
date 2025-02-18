@@ -240,10 +240,6 @@ header {
 	transform: translate(-50%, 0%);
 }
 
-.res-bar h2 {
-	font-size: 6rem;	
-}
-
 .nav-container .menu-toggle .menu-bar {
 	cursor: pointer;
 }
@@ -936,11 +932,6 @@ button {
 	header {
 		width: 100vw;
 		justify-content: space-around;
-	}
-
-	.res-bar h2 {
-		font-size: 4rem;
-		text-align: center;
 	}
 
 	.nav-container .menu-toggle {
