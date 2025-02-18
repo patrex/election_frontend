@@ -19,21 +19,21 @@ function NavBar({ user, onLogout}) {
 					<ul className={navOpen ? 'nav-link active' : 'nav-link'}>
 						{user ? (
 							<>
-								<li><NavLink to="" className={({isActive}) => {isActive ? "active" : "link-item"}}>Dashboard</NavLink></li>
-								<li><NavLink to="" className={({isActive}) => {isActive ? "active" : "link-item"}}>Create Election</NavLink></li>
+								<li><NavLink to="" className="link-item">Dashboard</NavLink></li>
+								<li><NavLink to="" className="link-item">Create Election</NavLink></li>
 								<li>{user?.email} | <button onClick={onLogout}></button></li>
 							</>
 							) : (
 							<>
-								<li><NavLink to={`/login`} className={({isActive}) => {isActive ? "active" : "link-item"}}>Login</NavLink></li>
-								<li><NavLink to={`/signup`} className={({isActive}) => {isActive ? "active" : "link-item"}}>Sign Up</NavLink></li>
+								<li><NavLink to={`/login`} className="link-item">Login</NavLink></li>
+								<li><NavLink to={`/signup`} className="link-item">Sign Up</NavLink></li>
 							</>
 						)}
 
 						
 					</ul>
 
-					<div className="res-menu-icons">
+					<div className="menu-toggle">
 						<Menu className="menu-bar" onClick={toggleMenu}/>
 					</div>
 				</nav>

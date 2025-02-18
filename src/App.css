@@ -231,22 +231,21 @@ header {
 	border-bottom: lightskyblue 5px solid;
 }
 
-.res-menu-icons {
+.nav-container .menu-toggle {
 	position: absolute;
 	top: 45%;
 	left: 50%;
-	transform: translate(-50%, 0%);
+	font-size: 1.5rem;
 	display: none;
+	transform: translate(-50%, 0%);
 }
 
 .res-bar h2 {
 	font-size: 6rem;	
 }
 
-.res-menu-icons .menu-bar {
+.nav-container .menu-toggle .menu-bar {
 	cursor: pointer;
-	font-size: 1.5rem;
-	display: none;
 }
 
 /* ############################### Form styles ###############################*/
