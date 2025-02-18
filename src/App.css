@@ -942,9 +942,9 @@ button {
 	.nav-container .nav-link {
 		flex-direction: column;
 		justify-content: flex-start;
-		background-color: #fff;
+		background-color: #ccc;
 		position: absolute;
-		width: 250px;
+		width: 200px;
 		height: 50vh;
 		top: -800px;
 		right: 0;
