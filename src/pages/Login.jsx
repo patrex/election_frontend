@@ -27,7 +27,6 @@ function Login() {
 	const [loading, setLoading] = useState(false);
 	const [err, setErr] = useState("")
 
-	const [img, setImg] = useState("")
 	const provider = new GoogleAuthProvider();
 
 	const schema = Joi.object({
@@ -38,32 +37,27 @@ function Login() {
 	const { register, handleSubmit, formState: {errors} } = useForm({
 		resolver: joiResolver(schema)
 	});
-
-	async function setAndRedirectUser (user) {
-		setUser(user);
-		navigate(`/user/${user.uid}`)
-	}
-
+	
 	const handleGoogleSignIn = async () => {
 		try {
 			const result = await signInWithRedirect(authman, provider);
 			const user = result.user;
-			if (user.emailVerified)
-				setAndRedirectUser(result?.user)
+			setUser(user);
+			navigate(`/user/${user.localId}`)
 		} catch (error) {
-		  	console.error("Error signing in:", error);
+			console.error("Error signing in:", error);
 		}
 	}
-
+	
 	const onSubmit = async (formData) => {
 		setLoading(true);
 		setErr('')
-
+		
 		try {
 			const login_res = await signInWithEmailAndPassword(authman, formData.username, formData.password);
 			const user = login_res.user;
-			if (user.emailVerified)
-				setAndRedirectUser(user)
+			setUser(user)
+			navigate(`/user/${user.localId}`)
 		} catch (error) {
 			if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
 				setErr('Username or password is incorrect')
@@ -124,7 +118,7 @@ function Login() {
 
 					<div>
 						<button
-							onClick={handleGoogleSignIn}
+							onClick={ handleGoogleSignIn }
 							className="mt-4 flex items-center justify-center w-2/3 px-6 py-3 bg-white block mx-auto text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
 							>
 							<img

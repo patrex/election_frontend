@@ -51,16 +51,6 @@ function App() {
 	const [voter, setVoter] = useState();
 	const [user, setUser] = useState(null);
 
-	// useEffect(() => {
-	// 	const unsubscribe = auth.onAuthStateChanged((user) => {
-	// 		setUser(user);
-	// 		if (!user) {
-	// 			navigate('/login');
-	// 		}
-	// 	});
-
-	// 	return () => unsubscribe();
-	// }, [auth, navigate]);
 	
 	return (
 		<AppContext.Provider value={ {voter, setVoter, user, setUser} }>

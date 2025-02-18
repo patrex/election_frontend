@@ -2,49 +2,28 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "@/App";
 import { useContext } from "react";
 import Navbar from "./Navbar";
+import Toast from "@/utils/ToastMsg";
+
+import { signOut } from "firebase/auth";
+import { authman } from "@/utils/fireloader";
 
 
 function Header() {
 	const navigate = useNavigate()
 	const {user, setUser} = useContext(AppContext);
 
-	const linkStyles = {
-		fontWeight: 'bold',
-		color: '',
-		fontFamily: 'sans-serif',
-		borderBottom: 'solid 5px blue'
-	}
-
-	function logout(){
-		setUser(null);
-		navigate('/')
+	async function logout(){
+		try {
+			const logout_req = await signOut(authman);
+		} catch (error) {
+			Toast.error("There was an error")
+		}
 	}
 
 	return ( 
 		<>	
 			<header>
-				<Navbar user={user} onLogout={logout} />
-				
-
-				{/* <div><h2 className='banner'><NavLink to='/'>#Vote4.me</NavLink></h2></div>
-				
-				{user ? 
-					<div style={ {display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '0 1.5rem'} }>
-						<pre style={ {color: 'white'} }>Welcome, { user.firstname } | <span className="logout" onClick={ logout }>Logout</span></pre>
-					</div>
-					: 
-					<nav>
-					
-						<NavLink to="/login"
-							style={({isActive}) => isActive ? linkStyles: null}
-						>Login</NavLink>
-
-						<NavLink to="/signup"
-							style={({isActive}) => isActive ? linkStyles: null}
-						>Signup</NavLink>
-					</nav>
-				} */}
-				
+				<Navbar user={user} onLogout={ logout } />
 			</header>
 		</>
 		

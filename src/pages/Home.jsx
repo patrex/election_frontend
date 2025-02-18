@@ -1,9 +1,14 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/App";
+// import { sendSignInLinkToEmail,
+// 	isSignInWithEmailLink,
+// 	signInWithEmailLink
+//  } from "firebase/auth";
 
 import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
+import { authman } from "@/utils/fireloader";
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
@@ -28,6 +33,24 @@ function Home() {
 	useEffect (() => {
 		if (electionFromQueryParams) procElection(electionFromQueryParams)
 	}, [])
+
+	// const actionCodeSettings = {
+	// 	url: 'https://election-frontend-git-firebase-patrexs-projects.vercel.app',
+	// 	handleCodeInApp: true
+	// }
+
+	// async function sendEmailVerification () {
+	// 	try {
+	// 		const verification_req = await sendSignInLinkToEmail(authman, participant, actionCodeSettings);
+	// 		window.localStorage.setItem('voteremail', participant)
+	// 		setVoter(participant)
+			
+	// 		navigate(`/election/${election._id}/${participant}`)
+	// 	} catch (error) {
+	// 		Toast.error("There was an error")
+	// 		console.error(error);
+	// 	}
+	// }
 
 	async function procElection(electionid) {
 		try {
