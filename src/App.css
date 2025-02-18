@@ -944,7 +944,7 @@ button {
 		justify-content: flex-start;
 		background-color: #fff;
 		position: absolute;
-		width: 300px;
+		width: 250px;
 		height: 50vh;
 		top: -800px;
 		right: 0;
@@ -955,6 +955,7 @@ button {
 	.nav-container .logo .link-item {
 		font-size: 1rem;
 		padding: .1rem 1rem;
+		gap: 2px;
 	}
 
 	.nav-container ul li .link-item:hover,

@@ -21,7 +21,7 @@ function NavBar({ user, onLogout}) {
 							<>
 								<li><NavLink to="" className="link-item">Dashboard</NavLink></li>
 								<li><NavLink to="" className="link-item">Create Election</NavLink></li>
-								<li>{user?.email} | <button onClick={onLogout}></button></li>
+								<li>{user?.email} | <button onClick={ onLogout }></button></li>
 							</>
 							) : (
 							<>
