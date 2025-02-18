@@ -233,8 +233,8 @@ header {
 
 .nav-container .menu-toggle {
 	position: absolute;
-	top: 45%;
-	left: 50%;
+	top: 50px;
+	left: 1px;
 	font-size: 1.5rem;
 	display: none;
 	/* transform: translate(-50%, 0%); */
