@@ -21,8 +21,7 @@ function Header() {
 	}
 
 	return ( 
-		<>
-			
+		<>	
 			<header>
 				<Navbar user={user} onLogout={logout} />
 				
