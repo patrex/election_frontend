@@ -35,7 +35,6 @@ function NavBar({ user, onLogout}) {
 
 					<div className="res-menu-icons">
 						<Menu className="menu-bar" onClick={toggleMenu}/>
-						<X className="close-menu" onClick={toggleMenu}/>
 					</div>
 				</nav>
 			</div>

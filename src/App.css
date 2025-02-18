@@ -979,13 +979,8 @@ keyframes fadeIn {
 		border-left: skyblue 2px solid;
 	}
 
-	.res-menu-icons .close-menu {
-		display: block;
-		cursor: pointer;
-	}
-
 	.res-menu-icons .menu-bar {
-		display: none;
+		display: block;
 	}
 
 	.nav-link.active {
