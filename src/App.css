@@ -223,7 +223,6 @@ header {
 	font-size: 1.3rem;
 	padding: .2rem 1rem;
 	display: block;
-	border-radius: 5px;
 	text-decoration: none;
 }
 
@@ -981,6 +980,7 @@ keyframes fadeIn {
 
 	.res-menu-icons .close-menu {
 		display: block;
+		cursor: pointer;
 	}
 
 	.res-menu-icons .menu-bar {
