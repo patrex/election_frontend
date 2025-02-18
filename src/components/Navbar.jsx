@@ -19,14 +19,14 @@ function NavBar({ user, onLogout}) {
 					<ul className={navOpen ? 'nav-link active' : 'nav-link'}>
 						{user ? (
 							<>
-								<li><NavLink to="" className={({isActive}) => {isActive ? "active" : "link-item"}}>Dashboard</NavLink></li>
-								<li><NavLink to="" className={({isActive}) => {isActive ? "active" : "link-item"}}>Create Election</NavLink></li>
+								<li><NavLink to="" className={({isActive, isPending}) => {isActive ? "nav-container ul li link-item active" : "nav-container ul li link-item"}}>Dashboard</NavLink></li>
+								<li><NavLink to="" className={({isActive}) => {isActive ? "nav-container ul li link-item active" : "nav-container ul li link-item"}}>Create Election</NavLink></li>
 								<li>{user?.email} | <button onClick={onLogout}></button></li>
 							</>
 							) : (
 							<>
-								<li><NavLink to={`/login`} className={({isActive}) => {isActive ? "active" : "link-item"}}>Login</NavLink></li>
-								<li><NavLink to={`/signup`} className={({isActive}) => {isActive ? "active" : "link-item"}}>Sign Up</NavLink></li>
+								<li><NavLink to={`/login`} className={({isActive}) => {isActive ? "nav-container ul li link-item active" : "nav-container ul li link-item"}}>Login</NavLink></li>
+								<li><NavLink to={`/signup`} className={({isActive}) => {isActive ? "nav-container ul li link-item active" : "nav-container ul li link-item"}}>Sign Up</NavLink></li>
 							</>
 						)}
 
