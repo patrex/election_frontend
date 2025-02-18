@@ -962,8 +962,9 @@ keyframes fadeIn {
 		position: absolute;
 		width: 300px;
 		height: 100vh;
-		top: 50px;
+		top: -800px;
 		right: 0;
+		transition: all .5s ease-in;
 	}
 
 	.nav-container ul li .link-item,
@@ -985,6 +986,11 @@ keyframes fadeIn {
 
 	.res-menu-icons .menu-bar {
 		display: none;
+	}
+
+	.nav-link.active {
+		top: 10%;
+		transition: all .5s ease-in;
 	}
 
 	.election-container {

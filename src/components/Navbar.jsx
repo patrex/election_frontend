@@ -1,7 +1,14 @@
 import { NavLink, Link } from "react-router-dom";
 import {X, Menu} from 'lucide-react'
+import { useState } from "react";
 
 function NavBar({ user, onLogout}) {
+	const [navOpen, setNavOpen] = useState(false)
+
+	const toggleMenu = function () {
+		setNavOpen(!navOpen)
+	}
+
 	return ( 
 		<>
 			<div className="nav-container">
@@ -9,7 +16,7 @@ function NavBar({ user, onLogout}) {
 					<div className="logo">
 						<h2><Link to={`/`} className="link-item">Votify</Link></h2>
 					</div>
-					<ul className="nav-link">
+					<ul className={navOpen ? 'nav-link' : ''}>
 						{user ? (
 							<>
 								<li><Link to="" className="link-item">Dashboard</Link></li>
@@ -27,8 +34,8 @@ function NavBar({ user, onLogout}) {
 					</ul>
 
 					<div className="res-menu-icons">
-						<Menu className="menu-bar"/>
-						<X className="close-menu"/>
+						<Menu className="menu-bar" onClick={toggleMenu}/>
+						<X className="close-menu" onClick={toggleMenu}/>
 					</div>
 				</nav>
 			</div>
