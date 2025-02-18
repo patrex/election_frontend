@@ -983,6 +983,10 @@ keyframes fadeIn {
 		display: block;
 	}
 
+	.res-menu-icons .menu-bar {
+		display: none;
+	}
+
 	.election-container {
 	    padding: 15px; /* Decreased padding */
 	}
