@@ -919,7 +919,7 @@ button {
 	}
 }
 
-keyframes fadeIn {
+@keyframes fadeIn {
 	from {
 	  opacity: 0;
 	  transform: scale(0.95);
@@ -943,7 +943,7 @@ keyframes fadeIn {
 		text-align: center;
 	}
 
-	.res-menu-icons {
+	.nav-container .menu-toggle {
 		font-size: 1.5rem;
 		display: block;
 	}
@@ -970,10 +970,6 @@ keyframes fadeIn {
 	.nav-container ul li .link-item.active {
 		border-bottom: none;
 		border-left: skyblue 2px solid;
-	}
-
-	.res-menu-icons .menu-bar {
-		display: block;
 	}
 
 	.nav-link.active {
