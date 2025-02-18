@@ -966,6 +966,18 @@ keyframes fadeIn {
 		right: 0;
 	}
 
+	.nav-container ul li .link-item,
+	.nav-container .logo .link-item {
+		font-size: 1rem;
+		padding: .1rem 1rem;
+	}
+
+	.nav-container ul li .link-item:hover,
+	.nav-container ul li .link-item.active {
+		border-bottom: none;
+		border-left: skyblue 2px solid;
+	}
+
 	.election-container {
 	    padding: 15px; /* Decreased padding */
 	}
