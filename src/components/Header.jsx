@@ -46,12 +46,6 @@ function Header() {
 				} */}
 				
 			</header>
-			<section>
-				<div className="nav-container">
-					
-				</div>
-			</section>
-
 		</>
 		
 	 );
