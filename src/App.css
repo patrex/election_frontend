@@ -231,11 +231,15 @@ header {
 	border-bottom: lightskyblue 5px solid;
 }
 
-.res-bar {
+.res-menu-icons {
 	position: absolute;
 	top: 45%;
 	left: 50%;
 	transform: translate(-50%, 0%);
+	display: none;
+}
+
+.res-menu-icons .menu-bar {
 	display: none;
 }
 
@@ -950,7 +954,7 @@ keyframes fadeIn {
 		text-align: center;
 	}
 
-	.res-menu-icons .menu-bar {
+	.res-menu-icons {
 		font-size: 1.5rem;
 		display: block;
 	}

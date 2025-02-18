@@ -49,7 +49,7 @@ function Header() {
 			<section>
 				<div className="nav-container">
 					<div className="res-bar">
-						<h2>Menu</h2>
+						
 					</div>
 				</div>
 			</section>
