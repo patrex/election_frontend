@@ -18,11 +18,11 @@ import NotFound from './pages/NotFound';
 import UpdateCandidate, { updateloader } from './pages/UpdateCandidate';
 import UpdateElection, { updateElectionLoader } from './pages/UpdateElection';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebase'; // Adjust based on your setup
 import ErrorBoundary from './pages/ErrorBoundary';
 
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { authman } from './utils/fireloader';
 
 export const AppContext = createContext();
 
@@ -31,7 +31,7 @@ function AuthProvider({ children }) {
 	const [voter, setVoter] = useState(null);
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+		const unsubscribe = onAuthStateChanged(authman, (authUser) => {
 			setUser(authUser);
 		});
 		return () => unsubscribe();
