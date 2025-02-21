@@ -5,7 +5,8 @@ import { authman } from "@/utils/fireloader";
 import { createUserWithEmailAndPassword, 
 	signInWithRedirect,
 	sendEmailVerification,
-	signOut
+	signOut,
+	GoogleAuthProvider
 } from 'firebase/auth';
 
 import Toast from "@/utils/ToastMsg";
@@ -21,6 +22,8 @@ import { useState } from "react";
 function CreateAccount() { 
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+
+	const provider = new GoogleAuthProvider();
 
 	const schema = Joi.object({
 		firstname: Joi.string().min(2).required(),
