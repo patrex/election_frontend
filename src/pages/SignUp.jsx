@@ -135,7 +135,7 @@ function CreateAccount() {
 							type="submit"
 							disabled={loading}
 							className="w-3/4 flex items-center justify-center block mx-auto px-4 py-2 mt-2 mb-2 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
-						> {loading ? "Loading..." : "Sign Up"}
+						> { loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }
 						</button>
 					</form>
 

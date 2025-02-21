@@ -8,7 +8,6 @@ import { signInWithEmailAndPassword,
 	 GoogleAuthProvider,
 	 AuthErrorCodes,
 	 signInWithRedirect,
-	 sendEmailVerification
 } from 'firebase/auth';
 
 import { PulseLoader } from 'react-spinners';
@@ -61,6 +60,9 @@ function Login() {
 			if (user.emailVerified) {
 				setUser(user);
 				navigate(`/user/${user.uid}`)
+			} else {
+				Toast.warning("You must verify your account first!");
+				return;
 			}
 		} catch (error) {
 			if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
