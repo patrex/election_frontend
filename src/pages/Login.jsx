@@ -42,8 +42,10 @@ function Login() {
 		try {
 			const result = await signInWithRedirect(authman, provider);
 			const user = result.user;
-			setUser(user);
-			navigate(`/user/${user.uid}`)
+			if (user.emailVerified) {
+				setUser(user);
+				navigate(`/user/${user.uid}`)
+			}
 		} catch (error) {
 			console.error("Error signing in:", error);
 		}
@@ -56,8 +58,10 @@ function Login() {
 		try {
 			const login_res = await signInWithEmailAndPassword(authman, formData.username, formData.password);
 			const user = login_res.user;
-			setUser(user)
-			navigate(`/user/${user.uid}`)
+			if (user.emailVerified) {
+				setUser(user);
+				navigate(`/user/${user.uid}`)
+			}
 		} catch (error) {
 			if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
 				setErr('Username or password is incorrect')

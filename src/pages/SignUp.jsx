@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
-// import backendUrl from '../utils/backendurl'
+import backendUrl from '../utils/backendurl'
 import { authman } from "@/utils/fireloader";
 
 import { createUserWithEmailAndPassword, 
 	GoogleAuthProvider,
 	AuthErrorCodes,
-	signInWithRedirect
+	signInWithRedirect,
+	sendEmailVerification
 } from 'firebase/auth';
 
 import Toast from "@/utils/ToastMsg";
@@ -43,7 +44,9 @@ function CreateAccount() {
 
 		try {
 			const res = await createUserWithEmailAndPassword(authman, formData.email, formData.password)
+			const verificationSent = await sendEmailVerification(authman.currentUser)
 			navigate('/login')
+			Toast.success('Verification email was sent to ' + formData.email)
 		} catch (error) {
 			Toast.error("There was an error");
 			console.error(error);
