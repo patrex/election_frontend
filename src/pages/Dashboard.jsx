@@ -97,7 +97,9 @@ function Dashboard() {
 								<div className="list-btn-items">
 									<td><button className="Button violet action-item" onClick={() => copyLink(election._id)}>Copy ID</button></td>
 									<td><button className="Button violet action-item" onClick={() => copyLink(election.shareLink)}>Copy Link</button></td>
-									<td><Link to={`/user/${params.userId}/election/${election._id}/update`}><button className='Button violet action-item' disabled={new Date(election.startDate) < Date.now()}><i class="bi bi-pen-fill"></i></button></Link></td>
+									<td><Link to={`/user/${params.userId}/election/${election._id}/update`}>
+										<button className='Button violet action-item' disabled={new Date(election.startDate) < Date.now()}><i class="bi bi-pen-fill"></i>
+										</button></Link></td>
 									<td><button className='Button red action-item' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 								</div>
 							</tr>

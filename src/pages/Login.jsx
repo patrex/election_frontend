@@ -8,6 +8,7 @@ import { signInWithEmailAndPassword,
 	 GoogleAuthProvider,
 	 AuthErrorCodes,
 	 signInWithRedirect,
+	 signOut,
 } from 'firebase/auth';
 
 import { PulseLoader } from 'react-spinners';
@@ -43,7 +44,10 @@ function Login() {
 			const user = result.user;
 			if (user.emailVerified) {
 				setUser(user);
-				navigate(`/user/${user.uid}`)
+				navigate(`user/${user.uid}`)
+			} else {
+				Toast.warning("You must verify your account first!");
+				await signOut(authman);
 			}
 		} catch (error) {
 			console.error("Error signing in:", error);
@@ -59,9 +63,10 @@ function Login() {
 			const user = login_res.user;
 			if (user.emailVerified) {
 				setUser(user);
-				navigate(`/user/${user.uid}`)
+				navigate(`user/${user.uid}`)
 			} else {
 				Toast.warning("You must verify your account first!");
+				await signOut(authman)
 				return;
 			}
 		} catch (error) {
