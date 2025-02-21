@@ -19,8 +19,8 @@ function NavBar({ user, onLogout}) {
 					<ul className={navOpen ? 'nav-link active' : 'nav-link'}>
 						{user ? (
 							<>
-								<li><NavLink to={``} className="link-item">Dashboard</NavLink></li>
-								<li><NavLink to={``} className="link-item">Create Election</NavLink></li>
+								<li><NavLink to={`user/${user?.uid}`} className="link-item">Dashboard</NavLink></li>
+								<li><NavLink to={`user/${user?.uid}/create-election`} className="link-item">Create Election</NavLink></li>
 								<li>{user?.email} | <button onClick={ onLogout }>Logout</button></li>
 							</>
 							) : (
