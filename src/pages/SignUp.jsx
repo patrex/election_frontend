@@ -3,10 +3,9 @@ import backendUrl from '../utils/backendurl'
 import { authman } from "@/utils/fireloader";
 
 import { createUserWithEmailAndPassword, 
-	GoogleAuthProvider,
-	AuthErrorCodes,
 	signInWithRedirect,
-	sendEmailVerification
+	sendEmailVerification,
+	signOut
 } from 'firebase/auth';
 
 import Toast from "@/utils/ToastMsg";
@@ -36,7 +35,19 @@ function CreateAccount() {
 	});
 
 	const signUpWithGoogle = async () => {
-
+		try {
+			const result = await signInWithRedirect(authman, provider);
+			const user = result.user;
+			if (user.emailVerified) {
+				setUser(user);
+				navigate(`user/${user.uid}`)
+			} else {
+				Toast.warning("You must verify your account first!");
+				await signOut(authman);
+			}
+		} catch (error) {
+			console.error("Error signing in:", error);
+		}
 	}
 
 	const onSubmit = async (formData) => {
@@ -135,7 +146,7 @@ function CreateAccount() {
 							type="submit"
 							disabled={loading}
 							className="w-3/4 flex items-center justify-center block mx-auto px-4 py-2 mt-2 mb-2 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200"
-						> { loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }
+						> { loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Signup" }
 						</button>
 					</form>
 
