@@ -1,10 +1,10 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/App";
-// import { sendSignInLinkToEmail,
-// 	isSignInWithEmailLink,
-// 	signInWithEmailLink
-//  } from "firebase/auth";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import isValidPhoneNumber from "@/utils/validatePhone";
+import isValidEmail from "@/utils/validateEmail";
+import { b64encode, b64decode } from "@/utils/obfuscate";
 
 import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
@@ -33,24 +33,6 @@ function Home() {
 	useEffect (() => {
 		if (electionFromQueryParams) procElection(electionFromQueryParams)
 	}, [])
-
-	// const actionCodeSettings = {
-	// 	url: 'https://election-frontend-git-firebase-patrexs-projects.vercel.app',
-	// 	handleCodeInApp: true
-	// }
-
-	// async function sendEmailVerification () {
-	// 	try {
-	// 		const verification_req = await sendSignInLinkToEmail(authman, participant, actionCodeSettings);
-	// 		window.localStorage.setItem('voteremail', participant)
-	// 		setVoter(participant)
-			
-	// 		navigate(`/election/${election._id}/${participant}`)
-	// 	} catch (error) {
-	// 		Toast.error("There was an error")
-	// 		console.error(error);
-	// 	}
-	// }
 
 	async function procElection(electionid) {
 		try {
@@ -105,7 +87,7 @@ function Home() {
 
 			setVoter(participant)
 			
-			navigate(`/election/${election._id}/${participant}`)
+			navigate(`/election/${election._id}/${b64encode(participant)}`)
 		} catch (error) {
 			Toast.warning('An error occured')
 			console.log(error)
@@ -125,39 +107,35 @@ function Home() {
 			if (!(votersList.includes(participant))) {
 				// if election is closed, no further processing: user has to be added by the creator
 				// of the election
-				if (election.type == 'Closed') {
+				if (election.type === 'Closed') {
 					Toast.warning(`This is a closed event. Ensure your admin has added your ${election.userAuthType == 'email' ? 'email' : 'number'} and try again`)
 					return;
 				}
 	
 				// create an OTP for verification
-				const response = election.userAuthType == "phone" ? await fetch(`${backendUrl}/election/getOTP`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						participant,
-						electionId: election._id
-					}),
-				}) : await fetch(`${backendUrl}/election/getOTP/email`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						participant,
-						electionId: election._id
-					}),
-				})
-	
-				if (response.ok) {
-					setPhoneModalOpen(false)
-					setOTPOpen(true)	//open otp modal
+				if (election.userAuthType == "phone") {
+					sendOtpToPhone(participant)
+				} else {
+					const response = await fetch(`${backendUrl}/election/getOTP/email`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							participant,
+							electionId: election._id
+						}),
+					})
+
+					if (response.ok) {
+						setPhoneModalOpen(false)
+						setOTPOpen(true)	//open otp modal
+					}
 				}
+	
 			} else {
 				setVoter(participant)
-				navigate(`/election/${election._id}/${participant}`)
+				navigate(`/election/${election._id}/${b64decode(participant)}`)
 			}
 		} catch (error) {
 			Toast.error('Something went wrong')
@@ -169,8 +147,7 @@ function Home() {
 		if (participant) {
 			if (election.userAuthType == 'email') {
 				let emailAddr = String(participant).trim()
-				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-				if (!emailAddr.match(emailRegex)) {
+				if (!isValidEmail(emailAddr)) {
 					Toast.warning("The email address is invalid")
 					return;
 				}
@@ -179,27 +156,63 @@ function Home() {
 				procOTP(emailAddr)
 			}
 
-			else if (election.userAuthType == 'phone') {
-				const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
-				const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
-	
+			else if (election.userAuthType == 'phone') {	
 				let phoneNumber = String(participant).trim();
 				
-				if (phoneNumber.match(countryCodePattern)) {
-					procOTP(phoneNumber)
-				} else if(phoneNumber.match(phoneNumberPattern)) {
-					const phone = phoneNumber.replace(phoneNumberPattern, '234$2');
-	
-					setParticipant(phone)
-					procOTP(phone)
-				} else {
+				if (!isValidPhoneNumber(phoneNumber)) {
 					Toast.warning("A valid phone number is required to continue")
 					return;
-				}
+				} 
+				setParticipant(phoneNumber);
+				procOTP(phoneNumber);
 			}
-		} else Toast.warning("You must enter a phone number to continue")
+		} else Toast.warning(`You must enter ${election.userAuthType == 'email' ? 'an email' : 'a phone number'} to continue`)
 	}
 
+	// send OTP
+
+	function sendOtpToPhone(phoneNumber) {
+		// Ensure the phone number is in E.164 format (e.g., +14155552671)
+		// Set up the reCAPTCHA verifier. Make sure there's an element with id 'recaptcha-container' in your HTML.
+		window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+			size: 'invisible', // Use 'normal' if you want the widget visible
+			callback: (response) => {
+				// reCAPTCHA solved - you can proceed with sign in
+				setPhoneModalOpen(false)
+				setOTPOpen(true)
+			}
+		}, authman);
+
+		const appVerifier = window.recaptchaVerifier;
+
+		signInWithPhoneNumber(authman, phoneNumber, appVerifier)
+			.then((confirmationResult) => {
+			// SMS sent. Save confirmationResult to use later when verifying the OTP.
+				window.confirmationResult = confirmationResult;
+				console.log('OTP sent to:', phoneNumber);
+			})
+			.catch((error) => {
+				console.error('Error sending OTP:', error);
+			});
+	}
+
+	// Assuming `confirmationResult` is already set from signInWithPhoneNumber
+	function verifyOtpCode() {
+		window.confirmationResult.confirm(OTPVal)
+			.then((result) => {
+				// OTP is correct, user is signed in
+				setOTPOpen(false)
+				setVoter(participant)
+				navigate(`/election/${election._id}/${b64encode(participant)}`)
+			})
+			.catch((error) => {
+				// OTP verification failed
+				Toast.warning("Error verifying OTP")
+				return;
+				console.error('Error verifying OTP:', error);
+			});
+	}
+	
 	return (
 		<>
 			{phoneModalOpen && 
@@ -236,7 +249,8 @@ function Home() {
 							placeholder="confirmation code"
 						/>
 						<div className="action-btn-container">
-							<button className="Button violet action-item" onClick={ handleOTPSubmit }>Verify</button>
+							{election.userAuthType == 'phone' && <button className="Button violet action-item" onClick={ verifyOtpCode }>Verify</button>}
+							{election.userAuthType == 'email' && <button className="Button violet action-item" onClick={ handleOTPSubmit }>Verify</button>}
 							<button className="Button red action-item" onClick={ () => setOTPOpen(false) }>Cancel</button>
 						</div>
 					</div>
@@ -262,6 +276,7 @@ function Home() {
 						Continue
 					</button>
 				</div>
+				<div id="recaptcha-container"></div>
 			</div>
 		</>
 	);

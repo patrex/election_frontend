@@ -14,7 +14,6 @@ import { signInWithEmailAndPassword,
 import { PulseLoader } from 'react-spinners';
 
 import Toast from '@/utils/ToastMsg';
-import backendUrl from '../utils/backendurl'
 
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
