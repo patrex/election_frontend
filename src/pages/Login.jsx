@@ -69,6 +69,7 @@ function Login() {
 				return;
 			}
 		} catch (error) {
+			console.log(error.code)
 			switch (error.code) {
 				case "auth/wrong-password":
 				  setErr("Incorrect password. Please try again.");
