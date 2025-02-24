@@ -6,7 +6,8 @@ import { createUserWithEmailAndPassword,
 	signInWithRedirect,
 	sendEmailVerification,
 	signOut,
-	GoogleAuthProvider
+	GoogleAuthProvider,
+	updateProfile
 } from 'firebase/auth';
 
 import Toast from "@/utils/ToastMsg";
@@ -58,7 +59,10 @@ function CreateAccount() {
 
 		try {
 			const res = await createUserWithEmailAndPassword(authman, formData.email, formData.password)
-			const verificationSent = await sendEmailVerification(authman.currentUser)
+			await sendEmailVerification(authman.currentUser)
+			await updateProfile(res.user, {
+				displayName: formData.firstname
+			})
 			navigate('/login')
 			Toast.success('Verification email was sent to ' + formData.email)
 		} catch (error) {
