@@ -80,8 +80,8 @@ function Login() {
 				case "auth/invalid-email":
 				  setErr("Invalid email format. Please enter a valid email.");
 				  break;
-				case "auth/too-many-requests":
-				  setErr("Too many failed attempts. Please try again later.");
+				case "auth/invalid-credential":
+				  setErr("No user found with this email. Please sign up.");
 				  break;
 				case "auth/network-request-failed":
 				  setErr("Network error. Check your internet connection.");
