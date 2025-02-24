@@ -69,12 +69,25 @@ function Login() {
 				return;
 			}
 		} catch (error) {
-			if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
-				setErr('Username or password is incorrect')
-			} else {
-				setErr('Something went wrong...');
-				console.error(`Error: ${error}` );
-			}
+			switch (error.code) {
+				case "auth/wrong-password":
+				  setErr("Incorrect password. Please try again.");
+				  break;
+				case "auth/user-not-found":
+				  setErr("No user found with this email. Please sign up.");
+				  break;
+				case "auth/invalid-email":
+				  setErr("Invalid email format. Please enter a valid email.");
+				  break;
+				case "auth/too-many-requests":
+				  setErr("Too many failed attempts. Please try again later.");
+				  break;
+				case "auth/network-request-failed":
+				  setErr("Network error. Check your internet connection.");
+				  break;
+				default:
+				  setErr("An error occurred during login. Please try again.");
+			      }
 		} finally {
 			setLoading(false)
 		}

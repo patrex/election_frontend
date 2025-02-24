@@ -63,6 +63,7 @@ function CreateAccount() {
 			await updateProfile(res.user, {
 				displayName: formData.firstname
 			})
+			await signOut(authman)
 			navigate('/login')
 			Toast.success('Verification email was sent to ' + formData.email)
 		} catch (error) {
