@@ -60,7 +60,7 @@ const router = createBrowserRouter(
 
 			{/* Protected User Routes */}
 			<Route element={<ProtectedRoute />}>
-				<Route path="user/:userId" element={<UserLayout />}>
+				<Route path="/user/:userId" element={<UserLayout />}>
 					<Route index element={<Dashboard />} loader={dashboardLoader} />
 					<Route path="create-election" element={<CreateElection />} />
 					<Route path="election/:id" element={<ElectionDetail />} loader={electionDetailLoader} />
