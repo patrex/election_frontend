@@ -61,14 +61,6 @@ function Dashboard() {
 		if (text) Toast.success("copied")
 	}
 
-	useEffect(() => {
-		if (!user) {
-			Toast.warning("You need to login first")
-			navigate("/login")
-		}
-	})
-
-
 
 	return (
 		<>
@@ -86,7 +78,7 @@ function Dashboard() {
 					</thead>
 
 					<tbody className='table-group-divider'>
-						{electionsList && electionsList.map(election => (
+						{electionsList.length > 0 ? electionsList.map(election => (
 							<tr key={election._id}>
 								
 								<td><Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link></td>
@@ -103,7 +95,7 @@ function Dashboard() {
 									<td><button className='Button red action-item' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 								</div>
 							</tr>
-						)) || <p>No elections to show</p>}
+						)) : <p>No elections to show</p>}
 					</tbody>
 				</table>
 			</div>
