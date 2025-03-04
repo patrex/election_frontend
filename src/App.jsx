@@ -55,6 +55,7 @@ const router = createBrowserRouter(
 			<Route path="/" element={<Home />} loader={homeLoader} />
 			<Route path="login" element={<Login />} />
 			<Route path="signup" element={<SignUp />} />
+			
 			<Route path="/election/:id/results" element={<ElectionResults />} loader={resultsLoader} />
 			<Route path="/election/:id/:voterId" element={<Election />} loader={electionLoader} />
 
