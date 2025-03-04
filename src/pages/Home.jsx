@@ -60,7 +60,7 @@ function Home() {
 
 	const handleOTPSubmit = async () => {
 		try {
-			let s = await fetch(`${backendUrl}/election/${OTPVal}/verifyOTP`);
+			let s = await fetch(`${backendUrl}/otp/${OTPVal}/verifyOTP`);
 			if (s.ok) {
 				setOTPOpen(false);
 				setOTPVal('');
@@ -116,7 +116,7 @@ function Home() {
 				if (election.userAuthType == "phone") {
 					sendOtpToPhone(participant)
 				} else {
-					const response = await fetch(`${backendUrl}/election/getOTP/email`, {
+					const response = await fetch(`${backendUrl}/otp/getOTP/email`, {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ function Home() {
 	
 			} else {
 				setVoter(participant)
-				navigate(`/election/${election._id}/${b64decode(participant)}`)
+				navigate(`/election/${election._id}/${b64encode(participant)}`)
 			}
 		} catch (error) {
 			Toast.error('Something went wrong')

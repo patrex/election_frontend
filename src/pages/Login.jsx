@@ -6,7 +6,6 @@ import { authman } from '@/utils/fireloader';
 
 import { signInWithEmailAndPassword, 
 	 GoogleAuthProvider,
-	 AuthErrorCodes,
 	 signInWithRedirect,
 	 signOut,
 } from 'firebase/auth';
@@ -69,7 +68,6 @@ function Login() {
 				return;
 			}
 		} catch (error) {
-			console.log(error.code)
 			switch (error.code) {
 				case "auth/wrong-password":
 				  setErr("Incorrect password. Please try again.");
