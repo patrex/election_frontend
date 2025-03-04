@@ -7,11 +7,14 @@ import Toast from "@/utils/ToastMsg";
 import Joi from 'joi';
 import { useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
+import { AppContext } from '@/App';
+
 
 function CreateElection() {
 	const params = useParams();
 	const navigate = useNavigate();
 
+	const { user } = useContext(AppContext);
 	const [loading, setLoading] = useState(false);
 
 	const schema = Joi.object({
@@ -33,12 +36,12 @@ function CreateElection() {
 
 		try {
 			const res = await fetch(`${backendUrl}/elections`, {
-				      method: 'POST',
-				      headers: {
+				method: 'POST',
+				headers: {
 					'Content-Type': 'application/json',
+					Authorization: `Bearer ${ user?.getIdToken() }`
 				},
-				mode: 'cors',
-				      body: JSON.stringify({
+				body: JSON.stringify({
 					...formData,
 					userId: params.userId,
 					host_name: window.location.origin
