@@ -44,7 +44,6 @@ function CreateElection() {
 				},
 				body: JSON.stringify({
 					...formData,
-					userId: params.userId,
 					host_name: window.location.origin
 				})
 			})

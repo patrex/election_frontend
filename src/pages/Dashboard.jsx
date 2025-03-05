@@ -1,13 +1,25 @@
 import  { useState, useContext, useEffect } from 'react';
-import { Link, useLoaderData, useParams, useNavigate } from 'react-router-dom';
+import { Link, useLoaderData, useParams, useNavigate, redirect } from 'react-router-dom';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl'
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
+import { authman } from '@/utils/fireloader';
 
 export async function dashboardLoader({params}) {
-	const res = await fetch(`${backendUrl}/elections/${params.userId}`)
+	const currentUser = authman.currentUser;
+
+	if (!currentUser) return redirect('/login')
+
+	const token = await user.getIdToken();
+
+	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`
+		}
+	})
 	const elections = await res.json()
 
 	return elections;
