@@ -48,6 +48,7 @@ function Dashboard() {
 						method: 'delete',
 						headers: {
 							'Content-Type': 'application/json',
+							Authorization: `Bearer ${await user?.getIdToken()}`
 						},
 					})
 
