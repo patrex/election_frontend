@@ -12,7 +12,7 @@ export async function dashboardLoader({params}) {
 
 	if (!currentUser) return redirect('/login')
 
-	const token = await user.getIdToken();
+	const token = await currentUser.getIdToken();
 
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
 		headers: {
