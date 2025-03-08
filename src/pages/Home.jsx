@@ -264,7 +264,7 @@ function Home() {
 					</p>
 					<input 
 						type="text" 
-						className="w-5/6 p-4 md:w-2/5 lg:w-2/5 xl:w-2/5 p-3  dark:border-gray-600 bg-white text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none mb-4" 
+						className="w-5/6 p-4 md:w-2/5 lg:w-2/5 xl:w-2/5 dark:border-gray-600 bg-white text-gray-900 dark:text-white rounded-lg shadow-sm focus:outline-none mb-4" 
 						placeholder="Enter/paste in an election ID..." 
 						value={id}
 						onChange={ (e) => setId(e.target.value) }
