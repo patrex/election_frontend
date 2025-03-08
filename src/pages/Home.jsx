@@ -81,7 +81,6 @@ function Home() {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				mode: 'cors',
 				body: JSON.stringify({ participant, electionId: election._id }),
 			})
 
@@ -174,7 +173,7 @@ function Home() {
 	function sendOtpToPhone(phoneNumber) {
 		// Ensure the phone number is in E.164 format (e.g., +14155552671)
 		// Set up the reCAPTCHA verifier. Make sure there's an element with id 'recaptcha-container' in your HTML.
-		window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+		window.recaptchaVerifier = new RecaptchaVerifier(authman, 'recaptcha-container', {
 			size: 'invisible', // Use 'normal' if you want the widget visible
 			callback: (response) => {
 				// reCAPTCHA solved - you can proceed with sign in

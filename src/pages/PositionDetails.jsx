@@ -1,8 +1,9 @@
 import { useLoaderData, useParams, Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Toast from "@/utils/ToastMsg";
 
+import { AppContext } from "@/App";
 import backendUrl from '../utils/backendurl'
 
 export async function loader({params}) {
@@ -28,6 +29,8 @@ function PositionDetails() {
 	const [candidatesList, setCandidatesList] = useState(candidates);
 	const params = useParams()
 
+	const { user } = useContext(AppContext)
+
 	function removeCandidate(candidate) {
 		Swal.fire({
 			title: `Delete ${candidate.firstname} ${candidate.lastname}?`,
@@ -40,6 +43,7 @@ function PositionDetails() {
 					method: 'delete',
 					headers: {
 						'Content-Type': 'application/json',
+						Authorization: `Bearer ${await user?.getIdToken()}`
 					}
 				})
 	

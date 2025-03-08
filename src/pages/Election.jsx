@@ -66,7 +66,6 @@ export default function Election() {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					mode: 'cors',
 					body: JSON.stringify({
 						election: electionData._id,
 						candidate: candidate._id,

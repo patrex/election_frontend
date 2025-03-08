@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import backendUrl from '../utils/backendurl'
+import { AppContext } from '@/App';
 
 import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
@@ -15,6 +16,8 @@ function AddCandidate() {
 		lastname: '',
 		manifesto: ''
 	});
+
+	const { user } = useContext(AppContext);
 	
 	const [positions, setPositions] = useState([]);
 	const [selectedPosition, setSelectedPosition] = useState("");
@@ -50,7 +53,9 @@ function AddCandidate() {
 		
 			const res = await fetch(`${backendUrl}/election/${params.id}/add-candidate`, {
 			    method: 'POST',
-			    headers: { 'Content-Type': 'application/json' },
+			    headers: { 'Content-Type': 'application/json',
+				Authorization: `Bearer ${await user?.getIdToken()}`
+			    },
 			    body: JSON.stringify({ ...formData, photoUrl, selectedPosition }),
 			});
 		

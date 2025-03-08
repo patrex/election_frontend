@@ -1,6 +1,6 @@
 import { useLoaderData, Link, useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { fireman } from '../utils/fireloader';
 import Toast from "@/utils/ToastMsg";
 
@@ -9,6 +9,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import backendUrl from '../utils/backendurl'
+import { AppContext } from "@/App";
 
 export async function updateElectionLoader({ params }) {
 	let election = undefined;
@@ -28,6 +29,8 @@ function UpdateElection() {
 	const electionTypes = ['Open', 'Closed']
 	const params = useParams();
 	const navigate = useNavigate();
+
+	const { user } = useContext(AppContext)
 
 	const schema = yup.object().shape({
 		electiontitle: yup.string().min(2).required(),
@@ -83,6 +86,7 @@ function UpdateElection() {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'application/json',
+					Authorization: `Bearer ${await user?.getIdToken()}`
 				},
 				mode: 'cors',
 				      body: JSON.stringify({

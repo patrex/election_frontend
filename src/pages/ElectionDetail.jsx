@@ -1,24 +1,40 @@
-import { Link, useLoaderData, useParams } from 'react-router-dom';
+import { Link, redirect, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Swal from 'sweetalert2';
+import { AppContext } from '@/App';
 
 import Toast from '@/utils/ToastMsg';
-
 import backendUrl from '../utils/backendurl'
+import { authman } from '@/utils/fireloader';
 
 export async function electionDetailLoader({params}) {
 	let election, positions, voters = undefined;
+	const currentUser = authman.currentUser;
+
+	if (!currentUser) return redirect('/login')
 
 	try {
-		const res1 = await fetch(`${backendUrl}/election/${params.id}`)
-		const res2 = await fetch(`${backendUrl}/election/${params.id}/positions`)
+		const token = await currentUser.getIdToken();
+		const headerSection = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`
+		}
+
+		const res1 = await fetch(`${backendUrl}/election/${params.id}`, {
+			headers: headerSection
+		})
+		const res2 = await fetch(`${backendUrl}/election/${params.id}/positions`, {
+			headers: headerSection
+		})
 
 		election = await res1.json()
 		positions = await res2.json()
 
 		if (election.type == 'Closed') {
-			const v = await fetch(`${backendUrl}/election/${params.id}/voterlist`)
+			const v = await fetch(`${backendUrl}/election/${params.id}/voterlist`, {
+				headers: headerSection
+			})
 			voters = await v.json()
 		}
 
@@ -36,6 +52,8 @@ function ElectionDetail() {
 	const [votersFiltered, setVotersFiltered] = useState([])
 	const params = useParams()
 
+	const { user } = useContext(AppContext);
+
 	const [newPosition, setNewPosition] = useState("");
 	const [updatedPosition, setUpdatedPosition] = useState("");
 	const [currentlySelectedPosition, setCurrentlySelectedPosition] = useState("");
@@ -43,7 +61,6 @@ function ElectionDetail() {
 	const [participant, setParticipant] = useState();
 	const [updatedParticipantInfo, setUpdatedParticipantInfo] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
-	
 	
 	const [positionModalOpen, setPositionModalOpen] = useState(false);
 	const [updatePositionModalOpen, setUpdatePositionModalOpen] = useState(false);
@@ -95,6 +112,7 @@ function ElectionDetail() {
 					method: 'POST',
 					headers: {
 					  'Content-Type': 'application/json',
+					  Authorization: `Bearer ${await user?.getIdToken()}`
 					},
 					mode: 'cors',
 					body: JSON.stringify({
@@ -127,6 +145,7 @@ function ElectionDetail() {
 					method: 'PATCH',
 					headers: {
 					  'Content-Type': 'application/json',
+					  Authorization: `Bearer ${await user?.getIdToken()}`
 					},
 					mode: 'cors',
 					body: JSON.stringify({
@@ -170,6 +189,7 @@ function ElectionDetail() {
 					method: 'delete',
 					headers: {
 						'Content-Type': 'application/json',
+						Authorization: `Bearer ${await user?.getIdToken()}`
 					}
 				})
 
@@ -187,6 +207,7 @@ function ElectionDetail() {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					Authorization: `Bearer ${await user?.getIdToken()}`
 				},
 				body: JSON.stringify({
 					election: election._id,
@@ -224,6 +245,7 @@ function ElectionDetail() {
 						method: 'post',
 						headers: {
 							'Content-Type': 'application/json',
+							Authorization: `Bearer ${await user?.getIdToken()}`
 						}
 					})
 		
@@ -311,8 +333,8 @@ function ElectionDetail() {
 					method: 'PATCH',
 					headers: {
 					  'Content-Type': 'application/json',
+					  Authorization: `Bearer ${await user?.getIdToken()}`
 					},
-					mode: 'cors',
 					body: JSON.stringify({
 						emailAddr: emailAddr,
 						participantId: participant._id,
@@ -356,6 +378,7 @@ function ElectionDetail() {
 					method: 'PATCH',
 					headers: {
 						'Content-Type': 'application/json',
+						Authorization: `Bearer ${await user?.getIdToken()}`
 					},
 					body: JSON.stringify({
 						phoneNo: validatedPhoneNo,
@@ -384,7 +407,8 @@ function ElectionDetail() {
 			const end_res = await fetch(`${backendUrl}/elections/${election._id}/end`, {
 				method: 'PUT',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${await user?.getIdToken()}`
 				}
 			})
 

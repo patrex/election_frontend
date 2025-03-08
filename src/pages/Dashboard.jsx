@@ -9,11 +9,8 @@ import { authman } from '@/utils/fireloader';
 
 export async function dashboardLoader({params}) {
 	const currentUser = authman.currentUser;
-
 	if (!currentUser) return redirect('/login')
-
 	const token = await currentUser.getIdToken();
-
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
 		headers: {
 			'Content-Type': 'application/json',

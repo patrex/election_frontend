@@ -1,8 +1,10 @@
 import { useLoaderData, Link, useParams } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useContext } from "react";
 import { fireman } from '../utils/fireloader';
 import Toast from "@/utils/ToastMsg";
+
+import { AppContext } from "@/App";
 
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -58,6 +60,8 @@ function UpdateCandidate() {
 		manifesto: yup.string()
 	})
 
+	const { user } = useContext(AppContext);
+
 	const {
 		register,
 		handleSubmit,
@@ -96,6 +100,7 @@ function UpdateCandidate() {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'application/json',
+					Authorization: `Bearer ${await user?.getIdToken()}`
 				},
 				body: JSON.stringify({
 					electionId: election._id,
