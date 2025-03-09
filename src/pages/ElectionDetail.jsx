@@ -444,7 +444,7 @@ function ElectionDetail() {
 	}, [searchTerm, votersList])
 
 	useEffect(() => {
-		setIsActive(new Date(election.endDate) > Date.now())
+		setIsActive(new Date(election.startDate) < Date.now() && Date.now() < new Date(election.endDate))
 	}, [isActive])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -481,7 +481,7 @@ function ElectionDetail() {
 						{!isActive && election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
 						{election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
 						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
-						{!hasEnded && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item'>View Results</Link></p>}
+						{hasEnded && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item'>View Results</Link></p>}
 					</div>
 				</div>
 
