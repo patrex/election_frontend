@@ -430,7 +430,6 @@ function ElectionDetail() {
 		if (positionsList.length < 1) {
 			e.preventDefault();
 			Toast.warning("There are no positions added yet. Add a position first")
-			return
 		}
 	}
 
@@ -477,11 +476,11 @@ function ElectionDetail() {
 					</table>
 					<div style={ {display: 'flex', justifyContent: 'flex-start'} }>
 						{!isActive && <p><button className='Button violet action-item' onClick={() => openPostionModal(election)}>Add Position</button></p>}
-						{!isActive && <p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`} className='Button violet action-item' onClick={(e) => checkPositionExists}>Add Candidate</Link></p>}
+						{!isActive && <p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`} className='Button violet action-item no-underline' onClick={checkPositionExists}>Add Candidate</Link></p>}
 						{!isActive && election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
 						{election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
 						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
-						{hasEnded && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item'>View Results</Link></p>}
+						{hasEnded && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item no-underline'>View Results</Link></p>}
 					</div>
 				</div>
 
@@ -636,7 +635,7 @@ function ElectionDetail() {
 							</tr>
 						</thead>
 						<tbody>
-							{	
+							{positionsList.length > 0 ?
 								positionsList.map(position => (
 									<tr className="position-row" key={position._id}>
 										<td>
@@ -645,18 +644,18 @@ function ElectionDetail() {
 
 										<td>
 											<div className="action-btn-container">
-												{isActive && <button className='Button violet action-item' 
+												{!isActive && <button className='Button violet action-item' 
 													onClick={() => editPosition(position)}>
 														<i className="bi bi-pen-fill"></i></button>}
 												
-												{isActive && <button className='Button red action-item' 
+												{!isActive && <button className='Button red action-item' 
 													onClick={() => removePosition(position)}>
 														<i className="bi bi-trash3 m-1"></i></button>}
 											</div>
 
 										</td>
 									</tr>
-								))
+								)) : <p>No positions added yet</p>
 							}
 						</tbody>
 					</table>
