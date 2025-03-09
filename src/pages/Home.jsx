@@ -207,8 +207,8 @@ function Home() {
 			.catch((error) => {
 				// OTP verification failed
 				Toast.warning("Error verifying OTP")
-				return;
 				console.error('Error verifying OTP:', error);
+				return;
 			});
 	}
 	

@@ -127,6 +127,8 @@ function ElectionDetail() {
 					Toast.success('Position was added')
 				} else if (response.status == 409) {
 					Toast.warning('Position already exists')
+				} else if (response.status == 400) {
+					Toast.warning(response.text())
 				} else {
 					Toast.warning('Could not add the position')
 				}
