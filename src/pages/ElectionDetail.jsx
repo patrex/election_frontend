@@ -68,7 +68,8 @@ function ElectionDetail() {
 	const [updateParticipantModal, setUpdateParticipantModal] = useState(false);
 	const [viewUsersModal, setViewUsersModal] = useState(false);
 	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false)
-	const [isActive, setIsActive] = useState(new Date(election.endDate) > Date.now());
+	const [isActive, setIsActive] = useState(new Date(election.startDate) < Date.now() && Date.now() < new Date(election.endDate));
+	const [hasEnded, setHasEnded] = useState(new Date(election.endDate) < Date.now())
 
 	function closeAddParticipant () {
 		setSearchTerm("")
@@ -425,6 +426,14 @@ function ElectionDetail() {
 		}
 	}
 
+	function checkPositionExists(e) {
+		if (positionsList.length < 1) {
+			e.preventDefault();
+			Toast.warning("There are no positions added yet. Add a position first")
+			return
+		}
+	}
+
 	useEffect(() => {
 		if (election.type == 'Closed'){
 			const votersFiltered = election.userAuthType == 'email' ?
@@ -467,12 +476,12 @@ function ElectionDetail() {
 						</tbody>
 					</table>
 					<div style={ {display: 'flex', justifyContent: 'flex-start'} }>
-						{isActive && <p><button className='Button violet action-item' onClick={() => openPostionModal(election)}>Add Position</button></p>}
-						{isActive && <p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`}><button disabled={!positions} className='Button violet action-item'>Add Candidate</button></Link></p>}
-						{isActive && election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
-						{ election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
+						{!isActive && <p><button className='Button violet action-item' onClick={() => openPostionModal(election)}>Add Position</button></p>}
+						{!isActive && <p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`} className='Button violet action-item' onClick={(e) => checkPositionExists}>Add Candidate</Link></p>}
+						{!isActive && election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
+						{election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
 						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
-						{!isActive && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item'>View Results</Link></p>}
+						{!hasEnded && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item'>View Results</Link></p>}
 					</div>
 				</div>
 
