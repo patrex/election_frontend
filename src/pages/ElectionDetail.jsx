@@ -68,8 +68,8 @@ function ElectionDetail() {
 	const [updateParticipantModal, setUpdateParticipantModal] = useState(false);
 	const [viewUsersModal, setViewUsersModal] = useState(false);
 	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false)
-	const [isActive, setIsActive] = useState(new Date(election.startDate) < Date.now() && Date.now() < new Date(election.endDate));
-	const [hasEnded, setHasEnded] = useState(new Date(election.endDate) < Date.now())
+	const [isActive, setIsActive] = useState(false);
+	const [hasEnded, setHasEnded] = useState(false)
 
 	function closeAddParticipant () {
 		setSearchTerm("")
@@ -443,8 +443,10 @@ function ElectionDetail() {
 	}, [searchTerm, votersList])
 
 	useEffect(() => {
-		setIsActive(new Date(election.startDate) < Date.now() && Date.now() < new Date(election.endDate))
-	}, [isActive])
+		const now = Date.now();
+		setIsActive(new Date(election.startDate) < now && now < new Date(election.endDate));
+		setHasEnded(new Date(election.endDate) < now);
+	}, [election])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
