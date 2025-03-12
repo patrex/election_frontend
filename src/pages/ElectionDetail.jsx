@@ -415,9 +415,13 @@ function ElectionDetail() {
 				}
 			})
 
-			if (!end_res.ok) Toast.info("Not found")
+			if (!end_res.ok){
+				Toast.info("Not found")
+				return;
+			} 
 
 			const new_res = await end_res.json();
+			election.endDate = new_res.election.endDate;
 
 			setEndElectionModalOpen(false)
 			Toast.success("Election Ended")
