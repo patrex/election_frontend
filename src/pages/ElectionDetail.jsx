@@ -46,7 +46,8 @@ export async function electionDetailLoader({params}) {
 }
 
 function ElectionDetail() {
-	const [election, positions, voters] = useLoaderData();
+	const [loaderElection, positions, voters] = useLoaderData();
+	const [election, setElection] = useState(loaderElection)
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters)
 	const [votersFiltered, setVotersFiltered] = useState([])
@@ -414,6 +415,8 @@ function ElectionDetail() {
 					Authorization: `Bearer ${await user?.getIdToken()}`
 				}
 			})
+			
+			setEndElectionModalOpen(false)
 
 			if (!end_res.ok){
 				Toast.info("Not found")
@@ -421,9 +424,8 @@ function ElectionDetail() {
 			} 
 
 			const new_res = await end_res.json();
-			election.endDate = new_res.election.endDate;
+			setElection(new_res.election)
 
-			setEndElectionModalOpen(false)
 			Toast.success("Election Ended")
 		} catch (error) {
 			Toast.error("Could not end the election")
