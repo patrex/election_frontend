@@ -431,7 +431,7 @@ function ElectionDetail() {
 
 			}))
 
-			Toast.success("Election Ended")
+			Toast.success("Election was ended successfully")
 		} catch (error) {
 			Toast.error("Could not end the election")
 		}
