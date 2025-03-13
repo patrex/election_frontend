@@ -427,7 +427,7 @@ function ElectionDetail() {
 			console.log(new_res.new_date);
 			setElection(prev => ({
 				...prev,
-				endDate: new_res?.new_date
+				endDate: new_res?.new_date ?? prev.endDate
 
 			}))
 
@@ -454,10 +454,19 @@ function ElectionDetail() {
 	}, [searchTerm, votersList])
 
 	useEffect(() => {
-		const now = Date.now();
-		setIsActive(new Date(election.startDate) < now && now < new Date(election.endDate));
-		setHasEnded(new Date(election.endDate) < now);
-	}, [election])
+		if (!election?.startDate || !election?.endDate) return;
+	      
+		const updateStatus = () => {
+		  const now = Date.now();
+		  setIsActive(new Date(election.startDate) < now && now < new Date(election.endDate));
+		  setHasEnded(new Date(election.endDate) < now);
+		};
+	      
+		updateStatus(); // Run immediately when `election` updates
+		const interval = setInterval(updateStatus, 1000 * 60); // Update every minute
+	      
+		return () => clearInterval(interval); // Cleanup
+	      }, [election]); // Runs whenever `election` updates
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
