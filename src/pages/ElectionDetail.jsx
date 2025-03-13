@@ -501,7 +501,7 @@ function ElectionDetail() {
 							</>
 						)}
 						{election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
-						{isActive && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
+						{(isActive && !hasEnded) && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
 						{hasEnded && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item no-underline'>View Results</Link></p>}
 					</div>
 				</div>
