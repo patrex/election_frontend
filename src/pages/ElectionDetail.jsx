@@ -424,6 +424,7 @@ function ElectionDetail() {
 			} 
 
 			const new_res = await end_res.json();
+			console.log(new_res.election);
 			setElection(new_res.election)
 
 			Toast.success("Election Ended")
