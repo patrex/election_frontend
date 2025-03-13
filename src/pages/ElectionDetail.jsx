@@ -424,8 +424,12 @@ function ElectionDetail() {
 			} 
 
 			const new_res = await end_res.json();
-			console.log(new_res.election);
-			setElection(new_res.election)
+			console.log(new_res.new_date);
+			setElection(prev => ({
+				...prev,
+				endDate: new_res?.new_date
+
+			}))
 
 			Toast.success("Election Ended")
 		} catch (error) {
