@@ -122,6 +122,7 @@ function UpdateCandidate() {
 		if (!isDirty && !state.newPicture) {
 		    Toast.info("You did not make any changes");
 		    return;
+		    
 		}
 	    
 		try {
