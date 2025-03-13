@@ -424,13 +424,10 @@ function ElectionDetail() {
 			} 
 
 			const new_res = await end_res.json();
-			console.log(new_res.new_date);
 			setElection(prev => ({
 				...prev,
 				endDate: new_res?.new_date ?? prev.endDate
 			}));
-
-			setHasEnded(true);
 
 			Toast.success("Election was ended successfully")
 		} catch (error) {
@@ -455,13 +452,10 @@ function ElectionDetail() {
 	}, [searchTerm, votersList])
 
 	useEffect(() => {
-		if (!election?.startDate || !election?.endDate) return;
-	      
-		
 		const now = Date.now();
 		setIsActive(new Date(election.startDate) < now && now < new Date(election.endDate));
 		setHasEnded(new Date(election.endDate) < now);
-	}, [election]); // Runs whenever `election` updates
+	}, [election.endDate]); // Runs whenever `election` updates
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
