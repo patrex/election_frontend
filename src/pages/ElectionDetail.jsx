@@ -407,31 +407,31 @@ function ElectionDetail() {
 	}
 
 	async function endElection () {
-		try {
-			const end_res = await fetch(`${backendUrl}/elections/${election._id}/end`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${await user?.getIdToken()}`
-				}
-			})
-			
-			setEndElectionModalOpen(false)
-
-			if (!end_res.ok){
-				Toast.info("Not found")
-				return;
-			} 
-
-			const new_res = await end_res.json();
-			setElection(prev => ({
-				...prev,
-				endDate: new_res?.new_date ?? prev.endDate
-			}));
-
-			Toast.success("Election was ended successfully")
-		} catch (error) {
-			Toast.error("Could not end the election")
+		if (hasEnded) {
+			Toast.warning("The election has already ended")
+			return;
+		} else {
+			try {
+				const end_res = await fetch(`${backendUrl}/elections/${election._id}/end`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${await user?.getIdToken()}`
+					}
+				})
+				
+				setEndElectionModalOpen(false)
+	
+				const new_res = await end_res.json();
+				setElection(prev => ({
+					...prev,
+					endDate: new Date(new_res?.new_date ?? prev.endDate)
+				}));
+	
+				Toast.success("Election was ended successfully")
+			} catch (error) {
+				Toast.error("Could not end the election")
+			}
 		}
 	}
 

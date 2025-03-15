@@ -6,9 +6,9 @@ import Toast from "@/utils/ToastMsg";
 
 import { AppContext } from "@/App";
 
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 
 import backendUrl from '../utils/backendurl'
