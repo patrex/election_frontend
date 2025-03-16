@@ -7,8 +7,9 @@ import Toast from "@/utils/ToastMsg";
 import { AppContext } from "@/App";
 
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 
 
 import backendUrl from '../utils/backendurl'
@@ -52,12 +53,11 @@ function UpdateCandidate() {
 		positions: positionsList || []
 	});
 
-	
-	const schema = yup.object().shape({
-		firstname: yup.string().min(2).required(),
-		lastname: yup.string().min(2).required(),
-		selectedPosition: yup.string(),
-		manifesto: yup.string()
+	const schema = z.object({
+		firstname: z.string().min(2, {message: "Firstname cannot be less than two characters"}),
+		lastname: z.string().min(2, {message: "Lastname cannot be less than two characters"}),
+		selectedPosition: z.string(),
+		manifesto: z.string().min(0)
 	})
 
 	const { user } = useContext(AppContext);
@@ -67,7 +67,7 @@ function UpdateCandidate() {
 		handleSubmit,
 		formState: { errors, dirtyFields, isDirty },
 	    } = useForm({
-		resolver: yupResolver(schema),
+		resolver: zodResolver(schema),
 		defaultValues: useMemo(() => ({
 		    firstname: candidate.firstname || "",
 		    lastname: candidate.lastname || "",
