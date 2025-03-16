@@ -13,16 +13,16 @@ import polyfillNode from 'rollup-plugin-polyfill-node'
 // https://vitejs.dev/config/
 export default defineConfig({
   	plugins: [react()],
-	build: {
-		rollupOptions: {
-			plugins: [
-				resolve(),
-				commonjs(),
-				peerDepsExternal(),
-				polyfillNode()
-			]
-		}
-	},
+	// build: {
+	// 	rollupOptions: {
+	// 		plugins: [
+	// 			resolve(),
+	// 			commonjs(),
+	// 			peerDepsExternal(),
+	// 			polyfillNode()
+	// 		]
+	// 	}
+	// },
   	resolve: {
 		alias: {
 	  		"@": path.resolve(__dirname, "./src"),
