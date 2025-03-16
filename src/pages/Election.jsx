@@ -41,6 +41,11 @@ export default function Election() {
 	const [selectedPosition, setSelectedPosition] = useState("");
 
 	async function sendVote(candidate, voterId) {
+		if (electionData.startDate > Date.now()) {
+			Toast.warning("The election has not started")
+			return;
+		}
+
 		try {
 			const userVotes = await fetch(`${backendUrl}/election/${electionData._id}/${voterId}/votes`);
 			let userHasVoted = false;
