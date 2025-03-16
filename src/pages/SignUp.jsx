@@ -44,7 +44,7 @@ function CreateAccount() {
 			const user = result.user;
 			if (user.emailVerified) {
 				setUser(user);
-				navigate(`user/${user.uid}`)
+				navigate(`../user/${user.uid}`)
 			} else {
 				Toast.warning("You must verify your account first!");
 				await signOut(authman);

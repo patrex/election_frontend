@@ -5,8 +5,8 @@ import { fireman } from '../utils/fireloader';
 import Toast from "@/utils/ToastMsg";
 
 import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import backendUrl from '../utils/backendurl'
 import { AppContext } from "@/App";
@@ -32,16 +32,29 @@ function UpdateElection() {
 
 	const { user } = useContext(AppContext)
 
-	const schema = yup.object().shape({
-		electiontitle: yup.string().min(2).required(),
-		startdate: yup.date().required().min(new Date()),
-		enddate: yup
-			 .date()
-			 .required()
-			 .min(yup.ref('startdate'), 'End date cannot be smaller than start date'),
-		electiontype: yup.string(),
-		description: yup.string().max(200),
-		rules: yup.string().max(1000)
+	const schema = z.object({
+		electiontitle: z.string().min(2, {message: "Election title cannot be less than two characters"}),
+		startdate: z.date(),
+		enddate: z.date(),
+		electiontype: z.string(),
+		description: z.string().max(200),
+		rules: z.string().max(1000)
+	}).superRefine((data, ctx) => {
+		if (data.startdate > data.enddate) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Start date cannot come after end date",
+				path: ['startdate']
+			})
+		}
+
+		if (data.startdate < Date.now()) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Start date cannot be in the past",
+				path: ['startdate']
+			})
+		}
 	})
 
 	function formatDate(date) {
@@ -67,7 +80,7 @@ function UpdateElection() {
 	}
 
 	const { register, handleSubmit, formState } = useForm({
-		resolver: yupResolver(schema),
+		resolver: zodResolver(schema),
 		defaultValues: {
 			electiontitle: election.title,
 			startdate: formatDate(new Date(election.startDate)),
