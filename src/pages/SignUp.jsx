@@ -96,7 +96,8 @@ function CreateAccount() {
 								id="firstname"
 								placeholder="Enter your firstname"
 								autoFocus
-								className="w-2/3 p-2 rounded-md focus:ring-2"
+								// className="w-2/3 p-2 rounded-md focus:ring-2"
+								className="w-full p-2 border border-yellow-600 rounded-md text-base mt-2 mb-2"
 								{...register("firstname")}
 							/>
 							{errors.firstname && <span className="text-red-500 text-sm">Firstname must be at least two characters</span>}
