@@ -102,7 +102,7 @@ function CreateElection() {
 
 					<div className="mb-3">
 						<label htmlFor="type">Select the election type</label>
-						<select className="form-select form-select-lg mb-3 w-3/5"
+						<select className="form-select form-select-lg mb-3 w-full"
 							id="type" 
 							aria-label="Large select example"
 							name="electiontype"
