@@ -84,7 +84,7 @@ function CreateAccount() {
 			{/* Right Side (Signup Form) */}
 			<div className="w-full md:w-1/2 flex items-center justify-center p-6 dark:bg-gray-900 p-6">
 				<div className="max-w-md w-full">
-					<h2 className="text-xl font-semibold text-center mb-2 mt-2">Create Your Account</h2>
+					<h2 className="text-xl font-semibold text-center mb-2 mt-2">Create an account</h2>
 					<form onSubmit={handleSubmit(onSubmit)} >
 						{/* Firstname */}
 						<div>
@@ -115,7 +115,6 @@ function CreateAccount() {
 								{...register("email")}
 							/>
 							{errors.email && <span className="text-red-500 text-sm">You need to enter a valid email</span>}
-							<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">We'll never share your email.</p>
 						</div>
 
 						{/* Password */}
