@@ -123,7 +123,7 @@ function Login() {
 
 						<div className="mb-4">
 							<button 
-								className="w-full px-6 py-3 text-white bg-blue-600 rounded-lg shadow-md text-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg active:scale-95"
+								className="submit-btn"
 								disabled={loading}
 							>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
 						</div>
