@@ -120,11 +120,13 @@ function Login() {
 								{...register('password')}
 							/>
 						</div>
-						
-						<button 
-							className="w-full px-6 py-3 text-white bg-blue-600 rounded-lg shadow-md text-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg active:scale-95"
-							disabled={loading}
-						>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
+
+						<div className="mb-4">
+							<button 
+								className="w-full px-6 py-3 text-white bg-blue-600 rounded-lg shadow-md text-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg active:scale-95"
+								disabled={loading}
+							>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
+						</div>
 
 						{err && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{err}</div>}
 						{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}

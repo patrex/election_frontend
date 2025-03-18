@@ -151,12 +151,14 @@ function CreateAccount() {
 						</div>
 
 						{/* Submit Button */}
-						<button
-							type="submit"
-							disabled={loading}
-							className="w-full px-6 py-3 text-white bg-blue-600 rounded-lg shadow-md text-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg active:scale-95"
-						> { loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Signup" }
-						</button>
+						<div>
+							<button
+								type="submit"
+								disabled={loading}
+								className="w-full px-6 py-3 text-white bg-blue-600 rounded-lg shadow-md text-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg active:scale-95"
+							> { loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Signup" }
+							</button>
+						</div>
 					</form>
 
 					<div className="flex items-center w-2/3 my-2 mx-auto" >
