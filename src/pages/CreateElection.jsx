@@ -140,7 +140,7 @@ function CreateElection() {
 					<div className="action-btn-container">
 						<button type="submit" disabled={loading} 
 							className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200">
-								Create Election</button>
+								{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Create Election" }</button>
 					</div>
 				</form>
 			</div>

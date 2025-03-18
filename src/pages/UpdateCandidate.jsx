@@ -41,6 +41,7 @@ export async function updateloader({ params }) {
 
 function UpdateCandidate() {
 	const [candidate, position, positionsList, election] = useLoaderData();
+	const [loading, setLoading] = useState(false)
 	// const [image, setImage] = useState("");
 	// const [newPicture, setNewPicture] = useState("");
 	// const [newFile, setNewFile] = useState("");
@@ -115,10 +116,13 @@ function UpdateCandidate() {
         		Toast.success("Candidate updated successfully!");
 		} catch (error) {
 			Toast.error("Update failed")
+		} finally {
+			setLoading(false)
 		}
 	}
 
 	const onSubmit = async (formdata) => {
+		setLoading(true)
 		if (!isDirty && !state.newPicture) {
 		    Toast.info("You did not make any changes");
 		    return;
@@ -136,8 +140,8 @@ function UpdateCandidate() {
 	    
 		    await patchCandidate(formdata, photoUrl);
 		} catch (err) {
-		    Toast.error("An error occurred while updating candidate.");
-		}
+		    Toast.error("An error occurred while uploading candidate picture.");
+		} 
 	};
 	    
 
@@ -220,7 +224,7 @@ function UpdateCandidate() {
 							form="candidate-update-form" 
 							className="Button violet"
 							disabled={!isDirty && !state.newPicture}
-						>Save</button>
+						>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Update Candidate" }</button>
 					</div>
 				</div>
 			</div>	
