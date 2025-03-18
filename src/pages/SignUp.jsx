@@ -97,7 +97,6 @@ function CreateAccount() {
 								placeholder="Enter your firstname"
 								autoFocus
 								// className="w-2/3 p-2 rounded-md focus:ring-2"
-								className="w-full p-2 border border-yellow-600 rounded-md text-base mt-2 mb-2"
 								{...register("firstname")}
 							/>
 							{errors.firstname && <span className="text-red-500 text-sm">Firstname must be at least two characters</span>}
@@ -113,7 +112,6 @@ function CreateAccount() {
 								type="email"
 								id="email"
 								placeholder="Enter your email"
-								className="w-2/3 p-2 rounded-md focus:ring-2"
 								{...register("email")}
 							/>
 							{errors.email && <span className="text-red-500 text-sm">You need to enter a valid email</span>}
@@ -130,7 +128,6 @@ function CreateAccount() {
 								id="password"
 								placeholder="Enter a secure password"
 								{...register("password")}
-								className="w-2/3 p-2 rounded-md focus:ring-2"
 							/>
 							{errors.password && <span className="text-red-500 text-sm">Password must be at least 6 characters and contain symbols</span>}
 						</div>
@@ -144,7 +141,6 @@ function CreateAccount() {
 								type="password"
 								id="repeat_password"
 								placeholder="Re-enter your password"
-								className="w-2/3 p-2 rounded-md focus:ring-2 mb-2"
 								{...register("repeat_password")}
 							/>
 							{errors.repeat_password && <span className="text-red-500 text-sm">Passwords don't match</span>}
