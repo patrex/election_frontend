@@ -453,12 +453,12 @@ function ElectionDetail() {
 
 	useEffect(() => {
 		const now = Date.now();
+		setHasEnded(new Date(election.endDate) < Date.now());
 		setIsActive(new Date(election.startDate) < now && now < new Date(election.endDate));
 	}, [election]); // Runs whenever `election` updates
 	
 	useEffect(() => {
 		setHasEnded(new Date(election.endDate) < Date.now());
-		console.log(election);
 	}, [election.endDate])
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
