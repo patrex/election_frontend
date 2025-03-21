@@ -471,7 +471,9 @@ function ElectionDetail() {
 						<thead>
 							<tr>
 								<th>Election</th>
-								<th>{election.title}</th>
+								<th>{election.title} <span className={isActive ? 'active-badge' : hasEnded ? 'ended-badge' : 'not-started-badge'}>
+									{isActive ? 'Active' : hasEnded ? 'Election Has Ended' : 'Not Started'}
+								</span></th>
 							</tr>
 						</thead>
 						<tbody>

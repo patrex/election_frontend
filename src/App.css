@@ -566,6 +566,35 @@ input[type="number"] {
   font-size: 12px;
 }
 
+.active-badge {
+	background-color: green;
+	color: whitesmoke;
+	font-weight: bold;
+	padding: 3px 6px;
+	border-radius: 5px;
+	margin-left: 8px;
+	font-size: 12px;
+}
+
+.ended-badge {
+	background-color: red;
+	color: whitesmoke;
+	font-weight: bold;
+	padding: 3px 6px;
+	border-radius: 5px;
+	margin-left: 8px;
+	font-size: 12px;
+}
+
+.not-started-badge {
+	background-color: grey;
+	color: whitesmoke;
+	font-weight: bold;
+	padding: 3px 6px;
+	border-radius: 5px;
+	margin-left: 8px;
+	font-size: 12px;
+}
 /* Container styles */
 .home-container {
   display: flex;
