@@ -749,7 +749,7 @@ button {
 }
 
 .pos-list-container {
-  min-height: 50vh;
+  min-height: 100vh;
   overflow: hidden;
   min-width: 100%;
 }
