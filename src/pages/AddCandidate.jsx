@@ -7,6 +7,8 @@ import { AppContext } from '@/App';
 import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
 
+import { PulseLoader } from 'react-spinners';
+
 function AddCandidate() {
 	const params = useParams();
 	const navigate = useNavigate();
