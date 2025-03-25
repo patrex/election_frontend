@@ -94,7 +94,6 @@ function CreateAccount() {
 							<input
 								type="text"
 								id="firstname"
-								placeholder="Enter your firstname"
 								autoFocus
 								// className="w-2/3 p-2 rounded-md focus:ring-2"
 								{...register("firstname")}
@@ -111,7 +110,6 @@ function CreateAccount() {
 							<input
 								type="email"
 								id="email"
-								placeholder="Enter your email"
 								{...register("email")}
 							/>
 							{errors.email && <span className="text-red-500 text-sm">You need to enter a valid email</span>}
@@ -125,7 +123,6 @@ function CreateAccount() {
 							<input
 								type="password"
 								id="password"
-								placeholder="Enter a secure password"
 								{...register("password")}
 							/>
 							{errors.password && <span className="text-red-500 text-sm">Password must be at least 6 characters and contain symbols</span>}
@@ -139,7 +136,6 @@ function CreateAccount() {
 							<input
 								type="password"
 								id="repeat_password"
-								placeholder="Re-enter your password"
 								{...register("repeat_password")}
 							/>
 							{errors.repeat_password && <span className="text-red-500 text-sm">Passwords don't match</span>}
