@@ -2,8 +2,12 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu } from "lucide-react"; // Ensure correct import
 
-function NavBar({ user, voter, onLogout }) {
+import { AppContext } from '@/App';
+
+function NavBar({ user, onLogout }) {
   const [navOpen, setNavOpen] = useState(false);
+
+  const { voter } = useContext(AppContext)
 
   const toggleMenu = () => setNavOpen(!navOpen);
   const closeMenu = () => setNavOpen(false);
@@ -30,7 +34,6 @@ function NavBar({ user, voter, onLogout }) {
           ) : voter ? (
             // Voters (who are not registered users)
             <>
-              <li><NavLink to="/vote" className="link-item" onClick={closeMenu}>Vote</NavLink></li>
               <li><button onClick={onLogout}>Exit</button></li>
             </>
           ) : (
