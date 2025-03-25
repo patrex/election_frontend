@@ -21,7 +21,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 
 function Login() {
 	const navigate = useNavigate();
-	const { setUser } = useContext(AppContext)
+	const { setUser, user } = useContext(AppContext)
 	const [loading, setLoading] = useState(false);
 	const [err, setErr] = useState("")
 
@@ -91,6 +91,13 @@ function Login() {
 			setLoading(false)
 		}
 	}
+
+	useEffect(() => {
+		if (user) {
+			setLoading(true)
+			navigate(`../user/${user.uid}`)
+		}
+	}, [user])
 
 	return (
 		<div className="flex min-h-screen">
