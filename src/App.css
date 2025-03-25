@@ -350,11 +350,15 @@ textarea {
 /* susbmit btn */
 /* Modern Submit Button */
 button.submit-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background-color: #007BFF; /* Button's blue background */
 	color: white; /* White text */
 	cursor: pointer; /* Pointer cursor on hover */
 	transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
-	border: 1px solid goldenrod; /* Button border matching the input fields */
+	border: none;
+	border-radius: 5px;
 }
 
 /* Hover effect */
