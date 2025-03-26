@@ -46,7 +46,7 @@ function NavBar({ user, onLogout }) {
 								<li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
 								<li>
 									{(user && !voter) && (
-										<div className="profile-menu" onClick={toggleProfile}>
+										<div className="profile-menu" onClick={console.log("Clicked")}>
 											<div className="profile-pic" >
 												{user?.photoURL ? (
 													<img src={user.photoURL} alt="User Profile" />
