@@ -118,7 +118,7 @@ function ElectionResults() {
 						<h3>Results for {selectedPosition}</h3>
 						<h4>Total votes: {totalVotes}</h4>
 
-						<div className='dashboard-container table-responsive'>
+						<div className='table-responsive'>
 							<table className="table table-hover table-striped">
 								<tbody className='table-group-divider'>
 									{data
