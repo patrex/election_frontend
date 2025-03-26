@@ -13,6 +13,7 @@ function NavBar({ user, onLogout }) {
 
 	const toggleMenu = () => setNavOpen(!navOpen);
 	const closeMenu = () => setNavOpen(false);
+
 	const toggleProfile = () => setProfileOpen(!profileOpen);
 
 	// Close menu when clicking outside
@@ -43,23 +44,7 @@ function NavBar({ user, onLogout }) {
 							<>
 								<li><NavLink to={`/user/${user?.uid}`} className="link-item" onClick={closeMenu}>Dashboard</NavLink></li>
 								<li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
-								{ user && !voter && (
-									<div className="profile-menu">
-										<div className="profile-pic" onClick={toggleProfile}>
-											{user?.photoURL ? (
-												<img src={user.photoURL} alt="User Profile" />
-											) : (
-												<span className="profile-initial">{userInitial}</span>
-											)}
-										</div>
-										{profileOpen && (
-											<div className="dropdown-menu">
-												<p>{user?.email}</p>
-												<button onClick={onLogout}>Logout</button>
-											</div>
-										)}
-									</div>
-								)} 
+								
 							</>
 						)
 					) : voter ? (
@@ -75,6 +60,24 @@ function NavBar({ user, onLogout }) {
 						</>
 					)}
 				</ul>
+
+				{(user && !voter) && (
+					<div className="profile-menu">
+						<div className="profile-pic" onClick={toggleProfile}>
+							{user?.photoURL ? (
+								<img src={user.photoURL} alt="User Profile" />
+							) : (
+								<span className="profile-initial">{userInitial}</span>
+							)}
+						</div>
+						{profileOpen && (
+							<div className="dropdown-menu">
+								<p>{user?.email}</p>
+								<button onClick={onLogout}>Logout</button>
+							</div>
+						)}
+					</div>
+				)} 
 
 				<div className="menu-toggle">
 					<Menu className="menu-bar" onClick={toggleMenu} aria-expanded={navOpen} />
