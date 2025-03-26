@@ -6,23 +6,26 @@ import { AppContext } from '@/App';
 
 function NavBar({ user, onLogout }) {
 	const [navOpen, setNavOpen] = useState(false);
+	const [profileOpen, setProfileOpen] = useState(false);
 	const navigate = useNavigate();
 
 	const { voter } = useContext(AppContext)
 
 	const toggleMenu = () => setNavOpen(!navOpen);
 	const closeMenu = () => setNavOpen(false);
+	const toggleProfile = () => setProfileOpen(!profileOpen);
 
 	// Close menu when clicking outside
 	useEffect(() => {
 		const handleClickOutside = (e) => {
-		  if (navOpen && !e.target.closest(".nav-container")) {
-		    setNavOpen(false);
-		  }
+		  if (navOpen && !e.target.closest(".nav-container")) setNavOpen(false);
+		  if (profileOpen && !e.target.closest(".profile-menu")) setProfileOpen(false);
 		};
 		document.addEventListener("click", handleClickOutside);
 		return () => document.removeEventListener("click", handleClickOutside);
-	}, [navOpen]);
+	}, [navOpen, profileOpen]);
+
+	const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : "U";
 
 	return (
 		<div className="nav-container">
@@ -40,7 +43,23 @@ function NavBar({ user, onLogout }) {
 							<>
 								<li><NavLink to={`/user/${user?.uid}`} className="link-item" onClick={closeMenu}>Dashboard</NavLink></li>
 								<li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
-								<li>{user?.email} | <button onClick={onLogout}>Logout</button></li>
+								{ user && !voter && (
+									<div className="profile-menu">
+										<div className="profile-pic" onClick={toggleProfile}>
+											{user?.photoURL ? (
+												<img src={user.photoURL} alt="User Profile" />
+											) : (
+												<span className="profile-initial">{userInitial}</span>
+											)}
+										</div>
+										{profileOpen && (
+											<div className="dropdown-menu">
+												<p>{user?.email}</p>
+												<button onClick={onLogout}>Logout</button>
+											</div>
+										)}
+									</div>
+								)} 
 							</>
 						)
 					) : voter ? (
