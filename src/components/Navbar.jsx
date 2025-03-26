@@ -1,27 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X } from "lucide-react"; // For icons
+import { Menu, X } from "lucide-react"; // Icons for menu toggle
 
 function NavBar({ user, voter, onLogout }) {
   const [navOpen, setNavOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
 
-  // Close menus when clicking outside
+  // Close profile dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (navOpen && !e.target.closest(".nav-container")) setNavOpen(false);
-      if (profileOpen && !e.target.closest(".profile-menu")) setProfileOpen(false);
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [navOpen, profileOpen]);
+    function handleClickOutside(event) {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const toggleMenu = () => setNavOpen(!navOpen);
   const closeMenu = () => setNavOpen(false);
   const toggleProfile = () => setProfileOpen(!profileOpen);
 
-  // Get user initial from email if no profile picture
-  const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : "U";
+  // Get first letter of email if no profile picture
+  const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : "?";
 
   return (
     <div className="nav-container">
@@ -53,12 +55,12 @@ function NavBar({ user, voter, onLogout }) {
           )}
         </ul>
 
-        {/* User Profile Menu */}
+        {/* User Profile Dropdown */}
         {user && !voter && (
-          <div className="profile-menu">
+          <div className="profile-menu" ref={profileRef}>
             <div className="profile-pic" onClick={toggleProfile}>
               {user?.photoURL ? (
-                <img src={user.photoURL} alt="User Profile" />
+                <img src={user.photoURL} alt="Profile" />
               ) : (
                 <span className="profile-initial">{userInitial}</span>
               )}
