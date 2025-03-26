@@ -1,92 +1,88 @@
-import { useState, useContext, useEffect } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react"; // Ensure correct import
+import { useState, useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { Menu, X } from "lucide-react"; // For icons
 
-import { AppContext } from '@/App';
+function NavBar({ user, voter, onLogout }) {
+  const [navOpen, setNavOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
-function NavBar({ user, onLogout }) {
-	const [navOpen, setNavOpen] = useState(false);
-	const [profileOpen, setProfileOpen] = useState(false);
-	const navigate = useNavigate();
+  // Close menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (navOpen && !e.target.closest(".nav-container")) setNavOpen(false);
+      if (profileOpen && !e.target.closest(".profile-menu")) setProfileOpen(false);
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [navOpen, profileOpen]);
 
-	const { voter } = useContext(AppContext)
+  const toggleMenu = () => setNavOpen(!navOpen);
+  const closeMenu = () => setNavOpen(false);
+  const toggleProfile = () => setProfileOpen(!profileOpen);
 
-	const toggleMenu = () => setNavOpen(!navOpen);
-	const closeMenu = () => setNavOpen(false);
+  // Get user initial from email if no profile picture
+  const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : "U";
 
-	const toggleProfile = () => setProfileOpen(!profileOpen);
+  return (
+    <div className="nav-container">
+      <nav className="navbar">
+        <div className="logo">
+          <h2>
+            <Link to="/" className="link-item">Votify</Link>
+          </h2>
+        </div>
 
-	// Close menu when clicking outside
-	useEffect(() => {
-		const handleClickOutside = (e) => {
-		  if (navOpen && !e.target.closest(".nav-container")) setNavOpen(false);
-		  if (profileOpen && !e.target.closest(".profile-menu")) setProfileOpen(false);
-		};
-		document.addEventListener("click", handleClickOutside);
-		return () => document.removeEventListener("click", handleClickOutside);
-	}, [navOpen, profileOpen]);
+        {/* Navigation Links */}
+        <ul className={`nav-links ${navOpen ? "active" : ""}`}>
+          {user ? (
+            !voter && (
+              <>
+                <li><NavLink to={`/user/${user?.uid}`} className="link-item" onClick={closeMenu}>Dashboard</NavLink></li>
+                <li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
+              </>
+            )
+          ) : voter ? (
+            <>
+              <li><NavLink to="/vote" className="link-item" onClick={closeMenu}>Vote</NavLink></li>
+            </>
+          ) : (
+            <>
+              <li><NavLink to="/login" className="link-item" onClick={closeMenu}>Login</NavLink></li>
+              <li><NavLink to="/signup" className="link-item" onClick={closeMenu}>Sign Up</NavLink></li>
+            </>
+          )}
+        </ul>
 
-	const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : "U";
+        {/* User Profile Menu */}
+        {user && !voter && (
+          <div className="profile-menu">
+            <div className="profile-pic" onClick={toggleProfile}>
+              {user?.photoURL ? (
+                <img src={user.photoURL} alt="User Profile" />
+              ) : (
+                <span className="profile-initial">{userInitial}</span>
+              )}
+            </div>
+            {profileOpen && (
+              <div className="dropdown-menu">
+                <p>{user?.email}</p>
+                <button onClick={onLogout}>Logout</button>
+              </div>
+            )}
+          </div>
+        )}
 
-	return (
-		<div className="nav-container">
-			<nav>
-				<div className="logo">
-					<h2>
-						<Link to="/" className="link-item">Votify</Link>
-					</h2>
-				</div>
-
-				<ul className={navOpen ? "nav-link active" : "nav-link"}>
-					{user ? (
-						// Logged-in users (excluding voters)
-						!voter && (
-							<>
-								<li><NavLink to={`/user/${user?.uid}`} className="link-item" onClick={closeMenu}>Dashboard</NavLink></li>
-								<li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
-								<li>
-									{(user && !voter) && (
-										<div className="profile-menu" onClick={console.log("Clicked")}>
-											<div className="profile-pic" >
-												{user?.photoURL ? (
-													<img src={user.photoURL} alt="User Profile" />
-												) : (
-													<span className="profile-initial">{userInitial}</span>
-												)}
-											</div>
-											{profileOpen && (
-												<div className="dropdown-menu">
-													<p>{user?.email}</p>
-													<button onClick={onLogout}>Logout</button>
-												</div>
-											)}
-										</div>
-									)} 
-								</li>
-							</>
-						)
-					) : voter ? (
-						// Voters (who are not registered users)
-						<>
-							<li><button onClick={navigate('/')}>Exit</button></li>
-						</>
-					) : (
-						// Completely unauthenticated users
-						<>
-							<li><NavLink to="/login" className="link-item" onClick={closeMenu}>Login</NavLink></li>
-							<li><NavLink to="/signup" className="link-item" onClick={closeMenu}>Sign Up</NavLink></li>
-						</>
-					)}
-				</ul>
-
-				
-
-				<div className="menu-toggle">
-					<Menu className="menu-bar" onClick={toggleMenu} aria-expanded={navOpen} />
-				</div>
-			</nav>
-		</div>
-	);
+        {/* Mobile Menu Toggle */}
+        <div className="menu-toggle">
+          {navOpen ? (
+            <X className="menu-icon" onClick={toggleMenu} />
+          ) : (
+            <Menu className="menu-icon" onClick={toggleMenu} />
+          )}
+        </div>
+      </nav>
+    </div>
+  );
 }
 
 export default NavBar;
