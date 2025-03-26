@@ -285,8 +285,7 @@ input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="tel"],
-input[type="number"],
-button.submit-btn {
+input[type="number"] {
 	width: 100%;
 	height: 40px;
 	padding: 10px;
@@ -360,6 +359,7 @@ textarea {
 /* susbmit btn */
 /* Modern Submit Button */
 button.submit-btn {
+	width: 95%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
