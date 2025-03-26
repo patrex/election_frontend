@@ -359,7 +359,8 @@ textarea {
 /* susbmit btn */
 /* Modern Submit Button */
 button.submit-btn {
-	width: 95%;
+	width: 98%;
+	height: 40px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
