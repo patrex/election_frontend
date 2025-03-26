@@ -11,10 +11,9 @@ export async function resultsLoader({params}) {
 		fetch(`${backendUrl}/election/${params.id}/positions`).then(res => res.json()),
 		fetch(`${backendUrl}/election/${params.id}/candidates`).then(res => res.json()),
 		fetch(`${backendUrl}/election/${params.id}/votes`).then(res => res.json()),
-		fetch(`${backendUrl}/election/${params.id}/ownerinfo`).then(res => res.json()),
 	])
 
-	return [ election, positions, candidates, votes, owner ];
+	return [ election, positions, candidates, votes ];
 }
 
 function ElectionResults() {
@@ -88,7 +87,7 @@ function ElectionResults() {
 				<div className="p-2">
 					<p className='my-0 py-1'><strong>{ election.title }</strong></p>
 					<p className='my-0 py-1'><strong>Description:</strong> { election.desc ? election.desc : '' }</p>
-					<p className='my-0 py-1'><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
+					<p className='my-0 py-1'><strong>Created by:</strong> {`${election.owner.name}`}</p>
 					<p className='my-0 py-1'><strong>Start date:</strong> { election.startDate ? moment(election.startDate).format('LLL') : ''}</p>
 					<p className='my-0 py-1'><strong>End date:</strong> { election?.endDate ? moment(election.endDate).format('LLL') : ''}</p>
 				</div>
