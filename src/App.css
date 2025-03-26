@@ -1009,15 +1009,16 @@ button {
   }
 
   .nav-container .nav-link {
-    flex-direction: column;
-    justify-content: flex-start;
-    background-color: #ccc;
-    position: absolute;
-    width: 200px;
-    height: 100vh;
-    top: 20px;
-    right: -5px;
-    transition: all 0.5s ease-in;
+	position: fixed;
+	top: 0;
+	right: -100%;
+	width: 250px;
+	height: 100vh;
+	background: #f9f9f9;
+	flex-direction: column;
+	padding-top: 3rem;
+	transition: right 0.3s ease-in-out;
+	box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
   }
 
   .nav-container ul li .link-item,
