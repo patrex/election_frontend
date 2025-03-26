@@ -87,7 +87,7 @@ function ElectionResults() {
 				<div className="p-2">
 					<p className='my-0 py-1'><strong>{ election.title }</strong></p>
 					<p className='my-0 py-1'><strong>Description:</strong> { election.desc ? election.desc : '' }</p>
-					<p className='my-0 py-1'><strong>Created by:</strong> {`${(election.owner?.name) || election.owner?.email}`}</p>
+					<p className='my-0 py-1'><strong>Created by:</strong> {`${(election.owner?.name) || 'Unavailable'}`}</p>
 					<p className='my-0 py-1'><strong>Start date:</strong> { election.startDate ? moment(election.startDate).format('LLL') : ''}</p>
 					<p className='my-0 py-1'><strong>End date:</strong> { election?.endDate ? moment(election.endDate).format('LLL') : ''}</p>
 				</div>
