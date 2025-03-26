@@ -6,18 +6,18 @@ import backendUrl from '../utils/backendurl'
 
 export async function resultsLoader({params}) {
 
-	const [election, positions, candidates, votes, owner] = await Promise.all([
+	const [election, positions, candidates, votes] = await Promise.all([
 		fetch(`${backendUrl}/election/${params.id}`).then(res => res.json()),
 		fetch(`${backendUrl}/election/${params.id}/positions`).then(res => res.json()),
 		fetch(`${backendUrl}/election/${params.id}/candidates`).then(res => res.json()),
 		fetch(`${backendUrl}/election/${params.id}/votes`).then(res => res.json()),
 	])
 
-	return [ election, positions, candidates, votes ];
+	return [ election, positions, candidates, votes];
 }
 
 function ElectionResults() {
-	const [election, positions, candidates, votes, owner] = useLoaderData();
+	const [election, positions, candidates, votes] = useLoaderData();
 
 	const [votesList, setVotesList] = useState([])
 	const [candidatesList, setCandidatesList] = useState([])
