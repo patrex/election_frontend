@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const ElectionActions = ({ election, isActive, hasEnded, openPostionModal, checkPositionExists, setAddParticipantsModalOpen, setViewUsersModal, setEndElectionModalOpen }) => {
+  const params = useParams();
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
       {(!isActive && !hasEnded) && (

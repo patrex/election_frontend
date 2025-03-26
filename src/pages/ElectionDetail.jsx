@@ -3,7 +3,6 @@ import moment from 'moment';
 import { useEffect, useState, useContext } from 'react';
 import Swal from 'sweetalert2';
 import { AppContext } from '@/App';
-import ElectionActions from '@/components/ElectionActions';
 
 import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
@@ -489,16 +488,19 @@ function ElectionDetail() {
 							</tr>
 						</tbody>
 					</table>
-					<ElectionActions
-						election={election}
-						isActive={isActive}
-						hasEnded={hasEnded}
-						openPostionModal={openPostionModal}
-						checkPositionExists={checkPositionExists}
-						setAddParticipantsModalOpen={setAddParticipantsModalOpen}
-						setViewUsersModal={setViewUsersModal}
-						setEndElectionModalOpen={setEndElectionModalOpen}
-					/>
+					<div style={ {display: 'flex', justifyContent: 'flex-start'} }>
+						{(!isActive && !hasEnded) && (
+							<>
+								<p><button className='Button violet action-item' onClick={() => openPostionModal(election)}>Add Position</button></p>
+								<p><Link to={`/user/${params.userId}/election/${election._id}/addcandidate`} className='Button violet action-item no-underline' onClick={checkPositionExists}>Add Candidate</Link></p>
+								{election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setAddParticipantsModalOpen(true) }>Add Voters</button></p> }
+							
+							</>
+						)}
+						{election.type === "Closed" && <p><button className='Button violet action-item' onClick={ () => setViewUsersModal(true) }>View Voters</button></p> }
+						{(isActive && !hasEnded) && <p><button className='Button red action-item' onClick={ () => setEndElectionModalOpen(true) }>End This Election!</button></p>}
+						{hasEnded && <p><Link to={`/election/${election._id}/results`} className='Button violet action-item no-underline'>View Results</Link></p>}
+					</div>
 				</div>
 
 				{viewUsersModal && (
