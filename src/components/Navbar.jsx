@@ -44,7 +44,25 @@ function NavBar({ user, onLogout }) {
 							<>
 								<li><NavLink to={`/user/${user?.uid}`} className="link-item" onClick={closeMenu}>Dashboard</NavLink></li>
 								<li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
-								
+								<li>
+									{(user && !voter) && (
+										<div className="profile-menu" onClick={toggleProfile}>
+											<div className="profile-pic" >
+												{user?.photoURL ? (
+													<img src={user.photoURL} alt="User Profile" />
+												) : (
+													<span className="profile-initial">{userInitial}</span>
+												)}
+											</div>
+											{profileOpen && (
+												<div className="dropdown-menu">
+													<p>{user?.email}</p>
+													<button onClick={onLogout}>Logout</button>
+												</div>
+											)}
+										</div>
+									)} 
+								</li>
 							</>
 						)
 					) : voter ? (
@@ -61,23 +79,7 @@ function NavBar({ user, onLogout }) {
 					)}
 				</ul>
 
-				{(user && !voter) && (
-					<div className="profile-menu">
-						<div className="profile-pic" onClick={toggleProfile}>
-							{user?.photoURL ? (
-								<img src={user.photoURL} alt="User Profile" />
-							) : (
-								<span className="profile-initial">{userInitial}</span>
-							)}
-						</div>
-						{profileOpen && (
-							<div className="dropdown-menu">
-								<p>{user?.email}</p>
-								<button onClick={onLogout}>Logout</button>
-							</div>
-						)}
-					</div>
-				)} 
+				
 
 				<div className="menu-toggle">
 					<Menu className="menu-bar" onClick={toggleMenu} aria-expanded={navOpen} />
