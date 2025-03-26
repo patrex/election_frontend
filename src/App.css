@@ -237,7 +237,7 @@ header {
   right: 1px;
   font-size: 1.5rem;
   display: none;
-  /* transform: translate(-50%, 0%); */
+  transform: translate(-50%, 0%);
 }
 
 .nav-container .menu-toggle .menu-bar {

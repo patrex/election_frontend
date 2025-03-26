@@ -1,11 +1,12 @@
 import { useState, useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react"; // Ensure correct import
 
 import { AppContext } from '@/App';
 
 function NavBar({ user, onLogout }) {
   const [navOpen, setNavOpen] = useState(false);
+  const navigate = useNavigate();
 
   const { voter } = useContext(AppContext)
 
@@ -34,7 +35,7 @@ function NavBar({ user, onLogout }) {
           ) : voter ? (
             // Voters (who are not registered users)
             <>
-              <li><button onClick={onLogout}>Exit</button></li>
+              <li><button onClick={ navigate('/') }>Exit</button></li>
             </>
           ) : (
             // Completely unauthenticated users
