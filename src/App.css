@@ -2,9 +2,7 @@
 @import "@radix-ui/colors/mauve.css";
 @import "@radix-ui/colors/red.css";
 @import "@radix-ui/colors/violet.css";
-@import "@radix-ui/colors/gray-dark.css";
-@import "@radix-ui/colors/blue-dark.css";
-@import "@radix-ui/colors/green-dark.css";
+
 
 /* Global styles */
 
@@ -206,7 +204,7 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 1rem 2rem;
+	padding: 1rem;
 	position: relative;
 }
 
@@ -365,13 +363,9 @@ button.submit-btn {
 	align-items: center;
 	justify-content: center;
 	background-color: #007BFF;
-	/* Button's blue background */
 	color: white;
-	/* White text */
 	cursor: pointer;
-	/* Pointer cursor on hover */
 	transition: background-color 0.3s ease, transform 0.3s ease;
-	/* Smooth transition */
 	border: none;
 	border-radius: 5px;
 }
@@ -379,25 +373,19 @@ button.submit-btn {
 /* Hover effect */
 button.submit-btn:hover {
 	background-color: #0056b3;
-	/* Darker blue on hover */
 	transform: translateY(-2px);
-	/* Slight lift effect */
 }
 
 /* Focus effect */
 button.submit-btn:focus {
 	outline: none;
-	/* Remove default outline */
 	box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
-	/* Blue shadow on focus */
 }
 
 /* Active effect */
 button.submit-btn:active {
 	background-color: #004085;
-	/* Even darker blue when clicked */
 	transform: translateY(0);
-	/* Remove the lift effect */
 }
 
 textarea:focus {
@@ -421,7 +409,7 @@ input[type="number"] {
 	border-radius: 5px;
 }
 
-/* modal ******************************************&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+/* modal ##############################################################*/
 .modal-overlay {
 	position: fixed;
 	top: 0;
