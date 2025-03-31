@@ -513,12 +513,17 @@ function ElectionDetail() {
 										) : (
 										votersFiltered.map(voter => (
 											<li key={voter._id}>
-												<div>
-													{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
-													<div>
-														{(!isActive && !hasEnded) && <button className='Button violet action-item' onClick={ () => editParticipant(voter) }>Edit</button>}
-														{(!isActive && !hasEnded) && <button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>}
-													</div>
+												<div className='voter-info'>
+													<span>{election.userAuthType == 'email' ? voter.email : voter.phoneNo}</span>
+													{ (!isActive && !hasEnded) && (
+															<div className='voter-actions'>
+																<button className='Button violet action-item' 
+																	onClick={ () => editParticipant(voter) }>Edit</button>
+																<button className='Button red action-item' 
+																	onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+															</div>
+														)
+													}
 												</div>
 											</li>
 										)))

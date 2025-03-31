@@ -271,14 +271,28 @@ header {
 
 .err-img {
 	display: flex;
-	justify-content: center;  /* Center vertically */
-	align-items: center;      /* Center horizontally */
+	justify-content: center;
+	align-items: center;
 }
 
 .err-img img {
 	max-width: 100%;
     	height: auto;
 }
+
+.voter-info {
+	display: flex;
+	align-items: center;  
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.voter-actions {
+	display: flex;
+    	gap: 5px; 
+}
+
+
 
 /* .logo {
 	margin: 0 auto;
