@@ -73,7 +73,7 @@ function PositionDetails() {
 								<div className="candidate-pos-label">{position} </div>
 								<div className="btn-group" role="group">
 									{new Date(election?.endDate) > Date.now() && <Link to={`/user/${params.userId}/election/candidate/${candidate._id}/update`}>
-										 <button className='Button violet'><i class="bi bi-pen-fill"></i></button>
+										 <button className='Button violet'>Edit</button>
 									</Link>}
 
 									{new Date(election?.endDate) > Date.now() && <button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>

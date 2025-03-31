@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
-import { authman } from '@/utils/fireloader';
 
 export async function dashboardLoader({ params }) {
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
@@ -13,8 +12,8 @@ export async function dashboardLoader({ params }) {
 			'Content-Type': 'application/json'
 		}
 	})
+	
 	const elections = await res.json()
-
 	return elections;
 }
 
@@ -96,8 +95,7 @@ function Dashboard() {
 									<td><button className="Button violet action-item" onClick={() => copyLink(election._id)}>Copy ID</button></td>
 									<td><button className="Button violet action-item" onClick={() => copyLink(election.shareLink)}>Copy Link</button></td>
 									<td><Link to={`/user/${params.userId}/election/${election._id}/update`}>
-										<button className='Button violet action-item' disabled={new Date(election.startDate) < Date.now()}><i class="bi bi-pen-fill"></i>
-										</button>
+										<button className='Button violet action-item' disabled={new Date(election.startDate) < Date.now()}>Edit</button>
 									</Link></td>
 									<td><button className='Button red action-item' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
 								</div>

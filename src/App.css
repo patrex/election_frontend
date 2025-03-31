@@ -269,6 +269,17 @@ header {
 	border: 1px solid #feb47b;
 }
 
+.err-img {
+	display: flex;
+	justify-content: center;  /* Center vertically */
+	align-items: center;      /* Center horizontally */
+}
+
+.err-img img {
+	max-width: 100%;
+    	height: auto;
+}
+
 /* .logo {
 	margin: 0 auto;
 	width: 70px;
