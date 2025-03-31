@@ -9,12 +9,11 @@ import { authman } from '@/utils/fireloader';
 
 export async function dashboardLoader({ params }) {
 	const currentUser = authman.currentUser;
-	if (!currentUser) return redirect('/login')
 
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
+			Authorization: `Bearer ${await currentUser?.getIdToken()}`
 		}
 	})
 	const elections = await res.json()
