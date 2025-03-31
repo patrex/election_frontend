@@ -1,15 +1,20 @@
-import  { useState, useContext, useEffect } from 'react';
-import { Link, useLoaderData, useParams, useNavigate, redirect } from 'react-router-dom';
+import  { useState, useContext } from 'react';
+import { Link, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
 import Swal from 'sweetalert2';
-import backendUrl from '../utils/backendurl'
+import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
+import { authman } from '@/utils/fireloader';
 
-export async function dashboardLoader({params}) {
+export async function dashboardLoader({ params }) {
+	const currentUser = authman.currentUser;
+	if (!currentUser) return redirect('/login')
+
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
 		}
 	})
 	const elections = await res.json()
@@ -49,7 +54,7 @@ function Dashboard() {
 						return;
 					}
 
-					setElectionsList(electionsList.filter(e => e._id != election._id ));
+					setElectionsList(electionsList.filter( e => e._id != election._id ));
 					Toast.success('The event was removed successfully')
 				} catch (error) {
 					Toast.error("An error occured")
