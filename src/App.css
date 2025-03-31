@@ -236,7 +236,7 @@ header {
 .nav-container ul li .link-item.active {
 	background-color: goldenrod;
 	color: #fff;
-	border-radius: 50%;
+	border-radius: 20px;
 }
 
 .nav-container .menu-toggle {
