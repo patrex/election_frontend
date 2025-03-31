@@ -665,15 +665,17 @@ function ElectionDetail() {
 										</td>
 
 										<td>
-											<div className="action-btn-container">
-												{!isActive && <button className='Button violet action-item' 
-													onClick={() => editPosition(position)}>
-														<i className="bi bi-pen-fill"></i></button>}
-												
-												{!isActive && <button className='Button red action-item' 
-													onClick={() => removePosition(position)}>
-														<i className="bi bi-trash3 m-1"></i></button>}
-											</div>
+											{ (!isActive && !hasEnded) && (
+												<div className="action-btn-container">
+													<button className='Button violet action-item' 
+														onClick={() => editPosition(position)}>
+															<i className="bi bi-pen-fill"></i></button>
+													
+													<button className='Button red action-item' 
+														onClick={() => removePosition(position)}>
+															<i className="bi bi-trash3 m-1"></i></button>
+												</div>
+											)}
 
 										</td>
 									</tr>
