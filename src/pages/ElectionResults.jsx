@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import backendUrl from '../utils/backendurl'
 
-export async function resultsLoader({params}) {
+export async function resultsLoader({ params }) {
 
 	const [election, positions, candidates, votes] = await Promise.all([
 		fetch(`${backendUrl}/election/${params.id}`).then(res => res.json()),

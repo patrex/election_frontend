@@ -190,21 +190,19 @@ li:hover {
 header {
 	background-color: #fff;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-	padding: 1rem 0;
+	/* padding: 1rem 0; */
 }
 
 .nav-container {
 	max-width: 1440px;
 	width: 100%;
-	/* margin: 0 auto; */
-	/* padding: 0 1rem; */
 }
 
 .nav-container nav {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 1rem;
+	padding: 0 1rem;
 	position: relative;
 }
 
@@ -216,7 +214,7 @@ header {
 
 .nav-container .nav-link {
 	display: flex;
-	gap: 1rem;
+	/* gap: 1rem; */
 	list-style: none;
 }
 
@@ -229,7 +227,7 @@ header {
 .nav-container .logo .link-item {
 	color: #212a3c;
 	font-size: 1.3rem;
-	padding: 0.2rem 1rem;
+	padding: 0 1rem;
 	display: block;
 	text-decoration: none;
 }
@@ -257,12 +255,10 @@ header {
 	justify-content: center;
 	align-items: center;
 	min-height: 80vh;
-	/* Adjust as needed */
 	width: 100vw;
 }
 
 .form-container {
-	/* background-color: #ffd700; Light gold background color */
 	padding: 20px;
 	border-radius: 10px;
 	width: 40%;
@@ -291,8 +287,6 @@ header {
 	display: flex;
     	gap: 5px; 
 }
-
-
 
 /* .logo {
 	margin: 0 auto;
@@ -463,15 +457,10 @@ input[type="number"] {
 	border-radius: 10px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	padding: 20px;
-	/* Padding */
 	margin: 20px auto;
-	/* Centering */
 	max-width: 900px;
-	/* Maximum width */
 	overflow: hidden;
-	/* Prevents overflow */
 	position: relative;
-	/* For positioning child elements */
 }
 
 .election-container:before {
@@ -484,20 +473,15 @@ input[type="number"] {
 	background-image: linear-gradient(45deg,
 			#ff7e5f,
 			#feb47b);
-	/* Gradient background */
+
 	opacity: 0.2;
-	/* Opacity */
 	z-index: -1;
-	/* Behind other content */
 	border-radius: 10px;
-	/* Rounded corners */
 }
 
 .election-container:hover:before {
 	opacity: 0.3;
-	/* Opacity on hover */
 	transition: opacity 0.3s ease;
-	/* Smooth transition */
 }
 
 .election-container h2 {
