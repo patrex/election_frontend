@@ -8,12 +8,9 @@ import { AppContext } from '@/App';
 import { authman } from '@/utils/fireloader';
 
 export async function dashboardLoader({ params }) {
-	const currentUser = authman.currentUser;
-
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
 		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await currentUser?.getIdToken()}`
+			'Content-Type': 'application/json'
 		}
 	})
 	const elections = await res.json()
