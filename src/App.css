@@ -227,7 +227,6 @@ header {
 .nav-container ul li .link-item,
 .nav-container .logo .link-item {
 	color: #212a3c;
-	font-size: 1.3rem;
 	padding: 0 1rem;
 	display: block;
 	text-decoration: none;
@@ -237,6 +236,7 @@ header {
 .nav-container ul li .link-item.active {
 	background-color: goldenrod;
 	color: #fff;
+	border-radius: 50%;
 }
 
 .nav-container .menu-toggle {
