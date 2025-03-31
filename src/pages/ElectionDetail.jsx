@@ -669,7 +669,7 @@ function ElectionDetail() {
 												<div className="action-btn-container">
 													<button className='Button violet action-item' 
 														onClick={() => editPosition(position)}>
-															<i className="bi bi-pen-fill"></i></button>
+															Edit</button>
 													
 													<button className='Button red action-item' 
 														onClick={() => removePosition(position)}>
