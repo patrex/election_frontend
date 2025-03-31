@@ -516,8 +516,8 @@ function ElectionDetail() {
 												<div>
 													{election.userAuthType == 'email' ? voter.email : voter.phoneNo}
 													<div>
-														{isActive && <button className='Button violet action-item' onClick={ () => editParticipant(voter) }><i className="bi bi-pen-fill"></i></button>}
-														{isActive && <button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>}
+														{(!isActive && !hasEnded) && <button className='Button violet action-item' onClick={ () => editParticipant(voter) }>Edit</button>}
+														{(!isActive && !hasEnded) && <button className='Button red action-item' onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>}
 													</div>
 												</div>
 											</li>
