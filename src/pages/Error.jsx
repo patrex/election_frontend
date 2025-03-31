@@ -3,7 +3,7 @@ import { useRouteError,
 	useLocation
 } from 'react-router-dom';
 
-import errImg from '../assets/error-img.png'
+import errImg from '../assets/error-image.png'
 
 
 function Error() {
