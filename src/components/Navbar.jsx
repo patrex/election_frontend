@@ -17,7 +17,7 @@ function NavBar({ user, onLogout }) {
 	useEffect(() => {
 		const handleClickOutside = (e) => {
 			if (navOpen && !e.target.closest(".nav-container")) {
-			setNavOpen(false);
+				setNavOpen(false);
 			}
 		};
 		document.addEventListener("click", handleClickOutside);

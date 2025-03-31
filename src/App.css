@@ -235,7 +235,8 @@ header {
 
 .nav-container ul li .link-item:hover,
 .nav-container ul li .link-item.active {
-	border-bottom: lightskyblue 1px solid;
+	background-color: goldenrod;
+	color: #fff;
 }
 
 .nav-container .menu-toggle {
