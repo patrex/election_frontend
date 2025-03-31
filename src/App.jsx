@@ -17,6 +17,7 @@ import ElectionResults, { resultsLoader } from './pages/ElectionResults';
 import NotFound from './pages/NotFound';
 import UpdateCandidate, { updateloader } from './pages/UpdateCandidate';
 import UpdateElection, { updateElectionLoader } from './pages/UpdateElection';
+import Error from './pages/Error';
 import { onAuthStateChanged } from 'firebase/auth';
 
 import { ToastContainer } from 'react-toastify';
@@ -55,19 +56,54 @@ const router = createBrowserRouter(
 			<Route path="login" element={<Login />} />
 			<Route path="signup" element={<SignUp />} />
 			
-			<Route path="/election/:id/results" element={<ElectionResults />} loader={resultsLoader} />
-			<Route path="/election/:id/:voterId" element={<Election />} loader={electionLoader} />
+			<Route path="/election/:id/results" 
+				element={<ElectionResults />} 
+				loader={resultsLoader}
+				errorElement={<Error />}
+			/>
+
+			<Route path="/election/:id/:voterId" 
+				element={<Election />} 
+				loader={electionLoader}
+				errorElement={<Error />}
+			/>
 
 			{/* Protected User Routes */}
 			<Route element={<ProtectedRoute />}>
 				<Route path="user/:userId" element={<UserLayout />}>
-					<Route index element={<Dashboard />} loader={dashboardLoader} />
-					<Route path="create-election" element={<CreateElection />} />
-					<Route path="election/:id" element={<ElectionDetail />} loader={electionDetailLoader} />
-					<Route path="election/:electionId/update" element={<UpdateElection />} loader={updateElectionLoader} />
-					<Route path="election/:id/addcandidate" element={<AddCandidate />} />
-					<Route path="election/:id/position/:position" element={<PositionDetails />} loader={loader} />
-					<Route path="election/candidate/:candidateId/update" element={<UpdateCandidate />} loader={updateloader} />
+					<Route index 
+						element={<Dashboard />} 
+						loader={dashboardLoader}
+						errorElement={<Error />}
+					/>
+
+					<Route path="create-election" 
+						element={<CreateElection />} 
+					/>
+					<Route path="election/:id" 
+						element={<ElectionDetail />} 
+						loader={electionDetailLoader}
+						errorElement={<Error />}
+					/>
+					<Route path="election/:electionId/update" 
+						element={<UpdateElection />} 
+						loader={updateElectionLoader} 
+						errorElement={<Error />}
+					/>
+					<Route path="election/:id/addcandidate" 
+						element={<AddCandidate />} 
+						errorElement={<Error />}
+					/>
+					<Route path="election/:id/position/:position" 
+						element={<PositionDetails />} 
+						loader={loader} 
+						errorElement={<Error />}
+					/>
+					<Route path="election/candidate/:candidateId/update" 
+						element={<UpdateCandidate />} 
+						loader={updateloader} 
+						errorElement={<Error />}
+					/>
 				</Route>
 			</Route>
 

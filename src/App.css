@@ -706,7 +706,51 @@ input[type="number"] {
 	align-items: center;
 }
 
-/* Radix Alert Dialog */
+/* Refresh button ###################################### */
+.refresh-button {
+	padding: 8px 16px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background-color 0.3s;
+}
+
+.refresh-button:hover {
+	background-color: #45a049;
+}
+
+.refresh-button:disabled {
+	background-color: #cccccc;
+	cursor: not-allowed;
+}
+
+.refresh-button.loading {
+	position: relative;
+	padding-left: 40px;
+}
+
+.refresh-button.loading:after {
+	content: "";
+	position: absolute;
+	left: 10px;
+	top: 50%;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	border-top-color: transparent;
+	animation: spin 1s linear infinite;
+	transform: translateY(-50%);
+}
+
+@keyframes spin {
+	to {
+		transform: translateY(-50%) rotate(360deg);
+	}
+}
 
 /* reset */
 button {
