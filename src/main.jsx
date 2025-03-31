@@ -6,8 +6,6 @@ import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 import 'bootstrap/dist/css/bootstrap.css'
 
-const queryClient = new QueryClient({}); 
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 	<ErrorBoundary>

@@ -1,7 +1,7 @@
 import { useRouteError,
 	useNavigate,
 	useLocation
- } from 'react-router-dom';
+} from 'react-router-dom';
 
 
 function Error() {
