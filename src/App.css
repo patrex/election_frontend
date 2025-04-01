@@ -192,6 +192,7 @@ header {
 	/* box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); */
 	/* padding: 1rem 0; */
 	border-bottom: red solid 1px;
+	margin-bottom: 1rem;
 }
 
 .nav-container {
