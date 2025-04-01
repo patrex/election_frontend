@@ -224,16 +224,16 @@ header {
 	margin: 0 0.5rem;
 }
 
-.nav-container ul li .link-item,
-.nav-container .logo .link-item {
+
+.link-item {
 	color: #212a3c;
 	padding: 0 1rem;
 	display: block;
 	text-decoration: none;
 }
 
-.nav-container ul li .link-item:hover,
-.nav-container ul li .link-item.active {
+.link-item:hover,
+.link-item.active {
 	background-color: goldenrod;
 	color: #fff;
 	border-radius: 20px;
@@ -1140,17 +1140,14 @@ button {
 		box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
 	}
 
-	.nav-container ul li .link-item,
-	.nav-container .logo .link-item {
+	.link-item {
 		font-size: 1rem;
 		padding: 0.1rem 1rem;
 		gap: 2px;
 	}
 
-	.nav-container ul li .link-item:hover,
-	.nav-container ul li .link-item.active {
-		border-bottom: none;
-		border-left: skyblue 2px solid;
+	.link-item.active {
+		border-radius: 5px;
 	}
 
 	.nav-link.active {
