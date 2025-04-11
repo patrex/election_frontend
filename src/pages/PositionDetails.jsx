@@ -1,7 +1,8 @@
-import { useLoaderData, useParams, Link } from "react-router-dom";
+import { useLoaderData, useParams, Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useState, useContext } from "react";
 import Toast from "@/utils/ToastMsg";
+import UserCard from "@/components/UserCard"
 
 import { AppContext } from "@/App";
 import backendUrl from '../utils/backendurl'
@@ -30,6 +31,12 @@ function PositionDetails() {
 	const params = useParams()
 
 	const { user } = useContext(AppContext)
+	const navigate = useNavigate()
+
+
+	function handleEdit(edit_url) {
+		navigate(edit_url)
+	}
 
 	function removeCandidate(candidate) {
 		Swal.fire({
@@ -62,7 +69,16 @@ function PositionDetails() {
 				{
 					candidatesList.map(candidate => (
 						<div className="candidate-card">
-							<div className="candidate-card-img">
+							<div>
+								<UserCard 
+									name={`${candidate.firstname} ${candidate.lastname}`}
+									position={ position }
+									imageUrl={candidate.imgUrl}
+									onEdit={ () => handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`) }
+									onDelete={removeCandidate}
+								/>
+							</div>
+							{/* <div className="candidate-card-img">
 								<img 
 									src={candidate.imgUrl}
 								/>
@@ -79,7 +95,7 @@ function PositionDetails() {
 									{new Date(election?.endDate) > Date.now() && <button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
 										<i className="bi bi-trash3"></i></button>}
 								</div>
-							</div>
+							</div> */}
 						</div>
 					))
 				}
