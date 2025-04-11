@@ -1,6 +1,6 @@
 import { useLoaderData, useParams, Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
 
@@ -61,6 +61,10 @@ function PositionDetails() {
 			}
 		});	
 	}
+
+	useEffect(() => {
+		console.log(election);
+	}, [])
 
 	return ( 
 		<>
