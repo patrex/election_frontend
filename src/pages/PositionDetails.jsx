@@ -73,9 +73,9 @@ function PositionDetails() {
 								<UserCard 
 									name={`${candidate.firstname} ${candidate.lastname}`}
 									position={ position }
-									imageUrl={candidate.imgUrl}
+									imageUrl={ candidate.imgUrl }
 									onEdit={ () => handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`) }
-									onDelete={removeCandidate}
+									onDelete={ removeCandidate }
 								/>
 							</div>
 							{/* <div className="candidate-card-img">
