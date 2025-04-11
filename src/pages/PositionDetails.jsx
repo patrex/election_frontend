@@ -75,6 +75,7 @@ function PositionDetails() {
 								imageUrl={ candidate.imgUrl }
 								onEdit={ () => handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`) }
 								onDelete={ removeCandidate }
+								election={election}
 							/>
 						</div>
 					
