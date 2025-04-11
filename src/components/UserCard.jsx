@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 	return (
-		<Card elevation={3} sx={{ borderRadius: 3, maxWidth: 300, padding: 2 }}>
+		<Card elevation={3} sx={{ borderRadius: 3, maxWidth: 350, padding: 2 }}>
 			<Stack alignItems="center" spacing={2}>
 				<Avatar
 					alt={name}

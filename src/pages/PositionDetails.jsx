@@ -68,35 +68,16 @@ function PositionDetails() {
 			<div className="candidates-grid">
 				{
 					candidatesList.map(candidate => (
-						<div className="candidate-card">
-							<div>
-								<UserCard 
-									name={`${candidate.firstname} ${candidate.lastname}`}
-									position={ position }
-									imageUrl={ candidate.imgUrl }
-									onEdit={ () => handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`) }
-									onDelete={ removeCandidate }
-								/>
-							</div>
-							{/* <div className="candidate-card-img">
-								<img 
-									src={candidate.imgUrl}
-								/>
-							</div>
-			
-							<div className="candidate-card-details">
-								<div className="candidate-card-name-plaque">{`${candidate.firstname} ${candidate.lastname}`}</div>
-								<div className="candidate-pos-label">{position} </div>
-								<div className="btn-group" role="group">
-									{new Date(election?.endDate) > Date.now() && <Link to={`/user/${params.userId}/election/candidate/${candidate._id}/update`}>
-										 <button className='Button violet'>Edit</button>
-									</Link>}
-
-									{new Date(election?.endDate) > Date.now() && <button type="button" className='btn btn-danger' onClick={() => removeCandidate(candidate)}>
-										<i className="bi bi-trash3"></i></button>}
-								</div>
-							</div> */}
+						<div>
+							<UserCard 
+								name={`${candidate.firstname} ${candidate.lastname}`}
+								position={ position }
+								imageUrl={ candidate.imgUrl }
+								onEdit={ () => handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`) }
+								onDelete={ removeCandidate }
+							/>
 						</div>
+					
 					))
 				}
 			</div>
