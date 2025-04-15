@@ -62,10 +62,6 @@ function PositionDetails() {
 		});	
 	}
 
-	useEffect(() => {
-		console.log(election);
-	}, [])
-
 	return ( 
 		<>
 			<h1 style={{padding: "0 .5rem"}}>Candidates for {position}</h1>

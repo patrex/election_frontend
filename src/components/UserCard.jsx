@@ -27,7 +27,7 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 					</Typography>
 				</CardContent>
 
-				{new Date(election?.endDate) > Date.now() && (
+				{(new Date(election?.endDate) > Date.now() && new Date(election?.startDate) > Date.now()) && (
 					<Stack direction="row" spacing={1}>
 						<IconButton color="primary" onClick={onEdit}>
 							<EditIcon />

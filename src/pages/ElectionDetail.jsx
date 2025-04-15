@@ -13,8 +13,6 @@ export async function electionDetailLoader({params}) {
 	let election, positions, voters = undefined;
 	const currentUser = authman.currentUser;
 
-	if (!currentUser) return redirect('/login')
-
 	try {
 		const token = await currentUser.getIdToken();
 		const headerSection = {
