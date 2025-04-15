@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { useState, useContext, useEffect } from "react";
 import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
-import { Grid } from '@mui/material';
+import { Grid, Container, Typography } from '@mui/material';
 
 import { AppContext } from "@/App";
 import backendUrl from '../utils/backendurl'
@@ -65,26 +65,30 @@ function PositionDetails() {
 
 	return ( 
 		<>
-			<div className="container">
-				<h1 style={{padding: "0 .5rem"}}>Candidates for {position}</h1>
+			<Container maxWidth="lg" sx={{ pt: 4 }}>
+				<Typography variant="h4" component="h1" sx={{ mb: 3 }}>
+					Candidates for {position}
+				</Typography>
+
 				<Grid container spacing={2}>
-					{
-						candidatesList.map(candidate => (
-							<Grid item key={user.id} xs={12} sm={6} md={4} lg={3}>
-								<UserCard 
-									name={`${candidate.firstname} ${candidate.lastname}`}
-									position={ position }
-									imageUrl={ candidate.imgUrl }
-									onEdit={ () => handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`) }
-									onDelete={ () => removeCandidate(candidate) }
-									election={election}
-								/>
-							</Grid>
-						
-						))
-					}
+					{candidatesList.map(candidate => (
+						<Grid item key={candidate._id} xs={12} sm={6} md={4} lg={3}>
+							<UserCard
+								name={`${candidate.firstname} ${candidate.lastname}`}
+								position={position}
+								imageUrl={candidate.imgUrl}
+								onEdit={() =>
+									handleEdit(
+										`/user/${params.userId}/election/candidate/${candidate._id}/update`
+									)
+								}
+								onDelete={() => removeCandidate(candidate)}
+								election={election}
+							/>
+						</Grid>
+					))}
 				</Grid>
-			</div>
+			</Container>
 		</>
 	);
 }
