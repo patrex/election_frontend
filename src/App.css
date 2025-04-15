@@ -1082,6 +1082,10 @@ button {
 	margin-bottom: 8px;
 }
 
+.footer-content {
+	margin-top: auto;
+}
+
 @keyframes overlayShow {
 	from {
 		opacity: 0;
