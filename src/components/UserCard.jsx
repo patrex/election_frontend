@@ -19,8 +19,8 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 		<Card
 			elevation={3}
 			sx={{
-				width: 300,
-				height: 320,
+				width: 280,
+				height: 300,
 				borderRadius: 3,
 				p: 2,
 				display: 'flex',
@@ -67,7 +67,7 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 
 			{/* Action Buttons */}
 			<Box sx={{ minHeight: 48, mt: 2 }}>
-				{!(hasEnded && isActive) && (
+				{(!hasEnded && !isActive) && (
 					<Stack direction="row" spacing={1}>
 						<IconButton color="primary" onClick={onEdit}>
 							<EditIcon />
