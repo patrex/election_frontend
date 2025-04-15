@@ -2,7 +2,7 @@ function Footer() {
 	return ( 
 		<>
 			<footer>
-				<div className="footer-content">
+				<div>
 					&copy; {new Date().getFullYear()} made with &#10084; by silabs
 				</div>
 			</footer>
