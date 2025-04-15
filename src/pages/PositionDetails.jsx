@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import { useState, useContext, useEffect } from "react";
 import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
+import { Grid } from '@mui/material';
 
 import { AppContext } from "@/App";
 import backendUrl from '../utils/backendurl'
@@ -65,10 +66,10 @@ function PositionDetails() {
 	return ( 
 		<>
 			<h1 style={{padding: "0 .5rem"}}>Candidates for {position}</h1>
-			<div className="candidates-grid">
+			<Grid container spacing={2}>
 				{
 					candidatesList.map(candidate => (
-						<div>
+						<Grid item key={user.id} xs={12} sm={6} md={4} lg={3}>
 							<UserCard 
 								name={`${candidate.firstname} ${candidate.lastname}`}
 								position={ position }
@@ -77,11 +78,11 @@ function PositionDetails() {
 								onDelete={ () => removeCandidate(candidate) }
 								election={election}
 							/>
-						</div>
+						</Grid>
 					
 					))
 				}
-			</div>
+			</Grid>
 		</>
 	);
 }
