@@ -65,24 +65,26 @@ function PositionDetails() {
 
 	return ( 
 		<>
-			<h1 style={{padding: "0 .5rem"}}>Candidates for {position}</h1>
-			<Grid container spacing={2}>
-				{
-					candidatesList.map(candidate => (
-						<Grid item key={user.id} xs={12} sm={6} md={4} lg={3}>
-							<UserCard 
-								name={`${candidate.firstname} ${candidate.lastname}`}
-								position={ position }
-								imageUrl={ candidate.imgUrl }
-								onEdit={ () => handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`) }
-								onDelete={ () => removeCandidate(candidate) }
-								election={election}
-							/>
-						</Grid>
-					
-					))
-				}
-			</Grid>
+			<div className="container">
+				<h1 style={{padding: "0 .5rem"}}>Candidates for {position}</h1>
+				<Grid container spacing={2}>
+					{
+						candidatesList.map(candidate => (
+							<Grid item key={user.id} xs={12} sm={6} md={4} lg={3}>
+								<UserCard 
+									name={`${candidate.firstname} ${candidate.lastname}`}
+									position={ position }
+									imageUrl={ candidate.imgUrl }
+									onEdit={ () => handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`) }
+									onDelete={ () => removeCandidate(candidate) }
+									election={election}
+								/>
+							</Grid>
+						
+						))
+					}
+				</Grid>
+			</div>
 		</>
 	);
 }
