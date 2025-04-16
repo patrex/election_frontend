@@ -1,175 +1,141 @@
-import { useState, useContext, useMemo } from 'react';
+import  { useState, useContext } from 'react';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  createColumnHelper,
-} from '@tanstack/react-table';
 
 export async function dashboardLoader({ params }) {
-  const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  const elections = await res.json();
-  return elections;
+	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	
+	const elections = await res.json()
+	return elections;
 }
+
 
 function Dashboard() {
-  const params = useParams();
-  const elections = useLoaderData();
-  const { user } = useContext(AppContext);
-  const [electionsList, setElectionsList] = useState(elections);
+	const params = useParams();
+	const elections = useLoaderData();
+	
 
-  const removeElection = async (election) => {
-    Swal.fire({
-      title: `Delete ${election.title}?`,
-      showDenyButton: true,
-      confirmButtonText: 'Delete',
-      denyButtonText: 'Cancel',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await fetch(`${backendUrl}/election/${election._id}/delete`, {
-            method: 'delete',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${await user?.getIdToken()}`,
-            },
-          });
+	const { user } = useContext(AppContext);
 
-          if (!res.ok) {
-            Toast.warning('Could not complete the request');
-            return;
-          }
+	const [electionsList, setElectionsList] = useState(elections);
 
-          setElectionsList(electionsList.filter((e) => e._id !== election._id));
-          Toast.success('The event was removed successfully');
-        } catch (error) {
-          Toast.error('An error occurred');
-          console.error(error);
-        }
-      }
-    });
-  };
+	const removeElection = async (election) => {
+		Swal.fire({
+			title: `Delete ${election.title}?`,
+			showDenyButton: true,
+			confirmButtonText: "Delete",
+			denyButtonText: `Cancel`
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				try {
+					const res = await fetch(`${backendUrl}/election/${election._id}/delete`, {
+						method: 'delete',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${await user?.getIdToken()}`
+						},
+					})
 
-  function copyLink(link) {
-    navigator.clipboard.writeText(link);
-    Toast.success('Copied');
-  }
+					if (!res.ok) {
+						Toast.warning("Could not complete the request")
+						return;
+					}
 
-  const columnHelper = createColumnHelper();
+					setElectionsList(electionsList.filter( e => e._id != election._id ));
+					Toast.success('The event was removed successfully')
+				} catch (error) {
+					Toast.error("An error occured")
+					console.error(error);
+				}
+			}
+		});
+	}
 
-  const columns = useMemo(
-    () => [
-      columnHelper.accessor('title', {
-        header: 'Election',
-        cell: (info) => (
-          <Link
-            className="text-primary text-decoration-underline"
-            to={`/user/${params.userId}/election/${info.row.original._id}`}
-          >
-            {info.getValue()}
-          </Link>
-        ),
-      }),
-      columnHelper.accessor('startDate', {
-        header: 'Starting',
-        cell: (info) => moment(info.getValue()).format('MMM[-]Do[-]YY'),
-      }),
-      columnHelper.accessor('endDate', {
-        header: 'Ending',
-        cell: (info) => moment(info.getValue()).format('MMM[-]Do[-]YY'),
-      }),
-      columnHelper.accessor('type', {
-        header: 'Type',
-      }),
-      columnHelper.display({
-        id: 'actions',
-        header: '',
-        cell: ({ row }) => (
-          <div className="d-flex flex-wrap gap-2">
-            <button
-              className="btn btn-outline-primary btn-sm"
-              onClick={() => copyLink(row.original._id)}
-            >
-              Copy ID
-            </button>
-            <button
-              className="btn btn-outline-primary btn-sm"
-              onClick={() => copyLink(row.original.shareLink)}
-            >
-              Copy Link
-            </button>
-            <Link
-              to={`/user/${params.userId}/election/${row.original._id}/update`}
-            >
-              <button
-                className="btn btn-outline-secondary btn-sm"
-                disabled={new Date(row.original.startDate) < Date.now()}
-              >
-                Edit
-              </button>
-            </Link>
-            <button
-              className="btn btn-outline-danger btn-sm"
-              onClick={() => removeElection(row.original)}
-            >
-              <i className="bi bi-trash3"></i>
-            </button>
-          </div>
-        ),
-      }),
-    ],
-    [params.userId, electionsList]
-  );
+	function copyLink(link) {
+		let text = '';
+		text = navigator.clipboard.writeText(link);
 
-  const table = useReactTable({
-    data: electionsList,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+		if (text) Toast.success("copied")
+	}
 
-  return (
-    <div className="table-responsive">
+
+	return (
+		<>
+			<div className='dashboard-container table-responsive'>
+  <table className="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Election</th>
+        <th scope="col">Starting</th>
+        <th scope="col">Ending</th>
+        <th scope="col">Type</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody className='table-group-divider'>
       {electionsList.length > 0 ? (
-        <table className="table table-striped table-hover">
-          <thead className="table-light">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="whitespace-nowrap">
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="whitespace-nowrap">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        electionsList.map(election => (
+          <tr key={election._id}>
+            <td>
+              <Link to={`/user/${params.userId}/election/${election._id}`}>
+                {election.title}
+              </Link>
+            </td>
+            <td>{moment(election.startDate).format('MMM Do YY')}</td>
+            <td>{moment(election.endDate).format('MMM Do YY')}</td>
+            <td>{election.type}</td>
+            <td>
+              <div className="d-flex flex-wrap gap-2">
+                <button
+                  className="Button violet action-item"
+                  onClick={() => copyLink(election._id)}
+                >
+                  Copy ID
+                </button>
+                <button
+                  className="Button violet action-item"
+                  onClick={() => copyLink(election.shareLink)}
+                >
+                  Copy Link
+                </button>
+                <Link to={`/user/${params.userId}/election/${election._id}/update`}>
+                  <button
+                    className="Button violet action-item"
+                    disabled={new Date(election.startDate) < Date.now()}
+                  >
+                    Edit
+                  </button>
+                </Link>
+                <button
+                  className="Button red action-item"
+                  onClick={() => removeElection(election)}
+                >
+                  <i className="bi bi-trash3 m-1"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))
       ) : (
-        <p className="text-muted">No elections to show</p>
+        <tr>
+          <td colSpan={5} className="text-center">No elections to show</td>
+        </tr>
       )}
-    </div>
-  );
-}
+    </tbody>
+  </table>
+</div>
 
+		</>
+	);
+}
+ 
 export default Dashboard;
