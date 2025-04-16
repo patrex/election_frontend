@@ -27,6 +27,19 @@ function AddCandidate() {
 	const [image, setImage] = useState('');
 	const [filename, setFilename] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [preview, setPreview] = useState(null);
+
+	const handleFileChange = (event) => {
+		const file = event.target.files[0];
+		if (file) {
+			setImage(file)
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setPreview(reader.result);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
 
 	const fetchPositions = () => {
 		fetch(`${backendUrl}/election/${params.id}/positions`)
@@ -35,13 +48,13 @@ function AddCandidate() {
 			.catch(err => console.log(err))
 	}
 
-	const handleFileNameChange = (e) => {
-		const file = e.target.files[0];
-		if (file) {
-			setImage(file)
-			setFilename(file.name)
-		}
-	}
+	// const handleFileNameChange = (e) => {
+	// 	const file = e.target.files[0];
+	// 	if (file) {
+	// 		setImage(file)
+	// 		setFilename(file.name)
+	// 	}
+	// }
 
 	const uploadImage = async () => {
 		try {
@@ -151,15 +164,21 @@ function AddCandidate() {
 					
 					<div>
 						<div className="mb-3">
-							<input className='fileupload form-control-file' 
+							<input
+								className='fileupload form-control-file'
 								type="file"
-								id="uploadpic" 
-								onChange={ handleFileNameChange }
-								style={ {display: 'none'} }
+								id="uploadpic"
+								accept='image/png, image/jpeg'
+								onChange={ handleFileChange }
+								style={{ display: 'none' }}
 							/>
 							<label htmlFor="uploadpic" className='Button violet'>Choose a picture</label>
 						</div>
-						<p>&gt; {filename}</p>
+						{preview && (
+							<div className="image-preview">
+								<img src={preview} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
+							</div>
+						)}
 					</div>
 					
 					<button type = 'submit' disabled={isSubmitting} 

@@ -12,8 +12,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
-	const hasEnded = new Date(election?.endDate) > Date.now();
-	const isActive = new Date(election?.startDate) > Date.now()
 
 	return (
 		<Card
@@ -67,7 +65,7 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 
 			{/* Action Buttons */}
 			<Box sx={{ minHeight: 48, mt: 2 }}>
-				{(!hasEnded && !isActive) && (
+				{(new Date(election?.endDate) > Date.now() && new Date(election?.startDate) > Date.now()) && (
 					<Stack direction="row" spacing={1}>
 						<IconButton color="primary" onClick={onEdit}>
 							<EditIcon />
