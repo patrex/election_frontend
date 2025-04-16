@@ -1,10 +1,15 @@
-import  { useState, useContext } from 'react';
+import { useState, useContext, useMemo } from 'react';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
+import {
+	useReactTable,
+	getCoreRowModel,
+	flexRender,
+} from '@tanstack/react-table';
 
 export async function dashboardLoader({ params }) {
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
@@ -12,17 +17,14 @@ export async function dashboardLoader({ params }) {
 			'Content-Type': 'application/json'
 		}
 	})
-	
-	const elections = await res.json()
+
+	const elections = await res.json();
 	return elections;
 }
-
 
 function Dashboard() {
 	const params = useParams();
 	const elections = useLoaderData();
-	
-
 	const { user } = useContext(AppContext);
 
 	const [electionsList, setElectionsList] = useState(elections);
@@ -49,10 +51,10 @@ function Dashboard() {
 						return;
 					}
 
-					setElectionsList(electionsList.filter( e => e._id != election._id ));
+					setElectionsList(electionsList.filter(e => e._id !== election._id));
 					Toast.success('The event was removed successfully')
 				} catch (error) {
-					Toast.error("An error occured")
+					Toast.error("An error occurred")
 					console.error(error);
 				}
 			}
@@ -60,52 +62,92 @@ function Dashboard() {
 	}
 
 	function copyLink(link) {
-		let text = '';
-		text = navigator.clipboard.writeText(link);
-
-		if (text) Toast.success("copied")
+		navigator.clipboard.writeText(link).then(() => {
+			Toast.success("Copied")
+		});
 	}
 
+	const columns = useMemo(() => [
+		{
+			header: 'Election',
+			accessorKey: 'title',
+			cell: ({ row }) => (
+				<Link to={`/user/${params.userId}/election/${row.original._id}`}>
+					{row.original.title}
+				</Link>
+			),
+		},
+		{
+			header: 'Starting',
+			accessorKey: 'startDate',
+			cell: ({ getValue }) => moment(getValue()).format('MMM[-]Do[-]YY'),
+		},
+		{
+			header: 'Ending',
+			accessorKey: 'endDate',
+			cell: ({ getValue }) => moment(getValue()).format('MMM[-]Do[-]YY'),
+		},
+		{
+			header: 'Type',
+			accessorKey: 'type',
+		},
+		{
+			header: '',
+			id: 'actions',
+			cell: ({ row }) => {
+				const election = row.original;
+				return (
+					<div className="flex flex-wrap gap-2">
+						<button className="Button violet action-item" onClick={() => copyLink(election._id)}>Copy ID</button>
+						<button className="Button violet action-item" onClick={() => copyLink(election.shareLink)}>Copy Link</button>
+						<Link to={`/user/${params.userId}/election/${election._id}/update`}>
+							<button className='Button violet action-item' disabled={new Date(election.startDate) < Date.now()}>Edit</button>
+						</Link>
+						<button className='Button red action-item' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button>
+					</div>
+				);
+			},
+		},
+	], [copyLink, removeElection, params.userId]);
+
+	const table = useReactTable({
+		data: electionsList,
+		columns,
+		getCoreRowModel: getCoreRowModel(),
+	});
 
 	return (
-		<>
-			<div className='dashboard-container table-responsive'>
-				<table className="table table-hover table-striped">
+		<div className='dashboard-container overflow-x-auto mt-4'>
+			{electionsList.length === 0 ? (
+				<p>No elections to show</p>
+			) : (
+				<table className="table-auto w-full text-left border-collapse">
 					<thead>
-						<tr>
-							<th scope="col">Election</th>
-							<th scope="col">Starting</th>
-							<th scope="col">Ending</th>
-							<th scope="col">Type</th>
-							
-							<th scope="col"></th>
-						</tr>
-					</thead>
-
-					<tbody className='table-group-divider'>
-						{electionsList.length > 0 ? electionsList.map(election => (
-							<tr key={election._id}>
-								
-								<td><Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link></td>
-								<td>{moment(election.startDate).format('MMM[-]Do[-]YY')}</td>
-								<td>{moment(election.endDate).format('MMM[-]Do[-]YY')}</td>
-								<td>{election.type}</td>
-								
-								<div className="list-btn-items">
-									<td><button className="Button violet action-item" onClick={() => copyLink(election._id)}>Copy ID</button></td>
-									<td><button className="Button violet action-item" onClick={() => copyLink(election.shareLink)}>Copy Link</button></td>
-									<td><Link to={`/user/${params.userId}/election/${election._id}/update`}>
-										<button className='Button violet action-item' disabled={new Date(election.startDate) < Date.now()}>Edit</button>
-									</Link></td>
-									<td><button className='Button red action-item' onClick={() => removeElection(election)}><i className="bi bi-trash3 m-1"></i></button></td>
-								</div>
+						{table.getHeaderGroups().map(headerGroup => (
+							<tr key={headerGroup.id} className="bg-gray-100">
+								{headerGroup.headers.map(header => (
+									<th key={header.id} className="p-3 border-b font-medium">
+										{flexRender(header.column.columnDef.header, header.getContext())}
+									</th>
+								))}
 							</tr>
-						)) : <p>No elections to show</p>}
+						))}
+					</thead>
+					<tbody className="divide-y">
+						{table.getRowModel().rows.map(row => (
+							<tr key={row.id} className="hover:bg-gray-50">
+								{row.getVisibleCells().map(cell => (
+									<td key={cell.id} className="p-3">
+										{flexRender(cell.column.columnDef.cell, cell.getContext())}
+									</td>
+								))}
+							</tr>
+						))}
 					</tbody>
 				</table>
-			</div>
-		</>
+			)}
+		</div>
 	);
 }
- 
+
 export default Dashboard;
