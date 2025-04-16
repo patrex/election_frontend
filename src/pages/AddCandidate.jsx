@@ -202,7 +202,7 @@ function AddCandidate() {
     					</div>
 					
 					<button type = 'submit' disabled={isSubmitting} 
-						className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200 w-4/5 mt-4">
+						className="mt-4 flex items-center justify-center w-2/3 px-6 py-3 bg-white block mx-auto text-gray-700 text-lg font-medium border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700">
 							{ isSubmitting ? <PulseLoader  color="#fff" size={5} loading={isSubmitting}/> : "Add Candidate" }
 					</button>
 				</form>
