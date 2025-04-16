@@ -192,11 +192,11 @@ function AddCandidate() {
 
 						{preview && (
 							<div className="sm:ml-auto">
-							<img
-								src={preview}
-								alt="Preview"
-								className="w-24 h-24 object-cover rounded border shadow"
-							/>
+								<img
+									src={preview}
+									alt="Preview"
+									className="w-24 h-24 object-cover rounded border shadow"
+								/>
 							</div>
 						)}
     					</div>
