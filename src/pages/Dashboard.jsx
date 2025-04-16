@@ -31,11 +31,14 @@ function Dashboard() {
 	const [electionsList, setElectionsList] = useState(elections);
 
 	const handleEdit = async (election) => {
-		if (new Date(election.startDate) < Date.now()) {
+		if (new Date(election?.startDate) < Date.now()) {
 			Toast.warning("You cannot edit this election because it has already started")
 			return;
+		} else if (new Date(election?.endDate) < Date.now()) {
+			Toast.warning("You cannot edit this election because it has ended")
+			return
 		}
-
+		
 		navigate(`/user/${params.userId}/election/${election._id}/update`)
 	}
 
