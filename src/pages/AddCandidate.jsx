@@ -162,22 +162,29 @@ function AddCandidate() {
 						/>
 					</div>
 					
-					<div style={{ display: 'flex', alignItems: 'center' }}>
-						<div className="mb-3">
-							<input
-								className='fileupload form-control-file'
-								type="file"
-								id="uploadpic"
-								accept='image/png, image/jpeg'
-								onChange={ handleFileChange }
-								style={{ display: 'none' }}
+					<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
+						<div>
+							<input 
+								type="file" 
+								id="uploadpic" 
+								onChange={handleFileChange} 
+								className="hidden" 
 							/>
-							<label htmlFor="uploadpic" className='Button violet'>Choose a picture</label>
+							<label 
+								htmlFor="uploadpic" 
+								className="inline-block px-4 py-2 bg-violet-600 text-white rounded cursor-pointer hover:bg-violet-700 transition"
+							> Choose a picture
+							</label>
 						</div>
+
 						{preview && (
-							<div className="image-preview" style={{ marginLeft: '16px' }}>
-							 	<img src={preview} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
-						       </div>
+							<div className="w-full sm:w-auto sm:ml-auto">
+								<img 
+									src={preview} 
+									alt="Preview" 
+									className="w-24 h-24 object-cover rounded mx-auto sm:mx-0"
+								/>
+							</div>
 						)}
 					</div>
 					
