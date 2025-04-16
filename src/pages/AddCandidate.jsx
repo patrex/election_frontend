@@ -48,6 +48,11 @@ function AddCandidate() {
 			.catch(err => console.log(err))
 	}
 
+	const handleRemoveImage = () => {
+		setPreview(null);
+		document.getElementById('uploadpic').value = '';
+	};
+
 	// const handleFileNameChange = (e) => {
 	// 	const file = e.target.files[0];
 	// 	if (file) {
@@ -163,30 +168,38 @@ function AddCandidate() {
 					</div>
 					
 					<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
-						<div>
-							<input 
-								type="file" 
-								id="uploadpic" 
-								onChange={handleFileChange} 
-								className="hidden" 
+						<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+							<input
+								type="file"
+								id="uploadpic"
+								accept="image/*"
+								onChange={handleFileChange}
+								className="hidden"
 							/>
-							<label 
-								htmlFor="uploadpic" 
-								className="inline-block px-4 py-2 bg-violet-600 text-white rounded cursor-pointer hover:bg-violet-700 transition"
+							<label
+								htmlFor="uploadpic"
+								className="px-4 py-2 bg-violet-600 text-white rounded cursor-pointer hover:bg-violet-700 transition"
 							> Choose a picture
 							</label>
+							{preview && (
+								<button
+									onClick={handleRemoveImage}
+									className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+								> Remove Image
+								</button>
+							)}
 						</div>
 
 						{preview && (
-							<div className="w-full sm:w-auto sm:ml-auto">
-								<img 
-									src={preview} 
-									alt="Preview" 
-									className="w-24 h-24 object-cover rounded mx-auto sm:mx-0"
-								/>
+							<div className="sm:ml-auto">
+							<img
+								src={preview}
+								alt="Preview"
+								className="w-24 h-24 object-cover rounded border shadow"
+							/>
 							</div>
 						)}
-					</div>
+    					</div>
 					
 					<button type = 'submit' disabled={isSubmitting} 
 						className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200">
