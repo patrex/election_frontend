@@ -97,7 +97,7 @@ function ElectionResults() {
 				<div className="resultsLeft">
 					<label>
 						<select name="position"
-							className='form-select form-select-lg mb-3'
+							className='form-select form-select-lg mb-3 w-80'
 							value={selectedPosition}
 							onChange={handleChange}
 						>
