@@ -388,7 +388,8 @@ button.submit-btn {
 	cursor: pointer;
 	transition: background-color 0.3s ease, transform 0.3s ease;
 	border: none;
-	border-radius: 5px;
+	border-radius: 3px;
+	margin: 1rem .5rem;
 }
 
 /* Hover effect */
