@@ -9,7 +9,7 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
-  createColumnHelper
+  createColumnHelper,
 } from '@tanstack/react-table';
 
 export async function dashboardLoader({ params }) {
@@ -74,7 +74,7 @@ function Dashboard() {
         header: 'Election',
         cell: (info) => (
           <Link
-            className="text-blue-600 hover:underline"
+            className="text-primary text-decoration-underline"
             to={`/user/${params.userId}/election/${info.row.original._id}`}
           >
             {info.getValue()}
@@ -96,15 +96,15 @@ function Dashboard() {
         id: 'actions',
         header: '',
         cell: ({ row }) => (
-          <div className="flex flex-wrap gap-2">
+          <div className="d-flex flex-wrap gap-2">
             <button
-              className="Button violet action-item"
+              className="btn btn-outline-primary btn-sm"
               onClick={() => copyLink(row.original._id)}
             >
               Copy ID
             </button>
             <button
-              className="Button violet action-item"
+              className="btn btn-outline-primary btn-sm"
               onClick={() => copyLink(row.original.shareLink)}
             >
               Copy Link
@@ -113,17 +113,17 @@ function Dashboard() {
               to={`/user/${params.userId}/election/${row.original._id}/update`}
             >
               <button
-                className="Button violet action-item"
+                className="btn btn-outline-secondary btn-sm"
                 disabled={new Date(row.original.startDate) < Date.now()}
               >
                 Edit
               </button>
             </Link>
             <button
-              className="Button red action-item"
+              className="btn btn-outline-danger btn-sm"
               onClick={() => removeElection(row.original)}
             >
-              <i className="bi bi-trash3 m-1"></i>
+              <i className="bi bi-trash3"></i>
             </button>
           </div>
         ),
@@ -139,25 +139,25 @@ function Dashboard() {
   });
 
   return (
-    <div className="dashboard-container w-full overflow-x-auto">
+    <div className="table-responsive">
       {electionsList.length > 0 ? (
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
+        <table className="table table-striped table-hover">
+          <thead className="table-light">
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="text-left">
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="px-4 py-2 text-sm font-semibold text-gray-700 whitespace-nowrap">
+                  <th key={header.id} className="whitespace-nowrap">
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </th>
                 ))}
               </tr>
             ))}
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-50">
+              <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-2 text-sm whitespace-nowrap">
+                  <td key={cell.id} className="whitespace-nowrap">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -166,7 +166,7 @@ function Dashboard() {
           </tbody>
         </table>
       ) : (
-        <p className="text-gray-600">No elections to show</p>
+        <p className="text-muted">No elections to show</p>
       )}
     </div>
   );
