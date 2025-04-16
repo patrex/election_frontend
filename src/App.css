@@ -702,6 +702,7 @@ input[type="number"] {
 .resultsContainer {
 	display: flex;
 	height: 80vh;
+	width: 100vw;
 	background-color: #f5f5f5;
 }
 
@@ -716,6 +717,9 @@ input[type="number"] {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+.resultsLeft {
+	width: 60vw;
 }
 
 /* Refresh button ###################################### */
