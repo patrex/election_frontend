@@ -69,70 +69,60 @@ function Dashboard() {
 
 	return (
 		<>
-			<div className='table-responsive-sm'>
-  <table className="table table-hover table-striped">
-    <thead>
-      <tr>
-        <th scope="col">Election</th>
-        <th scope="col">Starting</th>
-        <th scope="col">Ending</th>
-        <th scope="col">Type</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-
-    <tbody className='table-group-divider'>
-      {electionsList.length > 0 ? (
-        electionsList.map(election => (
-          <tr key={election._id}>
-            <td>
-              <Link to={`/user/${params.userId}/election/${election._id}`}>
-                {election.title}
-              </Link>
-            </td>
-            <td>{moment(election.startDate).format('MMM Do YY')}</td>
-            <td>{moment(election.endDate).format('MMM Do YY')}</td>
-            <td>{election.type}</td>
-            <td>
-              <div className="d-flex flex-wrap gap-2">
-                <button
-                  className="Button violet action-item"
-                  onClick={() => copyLink(election._id)}
-                >
-                  Copy ID
-                </button>
-                <button
-                  className="Button violet action-item"
-                  onClick={() => copyLink(election.shareLink)}
-                >
-                  Copy Link
-                </button>
-                <Link to={`/user/${params.userId}/election/${election._id}/update`}>
-                  <button
-                    className="Button violet action-item"
-                    disabled={new Date(election.startDate) < Date.now()}
-                  >
-                    Edit
-                  </button>
+			<div className="dashboard-container">
+  {electionsList.length > 0 ? (
+    <div className="d-flex flex-column gap-3">
+      {electionsList.map(election => (
+        <div key={election._id} className="p-3 border rounded shadow-sm">
+          <div className="d-flex justify-content-between align-items-start flex-wrap">
+            <div>
+              <h5>
+                <Link to={`/user/${params.userId}/election/${election._id}`}>
+                  {election.title}
                 </Link>
+              </h5>
+              <p className="mb-1"><strong>Start:</strong> {moment(election.startDate).format('MMM Do YY')}</p>
+              <p className="mb-1"><strong>End:</strong> {moment(election.endDate).format('MMM Do YY')}</p>
+              <p className="mb-2"><strong>Type:</strong> {election.type}</p>
+            </div>
+
+            <div className="d-flex flex-wrap gap-2 mt-2">
+              <button
+                className="Button violet action-item"
+                onClick={() => copyLink(election._id)}
+              >
+                Copy ID
+              </button>
+              <button
+                className="Button violet action-item"
+                onClick={() => copyLink(election.shareLink)}
+              >
+                Copy Link
+              </button>
+              <Link to={`/user/${params.userId}/election/${election._id}/update`}>
                 <button
-                  className="Button red action-item"
-                  onClick={() => removeElection(election)}
+                  className="Button violet action-item"
+                  disabled={new Date(election.startDate) < Date.now()}
                 >
-                  <i className="bi bi-trash3 m-1"></i>
+                  Edit
                 </button>
-              </div>
-            </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan={5} className="text-center">No elections to show</td>
-        </tr>
-      )}
-    </tbody>
-  </table>
+              </Link>
+              <button
+                className="Button red action-item"
+                onClick={() => removeElection(election)}
+              >
+                <i className="bi bi-trash3 m-1"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p className="text-center">No elections to show</p>
+  )}
 </div>
+
 
 		</>
 	);
