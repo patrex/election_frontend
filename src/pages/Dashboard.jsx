@@ -5,8 +5,9 @@ import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
+
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 
 export async function dashboardLoader({ params }) {
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
@@ -23,26 +24,11 @@ export async function dashboardLoader({ params }) {
 function Dashboard() {
 	const params = useParams();
 	const elections = useLoaderData();
-	const navigate = useNavigate();
 	
 
 	const { user } = useContext(AppContext);
 
 	const [electionsList, setElectionsList] = useState(elections);
-
-	const handleEdit = async (election) => {
-		preventDefault()
-
-		if (new Date(election?.startDate) < Date.now()) {
-			Toast.warning("You cannot edit this election because it has already started")
-			return;
-		} else if (new Date(election?.endDate) < Date.now()) {
-			Toast.warning("You cannot edit this election because it has ended")
-			return
-		} else
-		
-		navigate(`/user/${params.userId}/election/${election._id}/update`)
-	}
 
 	const removeElection = async (election) => {
 		Swal.fire({
@@ -119,7 +105,7 @@ function Dashboard() {
 										<Link to={`/user/${params.userId}/election/${election._id}/update`}>
 											<button
 												className="Button violet action-item"
-												onClick={ () => handleEdit(election) }
+												disabled={new Date(election.startDate) < Date.now()}
 											>
 												Edit
 											</button>
