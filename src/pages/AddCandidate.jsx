@@ -162,7 +162,7 @@ function AddCandidate() {
 						/>
 					</div>
 					
-					<div>
+					<div style={{ display: 'flex', alignItems: 'center' }}>
 						<div className="mb-3">
 							<input
 								className='fileupload form-control-file'
@@ -175,9 +175,9 @@ function AddCandidate() {
 							<label htmlFor="uploadpic" className='Button violet'>Choose a picture</label>
 						</div>
 						{preview && (
-							<div className="image-preview">
-								<img src={preview} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
-							</div>
+							<div className="image-preview" style={{ marginLeft: '16px' }}>
+							 	<img src={preview} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
+						       </div>
 						)}
 					</div>
 					
