@@ -69,7 +69,7 @@ function Dashboard() {
 
 	return (
 		<>
-			<div className='dashboard-container table-responsive'>
+			<div className='table-responsive-sm'>
   <table className="table table-hover table-striped">
     <thead>
       <tr>
