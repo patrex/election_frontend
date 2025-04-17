@@ -532,15 +532,14 @@ input[type="number"] {
 table {
 	width: 100%;
 	border-collapse: collapse;
-	background: #ccc;
 }
 
-tr:nth-of-type(2n) {
-	background: 
+tr:nth-child(even) {
+	background: #eeeeee
 }
 
 th {
-	background: #fff;
+	background: #2c2c2c;
 	text-align: left;
 }
 
