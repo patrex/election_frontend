@@ -67,6 +67,7 @@ function CreateElection() {
 		<div className="container flex justify-center py-10">
   <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-md">
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      
       {/* Election Name */}
       <div>
         <label htmlFor="electionTitle" className="block font-medium mb-1">Election Name</label>
@@ -76,7 +77,8 @@ function CreateElection() {
           name="electiontitle"
           autoFocus
           {...register('electiontitle')}
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
+          style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
         />
         {errors.electiontitle && (
           <p className="text-red-500 text-sm mt-1">You need at least two characters</p>
@@ -92,7 +94,8 @@ function CreateElection() {
           id="startDate"
           name="startdate"
           {...register('startdate')}
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
+          style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
         />
         {errors.startdate && (
           <p className="text-red-500 text-sm mt-1">Start date cannot be less than the current year</p>
@@ -107,7 +110,8 @@ function CreateElection() {
           id="endDate"
           name="enddate"
           {...register('enddate')}
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
+          style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
         />
         {errors.enddate && (
           <p className="text-red-500 text-sm mt-1">End date cannot be later than the year 3000</p>
@@ -121,7 +125,8 @@ function CreateElection() {
           id="type"
           name="electiontype"
           {...register('electiontype')}
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
+          style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
         >
           <option value="" disabled>Select type</option>
           <option value="Open">Open</option>
@@ -150,7 +155,8 @@ function CreateElection() {
           name="description"
           placeholder="Describe the election (optional)"
           {...register('description')}
-          className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2"
+          style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
         />
         {errors.description && (
           <p className="text-red-500 text-sm mt-1">Cannot be more than 200 characters</p>
@@ -163,7 +169,8 @@ function CreateElection() {
           name="rules"
           placeholder="State any rules for this election"
           {...register('rules')}
-          className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2"
+          style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
         />
         {errors.rules && (
           <p className="text-red-500 text-sm mt-1">Cannot be more than 1000 characters</p>
@@ -175,14 +182,16 @@ function CreateElection() {
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-200"
+          className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 transition duration-200"
+          style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
         >
-          {loading ? <PulseLoader color="#fff" size={5} loading={loading} /> : "Create Election"}
+          {loading ? <PulseLoader color="#fff" size={5} loading={loading} /> : 'Create Election'}
         </button>
       </div>
     </form>
   </div>
 </div>
+
 
 	);
 }
