@@ -85,7 +85,7 @@ function Dashboard() {
 							<th>Start date</th>
 							<th>End date</th>
 							<th>Election type</th>
-							<th>Actions</th>
+							<th></th>
 						</tr>
 
 						{electionsList.length > 0 ? (
@@ -95,14 +95,15 @@ function Dashboard() {
 									<td data-cell="Start date">{election.startDate}</td>
 									<td data-cell="End date">{election.endDate}</td>
 									<td data-cell="Election type">{election.type}</td>
-									<td data-cell="Actions">
-										<div>
+									<td data-cell="">
+										<>
 											<ButtonGroup variant="contained" aria-label="Basic button group">
-												<Button>Copy ID</Button>
-												<Button>Copy URL</Button>
-												
+												<Button>ID</Button>
+												<Button>URL</Button>
+												<Button><EditIcon /></Button>
+												<Button><DeleteIcon /></Button>
 											</ButtonGroup>
-										</div>
+										</>
 									</td>
 								</tr>
 							))
