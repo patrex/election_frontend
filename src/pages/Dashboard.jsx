@@ -91,7 +91,9 @@ function Dashboard() {
 						{electionsList.length > 0 ? (
 							electionsList.map(election => (
 								<tr key={election._id}>
-									<td data-cell="Name">{election.title}</td>
+									<td data-cell="Name">{<Link to={`/user/${params.userId}/election/${election._id}`}>
+													{election.title}
+												</Link>}</td>
 									<td data-cell="Start date">{moment(election.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
 									<td data-cell="End date">{moment(election.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
 									<td data-cell="Election type">{election.type}</td>
