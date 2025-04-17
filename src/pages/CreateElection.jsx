@@ -135,19 +135,36 @@ function CreateElection() {
       </div>
 
       {/* Voter Authentication Type */}
-      <div className="bg-gray-50 rounded-md p-4">
-        <p className="font-medium mb-2">How will voters participate?</p>
-        <div className="flex gap-4">
-          <label htmlFor="auth-email" className="flex items-center gap-2">
-            <input {...register('userAuthType')} type="radio" id="auth-email" value="email" />
-            <span>Email</span>
-          </label>
-          <label htmlFor="auth-phone" className="flex items-center gap-2">
-            <input {...register('userAuthType')} type="radio" id="auth-phone" value="phone" />
-            <span>Phone</span>
-          </label>
-        </div>
-      </div>
+      <div className="border border-[#feb47b] rounded-md my-4 p-4 w-full max-w-2xl">
+  <p className="font-semibold mb-3">How will voters participate?</p>
+
+  <label htmlFor="auth-email" className="block cursor-pointer my-4">
+    <input
+      {...register('userAuthType')}
+      type="radio"
+      id="auth-email"
+      value="email"
+      className="hidden peer"
+    />
+    <span className="inline-flex items-center rounded-[10px] transition-all duration-200 before:content-[''] before:h-5 before:w-5 before:rounded-full before:ml-2 before:mr-4 before:bg-transparent before:shadow-[inset_0_0_0_1px_black] peer-checked:before:shadow-[inset_0_0_0_5px_black]">
+      Email
+    </span>
+  </label>
+
+  <label htmlFor="auth-phone" className="block cursor-pointer my-4">
+    <input
+      {...register('userAuthType')}
+      type="radio"
+      id="auth-phone"
+      value="phone"
+      className="hidden peer"
+    />
+    <span className="inline-flex items-center rounded-[10px] transition-all duration-200 before:content-[''] before:h-5 before:w-5 before:rounded-full before:ml-2 before:mr-4 before:bg-transparent before:shadow-[inset_0_0_0_1px_black] peer-checked:before:shadow-[inset_0_0_0_5px_black]">
+      Phone
+    </span>
+  </label>
+</div>
+
 
       {/* Description */}
       <div>
