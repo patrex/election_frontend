@@ -532,7 +532,6 @@ input[type="number"] {
 table {
 	width: 100%;
 	border-collapse: collapse;
-	background: goldenrod;
 }
 
 tr:nth-of-type(2n) {
@@ -540,12 +539,38 @@ tr:nth-of-type(2n) {
 }
 
 th {
-	background: darkslategray;
+	background: ;
 	text-align: left;
 }
 
 th, td {
 	padding: 1rem;
+}
+
+@media (max-width: 650px) {
+
+	th {
+		display: none;
+	}
+
+	td {
+		display: block;
+		padding: .5rem 1rem;
+	}
+
+	td:first-child {
+		padding-top: 1rem;
+	}
+
+	td:last-child {
+		padding-bottom: 1rem;
+	}
+
+	td::before {
+		content: attr(data-cell) ": ";
+		font-weight: bold;
+		text-transform: capitalize;
+	}
 }
 
 /*  */
