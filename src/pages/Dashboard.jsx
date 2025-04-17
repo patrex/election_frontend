@@ -100,12 +100,7 @@ function Dashboard() {
 											<ButtonGroup variant="contained" aria-label="Basic button group">
 												<Button>Copy ID</Button>
 												<Button>Copy URL</Button>
-												<IconButton color="primary" onClick={ navigate(`/user/${params.userId}/election/${election._id}/update`)}>
-													<EditIcon />
-												</IconButton>
-												<IconButton color="error" onClick={ () => removeElection(election)}>
-													<DeleteIcon />
-												</IconButton>
+												
 											</ButtonGroup>
 										</div>
 									</td>

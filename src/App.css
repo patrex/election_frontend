@@ -535,11 +535,11 @@ table {
 }
 
 tr:nth-of-type(2n) {
-	background: hsl(0, 0%, 0% / .1);
+	background: hsl(0, 0%, 0% / 0.1);
 }
 
 th {
-	background: hsl(0, 0%, 0% / .5);
+	background: hsl(0, 0%, 0% / 0.5);
 }
 
 th, td {
