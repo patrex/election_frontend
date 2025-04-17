@@ -521,6 +521,7 @@ input[type="number"] {
 	border-radius: 10px;
 	overflow: hidden;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	width: 90%;
 }
 
 .candidate-update-form-container {
