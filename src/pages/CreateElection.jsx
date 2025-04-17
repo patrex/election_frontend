@@ -64,89 +64,126 @@ function CreateElection() {
 	}
 
 	return (
-		<div className="container">
-			<div className="form-container" style={ {border: 'none'} }>
-				<form onSubmit={ handleSubmit(onSubmit) }>
-					<div className="mb-3">
-						<label htmlFor="electionTitle" className="form-label">Election Name: </label>
-						<input type="text" 
-							id="electionTitle" 
-							aria-describedby="electionName" 
-							name="electiontitle"
-							autoFocus
-							{...register('electiontitle')}
-						/>{errors.electiontitle && <span className='error-msg'>You need at least two characters</span>}
-						<div id="electionName" className="form-text">Enter a descriptive title this election</div>
-					</div>
-					<div className="mb-3">
-						<label htmlFor="startDate" className="px-2">Start Date</label>
-						<span>
-							<input type="datetime-local" 
-								id="startDate" 
-								name="startdate"
-								className="Button mauve"
-								{...register('startdate')}
-							/>
-						</span>{errors.startdate && <span className='error-msg'>Start date cannot be less than current year</span>}
-					</div>
+		<div className="container flex justify-center py-10">
+  <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-md">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Election Name */}
+      <div>
+        <label htmlFor="electionTitle" className="block font-medium mb-1">Election Name</label>
+        <input
+          type="text"
+          id="electionTitle"
+          name="electiontitle"
+          autoFocus
+          {...register('electiontitle')}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        {errors.electiontitle && (
+          <p className="text-red-500 text-sm mt-1">You need at least two characters</p>
+        )}
+        <p className="text-gray-500 text-sm mt-1">Enter a descriptive title for this election</p>
+      </div>
 
-					<div className="mb-3">
-						<label htmlFor="endDate" className="px-2">End Date</label>
-						<span>
-							<input type="datetime-local" 
-								id="endDate" 
-								name="enddate"
-								className="Button mauve"
-								{...register('enddate')}
-							/>{errors.enddate && <span className='error-msg'>Cannot be more than 3000</span>}
-						</span>
-					</div>
+      {/* Start Date */}
+      <div>
+        <label htmlFor="startDate" className="block font-medium mb-1">Start Date</label>
+        <input
+          type="datetime-local"
+          id="startDate"
+          name="startdate"
+          {...register('startdate')}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        {errors.startdate && (
+          <p className="text-red-500 text-sm mt-1">Start date cannot be less than the current year</p>
+        )}
+      </div>
 
-					<div className="mb-3">
-						<label htmlFor="type">Select the election type</label>
-						<select className="form-select form-select-lg mb-3 w-full"
-							id="type" 
-							aria-label="Large select example"
-							name="electiontype"
-							{...register('electiontype')}
-						>
-							<option value="" disabled>Select type</option>
-							<option value="Open">Open</option>
-							<option value="Closed">Closed</option>
-						</select>
-					</div>
+      {/* End Date */}
+      <div>
+        <label htmlFor="endDate" className="block font-medium mb-1">End Date</label>
+        <input
+          type="datetime-local"
+          id="endDate"
+          name="enddate"
+          {...register('enddate')}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        {errors.enddate && (
+          <p className="text-red-500 text-sm mt-1">End date cannot be later than the year 3000</p>
+        )}
+      </div>
 
-					
-					<div className="closed-event my-2 p-2.5 w-4/5">
-						<p>How will voters participate?</p>
-						
-						<label htmlFor="auth-email" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-email" value='email'/><span>Email</span></label>
-						<label htmlFor="auth-phone" className="auth-type-label"><input {...register('userAuthType')} type="radio"  id="auth-phone" value='phone'/><span>Phone</span></label>
-					</div>
-					
+      {/* Election Type */}
+      <div>
+        <label htmlFor="type" className="block font-medium mb-1">Election Type</label>
+        <select
+          id="type"
+          name="electiontype"
+          {...register('electiontype')}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="" disabled>Select type</option>
+          <option value="Open">Open</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
 
-					<textarea name="description" 
-						id=""
-						placeholder="Describe the election(optional)"
-						{...register('description')}
-						className="p-2 my-2"
-					/> {errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
+      {/* Voter Authentication Type */}
+      <div className="bg-gray-50 rounded-md p-4">
+        <p className="font-medium mb-2">How will voters participate?</p>
+        <div className="flex gap-4">
+          <label htmlFor="auth-email" className="flex items-center gap-2">
+            <input {...register('userAuthType')} type="radio" id="auth-email" value="email" />
+            <span>Email</span>
+          </label>
+          <label htmlFor="auth-phone" className="flex items-center gap-2">
+            <input {...register('userAuthType')} type="radio" id="auth-phone" value="phone" />
+            <span>Phone</span>
+          </label>
+        </div>
+      </div>
 
-					<textarea name="rules" 
-						id=""
-						placeholder="State any rules for this election"
-						className="p-2 my-2"
-						{...register('rules')}
-					/> {errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
-					
-					<div className="action-btn-container">
-						<button type="submit" disabled={loading} 
-							className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-500 transition duration-200">
-								{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Create Election" }</button>
-					</div>
-				</form>
-			</div>
-		</div>
+      {/* Description */}
+      <div>
+        <textarea
+          name="description"
+          placeholder="Describe the election (optional)"
+          {...register('description')}
+          className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        {errors.description && (
+          <p className="text-red-500 text-sm mt-1">Cannot be more than 200 characters</p>
+        )}
+      </div>
+
+      {/* Rules */}
+      <div>
+        <textarea
+          name="rules"
+          placeholder="State any rules for this election"
+          {...register('rules')}
+          className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        {errors.rules && (
+          <p className="text-red-500 text-sm mt-1">Cannot be more than 1000 characters</p>
+        )}
+      </div>
+
+      {/* Submit Button */}
+      <div className="text-center">
+        <button
+          type="submit"
+          disabled={loading}
+          className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-200"
+        >
+          {loading ? <PulseLoader color="#fff" size={5} loading={loading} /> : "Create Election"}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 	);
 }
  
