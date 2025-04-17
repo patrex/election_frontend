@@ -73,13 +73,12 @@ function Dashboard() {
 	return (
 		<>
 			<div class="flex items-center justify-center min-h-screen bg-gray-100">
-				<div className="bg-white shadow-md rounded-2xl 
-					p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 
-					m-2 sm:m-4 md:m-6 lg:m-8 xl:m-10
-					w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 2xl:w-2/5
-					h-auto 
+				<div className="
+					bg-white shadow-lg rounded-2xl 
+					p-6 sm:p-8 md:p-10 lg:p-14 xl:p-16 
+					w-full sm:w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 2xl:w-1/2
+					text-center
 					text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl
-					flex flex-col items-center justify-center
 					transition-all duration-300 ease-in-out"
 				>
 					{electionsList.length > 0 ? (
