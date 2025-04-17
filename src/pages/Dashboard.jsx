@@ -72,58 +72,66 @@ function Dashboard() {
 
 	return (
 		<>
-			<div className="dashboard-container">
-				{electionsList.length > 0 ? (
-					<div className="d-flex flex-column gap-3">
-						{electionsList.map(election => (
-							<div key={election._id} className="p-3 border rounded shadow-sm">
-								<div className="d-flex justify-content-between align-items-start flex-wrap">
-									<div>
-										<h5>
-											<Link to={`/user/${params.userId}/election/${election._id}`}>
-												{election.title}
-											</Link>
-										</h5>
-										<p className="mb-1"><strong>Start:</strong> {moment(election.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</p>
-										<p className="mb-1"><strong>End:</strong> {moment(election.endDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</p>
-										<p className="mb-2"><strong>Type:</strong> {election.type}</p>
-									</div>
+			<div class="flex items-center justify-center min-h-screen bg-gray-100">
+				<div className="bg-white shadow-md rounded-2xl 
+					p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 
+					m-2 sm:m-4 md:m-6 lg:m-8 xl:m-10
+					w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 2xl:w-2/5
+					h-auto 
+					text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl
+					flex flex-col items-center justify-center
+					transition-all duration-300 ease-in-out"
+				>
+					{electionsList.length > 0 ? (
+						<div className="d-flex flex-column gap-3">
+							{electionsList.map(election => (
+								<div key={election._id} className="p-3 border rounded shadow-sm">
+									<div className="d-flex justify-content-between align-items-start flex-wrap">
+										<div>
+											<h5>
+												<Link to={`/user/${params.userId}/election/${election._id}`}>
+													{election.title}
+												</Link>
+											</h5>
+											<p className="mb-1"><strong>Start:</strong> {moment(election.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</p>
+											<p className="mb-1"><strong>End:</strong> {moment(election.endDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</p>
+											<p className="mb-2"><strong>Type:</strong> {election.type}</p>
+										</div>
 
-									<div className="d-flex flex-wrap gap-2 mt-2">
-										<button
-											className="Button violet action-item"
-											onClick={() => copyLink(election._id)}
-										>
-											Copy ID
-										</button>
-										<button
-											className="Button violet action-item"
-											onClick={() => copyLink(election.shareLink)}
-										>
-											Copy Link
-										</button>
-										<Link to={`/user/${params.userId}/election/${election._id}/update`}>
+										<div className="d-flex flex-wrap gap-2 mt-2">
 											<button
 												className="Button violet action-item"
-												disabled={new Date(election.startDate) < Date.now()}
+												onClick={() => copyLink(election._id)}
 											>
-												Edit
+												Copy ID
 											</button>
-										</Link>
-										<IconButton color="error" onClick={ () => removeElection(election) }>
-											<DeleteIcon />
-										</IconButton>
+											<button
+												className="Button violet action-item"
+												onClick={() => copyLink(election.shareLink)}
+											>
+												Copy Link
+											</button>
+											<Link to={`/user/${params.userId}/election/${election._id}/update`}>
+												<button
+													className="Button violet action-item"
+													disabled={new Date(election.startDate) < Date.now()}
+												>
+													Edit
+												</button>
+											</Link>
+											<IconButton color="error" onClick={ () => removeElection(election) }>
+												<DeleteIcon />
+											</IconButton>
+										</div>
 									</div>
 								</div>
-							</div>
-						))}
-					</div>
-				) : (
-					<p className="text-center">No elections to show</p>
-				)}
+							))}
+						</div>
+					) : (
+						<p className="text-center">No elections to show</p>
+					)}
+				</div>
 			</div>
-
-
 		</>
 	);
 }
