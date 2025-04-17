@@ -92,21 +92,21 @@ function Dashboard() {
 							electionsList.map(election => (
 								<tr key={election._id}>
 									<td data-cell="Name">{election.title}</td>
-									<td data-cell="Start date">{election.title}</td>
-									<td data-cell="End date">{election.title}</td>
-									<td data-cell="Election type">{election.title}</td>
+									<td data-cell="Start date">{election.startDate}</td>
+									<td data-cell="End date">{election.endDate}</td>
+									<td data-cell="Election type">{election.type}</td>
 									<td data-cell="Actions">
 										<div>
 											<ButtonGroup variant="contained" aria-label="Basic button group">
 												<Button>Copy ID</Button>
 												<Button>Copy URL</Button>
+												<IconButton color="primary" onClick={ navigate(`/user/${params.userId}/election/${election._id}/update`)}>
+													<EditIcon />
+												</IconButton>
+												<IconButton color="error" onClick={ () => removeElection(election)}>
+													<DeleteIcon />
+												</IconButton>
 											</ButtonGroup>
-											<IconButton color="primary" onClick={ navigate(`/user/${params.userId}/election/${election._id}/update`)}>
-												<EditIcon />
-											</IconButton>
-											<IconButton color="error" onClick={ () => removeElection(election)}>
-												<DeleteIcon />
-											</IconButton>
 										</div>
 									</td>
 								</tr>
