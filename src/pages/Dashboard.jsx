@@ -77,7 +77,6 @@ function Dashboard() {
 					bg-white shadow-lg rounded-2xl 
 					p-6 sm:p-8 md:p-10 lg:p-14 xl:p-16 
 					w-full sm:w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 2xl:w-1/2
-					text-center
 					text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl
 					transition-all duration-300 ease-in-out"
 				>
