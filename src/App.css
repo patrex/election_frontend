@@ -571,6 +571,10 @@ th, td {
 		font-weight: bold;
 		text-transform: capitalize;
 	}
+
+	td::before:last-child {
+		content: attr(data-cell) " ";
+	}
 }
 
 /*  */
