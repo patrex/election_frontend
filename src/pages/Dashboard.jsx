@@ -92,8 +92,8 @@ function Dashboard() {
 							electionsList.map(election => (
 								<tr key={election._id}>
 									<td data-cell="Name">{election.title}</td>
-									<td data-cell="Start date">{election.startDate}</td>
-									<td data-cell="End date">{election.endDate}</td>
+									<td data-cell="Start date">{moment(election.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
+									<td data-cell="End date">{moment(election.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
 									<td data-cell="Election type">{election.type}</td>
 									<td data-cell="">
 										<>
