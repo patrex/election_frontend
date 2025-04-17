@@ -33,29 +33,33 @@ function NavBar({ user, onLogout }) {
 					</h2>
 				</div>
 
-				<ul className={navOpen ? "nav-link active" : "nav-link"}>
-					{user ? (
-						// Logged-in users (excluding voters)
-						!voter && (
+				<div>
+
+					<ul className={navOpen ? "nav-link active" : "nav-link"}>
+						{user ? (
+							// Logged-in users (excluding voters)
+							!voter && (
+								<>
+									<li><NavLink to={`/user/${user?.uid}`} className="link-item" onClick={closeMenu} end>Dashboard</NavLink></li>
+									<li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
+									<li>{user?.email} | <button onClick={onLogout}>Logout</button></li>
+								</>
+							)
+						) : voter ? (
+							// Voters (who are not registered users)
 							<>
-								<li><NavLink to={`/user/${user?.uid}`} className="link-item" onClick={closeMenu} end>Dashboard</NavLink></li>
-								<li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
-								<li>{user?.email} | <button onClick={onLogout}>Logout</button></li>
+								<li><button onClick={navigate('/')}>Exit</button></li>
 							</>
-						)
-					) : voter ? (
-						// Voters (who are not registered users)
-						<>
-							<li><button onClick={navigate('/')}>Exit</button></li>
-						</>
-					) : (
-						// Completely unauthenticated users
-						<>
-							<li><NavLink to="/login" className="link-item" onClick={closeMenu}>Login</NavLink></li>
-							<li><NavLink to="/signup" className="link-item" onClick={closeMenu}>Sign Up</NavLink></li>
-						</>
-					)}
-				</ul>
+						) : (
+							// Completely unauthenticated users
+							<>
+								<li><NavLink to="/login" className="link-item" onClick={closeMenu}>Login</NavLink></li>
+								<li><NavLink to="/signup" className="link-item" onClick={closeMenu}>Sign Up</NavLink></li>
+							</>
+						)}
+					</ul>
+				</div>
+
 
 				<div className="menu-toggle">
 					<Menu className="menu-bar" onClick={toggleMenu} aria-expanded={navOpen} />
