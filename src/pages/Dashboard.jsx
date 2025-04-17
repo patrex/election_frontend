@@ -6,8 +6,11 @@ import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
 
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit'
 
 export async function dashboardLoader({ params }) {
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
@@ -24,6 +27,7 @@ export async function dashboardLoader({ params }) {
 function Dashboard() {
 	const params = useParams();
 	const elections = useLoaderData();
+	const navigate = useNavigate()
 	
 
 	const { user } = useContext(AppContext);
@@ -72,6 +76,49 @@ function Dashboard() {
 
 	return (
 		<>
+			<div className="dashboard-container">
+				<div className="dashboard-table-container">
+
+					<table>
+						<tr>
+							<th>Name</th>
+							<th>Start date</th>
+							<th>End date</th>
+							<th>Election type</th>
+							<th>Actions</th>
+						</tr>
+
+						{electionsList.length > 0 ? (
+							electionsList.map(election => (
+								<tr key={election._id}>
+									<td data-cell="Name">{election.title}</td>
+									<td data-cell="Start date">{election.title}</td>
+									<td data-cell="End date">{election.title}</td>
+									<td data-cell="Election type">{election.title}</td>
+									<td data-cell="Actions">
+										<div>
+											<ButtonGroup variant="contained" aria-label="Basic button group">
+												<Button>Copy ID</Button>
+												<Button>Copy URL</Button>
+											</ButtonGroup>
+											<IconButton color="primary" onClick={ navigate(`/user/${params.userId}/election/${election._id}/update`)}>
+												<EditIcon />
+											</IconButton>
+											<IconButton color="error" onClick={ () => removeElection(election)}>
+												<DeleteIcon />
+											</IconButton>
+										</div>
+									</td>
+								</tr>
+							))
+						):(
+							<tr>
+								<td>No elections to show</td>
+							</tr>
+						)}
+					</table>
+				</div>
+			</div>
 			<div class="flex items-center justify-center min-h-screen bg-gray-100">
 				<div className="
 					bg-white shadow-lg rounded-2xl 
