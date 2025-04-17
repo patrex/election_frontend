@@ -554,7 +554,9 @@ th, td {
 	}
 
 	td {
-		display: block;
+		display: grid;
+		gap: .3rem;
+		grid-template-columns: 15ch auto;
 		padding: .5rem 1rem;
 	}
 
