@@ -531,7 +531,7 @@ input[type="number"] {
 table {
 	width: 100%;
 	border-collapse: collapse;
-	background: #323232;
+	background: #c4c4c4;
 }
 
 tr:nth-of-type(2n) {
@@ -540,6 +540,7 @@ tr:nth-of-type(2n) {
 
 th {
 	background: hsl(0, 0%, 0% / 0.5);
+	text-align: left;
 }
 
 th, td {
