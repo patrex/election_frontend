@@ -539,7 +539,7 @@ tr:nth-child(even) {
 }
 
 th {
-	background: #2c2c2c;
+	background: grey;
 	text-align: left;
 }
 
