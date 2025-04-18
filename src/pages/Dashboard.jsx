@@ -100,10 +100,10 @@ function Dashboard() {
 									<td data-cell="">
 										<>
 											<ButtonGroup variant="contained" aria-label="Basic button group">
-												<Button>ID</Button>
-												<Button>URL</Button>
-												<Button><EditIcon /></Button>
-												<Button><DeleteIcon /></Button>
+												<Button onClick={ () => copyLink(election._id)}>ID</Button>
+												<Button onClick={ () => copyLink(election.shareLink)}>URL</Button>
+												<Button disabled={new Date(election.startDate) < Date.now()} onClick={ () => navigate(`/user/${params.userId}/election/${election._id}/update`)}><EditIcon /></Button>
+												<Button onClick={ () => removeElection(election)}><DeleteIcon /></Button>
 											</ButtonGroup>
 										</>
 									</td>
