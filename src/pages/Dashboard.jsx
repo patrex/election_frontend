@@ -80,40 +80,45 @@ function Dashboard() {
 				<div className="dashboard-table-container">
 
 					<table>
-						<tr>
-							<th>Name</th>
-							<th>Start date</th>
-							<th>End date</th>
-							<th>Election type</th>
-							<th></th>
-						</tr>
-
-						{electionsList.length > 0 ? (
-							electionsList.map(election => (
-								<tr key={election._id}>
-									<td data-cell="Name">{<Link to={`/user/${params.userId}/election/${election._id}`}>
-													{election.title}
-												</Link>}</td>
-									<td data-cell="Start date">{moment(election.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
-									<td data-cell="End date">{moment(election.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
-									<td data-cell="Election type">{election.type}</td>
-									<td data-cell="">
-										<>
-											<ButtonGroup variant="contained" aria-label="Basic button group">
-												<Button onClick={ () => copyLink(election._id)}>ID</Button>
-												<Button onClick={ () => copyLink(election.shareLink)}>URL</Button>
-												<Button disabled={new Date(election.startDate) < Date.now()} onClick={ () => navigate(`/user/${params.userId}/election/${election._id}/update`)}><EditIcon /></Button>
-												<Button onClick={ () => removeElection(election)}><DeleteIcon /></Button>
-											</ButtonGroup>
-										</>
-									</td>
-								</tr>
-							))
-						):(
+						<thead>
 							<tr>
-								<td>No elections to show</td>
+								<th>Name</th>
+								<th>Start date</th>
+								<th>End date</th>
+								<th>Election type</th>
+								<th></th>
 							</tr>
-						)}
+						</thead>
+
+						<tbody>
+							{electionsList.length > 0 ? (
+								electionsList.map(election => (
+									<tr key={election._id}>
+										<td>
+											{<Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link>}
+										</td>
+										<td>{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}</td>
+										<td>{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}</td>
+										<td>{election.type}</td>
+										<td>
+											<>
+												<ButtonGroup variant="contained" aria-label="Basic button group">
+													<Button onClick={ () => copyLink(election._id)}>ID</Button>
+													<Button onClick={ () => copyLink(election.shareLink)}>URL</Button>
+													<Button disabled={new Date(election.startDate) < Date.now()} onClick={ () => navigate(`/user/${params.userId}/election/${election._id}/update`)}><EditIcon /></Button>
+													<Button onClick={ () => removeElection(election)}><DeleteIcon /></Button>
+												</ButtonGroup>
+											</>
+										</td>
+									</tr>
+								))
+							):(
+								<tr>
+									<td>No elections to show</td>
+								</tr>
+							)}
+						</tbody>
+
 					</table>
 				</div>
 			</div>
