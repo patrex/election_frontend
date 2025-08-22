@@ -524,7 +524,7 @@ input[type="number"] {
 }
 
 /* Table styles */
-table {
+#dashboard-table {
 	table-layout: fixed;
 	width: 80%;
 	min-width: 1000px;
@@ -534,17 +534,16 @@ table {
 	border-bottom: 1px solid #999999;
 }
 
-th, td {
+#dashboard-table th, td {
 	padding: 0.6em;
 }
 
-th,
-td {
+#dashboard-table th, td {
 	vertical-align: top;
 	padding: 0.3em;
 }
 
-tbody tr:nth-child(odd) {
+#dashboard-table tbody tr:nth-child(odd) {
 	background-color: #eeeeee;
 }
 

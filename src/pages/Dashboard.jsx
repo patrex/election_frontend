@@ -79,7 +79,7 @@ function Dashboard() {
 			<div className="dashboard-container">
 				<div className="dashboard-table-container">
 
-					<table>
+					<table id='dashboard-table'>
 						<thead>
 							<tr>
 								<th>Name</th>
