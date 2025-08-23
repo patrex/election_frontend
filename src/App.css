@@ -9,6 +9,7 @@
 * {
 	margin: 0;
 	padding: 0;
+	line-height: 1.5;
 	box-sizing: border-box;
 }
 
@@ -537,7 +538,7 @@ input[type="number"] {
 }
 
 #dashboard-table th {
-	background-color: #dcdcdc;
+	background-color: #f3f5f7;
 	position: sticky;
 	top: 0;
 	vertical-align: bottom;
