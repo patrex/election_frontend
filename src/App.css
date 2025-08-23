@@ -526,13 +526,11 @@ input[type="number"] {
 	padding: .2em;
 }
 
-/* Table styles */
+/* Dashboard table styles */
 #dashboard-table {
 	width: 80%;
 	min-width: 1000px;
 	margin: 0 auto;
-	border-top: 1px solid #999999;
-	border-bottom: 2px solid #999999;
 	display: block;
 	border-spacing: 0;
 }
@@ -542,7 +540,6 @@ input[type="number"] {
 	position: sticky;
 	top: 0;
 	vertical-align: bottom;
-	border-bottom: 2px solid #999;
 }
 
 #dashboard-table th, td {
@@ -563,7 +560,9 @@ input[type="number"] {
 	border-bottom-width: 0;
 }
 
-/*  */
+/* responsive config */
+
+/* ----------- end dashboard table styles ----------------------*/
 
 .candidate-update-form-container {
 	min-height: 80vh;
