@@ -568,6 +568,7 @@ input[type="number"] {
 .side-menu-div {
 	background-color: #f3f5f7;
 	border-radius: 10px;
+	box-shadow: 0 0 5px grey;
 }
 
 .side-list-item {
