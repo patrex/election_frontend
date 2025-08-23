@@ -575,6 +575,9 @@ input[type="number"] {
 	background-color: #f3f5f7;
 	border-radius: 10px;
 	box-shadow: 0 0 5px grey;
+	position: absolute;
+	top: 10px;
+	right: 5px;
 }
 
 .side-list-item {
@@ -585,6 +588,7 @@ input[type="number"] {
 
 .side-list-item:hover {
 	cursor: pointer;
+
 }
 
 .side-menu-icon {
