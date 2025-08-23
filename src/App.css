@@ -528,7 +528,7 @@ input[type="number"] {
 
 /* Dashboard table styles */
 #dashboard-table {
-	width: 90%;
+	width: 100%;
 	margin: 0 auto;
 	display: block;
 	border-spacing: 0;
@@ -540,7 +540,7 @@ input[type="number"] {
 	top: 0;
 	vertical-align: bottom;
 	font-weight: normal;
-	color: grey;
+	color: rgb(95, 94, 94);
 }
 
 #dashboard-table th, td {
