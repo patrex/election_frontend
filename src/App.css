@@ -520,7 +520,7 @@ input[type="number"] {
 }
 
 .dashboard-table-container {
-	width: 80%;
+	width: 100%;
 	max-width: 100%;
 	padding: .2em;
 }
@@ -546,10 +546,20 @@ input[type="number"] {
 
 #dashboard-table th, td {
 	padding: 0.6em;
+	border-top-width: 0;
+	border-left-width: 0;
 }
 
-#dashboard-table tbody tr:nth-child(odd) {
-	background-color: #eeeeee;
+#dashboard-table th:last-child, td:last-child {
+	border-right-width: 0;
+}
+
+#dashboard-table tbody {
+	white-space: nowrap;
+}
+
+#dashboard-table tr:last-child {
+	border-bottom-width: 0;
 }
 
 /*  */

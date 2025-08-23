@@ -114,7 +114,7 @@ function Dashboard() {
 								))
 							):(
 								<tr>
-									<td>No elections to show</td>
+									<td colSpan={5}>No elections to show</td>
 								</tr>
 							)}
 						</tbody>
