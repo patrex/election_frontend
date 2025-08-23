@@ -528,8 +528,7 @@ input[type="number"] {
 
 /* Dashboard table styles */
 #dashboard-table {
-	width: 80%;
-	min-width: 1000px;
+	width: 90%;
 	margin: 0 auto;
 	display: block;
 	border-spacing: 0;
