@@ -520,32 +520,32 @@ input[type="number"] {
 }
 
 .dashboard-table-container {
+	width: 80%;
 	max-width: 100%;
+	padding: .2em;
 }
 
 /* Table styles */
 #dashboard-table {
-	table-layout: fixed;
 	width: 80%;
 	min-width: 1000px;
 	margin: 0 auto;
-	border-collapse: collapse;
 	border-top: 1px solid #999999;
-	border-bottom: 1px solid #999999;
+	border-bottom: 2px solid #999999;
+	display: block;
+	border-spacing: 0;
 }
 
 #dashboard-table th {
-	background-color: #0056b3;
-	color: #f5f5f5;
+	background-color: #dcdcdc;
+	position: sticky;
+	top: 0;
+	vertical-align: bottom;
+	border-bottom: 2px solid #999;
 }
 
 #dashboard-table th, td {
 	padding: 0.6em;
-}
-
-#dashboard-table th, td {
-	vertical-align: top;
-	padding: 0.3em;
 }
 
 #dashboard-table tbody tr:nth-child(odd) {
