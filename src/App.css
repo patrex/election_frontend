@@ -575,6 +575,7 @@ input[type="number"] {
 .side-menu-div {
 	background-color: #f3f5f7;
 	box-shadow: 0 5px 10px grey;
+	border-radius: 10px;
 	position: absolute;
 	top: 30%;
 	right: 5px;
@@ -600,7 +601,6 @@ input[type="number"] {
 .side-menu-list {
 	padding: 0;
 	margin: 0;
-	border-radius: 10px;
 }
 
 .side-menu-list:last-child {
