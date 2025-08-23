@@ -539,6 +539,8 @@ input[type="number"] {
 	position: sticky;
 	top: 0;
 	vertical-align: bottom;
+	font-weight: normal;
+	color: grey;
 }
 
 #dashboard-table th, td {
