@@ -565,6 +565,11 @@ input[type="number"] {
 	border-bottom-width: 0;
 }
 
+.side-menu-menu-icon:hover {
+	background-color: azure;
+	transition: background-color .1s ease-in;
+}
+
 .side-menu-div {
 	background-color: #f3f5f7;
 	border-radius: 10px;

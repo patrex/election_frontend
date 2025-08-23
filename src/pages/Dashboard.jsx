@@ -105,7 +105,7 @@ function Dashboard() {
 										<td>{election.type}</td>
 										<td>
 											<div className="side-menu" onClick={ toggleSideMenu }>
-												<i class="bi bi-three-dots-vertical"></i>
+												<i class="bi bi-three-dots-vertical side-menu-menu-icon"></i>
 											</div>
 
 											{sideMenuOpen && 
