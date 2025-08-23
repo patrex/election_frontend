@@ -584,6 +584,11 @@ input[type="number"] {
 	padding: 0 .2em;
 }
 
+.side-menu-list {
+	padding: 0;
+	margin: 0;
+}
+
 /* responsive config */
 
 /* ----------- end dashboard table styles ----------------------*/
