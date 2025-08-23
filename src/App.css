@@ -528,6 +528,8 @@ input[type="number"] {
 	padding: .2em;
 }
 
+
+
 /* Dashboard table styles */
 #dashboard-table {
 	width: 100%;
@@ -561,6 +563,16 @@ input[type="number"] {
 
 #dashboard-table tr:last-child {
 	border-bottom-width: 0;
+}
+
+.side-menu-div {
+	background-color: #f3f5f7;
+}
+
+.side-list-item {
+	background-color: #ccc;
+	margin: .1em 0;
+	padding: .1em;
 }
 
 /* responsive config */
