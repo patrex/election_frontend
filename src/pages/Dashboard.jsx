@@ -104,7 +104,7 @@ function Dashboard() {
 										<td>{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}</td>
 										<td>{election.type}</td>
 										<td>
-											<div className="side-menu" onClick={() => toggleSideMenu}>
+											<div className="side-menu" onClick={ toggleSideMenu }>
 												<i class="bi bi-three-dots-vertical"></i>
 											</div>
 
