@@ -583,8 +583,8 @@ input[type="number"] {
 
 .side-list-item {
 	background-color: #ccc;
-	margin: .1em 0;
-	padding: .1em;
+	margin-bottom: 1px;
+	padding: .5em;
 }
 
 .side-list-item:hover {
