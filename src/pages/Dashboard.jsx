@@ -33,6 +33,7 @@ function Dashboard() {
 	const { user } = useContext(AppContext);
 
 	const [electionsList, setElectionsList] = useState(elections);
+	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 
 	const removeElection = async (election) => {
 		Swal.fire({
@@ -73,6 +74,8 @@ function Dashboard() {
 		if (text) Toast.success("copied")
 	}
 
+	const toggleSideMenu = () => setSideMenuOpen(!sideMenuOpen)
+
 
 	return (
 		<>
@@ -101,14 +104,20 @@ function Dashboard() {
 										<td>{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}</td>
 										<td>{election.type}</td>
 										<td>
-											<>
-												<ButtonGroup variant="contained" aria-label="Basic button group">
-													<Button onClick={ () => copyLink(election._id)}>ID</Button>
-													<Button onClick={ () => copyLink(election.shareLink)}>URL</Button>
-													<Button disabled={new Date(election.startDate) < Date.now()} onClick={ () => navigate(`/user/${params.userId}/election/${election._id}/update`)}><EditIcon /></Button>
-													<Button onClick={ () => removeElection(election)}><DeleteIcon /></Button>
-												</ButtonGroup>
-											</>
+											<div className="side-menu" onClick={() => toggleSideMenu}>
+												<i class="bi bi-three-dots-vertical"></i>
+											</div>
+
+											{sideMenuOpen && 
+												<div className="side-menu-div" >
+													<ul className='side-menu-list'>
+														<li className='side-list-item' onClick={ () => copyLink(election._id)}><i class="bi bi-cursor-fill"></i>Copy Id</li>
+														<li className='side-list-item' onClick={ () => copyLink(election.shareLink)}><i class="bi bi-link-45deg"></i>Copy link</li>
+														<li className='side-list-item' disabled={new Date(election.startDate) < Date.now()} onClick={ () => navigate(`/user/${params.userId}/election/${election._id}/update`)}><i class="bi bi-pencil-fill"></i>Edit</li>
+														<li className='side-list-item' onClick={ () => removeElection(election)}><i class="bi bi-trash3-fill"></i>Delete</li>
+													</ul>
+												</div>
+											}
 										</td>
 									</tr>
 								))
