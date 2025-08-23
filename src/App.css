@@ -567,12 +567,21 @@ input[type="number"] {
 
 .side-menu-div {
 	background-color: #f3f5f7;
+	border-radius: 10px;
 }
 
 .side-list-item {
 	background-color: #ccc;
 	margin: .1em 0;
 	padding: .1em;
+}
+
+.side-list-item:hover {
+	cursor: pointer;
+}
+
+.side-menu-icon {
+	padding: 0 .2em;
 }
 
 /* responsive config */

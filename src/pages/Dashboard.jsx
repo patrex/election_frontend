@@ -111,10 +111,10 @@ function Dashboard() {
 											{sideMenuOpen && 
 												<div className="side-menu-div" >
 													<ul className='side-menu-list'>
-														<li className='side-list-item' onClick={ () => copyLink(election._id)}><i class="bi bi-cursor-fill"></i>Copy Id</li>
-														<li className='side-list-item' onClick={ () => copyLink(election.shareLink)}><i class="bi bi-link-45deg"></i>Copy link</li>
-														<li className='side-list-item' disabled={new Date(election.startDate) < Date.now()} onClick={ () => navigate(`/user/${params.userId}/election/${election._id}/update`)}><i class="bi bi-pencil-fill"></i>Edit</li>
-														<li className='side-list-item' onClick={ () => removeElection(election)}><i class="bi bi-trash3-fill"></i>Delete</li>
+														<li className='side-list-item' onClick={ () => copyLink(election._id)}><i class="bi bi-cursor-fill side-menu-icon"></i>Copy Id</li>
+														<li className='side-list-item' onClick={ () => copyLink(election.shareLink)}><i class="bi bi-link-45deg side-menu-icon"></i>Copy link</li>
+														<li className='side-list-item' disabled={new Date(election.startDate) < Date.now()} onClick={ () => navigate(`/user/${params.userId}/election/${election._id}/update`)}><i class="bi bi-pencil-fill side-menu-icon"></i>Edit</li>
+														<li className='side-list-item' style={"color: red"} onClick={ () => removeElection(election)}><i class="bi bi-trash3-fill side-menu-icon"></i>Delete</li>
 													</ul>
 												</div>
 											}
