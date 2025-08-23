@@ -603,6 +603,10 @@ input[type="number"] {
 	border-radius: 10px;
 }
 
+.side-menu-list:last-child {
+	margin-bottom: 0;
+}
+
 /* responsive config */
 
 /* ----------- end dashboard table styles ----------------------*/
