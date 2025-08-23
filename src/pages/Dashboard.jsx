@@ -1,16 +1,10 @@
-import  { useState, useContext } from 'react';
+import  { useState, useContext, useRef } from 'react';
 import { Link, useLoaderData, useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
-
-import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit'
 
 export async function dashboardLoader({ params }) {
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
@@ -28,6 +22,7 @@ function Dashboard() {
 	const params = useParams();
 	const elections = useLoaderData();
 	const navigate = useNavigate()
+	const menuRef = useRef(null);
 	
 
 	const { user } = useContext(AppContext);
@@ -74,7 +69,16 @@ function Dashboard() {
 		if (text) Toast.success("copied")
 	}
 
-	const toggleSideMenu = () => setSideMenuOpen(!sideMenuOpen)
+	const toggleSideMenu = () => setSideMenuOpen(!sideMenuOpen);
+	useEffect(() => {
+		const handleClickOutside = (e) => {
+			if (menuRef.current && !menuRef.current.contains(e.target)) {
+				setSideMenuOpen(false);
+			}
+		};
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => document.removeEventListener("mousedown", handleClickOutside);
+	}, []);
 
 
 	return (
