@@ -551,6 +551,7 @@ input[type="number"] {
 	padding: 0.6em;
 	border-top-width: 0;
 	border-left-width: 0;
+	position: relative;
 }
 
 #dashboard-table th:last-child, td:last-child {
@@ -566,17 +567,18 @@ input[type="number"] {
 }
 
 .side-menu-menu-icon:hover {
-	background-color: #cccccc;
+	background-color: #ccc;
 	border-radius: 50%;
 	transition: background-color .1s ease-in;
+	z-index: 1000;
 }
 
 .side-menu-div {
 	background-color: #f3f5f7;
 	border-radius: 10px;
-	box-shadow: 0 0 5px grey;
+	box-shadow: 0 5px 10px grey;
 	position: absolute;
-	top: 10px;
+	top: 100%;
 	right: 5px;
 }
 
