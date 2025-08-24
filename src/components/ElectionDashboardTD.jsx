@@ -48,3 +48,5 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 		</td>
 	);
 }
+
+export default ElectionDashboardTD;
