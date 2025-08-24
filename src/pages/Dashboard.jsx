@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
+import ElectionDashboardTD from '@/components';
 
 export async function dashboardLoader({ params }) {
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
@@ -29,6 +30,8 @@ function Dashboard() {
 
 	const [electionsList, setElectionsList] = useState(elections);
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
+	const [anchorPos, setAnchorPos] = useState(null);
+
 
 	const removeElection = async (election) => {
 		Swal.fire({
@@ -70,6 +73,13 @@ function Dashboard() {
 	}
 
 	const toggleSideMenu = () => setSideMenuOpen(!sideMenuOpen);
+
+	const handleToggle = (e, elctionId) => {
+		const rect = e.currentTarget.getBoundingClientRect();
+		setAnchorPos({ top: rect.bottom, left: rect.right });
+		setSideMenuOpen(true);
+	};
+
 	useEffect(() => {
 		const handleClickOutside = (e) => {
 			if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -107,14 +117,21 @@ function Dashboard() {
 										<td>{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}</td>
 										<td>{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}</td>
 										<td>{election.type}</td>
-										<td>
+										<ElectionDashboardTD 
+											election = {election}
+											navigate = {navigate}
+											copyLink = {copyLink}
+											removeElection = {removeElection}
+											params = {params}
+										/>
+										{/* <td>
 											<div className="side-menu" onClick={ toggleSideMenu }>
 												<i class="bi bi-three-dots-vertical side-menu-menu-icon"></i>
 											</div>
 
 											{sideMenuOpen && (
 												<div className="side-menu-div" >
-													<ul className='side-menu-list'>
+													<ul className='side-menu-list' ref={menuRef}>
 														<li className='side-list-item' onClick={ () => copyLink(election._id)}><i class="bi bi-cursor-fill side-menu-icon"></i>Copy Id</li>
 														<li className='side-list-item' onClick={ () => copyLink(election.shareLink)}><i class="bi bi-link-45deg side-menu-icon"></i>Copy link</li>
 														<li className='side-list-item' onClick={ () => navigate(`/user/${params.userId}/election/${election._id}/update`)}><i class="bi bi-pencil-fill side-menu-icon"></i>Edit</li>
@@ -122,7 +139,7 @@ function Dashboard() {
 													</ul>
 												</div>
 											)}
-										</td>
+										</td> */}
 									</tr>
 								))
 							):(
