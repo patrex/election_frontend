@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
-import ElectionDashboardTD from '@/components';
+import ElectionDashboardTD from '@/components/ElectionDashboardTD';
 
 export async function dashboardLoader({ params }) {
 	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
