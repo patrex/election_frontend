@@ -573,7 +573,7 @@ input[type="number"] {
 
 .side-menu-div {
 	background-color: #f3f5f7;
-	box-shadow: 0 5px 10px grey;
+	box-shadow: 0 0 15px black;
 	border-radius: 10px;
 	position: absolute;
 	top: 30%;
@@ -582,7 +582,6 @@ input[type="number"] {
 }
 
 .side-list-item {
-	border-radius: 10px;
 	background-color: #ccc;
 	margin-bottom: 1px;
 	padding: .5em;
@@ -602,6 +601,7 @@ input[type="number"] {
 .side-menu-list {
 	padding: 0;
 	margin: 0;
+	height: 100%;
 }
 
 /* responsive config */
