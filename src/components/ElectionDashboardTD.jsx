@@ -1,4 +1,4 @@
-function ElectionRow({ election, navigate, copyLink, removeElection, params }) {
+function ElectionDashboardTD({ election, navigate, copyLink, removeElection, params }) {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 	const menuRef = useRef(null);
 
