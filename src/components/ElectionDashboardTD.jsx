@@ -1,3 +1,5 @@
+import { useState, useRef } from 'react'
+
 function ElectionDashboardTD({ election, navigate, copyLink, removeElection, params }) {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 	const menuRef = useRef(null);
