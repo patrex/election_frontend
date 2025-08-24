@@ -595,6 +595,7 @@ input[type="number"] {
 
 .side-menu-icon {
 	padding: 0 .2em;
+	margin-right: .5em;
 }
 
 .side-menu-list {
