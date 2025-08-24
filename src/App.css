@@ -582,6 +582,7 @@ input[type="number"] {
 }
 
 .side-list-item {
+	border-radius: 10px;
 	background-color: #ccc;
 	margin-bottom: 1px;
 	padding: .5em;
@@ -595,13 +596,12 @@ input[type="number"] {
 
 .side-menu-icon {
 	padding: 0 .2em;
-	margin-right: .5em;
+	margin-right: .3em;
 }
 
 .side-menu-list {
 	padding: 0;
 	margin: 0;
-	border-radius: 10px;
 }
 
 /* responsive config */
