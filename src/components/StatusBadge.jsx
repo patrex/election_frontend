@@ -2,7 +2,6 @@ import { useEventStatus } from "@/hooks/useEventStatus";
 
 function StatusBadge(election) {
 	const { isActive, hasEnded, isPending } = useEventStatus(new Date(election.startDate), new Date(election.endDate));
-	console.log(election);
 	
 	let label = "Unknown";
 	let classes =

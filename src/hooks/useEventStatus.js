@@ -5,6 +5,7 @@ export function useEventStatus(startDate, endDate) {
 
 	useEffect(() => {
 		const tick = () => setNow(new Date());
+		console.log(startDate, endDate);
 
 		// fire immediately, then every 100ms
 		tick();
