@@ -30,7 +30,6 @@ function Dashboard() {
 
 	const [electionsList, setElectionsList] = useState(elections);
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
-	const [anchorPos, setAnchorPos] = useState(null);
 
 
 	const removeElection = async (election) => {

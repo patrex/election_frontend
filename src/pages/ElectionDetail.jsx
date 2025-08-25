@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from 'react';
 import Swal from 'sweetalert2';
 import { AppContext } from '@/App';
 import ElectionActions from '@/components/ElectionActions';
+import StatusBadge from '@/components/StatusBadge';
 
 import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
@@ -68,6 +69,7 @@ function ElectionDetail() {
 	const [updateParticipantModal, setUpdateParticipantModal] = useState(false);
 	const [viewUsersModal, setViewUsersModal] = useState(false);
 	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false)
+
 	const [isActive, setIsActive] = useState(false);
 	const [hasEnded, setHasEnded] = useState(false)
 
@@ -467,9 +469,7 @@ function ElectionDetail() {
 						<thead>
 							<tr>
 								<th>Election</th>
-								<th>{election.title} <span className={isActive ? 'active-badge' : hasEnded ? 'ended-badge' : 'not-started-badge'}>
-									{isActive ? 'Active' : hasEnded ? 'Election Has Ended' : 'Not Started'}
-								</span></th>
+								<th>{election.title} <StatusBadge election={election}/></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -489,8 +489,6 @@ function ElectionDetail() {
 					</table>
 					<ElectionActions
 						election={election}
-						isActive={isActive}
-						hasEnded={hasEnded}
 						openPostionModal={openPostionModal}
 						checkPositionExists={checkPositionExists}
 						setAddParticipantsModalOpen={setAddParticipantsModalOpen}

@@ -1,10 +1,13 @@
 import { Link, useParams } from 'react-router-dom';
+import { useEventStatus } from '@/hooks/useEventStatus';
 
-const ElectionActions = ({ election, isActive, hasEnded, openPostionModal, checkPositionExists, setAddParticipantsModalOpen, setViewUsersModal, setEndElectionModalOpen }) => {
+const ElectionActions = ({ election, openPostionModal, checkPositionExists, setAddParticipantsModalOpen, setViewUsersModal, setEndElectionModalOpen }) => {
 	const params = useParams();
+	const { isActive, hasStarted, hasEnded, isPending } = useEventStatus(election.startDate, election.endDate)
+
 	return (
 		<div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-			{(!isActive && !hasEnded) && (
+			{isPending && (
 				<>
 					<p>
 						<button className='Button violet action-item' onClick={() => openPostionModal(election)}>
@@ -36,7 +39,8 @@ const ElectionActions = ({ election, isActive, hasEnded, openPostionModal, check
 					</button>
 				</p>
 			)}
-			{(isActive && !hasEnded) && (
+			
+			{ isActive && (
 				<p>
 					<button className='Button red action-item' onClick={() => setEndElectionModalOpen(true)}>
 						End This Election!
