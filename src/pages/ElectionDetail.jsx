@@ -10,6 +10,7 @@ import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
 import { authman } from '@/utils/fireloader';
 import { useEventStatus } from '@/hooks/useEventStatus';
+import PositionsBox from '@/components/PositionsBox';
 
 export async function electionDetailLoader({params}) {
 	let election, positions, voters = undefined;
@@ -642,43 +643,11 @@ function ElectionDetail() {
 				)}
 
 				<div className="pos-list-container">
-					<table className="table table-hover table-striped">
-						<thead>
-							<tr>
-								<th scope='col'>Positions</th>
-								<th scope="col"></th>
-							</tr>
-						</thead>
-						<tbody>
-							{ positionsList.length > 0 ?
-								positionsList.map(position => (
-									<tr className="position-row" key={position._id}>
-										<td>
-											<Link to={`./position/${position.position}`}>{position.position}</Link> 
-										</td>
-
-										<td>
-											{ isPending && (
-												<div className="action-btn-container">
-													<button className='Button violet action-item' 
-														onClick={() => editPosition(position)}>
-															Edit
-													</button>
-													
-													<button className='Button red action-item' 
-														onClick={() => removePosition(position)}>
-															<i className="bi bi-trash3 m-1"></i>
-													</button>
-												</div>
-											)}
-										</td>
-									</tr>
-								)) : <tr>
-									<td colSpan={2}>No positions added yet</td>
-								</tr>
-							}
-						</tbody>
-					</table>
+					<PositionsBox list_of_positions={positionsList}
+						isPending={isPending}
+						editPosition={editPosition}
+						removePosition={removePosition}
+					/>
 				</div>
 
 			</div>
