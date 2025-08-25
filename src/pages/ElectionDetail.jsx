@@ -675,9 +675,9 @@ function ElectionDetail() {
 
 										</td>
 									</tr>
-								)) : <tr>
-									<td colSpan={2}>No positions added yet</td>
-								</tr>
+								)) : <p>
+									No positions added yet
+								</p>
 							}
 						</tbody>
 					</table>
