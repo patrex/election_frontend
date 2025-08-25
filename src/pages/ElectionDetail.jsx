@@ -9,6 +9,7 @@ import StatusBadge from '@/components/StatusBadge';
 import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
 import { authman } from '@/utils/fireloader';
+import { useEventStatus } from '@/hooks/useEventStatus';
 
 export async function electionDetailLoader({params}) {
 	let election, positions, voters = undefined;
@@ -70,8 +71,8 @@ function ElectionDetail() {
 	const [viewUsersModal, setViewUsersModal] = useState(false);
 	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false)
 
-	const [isActive, setIsActive] = useState(false);
-	const [hasEnded, setHasEnded] = useState(false)
+
+	const { isActive, isPending, hasEnded } = useEventStatus(new Date(election.startDate), new Date(election.endDate))
 
 	function closeAddParticipant () {
 		setSearchTerm("")
@@ -452,13 +453,6 @@ function ElectionDetail() {
 		}
 	}, [searchTerm, votersList])
 
-	useEffect(() => {
-		const now = Date.now();
-		// setHasEnded(new Date(election.endDate) < Date.now());
-		setIsActive(new Date(election.startDate) < now && now < new Date(election.endDate));
-		setHasEnded(new Date(election.endDate) < Date.now());
-	}, [election]); // Runs whenever `election` updates
-
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	return ( 
@@ -511,12 +505,15 @@ function ElectionDetail() {
 											<li key={voter._id}>
 												<div className='voter-info'>
 													<span>{election.userAuthType == 'email' ? voter.email : voter.phoneNo}</span>
-													{ (!isActive && !hasEnded) && (
+													{ isPending && (
 															<div className='voter-actions'>
 																<button className='Button violet action-item' 
-																	onClick={ () => editParticipant(voter) }>Edit</button>
+																	onClick={ () => editParticipant(voter) }>Edit
+																</button>
+
 																<button className='Button red action-item' 
-																	onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i></button>
+																	onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i>
+																</button>
 															</div>
 														)
 													}
@@ -653,7 +650,7 @@ function ElectionDetail() {
 							</tr>
 						</thead>
 						<tbody>
-							{positionsList.length > 0 ?
+							{ positionsList.length > 0 ?
 								positionsList.map(position => (
 									<tr className="position-row" key={position._id}>
 										<td>
@@ -661,23 +658,24 @@ function ElectionDetail() {
 										</td>
 
 										<td>
-											{ (!isActive && !hasEnded) && (
+											{ isPending && (
 												<div className="action-btn-container">
 													<button className='Button violet action-item' 
 														onClick={() => editPosition(position)}>
-															Edit</button>
+															Edit
+													</button>
 													
 													<button className='Button red action-item' 
 														onClick={() => removePosition(position)}>
-															<i className="bi bi-trash3 m-1"></i></button>
+															<i className="bi bi-trash3 m-1"></i>
+													</button>
 												</div>
 											)}
-
 										</td>
 									</tr>
-								)) : <p>
-									No positions added yet
-								</p>
+								)) : <tr>
+									<td colSpan={2}>No positions added yet</td>
+								</tr>
 							}
 						</tbody>
 					</table>
