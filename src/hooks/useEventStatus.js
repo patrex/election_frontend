@@ -10,7 +10,7 @@ export function useEventStatus(startDate, endDate) {
 		tick();
 		const intervalId = setInterval(tick, 100);
 
-		return () => clearInterval(intervalId); // ✅ cleanup
+		return () => clearInterval(intervalId); // cleanup
 	}, []);
 
 	const hasStarted = now >= startDate;

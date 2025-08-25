@@ -3,7 +3,7 @@ import { useEventStatus } from '@/hooks/useEventStatus';
 
 const ElectionActions = ({ election, openPostionModal, checkPositionExists, setAddParticipantsModalOpen, setViewUsersModal, setEndElectionModalOpen }) => {
 	const params = useParams();
-	const { isActive, hasStarted, hasEnded, isPending } = useEventStatus(election.startDate, election.endDate)
+	const { isActive, hasStarted, hasEnded, isPending } = useEventStatus(new Date(election.startDate), new Date(election.endDate));
 
 	return (
 		<div style={{ display: 'flex', justifyContent: 'flex-start' }}>
