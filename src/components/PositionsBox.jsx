@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function PositionsBox({ list_of_positions, isPending, editPosition, removePosition }) {
 	return (<>
 		<div className="positions-container w-full">
