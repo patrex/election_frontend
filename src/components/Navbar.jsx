@@ -26,7 +26,7 @@ function NavBar({ user, onLogout }) {
 	}, []);
 
 	return (
-		<header className="nav-container w-full shadow-md px-6 py-4 bg-white">
+		<header className="nav-container shadow-md px-6 py-4 bg-white">
 			<nav className="max-w-7xl mx-auto flex items-center justify-between">
 				{/* Logo */}
 				<div className="logo">
