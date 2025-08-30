@@ -90,6 +90,16 @@
 	transition: background-color 0.1s ease-in;
 }
 
+.side-list-item li:first-child :hover {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.side-list-item li:last-child :hover {
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
 .side-menu-icon {
 	padding: 0 .2em;
 	margin-right: .3em;
