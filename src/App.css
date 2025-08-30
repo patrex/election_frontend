@@ -526,6 +526,9 @@ input[type="number"] {
 	height: 100%;
 	max-width: 100%;
 	padding: .2em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 
