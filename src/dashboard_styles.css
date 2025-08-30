@@ -41,6 +41,13 @@
 	border-right-width: 0;
 }
 
+#dashboard-table tbody tr:nth-child(odd)  { background: #e0e0e0; }
+#dashboard-table tbody tr:nth-child(even) { background: #f3f5f7; }
+
+#dashboard-table tbody tr:hover {
+	background: #d2d2d2;
+}
+
 #dashboard-table tbody {
 	white-space: nowrap;
 }
