@@ -1,6 +1,7 @@
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements, Navigate, Outlet } from 'react-router-dom';
 import { createContext, useEffect, useState, useContext } from 'react';
 import './App.css';
+import './dashboard_styles.css'
 
 import Home, { homeLoader } from './pages/Home';
 import Login from './pages/Login';
