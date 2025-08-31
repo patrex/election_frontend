@@ -1,5 +1,6 @@
 .dashboard-container {
 	height: 100%;
+	min-width: 100vw;
 	min-height: 100vh;
 }
 
@@ -9,6 +10,8 @@
 	max-width: 100%;
 	padding: 0.2em;
 	margin: 0 auto;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 
@@ -16,11 +19,10 @@
 /* Dashboard table styles */
 #dashboard-table {
 	width: 100%;
-	margin: 0 auto;
-	display: block;
-	border-spacing: 0;
 	border-collapse: separate;
 	border-spacing: 0 1px;
+	table-layout: auto;
+	min-width: 600px;
 }
 
 #dashboard-table th {
