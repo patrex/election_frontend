@@ -19,6 +19,7 @@
 /* Dashboard table styles */
 #dashboard-table {
 	width: 100%;
+	height: 100%;
 	border-collapse: separate;
 	border-spacing: 0 1px;
 	table-layout: auto;
