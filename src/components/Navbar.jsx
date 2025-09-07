@@ -73,8 +73,20 @@ function NavBar({ user, onLogout }) {
 						{user ? (
 							!voter && (
 								<>
-									<li><NavLink  to={`/user/${user.uid}`} className="link-item" onClick={closeMenu}>Dashboard</NavLink></li>
-									<li><NavLink to={`/user/${user.uid}/create-election`} className="link-item" onClick={closeMenu}>Create Election</NavLink></li>
+									<li>
+										<NavLink  
+											to={`/user/${user.uid}`} 
+											className= { ({ isActive}) => 
+											`link-item ${isActive ? "active" : ""}` }
+											onClick={closeMenu}>Dashboard
+									 	</NavLink>
+									</li>
+									<li>
+										<NavLink to={`/user/${user.uid}/create-election`} 
+											className= {({isActive}) => `link-item ${isActive ? "active" : ""}`}
+											onClick={closeMenu}>Create Election
+										</NavLink>
+									</li>
 									<li>{user.email} | <button onClick={() => { onLogout(); closeMenu(); }}>Logout</button></li>
 								</>
 							)
