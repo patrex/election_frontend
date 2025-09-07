@@ -40,7 +40,7 @@ function NavBar({ user, onLogout }) {
 					{user ? (
 						!voter && (
 							<>
-								<li><NavLink to={`/user/${user?.uid}`} className="link-item">Dashboard</NavLink></li>
+								<li><NavLink to={`/user/${user?.uid}`} className="link-item" end>Dashboard</NavLink></li>
 								<li><NavLink to={`/user/${user?.uid}/create-election`} className="link-item">Create Election</NavLink></li>
 								<li>{user?.email} | <button onClick={onLogout}>Logout</button></li>
 							</>
