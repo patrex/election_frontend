@@ -6,7 +6,8 @@
 
 .dashboard-table-container {
 	width: 90%;
-	height: 100%;
+	height: 100vh;
+	min-height: 600px;
 	max-width: 100%;
 	padding: 0.2em;
 	margin: 0 auto;
@@ -15,11 +16,9 @@
 }
 
 
-
 /* Dashboard table styles */
 #dashboard-table {
 	width: 100%;
-	height: 100%;
 	border-collapse: separate;
 	border-spacing: 0 1px;
 	table-layout: auto;
@@ -91,16 +90,6 @@
 	cursor: pointer;
 	background-color: #f9f9f9;
 	transition: background-color 0.1s ease-in;
-}
-
-.side-list-item:first-child :hover {
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
-}
-
-.side-list-item:last-child :hover {
-	border-bottom-left-radius: 10px;
-	border-bottom-right-radius: 10px;
 }
 
 .side-menu-icon {
