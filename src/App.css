@@ -235,9 +235,8 @@ header {
 
 .link-item:hover,
 .link-item.active {
-	background-color: goldenrod;
-	color: #fff;
-	border-radius: 20px;
+	background-color: #efefef;
+	border-radius: 10px;
 }
 
 .nav-container .menu-toggle {
