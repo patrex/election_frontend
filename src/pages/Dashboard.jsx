@@ -7,15 +7,30 @@ import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
 import ElectionDashboardTD from '@/components/ElectionDashboardTD';
 
-export async function dashboardLoader({ params }) {
-	const res = await fetch(`${backendUrl}/elections/${params.userId}`, {
+import { queryClient } from '../queryClient.js'
+import { useQuery } from "@tanstack/react-query";
+
+async function fetchElections(userId) {
+	const res = await fetch(`${backendUrl}/elections/${userId}`, {
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	})
-	
+
+	if (!res.ok) throw new Error("Network error");
 	const elections = await res.json()
-	return elections;
+  	return elections;
+}
+
+export async function dashboardLoader({ params }) {
+	const queryKey = ['elections', params.userId]
+	return (
+		queryClient.getQueryData(queryKey) ??
+		(await queryClient.fetchQuery({
+		  queryKey,
+		  queryFn: () => fetchElections(params.userId),
+		}))
+	);
 }
 
 
@@ -24,45 +39,56 @@ function Dashboard() {
 	const elections = useLoaderData();
 	const navigate = useNavigate()
 	const menuRef = useRef(null);
+
+	const { data } = useQuery({
+		queryKey: ["elections", params.userId],
+		queryFn: () => fetchElections(params.userId),
+		elections,
+	});
 	
 
 	const { user } = useContext(AppContext);
 
-	const [electionsList, setElectionsList] = useState(elections);
+	// const [electionsList, setElectionsList] = useState(elections);
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 
-
 	const removeElection = async (election) => {
-		Swal.fire({
+		const result = await Swal.fire({
 			title: `Delete ${election.title}?`,
 			showDenyButton: true,
 			confirmButtonText: "Delete",
-			denyButtonText: `Cancel`
-		}).then(async (result) => {
-			if (result.isConfirmed) {
-				try {
-					const res = await fetch(`${backendUrl}/election/${election._id}/delete`, {
-						method: 'delete',
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: `Bearer ${await user?.getIdToken()}`
-						},
-					})
-
-					if (!res.ok) {
-						Toast.warning("Could not complete the request")
-						return;
-					}
-
-					setElectionsList(electionsList.filter( e => e._id != election._id ));
-					Toast.success('The event was removed successfully')
-				} catch (error) {
-					Toast.error("An error occured")
-					console.error(error);
-				}
-			}
+			denyButtonText: `Cancel`,
 		});
-	}
+
+		if (!result.isConfirmed) return;
+
+		try {
+			const token = await user?.getIdToken();
+
+			const res = await fetch(`${backendUrl}/election/${election._id}/delete`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			});
+
+			if (!res.ok) {
+				Toast.error("Could not complete the request");
+				return;
+			}
+
+			queryClient.setQueryData(["elections", params.userId], (old) =>
+				old ? old.filter((e) => e._id !== election._id) : []
+			);
+
+			Toast.success("The election was deleted successfully");
+		} catch (error) {
+			Toast.error("An error occurred while deleting");
+			console.error("Delete error for election:", election._id, error);
+		}
+	};
+	      
 
 	function copyLink(link) {
 		let text = '';
@@ -80,6 +106,7 @@ function Dashboard() {
 	};
 
 	useEffect(() => {
+		console.log(data);
 		const handleClickOutside = (e) => {
 			if (menuRef.current && !menuRef.current.contains(e.target)) {
 				setSideMenuOpen(false);
@@ -107,8 +134,8 @@ function Dashboard() {
 						</thead>
 
 						<tbody>
-							{electionsList.length > 0 ? (
-								electionsList.map(election => (
+							{elections && (
+								elections.map(election => (
 									<tr key={election._id}>
 										<td>
 											{<Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link>}
@@ -126,7 +153,7 @@ function Dashboard() {
 										
 									</tr>
 								))
-							):(
+							) || (
 								<tr>
 									<td colSpan={5}>No elections to show</td>
 								</tr>
