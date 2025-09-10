@@ -106,7 +106,6 @@ function Dashboard() {
 	};
 
 	useEffect(() => {
-		console.log(data);
 		const handleClickOutside = (e) => {
 			if (menuRef.current && !menuRef.current.contains(e.target)) {
 				setSideMenuOpen(false);
@@ -134,7 +133,7 @@ function Dashboard() {
 						</thead>
 
 						<tbody>
-							{data && (
+							{data.length ? (
 								data.map(election => (
 									<tr key={election._id}>
 										<td>
@@ -153,7 +152,7 @@ function Dashboard() {
 										
 									</tr>
 								))
-							) || (
+							) : (
 								<tr>
 									<td colSpan={5}>No elections to show</td>
 								</tr>
