@@ -87,6 +87,7 @@ function NavBar({ user, onLogout }) {
 											onClick={closeMenu}>Create Election
 										</NavLink>
 									</li>
+									
 									<li>{user.email} | <button onClick={() => { onLogout(); closeMenu(); }}>Logout</button></li>
 								</>
 							)
