@@ -134,8 +134,8 @@ function Dashboard() {
 						</thead>
 
 						<tbody>
-							{elections && (
-								elections.map(election => (
+							{data && (
+								data.map(election => (
 									<tr key={election._id}>
 										<td>
 											{<Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link>}
