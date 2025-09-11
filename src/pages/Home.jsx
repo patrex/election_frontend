@@ -261,6 +261,7 @@ function Home() {
 					<h1 className="text-5xl font-bold text-gray-800 dark:text-white mb-6">Votify</h1>
 					<p className="text-gray-600 dark:text-gray-300 text-lg mb-8">
 						Participate in open or closed elections securely and fairly.
+						
 					</p>
 					<input 
 						type="text" 
