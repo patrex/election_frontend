@@ -548,12 +548,14 @@ input[type="number"] {
 	gap: .5rem;
 	margin-left: .5rem;
 	background-color: #ccc;
+	border-radius: 5px;
 }
 
 .image-actions button {
 	width: 32px;
 	height: 32px;
 	cursor: pointer;
+	text-align: center;
 }
 
 .update-candidate-middle {
