@@ -177,7 +177,7 @@ function UpdateCandidate() {
 								}))
 							}
 						>
-							<span><i class="bi bi-trash-fill"></i></span>
+							<span><i class="bi bi-trash-fill" style={{color: 'red'}}></i></span>
 						</button>
 					</div>
 				</div>
