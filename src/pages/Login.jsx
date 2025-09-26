@@ -135,9 +135,9 @@ function Login() {
 							>{ loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Login" }</button>
 						</div>
 
-						{err && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{err}</div>}
-						{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>You need to enter a valid email</div>}
-						{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 rounded-full text-red-500'>{errors.password.message}</div>}
+						{err && <div className='status bg-red-200 px-2 my-2 py-1 text-red-500'>{err}</div>}
+						{errors.username && <div className='status bg-red-200 px-2 my-2 py-1 text-red-500'>You need to enter a valid email</div>}
+						{errors.password && <div className='status bg-red-200 px-2 my-2 py-1 text-red-500'>{errors.password.message}</div>}
 					</form>
 
 					<div className="flex items-center w-2/3 my-6 mx-auto" >

@@ -38,11 +38,13 @@ function CreateElection() {
 		setLoading(true)
 
 		try {
+			const token = await user?.getIdToken();
+
 			const res = await fetch(`${backendUrl}/elections`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `Bearer ${ await user?.getIdToken() }`
+					Authorization: `Bearer ${ token }`
 				},
 				body: JSON.stringify({
 					...formData,
@@ -78,7 +80,7 @@ function CreateElection() {
 							autoFocus
 							{...register('electiontitle')}
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
-							style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
+							
 						/>
 						{errors.electiontitle && (
 							<p className="text-red-500 text-sm mt-1">You need at least two characters</p>
@@ -95,7 +97,6 @@ function CreateElection() {
 							name="startdate"
 							{...register('startdate')}
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
-							style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
 						/>
 						{errors.startdate && (
 							<p className="text-red-500 text-sm mt-1">Start date cannot be less than the current year</p>
@@ -170,10 +171,8 @@ function CreateElection() {
 					<div>
 						<textarea
 							name="description"
-							placeholder="Describe the election (optional)"
+							placeholder="Describe this election (optional)"
 							{...register('description')}
-							className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2"
-							style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
 						/>
 						{errors.description && (
 							<p className="text-red-500 text-sm mt-1">Cannot be more than 200 characters</p>
@@ -184,10 +183,9 @@ function CreateElection() {
 					<div>
 						<textarea
 							name="rules"
-							placeholder="State any rules for this election"
+							placeholder="State any rules for this election(optional)"
 							{...register('rules')}
 							className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2"
-							style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
 						/>
 						{errors.rules && (
 							<p className="text-red-500 text-sm mt-1">Cannot be more than 1000 characters</p>
@@ -200,7 +198,6 @@ function CreateElection() {
 							type="submit"
 							disabled={loading}
 							className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 transition duration-200"
-							style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
 						>
 							{loading ? <PulseLoader color="#fff" size={5} loading={loading} /> : 'Create Election'}
 						</button>

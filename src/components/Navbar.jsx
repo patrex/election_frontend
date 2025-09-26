@@ -15,7 +15,7 @@ function NavBar({ user, onLogout }) {
 	const closeMenu = () => setNavOpen(false);
 
 	// Close menu when clicking outside
-	useEffect(() => {
+	useEffect( () => {
 		const handleClickOutside = (e) => {
 			if (menuRef.current && !menuRef.current.contains(e.target)) {
 				setNavOpen(false);

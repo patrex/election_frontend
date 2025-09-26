@@ -4,7 +4,6 @@ function PositionsBox({ list_of_positions, isPending, editPosition, removePositi
 		<div className="positions-container w-full">
 			<div className="flex justify-between font-semibold border-b pb-2 mb-2">
 				<span>Positions</span>
-				<span></span>
 			</div>
 
 			{list_of_positions.length > 0 ? (
