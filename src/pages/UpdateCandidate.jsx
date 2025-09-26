@@ -161,7 +161,7 @@ function UpdateCandidate() {
 						{/* Change image (upload) */}
 						<label className="icon-btn" title="Change">
 							✏️
-							<input type="file" accept="image/*" id="imageUpload" onChange={handleFileUpload} />
+							<input type="file" accept="image/*" id="imageUpload" onChange={handleFileUpload} style={{display: 'none'}}/>
 						</label>
 
 						{/* Remove image */}
