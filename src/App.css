@@ -545,12 +545,12 @@ input[type="number"] {
 	flex-direction: column;
 	gap: .5rem;
 	margin-left: .5rem;
+	background-color: #ccc;
 }
 
 .image-actions button {
 	background: #fff;
 	border: 1px solid #ccc;
-	border-radius: 50%;
 	width: 32px;
 	height: 32px;
 	cursor: pointer;

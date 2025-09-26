@@ -160,7 +160,7 @@ function UpdateCandidate() {
 					<div className="image-actions">
 						{/* Change image (upload) */}
 						<label className="icon-btn" title="Change">
-							✏️
+							<span><i class="bi bi-arrow-left-right"></i></span>
 							<input type="file" accept="image/*" id="imageUpload" onChange={handleFileUpload} style={{display: 'none'}}/>
 						</label>
 
@@ -177,7 +177,7 @@ function UpdateCandidate() {
 								}))
 							}
 						>
-							❌
+							<span><i class="bi bi-trash-fill"></i></span>
 						</button>
 					</div>
 				</div>
