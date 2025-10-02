@@ -543,18 +543,17 @@ input[type="number"] {
 }
 
 .image-actions {
-	/* display: flex;
+	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	gap: .5rem;
 	margin-left: .5rem;
-	border-radius: 5px; */
+	border-radius: 5px;
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	display: flex;
-	gap: 0.5rem;
+	
 }
 
 .image-actions button {
