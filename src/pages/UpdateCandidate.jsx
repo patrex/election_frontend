@@ -156,30 +156,37 @@ function UpdateCandidate() {
 			<div className="candidate-update-form-container">
 				{/* top */}
 				<div className="update-candidate-top">
-					<img src={state.image} alt="Candidate" className="candidate-image" />
-					<div className="image-actions">
-						{/* Change image (upload) */}
-						<label className="icon-btn swap-pic-btn" title="Change picture">
-							<span><i class="bi bi-arrow-left-right"></i></span>
-							<input type="file" accept="image/*" id="imageUpload" 
-							       onChange={handleFileUpload} style={{display: 'none'}} />
-						</label>
+					<div className="image-wrapper">
+						<img 	
+							src={state.image} 
+							alt="Candidate" 
+							className="candidate-image" 
+						/>
 
-						{/* Remove image */}
-						<button
-							type="button"
-							className="icon-btn"
-							title="Remove"
-							onClick={() =>
-								setState((prev) => ({
-									...prev,
-									image: "",
-									newPicture: null,
-								}))
-							}
-						>
-							<span><i class="bi bi-trash-fill" style={{color: 'red'}}></i></span>
-						</button>
+						<div className="image-actions">
+							{/* Change image (upload) */}
+							<label className="icon-btn swap-pic-btn" title="Change picture">
+								<span><i class="bi bi-arrow-left-right"></i></span>
+								<input type="file" accept="image/*" id="imageUpload" 
+								onChange={handleFileUpload} style={{display: 'none'}} />
+							</label>
+
+							{/* Remove image */}
+							<button
+								type="button"
+								className="icon-btn"
+								title="Remove picture"
+								onClick={() =>
+									setState((prev) => ({
+										...prev,
+										image: "",
+										newPicture: null,
+									}))
+								}
+							>
+								<span><i class="bi bi-trash-fill" style={{color: 'red'}}></i></span>
+							</button>
+						</div>
 					</div>
 				</div>
 
