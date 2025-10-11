@@ -553,7 +553,37 @@ input[type="number"] {
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	
+	background-color: aliceblue;
+}
+
+.swap-pic-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 24px;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.5;
+	text-align: center;
+	text-decoration: none;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all .3s ease;
+	background-color: #007bff;
+	color: #fff;
+	user-select: none;
+}
+
+.swap-pic-btn :hover {
+	background-color: #0056b3;
+	transform: translateY(-1px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.swap-pic-btn :active {
+	transform: translateY(0);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .image-actions button {

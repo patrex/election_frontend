@@ -41,7 +41,7 @@ function UpdateCandidate() {
 	const [loading, setLoading] = useState(false);
 
 	const [state, setState] = useState({
-		image: candidate.imgUrl || "https://via.placeholder.com/120x80",
+		image: candidate.imgUrl || "",
 		newPicture: null,
 		newFile: "",
 		positions: positionsList || [],
@@ -76,7 +76,7 @@ function UpdateCandidate() {
 	useEffect(() => {
 		setState((prev) => ({
 			...prev,
-			image: candidate.imgUrl || "https://via.placeholder.com/120x80",
+			image: candidate.imgUrl || "",
 		}));
 	}, [candidate]);
 
@@ -87,8 +87,8 @@ function UpdateCandidate() {
 			reader.onload = (event) => {
 				setState((prev) => ({
 					...prev,
-					image: event.target.result, // preview
-					newPicture: file, // keep for upload
+					image: event.target.result,
+					newPicture: file,
 					newFile: file.name,
 				}));
 			};
@@ -160,8 +160,9 @@ function UpdateCandidate() {
 					<div className="image-actions">
 						{/* Change image (upload) */}
 						<label className="icon-btn" title="Change">
-							<span><i class="bi bi-arrow-left-right"></i></span>
-							<input type="file" accept="image/*" id="imageUpload" onChange={handleFileUpload} style={{display: 'none'}} />
+							<span><i class="bi bi-arrow-left-right swap-pic-btn"></i></span>
+							<input type="file" accept="image/*" id="imageUpload" 
+							       onChange={handleFileUpload} style={{display: 'none'}} />
 						</label>
 
 						{/* Remove image */}
@@ -172,7 +173,7 @@ function UpdateCandidate() {
 							onClick={() =>
 								setState((prev) => ({
 									...prev,
-									image: "https://via.placeholder.com/120x80",
+									image: "",
 									newPicture: null,
 								}))
 							}
