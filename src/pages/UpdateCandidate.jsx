@@ -180,13 +180,6 @@ function UpdateCandidate() {
 										type="button"
 										className="icon-btn"
 										title="Remove picture"
-										onClick={() =>
-											setState((prev) => ({
-												...prev,
-												image: "",
-												newPicture: null,
-											}))
-										}
 									>
 									<span><i class="bi bi-trash-fill" style={{color: 'red'}}></i></span>
 									</button>
