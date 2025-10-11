@@ -538,9 +538,9 @@ input[type="number"] {
 .image-wrapper {
 	position: relative;
 	display: inline-block;
-	max-width: 150px; /* adjust as you like */
-	flex-shrink: 0;   /* don't let it shrink */
-  	margin-left: auto; /* ensures it sticks to the right edge */
+	max-width: 150px; 
+	flex-shrink: 0; 
+  	margin-left: auto; 
 }
 
 .candidate-image {
@@ -621,16 +621,7 @@ input[type="number"] {
 	padding: 16px;
 }
 
-.vr-divider {
-	width: 1px;
-	/* Thin vertical line */
-	height: 100%;
-	/* Full height */
-	background-color: #ccc;
-	/* Neutral color */
-	margin: 0 8px;
-	/* Space around the divider */
-}
+
 
 .hr-divider {
 	width: 60%;
