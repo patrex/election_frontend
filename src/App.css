@@ -531,12 +531,16 @@ input[type="number"] {
 	display: flex;
 	justify-content: flex-end;
 	padding: 1rem;
+	align-items: flex-start;
+	flex-wrap: nowrap;
 }
 
 .image-wrapper {
 	position: relative;
 	display: inline-block;
 	max-width: 150px; /* adjust as you like */
+	flex-shrink: 0;   /* don't let it shrink */
+  	margin-left: auto; /* ensures it sticks to the right edge */
 }
 
 .candidate-image {
