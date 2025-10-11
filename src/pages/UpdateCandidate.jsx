@@ -159,8 +159,8 @@ function UpdateCandidate() {
 					<img src={state.image} alt="Candidate" className="candidate-image" />
 					<div className="image-actions">
 						{/* Change image (upload) */}
-						<label className="icon-btn" title="Change">
-							<span><i class="bi bi-arrow-left-right swap-pic-btn"></i></span>
+						<label className="icon-btn swap-pic-btn" title="Change picture">
+							<span><i class="bi bi-arrow-left-right"></i></span>
 							<input type="file" accept="image/*" id="imageUpload" 
 							       onChange={handleFileUpload} style={{display: 'none'}} />
 						</label>
