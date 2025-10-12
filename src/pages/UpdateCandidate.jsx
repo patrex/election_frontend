@@ -175,7 +175,7 @@ function UpdateCandidate() {
 								</label>
 
 								{/* Remove image */}
-								<AlertDialog.Root>
+								{/* <AlertDialog.Root>
 									<AlertDialog.Trigger asChild>
 										<button
 											type="button"
@@ -208,7 +208,7 @@ function UpdateCandidate() {
 										</div>
 									</AlertDialog.Content>
 									</AlertDialog.Portal>
-								</AlertDialog.Root>
+								</AlertDialog.Root> */}
 								
 							</div>
 						</div>
