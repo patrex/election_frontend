@@ -43,7 +43,8 @@ function PositionsBox({ list_of_positions, isPending, editPosition, removePositi
 									<AlertDialog.Content className="AlertDialogContent">
 										<AlertDialog.Title className="AlertDialogTitle">Delete Picture</AlertDialog.Title>
 										<AlertDialog.Description className="AlertDialogDescription">
-											{`Remove this picture for ${candidate.firstname}?`}
+											{`Remove the position: ${position}?`}
+											<p><span><i>This will also remove every candidate under this position</i></span></p>
 										</AlertDialog.Description>
 											<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
 										<AlertDialog.Cancel asChild>

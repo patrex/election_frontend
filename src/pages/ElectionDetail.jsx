@@ -183,29 +183,19 @@ function ElectionDetail() {
 		setCurrentlySelectedPosition(position.position)
 	}
 
-	function removePosition(position) {
-		Swal.fire({
-			title: `Delete <strong>${position.position}</strong> from <strong>${election.title}?</strong>`,
-			text: 'This will also remove every candidate under this position',
-			showDenyButton: true,
-			confirmButtonText: "Delete",
-			denyButtonText: `Cancel`
-		}).then(async (result) => {
-			if (result.isConfirmed) {
-				const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
-					method: 'delete',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${await user?.getIdToken()}`
-					}
-				})
-
-				if(res.ok) {
-					setPositionsList(positionsList.filter(p => p._id != position._id))
-					Toast.success("The position was removed")	
-				} else Toast.warning('Could not remove the position: ')
+	async function removePosition(position) {
+		const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
+			method: 'delete',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${await user?.getIdToken()}`
 			}
-		});	
+		})
+
+		if(res.ok) {
+			setPositionsList(positionsList.filter(p => p._id != position._id))
+			Toast.success("The position was removed")	
+		} else Toast.warning('Could not remove the position: ')		
 	}
 
 	async function sendListToDB (voterlist) {
