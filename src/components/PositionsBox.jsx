@@ -27,13 +27,36 @@ function PositionsBox({ list_of_positions, isPending, editPosition, removePositi
 								>
 									Edit
 								</button>
-
-								<button
-									className="Button red action-item"
-									onClick={() => removePosition(position)}
-								>
-									<i className="bi bi-trash3 m-1"></i>
-								</button>
+								
+								<AlertDialog.Root>
+									<AlertDialog.Trigger asChild>
+										<button
+											className="Button red action-item"
+										>
+										<i className="bi bi-trash3 m-1"></i>
+										</button>
+									</AlertDialog.Trigger>
+									<AlertDialog.Portal>
+									<AlertDialog.Overlay className="AlertDialogOverlay" />
+									<AlertDialog.Content className="AlertDialogContent">
+										<AlertDialog.Title className="AlertDialogTitle">Delete Picture</AlertDialog.Title>
+										<AlertDialog.Description className="AlertDialogDescription">
+											{`Remove this picture for ${candidate.firstname}?`}
+										</AlertDialog.Description>
+											<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+										<AlertDialog.Cancel asChild>
+											<button  className="Button mauve">Cancel</button>
+										</AlertDialog.Cancel>
+										<AlertDialog.Action asChild>
+											<button className="Button red" 
+												onClick={() => removePosition(position)}>Remove
+											</button>
+										</AlertDialog.Action>
+										</div>
+									</AlertDialog.Content>
+									</AlertDialog.Portal>
+								</AlertDialog.Root>
+								
 							</div>
 						)}
 					</div>
