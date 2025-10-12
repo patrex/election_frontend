@@ -41,9 +41,9 @@ function PositionsBox({ list_of_positions, isPending, editPosition, removePositi
 									<AlertDialog.Portal>
 									<AlertDialog.Overlay className="AlertDialogOverlay" />
 									<AlertDialog.Content className="AlertDialogContent">
-										<AlertDialog.Title className="AlertDialogTitle">Delete Picture</AlertDialog.Title>
+										<AlertDialog.Title className="AlertDialogTitle">Delete Position</AlertDialog.Title>
 										<AlertDialog.Description className="AlertDialogDescription">
-											{`Remove the position: ${position}?`}
+											{`Remove the position: ${position.position}?`}
 											<p><span><i>This will also remove every candidate under this position</i></span></p>
 										</AlertDialog.Description>
 											<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
