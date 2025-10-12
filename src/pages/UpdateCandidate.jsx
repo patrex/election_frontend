@@ -158,59 +158,66 @@ function UpdateCandidate() {
 			<div className="candidate-update-form-container">
 				{/* top */}
 				<div className="update-candidate-top">
-					<div className="image-wrapper">
-						<img 	
-							src={state.image} 
-							alt="Candidate" 
-							className="candidate-image" 
-						/>
+					{candidate.imgUrl ? (
+						<div className="image-wrapper">
+							<img 	
+								src={state.image} 
+								alt="Candidate" 
+								className="candidate-image" 
+							/>
 
-						<div className="image-actions">
-							{/* Change image (upload) */}
-							<label className="icon-btn" title="Change picture">
-								<span><i class="bi bi-arrow-left-right"></i></span>
-								<input type="file" accept="image/*" id="imageUpload" 
-								onChange={handleFileUpload} style={{display: 'none'}} />
-							</label>
+							<div className="image-actions">
+								{/* Change image (upload) */}
+								<label className="icon-btn" title="Change picture">
+									<span><i class="bi bi-arrow-left-right"></i></span>
+									<input type="file" accept="image/*" id="imageUpload" 
+									onChange={handleFileUpload} style={{display: 'none'}} />
+								</label>
 
-							{/* Remove image */}
-							<AlertDialog.Root>
-								<AlertDialog.Trigger asChild>
-									<button
-										type="button"
-										className="icon-btn"
-										title="Remove picture"
-									>
-									<span><i class="bi bi-trash-fill" style={{color: 'red'}}></i></span>
-									</button>
-								</AlertDialog.Trigger>
-								<AlertDialog.Portal>
-								<AlertDialog.Overlay className="AlertDialogOverlay" />
-								<AlertDialog.Content className="AlertDialogContent">
-									<AlertDialog.Title className="AlertDialogTitle">Delete Picture</AlertDialog.Title>
-									<AlertDialog.Description className="AlertDialogDescription">
-										{`Remove this picture for ${candidate.firstname}?`}
-									</AlertDialog.Description>
-										<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
-									<AlertDialog.Cancel asChild>
-										<button  className="Button mauve">Cancel</button>
-									</AlertDialog.Cancel>
-									<AlertDialog.Action asChild>
-										<button className="Button red" 
-											onClick={() => setState((prev) => ({
-												...prev,
-												image: "",
-												newPicture: avatar,
-											}))}>Remove
+								{/* Remove image */}
+								<AlertDialog.Root>
+									<AlertDialog.Trigger asChild>
+										<button
+											type="button"
+											className="icon-btn"
+											title="Remove picture"
+										>
+										<span><i class="bi bi-trash-fill" style={{color: 'red'}}></i></span>
 										</button>
-									</AlertDialog.Action>
-									</div>
-								</AlertDialog.Content>
-								</AlertDialog.Portal>
-							</AlertDialog.Root>
-							
+									</AlertDialog.Trigger>
+									<AlertDialog.Portal>
+									<AlertDialog.Overlay className="AlertDialogOverlay" />
+									<AlertDialog.Content className="AlertDialogContent">
+										<AlertDialog.Title className="AlertDialogTitle">Delete Picture</AlertDialog.Title>
+										<AlertDialog.Description className="AlertDialogDescription">
+											{`Remove this picture for ${candidate.firstname}?`}
+										</AlertDialog.Description>
+											<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+										<AlertDialog.Cancel asChild>
+											<button  className="Button mauve">Cancel</button>
+										</AlertDialog.Cancel>
+										<AlertDialog.Action asChild>
+											<button className="Button red" 
+												onClick={() => setState((prev) => ({
+													...prev,
+													image: "",
+													newPicture: avatar,
+												}))}>Remove
+											</button>
+										</AlertDialog.Action>
+										</div>
+									</AlertDialog.Content>
+									</AlertDialog.Portal>
+								</AlertDialog.Root>
+								
+							</div>
 						</div>
-					</div>
+
+					) : (
+						<div>
+							<p>Add picture for {`${candidate.firstname} ${candidate.lastname}`}</p>
+						</div>
+					) }
 				</div>
 
 				{/* middle */}
