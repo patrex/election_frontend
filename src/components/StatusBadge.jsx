@@ -1,29 +1,26 @@
 import { useEventStatus } from "@/hooks/useEventStatus";
+import { Badge } from "@/components/ui/badge";
 
 function StatusBadge({ election }) {
 	const { isActive, hasEnded, isPending } = useEventStatus(new Date(election.startDate), new Date(election.endDate));
 	
-	let label, classes;
+	let label, variant;
 	if (isPending) {
 		label = "Pending";
-		classes =
-			"inline-block px-3 py-1 text-sm font-semibold shadow bg-yellow-100 text-yellow-700 border border-yellow-300";
+		variant = "default";
 	} else if (isActive) {
 		label = "Active";
-		classes =
-			"inline-block px-3 py-1 text-sm font-semibold shadow bg-green-100 text-green-700 border border-green-300";
+		variant = "active"
+			
 	} else if (hasEnded) {
 		label = "Ended";
-		classes =
-			"inline-block px-3 py-1 text-sm font-semibold shadow bg-red-100 text-red-700 border border-red-300";
-	} else {
+		variant = "destructive"
 		// fallback only if logic fails completely
 		label = "Loading…";
-		classes =
-			"inline-block px-3 py-1 text-sm font-semibold shadow bg-gray-100 text-gray-600 border border-gray-300";
+		variant = "outline"
 	}
 
-	return <span className={classes}>{label}</span>;
+	return <Badge variant={variant}>{label}</Badge>
 }
 
 export default StatusBadge;
