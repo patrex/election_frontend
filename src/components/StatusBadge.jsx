@@ -7,7 +7,7 @@ function StatusBadge({ election }) {
 	let label, variant;
 	if (isPending) {
 		label = "Pending";
-		variant = "default";
+		variant = "secondary";
 	} else if (isActive) {
 		label = "Active";
 		variant = "active"
@@ -15,8 +15,10 @@ function StatusBadge({ election }) {
 	} else if (hasEnded) {
 		label = "Ended";
 		variant = "destructive"
+		
+	} else {
 		// fallback only if logic fails completely
-		label = "Loading…";
+		label = "???";
 		variant = "outline"
 	}
 
