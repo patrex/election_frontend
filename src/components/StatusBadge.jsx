@@ -7,7 +7,7 @@ function StatusBadge({ election }) {
 	let label, variant;
 	if (isPending) {
 		label = "Pending";
-		variant = "secondary";
+		variant = "pending";
 	} else if (isActive) {
 		label = "Active";
 		variant = "active"
