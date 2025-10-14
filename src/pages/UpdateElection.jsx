@@ -1,10 +1,8 @@
 import { useLoaderData, Link, useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useState, useEffect, useContext } from "react";
-import { fireman } from '../utils/fireloader';
 import Toast from "@/utils/ToastMsg";
 import { PulseLoader } from "react-spinners";
-import { Calendar24 } from "@/components/CalendarShad";
 
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -154,7 +152,6 @@ function UpdateElection() {
 							<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 						</div>
 
-						<Calendar24 />
 
 						<div className="mb-3">
 							<label htmlFor="startDate" className="px-2">Start Date</label>
