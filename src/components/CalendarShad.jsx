@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon, Clock, CalendarDays } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -13,13 +13,13 @@ import {
 
 export function Calendar24() {
 	const [open, setOpen] = React.useState(false)
-	const [date, setDate] = React.useState < Date | undefined > (undefined)
+	const [date, setDate] = React.useState();
 
 	return (
 		<div className="flex gap-4">
 			<div className="flex flex-col gap-3">
 				<Label htmlFor="date-picker" className="px-1">
-					Date
+					<CalendarDays />
 				</Label>
 				<Popover open={open} onOpenChange={setOpen}>
 					<PopoverTrigger asChild>
@@ -47,7 +47,7 @@ export function Calendar24() {
 			</div>
 			<div className="flex flex-col gap-3">
 				<Label htmlFor="time-picker" className="px-1">
-					Time
+					<Clock />
 				</Label>
 				<Input
 					type="time"
