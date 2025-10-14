@@ -162,7 +162,7 @@ function UpdateElection() {
 									className="Button mauve"
 									{...register('startdate')}
 								/>
-							</span>{errors.startdate && <span className='error-msg'>{errors.startdate.message}</span>}
+							</span> <br /> {errors.startdate && <span className='error-msg'>{errors.startdate.message}</span>}
 						</div>
 
 						<div className="mb-3">
@@ -172,7 +172,7 @@ function UpdateElection() {
 									id="endDate"
 									className="Button mauve"
 									{...register('enddate')}
-								/>{errors.enddate && <span className='error-msg'>{errors.enddate.message}</span>}
+								/> <br /> {errors.enddate && <span className='error-msg'>{errors.enddate.message}</span>}
 							</span>
 							
 						</div>
