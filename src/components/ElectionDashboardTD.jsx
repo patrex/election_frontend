@@ -53,7 +53,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 							<AlertDialog.Content className="AlertDialogContent">
 								<AlertDialog.Title className="AlertDialogTitle">Delete Election?</AlertDialog.Title>
 								<AlertDialog.Description className="AlertDialogDescription">
-									{`Delete election: < ${ election.title } >?`}
+									{`Delete election: ${ election.title }?`}
 								</AlertDialog.Description>
 									<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
 								<AlertDialog.Cancel asChild>

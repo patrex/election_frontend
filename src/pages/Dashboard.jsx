@@ -127,24 +127,26 @@ function Dashboard() {
 								data.map(election => (
 									<tr key={election._id}>
 										<td>
-											{<Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link>}
+											<Link to={`/user/${params.userId}/election/${election._id}`}>{election.title}</Link>
 										</td>
+
 										<td>{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}</td>
 										<td>{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}</td>
 										<td>{election.type}</td>
+
 										<ElectionDashboardTD 
-											election = {election}
-											navigate = {navigate}
-											copyLink = {copyLink}
-											removeElection = {removeElection}
-											params = {params}
+											election = { election }
+											navigate = { navigate }
+											copyLink = { copyLink }
+											removeElection = { removeElection }
+											params = { params }
 										/>
 										
 									</tr>
 								))
 							) : (
 								<tr>
-									<td colSpan={5}>No elections to show</td>
+									<td colSpan={ 5 }>No elections to show</td>
 								</tr>
 							)}
 						</tbody>
