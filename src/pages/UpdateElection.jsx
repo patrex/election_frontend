@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/popover"
 
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import backendUrl from '../utils/backendurl'
@@ -44,29 +44,32 @@ function UpdateElection() {
 	const { user } = useContext(AppContext)
 
 	const schema = z.object({
-		electiontitle: z.string().min(2, {message: "Election title cannot be less than two characters"}),
-		startdate: z.iso.datetime({ local: true}),
-		enddate: z.iso.datetime({ local: true}),
+		electiontitle: z.string().min(2, { message: "Election title cannot be less than two characters" }),
+		startdate: z.string().datetime({ offset: false }),
+		enddate: z.string().datetime({ offset: false }),
 		electiontype: z.string(),
 		description: z.string().max(200),
 		rules: z.string().max(1000)
-	}).superRefine((data, ctx) => {
-		if (data.startdate > data.enddate) {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: "Start date cannot come after end date",
-				path: ['startdate']
-			})
+	      }).superRefine((data, ctx) => {
+		const start = new Date(data.startdate);
+		const end = new Date(data.enddate);
+	      
+		if (start > end) {
+		  ctx.addIssue({
+		    code: z.ZodIssueCode.custom,
+		    message: "Start date cannot come after end date",
+		    path: ['startdate']
+		  });
 		}
-
-		if (data.startdate < Date.now()) {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: "Start date cannot be in the past",
-				path: ['startdate']
-			})
+	      
+		if (start < new Date()) {
+		  ctx.addIssue({
+		    code: z.ZodIssueCode.custom,
+		    message: "Start date cannot be in the past",
+		    path: ['startdate']
+		  });
 		}
-	})
+	});
 
 	function formatDate(date) {
 		const year = date.getFullYear();
