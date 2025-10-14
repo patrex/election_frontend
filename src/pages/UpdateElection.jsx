@@ -203,7 +203,17 @@ function UpdateElection() {
 							{...register('rules')}
 						/>{errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
 						
-						<button className="Button violet" type="submit">Save</button>
+						<button
+							type="submit"
+							className="Button violet"
+							disabled={ !isDirty }
+						>
+							{loading ? (
+								<PulseLoader color="#fff" size={5} loading={loading} />
+							) : (
+								"Update Election"
+							)}
+						</button>
 					</form>
 				</div>
 			</div>
