@@ -45,8 +45,8 @@ function UpdateElection() {
 
 	const schema = z.object({
 		electiontitle: z.string().min(2, { message: "Election title cannot be less than two characters" }),
-		startdate: z.string().datetime({ offset: false }),
-		enddate: z.string().datetime({ offset: false }),
+		startdate: z.string().datetime({ local: true }),
+		enddate: z.string().datetime({ local: true }),
 		electiontype: z.string(),
 		description: z.string().max(200),
 		rules: z.string().max(1000)
@@ -93,7 +93,7 @@ function UpdateElection() {
 		return formattedDate;
 	}
 
-	const { register, handleSubmit, formState } = useForm({
+	const { register, handleSubmit, formState: { errors, isDirty, dirtyFields } } = useForm({
 		resolver: zodResolver(schema),
 		defaultValues: {
 			electiontitle: election.title,
@@ -104,8 +104,6 @@ function UpdateElection() {
 			rules: election.rules
 		}
 	});
-
-	const { dirtyFields, isDirty, errors } = formState;
 
 	async function onSubmit(formData) {
 		if (isDirty) {
@@ -166,7 +164,7 @@ function UpdateElection() {
 									className="Button mauve"
 									{...register('startdate')}
 								/>
-							</span>{errors.startdate && <span className='error-msg'>Start date cannot be less than current year</span>}
+							</span>{errors.startdate && <span className='error-msg'>{errors.startdate.message}</span>}
 						</div>
 
 						<div className="mb-3">
@@ -176,7 +174,7 @@ function UpdateElection() {
 									id="endDate"
 									className="Button mauve"
 									{...register('enddate')}
-								/>{errors.enddate && <span className='error-msg'>Cannot be less than start date</span>}
+								/>{errors.enddate && <span className='error-msg'>{errors.enddate.message}</span>}
 							</span>
 							
 						</div>
