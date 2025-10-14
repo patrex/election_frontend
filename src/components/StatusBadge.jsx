@@ -15,7 +15,6 @@ function StatusBadge({ election }) {
 	} else if (hasEnded) {
 		label = "Ended";
 		variant = "destructive"
-		
 	} else {
 		// fallback only if logic fails completely
 		label = "???";

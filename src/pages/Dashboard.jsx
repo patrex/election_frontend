@@ -1,7 +1,6 @@
 import  { useState, useContext, useRef, useEffect } from 'react';
 import { Link, useLoaderData, useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import Swal from 'sweetalert2';
 import backendUrl from '../utils/backendurl';
 import Toast from '@/utils/ToastMsg';
 import { AppContext } from '@/App';
@@ -53,15 +52,6 @@ function Dashboard() {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 
 	const removeElection = async (election) => {
-		const result = await Swal.fire({
-			title: `Delete ${election.title}?`,
-			showDenyButton: true,
-			confirmButtonText: "Delete",
-			denyButtonText: `Cancel`,
-		});
-
-		if (!result.isConfirmed) return;
-
 		try {
 			const token = await user?.getIdToken();
 
@@ -69,7 +59,7 @@ function Dashboard() {
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${ token }`,
 				},
 			});
 

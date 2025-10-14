@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react';
+import * as AlertDialog from '@radix-ui/react-alert-dialog';
 
 function ElectionDashboardTD({ election, navigate, copyLink, removeElection, params }) {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
@@ -37,13 +38,34 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 						>
 							<i className="bi bi-pencil-fill side-menu-icon"></i> Edit
 						</li>
-						<li
-							className="side-list-item"
-							style={{ color: "red" }}
-							onClick={() => removeElection(election)}
-						>
-							<i className="bi bi-trash3-fill side-menu-icon"></i> Delete
-						</li>
+
+						<AlertDialog.Root>
+							<AlertDialog.Trigger asChild>
+								<li
+									className="side-list-item"
+									style={{ color: "red" }}
+								>
+									<i className="bi bi-trash3-fill side-menu-icon"></i> Delete
+								</li>
+							</AlertDialog.Trigger>
+							<AlertDialog.Portal>
+							<AlertDialog.Overlay className="AlertDialogOverlay" />
+							<AlertDialog.Content className="AlertDialogContent">
+								<AlertDialog.Title className="AlertDialogTitle">Delete Election?</AlertDialog.Title>
+								<AlertDialog.Description className="AlertDialogDescription">
+									{`Delete election: < ${ election.title } >?`}
+								</AlertDialog.Description>
+									<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+								<AlertDialog.Cancel asChild>
+									<button  className="Button mauve">Cancel</button>
+								</AlertDialog.Cancel>
+								<AlertDialog.Action asChild>
+									<button className="Button red" onClick={ () => removeElection(election) }>Delete</button>
+								</AlertDialog.Action>
+								</div>
+							</AlertDialog.Content>
+							</AlertDialog.Portal>
+  						</AlertDialog.Root>
 					</ul>
 				</div>
 			)}
