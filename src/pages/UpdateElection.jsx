@@ -4,6 +4,17 @@ import { useState, useEffect, useContext } from "react";
 import { fireman } from '../utils/fireloader';
 import Toast from "@/utils/ToastMsg";
 
+import { ChevronDownIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -34,8 +45,8 @@ function UpdateElection() {
 
 	const schema = z.object({
 		electiontitle: z.string().min(2, {message: "Election title cannot be less than two characters"}),
-		startdate: z.date(),
-		enddate: z.date(),
+		startdate: z.iso.datetime({ local: true}),
+		enddate: z.iso.datetime({ local: true}),
 		electiontype: z.string(),
 		description: z.string().max(200),
 		rules: z.string().max(1000)
