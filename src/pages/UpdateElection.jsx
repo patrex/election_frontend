@@ -6,17 +6,6 @@ import Toast from "@/utils/ToastMsg";
 import { PulseLoader } from "react-spinners";
 import { Calendar24 } from "@/components/CalendarShad";
 
-import { ChevronDownIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -42,6 +31,8 @@ function UpdateElection() {
 	const electionTypes = ['Open', 'Closed']
 	const params = useParams();
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
+
 
 	const { user } = useContext(AppContext)
 
@@ -108,6 +99,8 @@ function UpdateElection() {
 	});
 
 	async function onSubmit(formData) {
+		setLoading(true);
+
 		if (isDirty) {
 			const res = await fetch(`${backendUrl}/elections/${election._id}`, {
 				method: 'PATCH',
@@ -128,16 +121,19 @@ function UpdateElection() {
 			
 			else if (res.status === '404') {
 				Toast.warning('Event not found')
+				setLoading(false)
 				return;
 			}
 
 			else if (res.status === '500') {
 				Toast.error("There was a problem in the app")
+				setLoading(false)
 				return;
 			}
-
 		} else {
-			Toast.info("No updates made")
+			Toast.info("You did not make any changes")
+			setLoading(false)
+			return
 		}
 	}
 
