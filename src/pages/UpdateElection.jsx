@@ -3,6 +3,8 @@ import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useState, useEffect, useContext } from "react";
 import { fireman } from '../utils/fireloader';
 import Toast from "@/utils/ToastMsg";
+import { PulseLoader } from "react-spinners";
+import { Calendar24 } from "@/components/CalendarShad";
 
 import { ChevronDownIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -155,6 +157,9 @@ function UpdateElection() {
 							/> {errors.electiontitle && <span className='error-msg'>Title must be at least two characters</span>}
 							<div id="electionName" className="form-text">Enter a descriptive title this election</div>
 						</div>
+
+						<Calendar24 />
+
 						<div className="mb-3">
 							<label htmlFor="startDate" className="px-2">Start Date</label>
 							<span>
