@@ -51,9 +51,10 @@ function Dashboard() {
 	// const [electionsList, setElectionsList] = useState(elections);
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 
-	const removeElection = async (election) => {
+	async function removeElection (election) {
+		const token = await user?.getIdToken();
+		
 		try {
-			const token = await user?.getIdToken();
 
 			const res = await fetch(`${backendUrl}/election/${election._id}/delete`, {
 				method: "DELETE",

@@ -45,7 +45,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 									className="side-list-item"
 									style={{ color: "red" }}
 								>
-									<i className="bi bi-trash3-fill side-menu-icon"></i> Delete
+									<button><i className="bi bi-trash3-fill side-menu-icon"></i> Delete</button>
 								</li>
 							</AlertDialog.Trigger>
 							<AlertDialog.Portal>

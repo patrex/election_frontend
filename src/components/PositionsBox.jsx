@@ -52,7 +52,7 @@ function PositionsBox({ list_of_positions, isPending, editPosition, removePositi
 										</AlertDialog.Cancel>
 										<AlertDialog.Action asChild>
 											<button className="Button red" 
-												onClick={() => removePosition(position)}>Remove
+												onClick={ () => removePosition(position) }>Remove
 											</button>
 										</AlertDialog.Action>
 										</div>
