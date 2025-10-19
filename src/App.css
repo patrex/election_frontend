@@ -258,6 +258,7 @@ header {
 	align-items: center;
 	min-height: 80vh;
 	width: 100vw;
+	overflow: hidden;
 }
 
 .form-container {
@@ -877,7 +878,7 @@ button {
 
 .pos-list-container {
 	min-height: 50vh;
-	overflow: hidden;
+	overflow-y: auto;
 	min-width: 100%;
 	margin-top: 5px;
 	padding: 0 .5em;
