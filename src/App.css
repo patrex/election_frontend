@@ -878,11 +878,14 @@ button {
 
 .pos-list-container {
 	min-height: 50vh;
-	overflow-y: auto;
+	overflow: hidden;
 	min-width: 100%;
 	margin-top: 5px;
 	padding: 0 .5em;
+}
 
+.positions-container {
+	overflow-y: auto;
 }
 
 .logout {
