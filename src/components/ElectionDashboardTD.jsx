@@ -10,6 +10,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 			if (menuRef.current && !menuRef.current.contains(e.target)) {
 				setSideMenuOpen(false);
 			}
+			if (e.target.closest(".AlertDialogContent")) return;
 		};
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -24,7 +25,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 			{sideMenuOpen && (
 				<div className="side-menu-div">
 					<ul className="side-menu-list" ref={menuRef}>
-						<li className="side-list-item" onClick={() => copyLink(election._id)}>
+						<li className="side-list-item" onClick={() => {copyLink(election._id); setSideMenuOpen(false)}}>
 							<i className="bi bi-cursor-fill side-menu-icon"></i> Copy Id
 						</li>
 						<li className="side-list-item" onClick={() => copyLink(election.shareLink)}>
@@ -32,9 +33,10 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 						</li>
 						<li
 							className="side-list-item"
-							onClick={() =>
+							onClick={() => {
 								navigate(`/user/${params.userId}/election/${election._id}/update`)
-							}
+								setSideMenuOpen(false)
+							}}
 						>
 							<i className="bi bi-pencil-fill side-menu-icon"></i> Edit
 						</li>
