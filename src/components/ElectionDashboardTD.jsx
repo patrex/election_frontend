@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
+import { useEventStatus } from '@/hooks/useEventStatus';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
+
 
 function ElectionDashboardTD({ election, navigate, copyLink, removeElection, params }) {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const menuRef = useRef(null);
+	const { isActive, isPending, hasStarted, hasEnded } = useEventStatus(new Date(election.startDate), new Date(election.endDate))
 
 	useEffect(() => {
 		const handleClickOutside = (e) => {
@@ -34,15 +37,17 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 						<li className="side-list-item" onClick={() => {copyLink(election.shareLink); setSideMenuOpen(false)}}>
 							<i className="bi bi-link-45deg side-menu-icon"></i> Copy link
 						</li>
-						<li
-							className="side-list-item"
-							onClick={() => {
-								navigate(`/user/${params.userId}/election/${election._id}/update`)
-								setSideMenuOpen(false)
-							}}
-						>
-							<i className="bi bi-pencil-fill side-menu-icon"></i> Edit
-						</li>
+						{ isPending && (
+							<li
+								className="side-list-item"
+								onClick={() => {
+									navigate(`/user/${params.userId}/election/${election._id}/update`)
+									setSideMenuOpen(false)
+								}}
+							>
+								<i className="bi bi-pencil-fill side-menu-icon"></i> Edit
+							</li>
+						)} 
 
 						<AlertDialog.Root open={alertOpen} onOpenChange={setAlertOpen}>
 							<AlertDialog.Trigger asChild>
