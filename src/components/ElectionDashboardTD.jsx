@@ -3,18 +3,21 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog';
 
 function ElectionDashboardTD({ election, navigate, copyLink, removeElection, params }) {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
+	const [alertOpen, setAlertOpen] = useState(false);
 	const menuRef = useRef(null);
 
 	useEffect(() => {
 		const handleClickOutside = (e) => {
+			// Don't close menu if alert dialog is open or if clicking on alert dialog elements
+			if (alertOpen) return;
+			
 			if (menuRef.current && !menuRef.current.contains(e.target)) {
 				setSideMenuOpen(false);
 			}
-			if (e.target.closest(".AlertDialogContent")) return;
 		};
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => document.removeEventListener("mousedown", handleClickOutside);
-	}, []);
+	}, [alertOpen]);
 
 	return (
 		<td>
@@ -28,7 +31,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 						<li className="side-list-item" onClick={() => {copyLink(election._id); setSideMenuOpen(false)}}>
 							<i className="bi bi-cursor-fill side-menu-icon"></i> Copy Id
 						</li>
-						<li className="side-list-item" onClick={() => copyLink(election.shareLink)}>
+						<li className="side-list-item" onClick={() => {copyLink(election.shareLink); setSideMenuOpen(false)}}>
 							<i className="bi bi-link-45deg side-menu-icon"></i> Copy link
 						</li>
 						<li
@@ -41,7 +44,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 							<i className="bi bi-pencil-fill side-menu-icon"></i> Edit
 						</li>
 
-						<AlertDialog.Root>
+						<AlertDialog.Root open={alertOpen} onOpenChange={setAlertOpen}>
 							<AlertDialog.Trigger asChild>
 								<li
 									className="side-list-item"
@@ -51,21 +54,25 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 								</li>
 							</AlertDialog.Trigger>
 							<AlertDialog.Portal>
-							<AlertDialog.Overlay className="AlertDialogOverlay" />
-							<AlertDialog.Content className="AlertDialogContent">
-								<AlertDialog.Title className="AlertDialogTitle">Delete Election</AlertDialog.Title>
-								<AlertDialog.Description className="AlertDialogDescription">
-									{`Delete election: ${ election.title }?`}
-								</AlertDialog.Description>
+								<AlertDialog.Overlay className="AlertDialogOverlay" />
+								<AlertDialog.Content className="AlertDialogContent">
+									<AlertDialog.Title className="AlertDialogTitle">Delete Election</AlertDialog.Title>
+									<AlertDialog.Description className="AlertDialogDescription">
+										{`Delete election: ${ election.title }?`}
+									</AlertDialog.Description>
 									<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
-								<AlertDialog.Cancel asChild>
-									<button  className="Button mauve">Cancel</button>
-								</AlertDialog.Cancel>
-								<AlertDialog.Action asChild>
-									<button className="Button red" onClick={ () => removeElection(election) }>Delete</button>
-								</AlertDialog.Action>
-								</div>
-							</AlertDialog.Content>
+										<AlertDialog.Cancel asChild>
+											<button className="Button mauve" onClick={() => setAlertOpen(false)}>Cancel</button>
+										</AlertDialog.Cancel>
+										<AlertDialog.Action asChild>
+											<button className="Button red" onClick={() => {
+												removeElection(election);
+												setAlertOpen(false);
+												setSideMenuOpen(false);
+											}}>Delete</button>
+										</AlertDialog.Action>
+									</div>
+								</AlertDialog.Content>
 							</AlertDialog.Portal>
   						</AlertDialog.Root>
 					</ul>
