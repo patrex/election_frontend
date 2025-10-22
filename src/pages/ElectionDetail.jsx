@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from 'react';
 import Swal from 'sweetalert2';
 import { AppContext } from '@/App';
 import ElectionActions from '@/components/ElectionActions';
+import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import StatusBadge from '@/components/StatusBadge';
 
 import Toast from '@/utils/ToastMsg';
@@ -12,48 +13,60 @@ import { authman } from '@/utils/fireloader';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
 
-export async function electionDetailLoader({params}) {
-	let election, positions, voters = undefined;
+export async function electionDetailLoader({ params }) {
 	const currentUser = authman.currentUser;
 
 	try {
 		const token = await currentUser.getIdToken();
-		const headerSection = {
+		const headers = {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`
+		};
+
+		// Fetch election and positions in parallel
+		const [electionRes, positionsRes] = await Promise.all([
+			fetch(`${backendUrl}/election/${params.id}`, { headers }),
+			fetch(`${backendUrl}/election/${params.id}/positions`, { headers })
+		]);
+
+		// Check for HTTP errors
+		if (!electionRes.ok || !positionsRes.ok) {
+			throw new Error('Failed to fetch election data');
 		}
 
-		const res1 = await fetch(`${backendUrl}/election/${params.id}`, {
-			headers: headerSection
-		})
-		const res2 = await fetch(`${backendUrl}/election/${params.id}/positions`, {
-			headers: headerSection
-		})
+		const [election, positions] = await Promise.all([
+			electionRes.json(),
+			positionsRes.json()
+		]);
 
-		election = await res1.json()
-		positions = await res2.json()
-
-		if (election.type == 'Closed') {
-			const v = await fetch(`${backendUrl}/election/${params.id}/voterlist`, {
-				headers: headerSection
-			})
-			voters = await v.json()
+		// Fetch voters only for closed elections
+		let voters = null;
+		if (election.type === 'Closed') {
+			const votersRes = await fetch(`${backendUrl}/election/${params.id}/voterlist`, { headers });
+			
+			if (!votersRes.ok) {
+				throw new Error('Failed to fetch voter list');
+			}
+			
+			voters = await votersRes.json();
 		}
+
+		return { election, positions, voters };
 
 	} catch (error) {
-		console.log(error);
+		console.error('Error loading election details:', error);
+		// Return null values or throw error depending on your error handling strategy
+		return { election: null, positions: null, voters: null };
 	}
-
-	return [election, positions, voters]
 }
 
 function ElectionDetail() {
-	const [loaderElection, positions, voters] = useLoaderData();
-	const [election, setElection] = useState(loaderElection)
+	const { election: loaderElection, positions, voters } = useLoaderData();
+
+	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
-	const [votersList, setVotersList] = useState(voters)
-	const [votersFiltered, setVotersFiltered] = useState([])
-	const params = useParams()
+	const [votersList, setVotersList] = useState(voters);
+	const [votersFiltered, setVotersFiltered] = useState([]);
 
 	const { user } = useContext(AppContext);
 
@@ -230,32 +243,24 @@ function ElectionDetail() {
 	}
 
 	async function removeVoter(voter) {
-		Swal.fire({
-			title: `Remove ${election.userAuthType == 'email' ? voter.email : voter.phoneNo}?`,
-			showDenyButton: true,
-			confirmButtonText: "Remove",
-			denyButtonText: `Cancel`
-		}).then(async (result) => {
-			if (result.isConfirmed) {
-				try {
-					const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
-						method: 'post',
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: `Bearer ${await user?.getIdToken()}`
-						}
-					})
-		
-					if(res.ok) {
-						setVotersList(votersList.filter(e => e._id != voter._id ));
-						Toast.success('The participant was removed successfully')
-					}
-					
-				} catch (error) {
-					Toast.error("There was an error removing the participant")
+		try {
+			const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${await user?.getIdToken()}`
 				}
+			})
+
+			if(res.ok) {
+				setVotersList(votersList.filter(e => e._id != voter._id ));
+				Toast.success('The participant was removed successfully')
 			}
-		});
+			
+		} catch (error) {
+			Toast.error("There was an error removing the participant")
+		}
+			
 	}
 
 	function procList (participantsAuthType) {
@@ -436,9 +441,9 @@ function ElectionDetail() {
 	}
 
 	useEffect(() => {
-		if (election.type == 'Closed'){
+		if (election.type == 'Closed') {
 			const votersFiltered = election.userAuthType == 'email' ?
-				votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
+				votersList.filter( (voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase()) ) :
 				votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
 				setVotersFiltered(votersFiltered)
 		}
@@ -497,17 +502,35 @@ function ElectionDetail() {
 												<div className='voter-info'>
 													<span>{election.userAuthType == 'email' ? voter.email : voter.phoneNo}</span>
 													{ isPending && (
-															<div className='voter-actions'>
-																<button className='Button violet action-item' 
-																	onClick={ () => editParticipant(voter) }>Edit
-																</button>
+														<div className='voter-actions'>
+															<button className='Button violet action-item' 
+																onClick={ () => editParticipant(voter) }>Edit
+															</button>
 
-																<button className='Button red action-item' 
-																	onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i>
-																</button>
-															</div>
-														)
-													}
+															<AlertDialog.Root>
+																<AlertDialog.Trigger asChild>
+																	<button className='Button red action-item'><i className="bi bi-trash3 m-1"></i></button>
+																</AlertDialog.Trigger>
+																<AlertDialog.Portal>
+																<AlertDialog.Overlay className="AlertDialogOverlay" />
+																<AlertDialog.Content className="AlertDialogContent">
+																	<AlertDialog.Title className="AlertDialogTitle">Remove Voter</AlertDialog.Title>
+																	<AlertDialog.Description className="AlertDialogDescription">
+																		{`Remove ${election.userAuthType === 'email' ? voter.email : voter.phoneNo}?`}
+																	</AlertDialog.Description>
+																		<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+																	<AlertDialog.Cancel asChild>
+																		<button  className="Button mauve">Cancel</button>
+																	</AlertDialog.Cancel>
+																	<AlertDialog.Action asChild>
+																		<button className="Button red" onClick={ () => removeVoter(voter) }>Yes, remove</button>
+																	</AlertDialog.Action>
+																	</div>
+																</AlertDialog.Content>
+																</AlertDialog.Portal>
+															</AlertDialog.Root>
+														</div>
+													)}
 												</div>
 											</li>
 										)))
@@ -624,8 +647,8 @@ function ElectionDetail() {
 								onChange={ (e) => { setParticipantsList(e.target.value)} }
 							/>
 							<div className="action-btn-container">
-								{election.userAuthType == 'email' && <button className='Button violet action-item' onClick={() => procList('email')}>Add Emails</button>}
-								{election.userAuthType == 'phone' && <button className='Button violet action-item' onClick={() => procList('phone')}>Add Phone #s</button>}
+								{ election.userAuthType == 'email' ? <button className='Button violet action-item' onClick={() => procList('email')}>Add Emails</button>
+								 : <button className='Button violet action-item' onClick={() => procList('phone')}>Add Phone #s</button> }
 								<button className='Button red action-item' onClick={ () => setAddParticipantsModalOpen(false) }>Cancel</button>
 							</div>
 						</div>
