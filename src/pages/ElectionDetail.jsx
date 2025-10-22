@@ -441,12 +441,13 @@ function ElectionDetail() {
 	}
 
 	useEffect(() => {
-		console.log(election);
 		if (election.type == 'Closed') {
-			const votersFiltered = election.userAuthType === 'email' ?
-				votersList.filter( (voter) => voter?.email.toLowerCase().includes(searchTerm.toLowerCase()) ) :
-				votersList.filter((voter) => voter?.phoneNo.includes(searchTerm))
-				setVotersFiltered(votersFiltered)
+			if (votersFiltered.length > 0 ) {
+				const votersFiltered = election.userAuthType === 'email' ?
+					votersList.filter( (voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase()) ) :
+					votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
+					setVotersFiltered(votersFiltered)
+			}
 		}
 	}, [searchTerm, votersList])
 
