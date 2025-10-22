@@ -66,7 +66,7 @@ function ElectionDetail() {
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters);
-	const [votersFiltered, setVotersFiltered] = useState([]);
+	const [votersFiltered, setVotersFiltered] = useState(votersList);
 
 	const { user } = useContext(AppContext);
 
@@ -229,8 +229,8 @@ function ElectionDetail() {
 
 			if (post_list.ok) {
 				const updated_list = [...votersList, ...new_list.voters];
-				setVotersList(updated_list)
-				setVotersFiltered(updated_list)
+				setVotersList(updated_list);
+				setVotersFiltered(updated_list);
 
 				// const duplicatesFound = new_list.existing_voters.length
 
