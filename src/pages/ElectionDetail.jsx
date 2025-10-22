@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from 'react';
 import Swal from 'sweetalert2';
 import { AppContext } from '@/App';
 import ElectionActions from '@/components/ElectionActions';
+import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import StatusBadge from '@/components/StatusBadge';
 
 import Toast from '@/utils/ToastMsg';
@@ -230,32 +231,24 @@ function ElectionDetail() {
 	}
 
 	async function removeVoter(voter) {
-		Swal.fire({
-			title: `Remove ${election.userAuthType == 'email' ? voter.email : voter.phoneNo}?`,
-			showDenyButton: true,
-			confirmButtonText: "Remove",
-			denyButtonText: `Cancel`
-		}).then(async (result) => {
-			if (result.isConfirmed) {
-				try {
-					const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
-						method: 'post',
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: `Bearer ${await user?.getIdToken()}`
-						}
-					})
-		
-					if(res.ok) {
-						setVotersList(votersList.filter(e => e._id != voter._id ));
-						Toast.success('The participant was removed successfully')
-					}
-					
-				} catch (error) {
-					Toast.error("There was an error removing the participant")
+		try {
+			const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${await user?.getIdToken()}`
 				}
+			})
+
+			if(res.ok) {
+				setVotersList(votersList.filter(e => e._id != voter._id ));
+				Toast.success('The participant was removed successfully')
 			}
-		});
+			
+		} catch (error) {
+			Toast.error("There was an error removing the participant")
+		}
+			
 	}
 
 	function procList (participantsAuthType) {
@@ -497,17 +490,35 @@ function ElectionDetail() {
 												<div className='voter-info'>
 													<span>{election.userAuthType == 'email' ? voter.email : voter.phoneNo}</span>
 													{ isPending && (
-															<div className='voter-actions'>
-																<button className='Button violet action-item' 
-																	onClick={ () => editParticipant(voter) }>Edit
-																</button>
+														<div className='voter-actions'>
+															<button className='Button violet action-item' 
+																onClick={ () => editParticipant(voter) }>Edit
+															</button>
 
-																<button className='Button red action-item' 
-																	onClick={ () => removeVoter(voter) }><i className="bi bi-trash3 m-1"></i>
-																</button>
-															</div>
-														)
-													}
+															<AlertDialog.Root>
+																<AlertDialog.Trigger asChild>
+																	<button className='Button red action-item'><i className="bi bi-trash3 m-1"></i></button>
+																</AlertDialog.Trigger>
+																<AlertDialog.Portal>
+																<AlertDialog.Overlay className="AlertDialogOverlay" />
+																<AlertDialog.Content className="AlertDialogContent">
+																	<AlertDialog.Title className="AlertDialogTitle">Remove Voter</AlertDialog.Title>
+																	<AlertDialog.Description className="AlertDialogDescription">
+																		{`Remove ${election.userAuthType === 'email' ? voter.email : voter.phoneNo}?`}
+																	</AlertDialog.Description>
+																		<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+																	<AlertDialog.Cancel asChild>
+																		<button  className="Button mauve">Cancel</button>
+																	</AlertDialog.Cancel>
+																	<AlertDialog.Action asChild>
+																		<button className="Button red" onClick={ () => removeVoter(voter) }>Yes, remove</button>
+																	</AlertDialog.Action>
+																	</div>
+																</AlertDialog.Content>
+																</AlertDialog.Portal>
+															</AlertDialog.Root>
+														</div>
+													)}
 												</div>
 											</li>
 										)))
