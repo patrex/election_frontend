@@ -13,48 +13,59 @@ import { authman } from '@/utils/fireloader';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
 
-export async function electionDetailLoader({params}) {
-	let election, positions, voters = undefined;
+export async function electionDetailLoader({ params }) {
 	const currentUser = authman.currentUser;
 
 	try {
 		const token = await currentUser.getIdToken();
-		const headerSection = {
+		const headers = {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`
+		};
+
+		// Fetch election and positions in parallel
+		const [electionRes, positionsRes] = await Promise.all([
+			fetch(`${backendUrl}/election/${params.id}`, { headers }),
+			fetch(`${backendUrl}/election/${params.id}/positions`, { headers })
+		]);
+
+		// Check for HTTP errors
+		if (!electionRes.ok || !positionsRes.ok) {
+			throw new Error('Failed to fetch election data');
 		}
 
-		const res1 = await fetch(`${backendUrl}/election/${params.id}`, {
-			headers: headerSection
-		})
-		const res2 = await fetch(`${backendUrl}/election/${params.id}/positions`, {
-			headers: headerSection
-		})
+		const [election, positions] = await Promise.all([
+			electionRes.json(),
+			positionsRes.json()
+		]);
 
-		election = await res1.json()
-		positions = await res2.json()
-
-		if (election.type == 'Closed') {
-			const v = await fetch(`${backendUrl}/election/${params.id}/voterlist`, {
-				headers: headerSection
-			})
-			voters = await v.json()
+		// Fetch voters only for closed elections
+		let voters = null;
+		if (election.type === 'Closed') {
+			const votersRes = await fetch(`${backendUrl}/election/${params.id}/voterlist`, { headers });
+			
+			if (!votersRes.ok) {
+				throw new Error('Failed to fetch voter list');
+			}
+			
+			voters = await votersRes.json();
 		}
+
+		return { election, positions, voters };
 
 	} catch (error) {
-		console.log(error);
+		console.error('Error loading election details:', error);
+		// Return null values or throw error depending on your error handling strategy
+		return { election: null, positions: null, voters: null };
 	}
-
-	return [election, positions, voters]
 }
 
 function ElectionDetail() {
-	const [loaderElection, positions, voters] = useLoaderData();
-	const [election, setElection] = useState(loaderElection)
+	const { election: loaderElection, positions, voters } = useLoaderData();
+	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
-	const [votersList, setVotersList] = useState(voters)
-	const [votersFiltered, setVotersFiltered] = useState([])
-	const params = useParams()
+	const [votersList, setVotersList] = useState(voters);
+	const [votersFiltered, setVotersFiltered] = useState([]);
 
 	const { user } = useContext(AppContext);
 
@@ -635,8 +646,8 @@ function ElectionDetail() {
 								onChange={ (e) => { setParticipantsList(e.target.value)} }
 							/>
 							<div className="action-btn-container">
-								{election.userAuthType == 'email' && <button className='Button violet action-item' onClick={() => procList('email')}>Add Emails</button>}
-								{election.userAuthType == 'phone' && <button className='Button violet action-item' onClick={() => procList('phone')}>Add Phone #s</button>}
+								{ election.userAuthType == 'email' ? <button className='Button violet action-item' onClick={() => procList('email')}>Add Emails</button>
+								 : <button className='Button violet action-item' onClick={() => procList('phone')}>Add Phone #s</button> }
 								<button className='Button red action-item' onClick={ () => setAddParticipantsModalOpen(false) }>Cancel</button>
 							</div>
 						</div>
