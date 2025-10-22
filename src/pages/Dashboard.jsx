@@ -88,25 +88,6 @@ function Dashboard() {
 		if (text) Toast.success("copied")
 	}
 
-	const toggleSideMenu = () => setSideMenuOpen(!sideMenuOpen);
-
-	const handleToggle = (e, elctionId) => {
-		const rect = e.currentTarget.getBoundingClientRect();
-		setAnchorPos({ top: rect.bottom, left: rect.right });
-		setSideMenuOpen(true);
-	};
-
-	useEffect(() => {
-		const handleClickOutside = (e) => {
-			if (menuRef.current && !menuRef.current.contains(e.target)) {
-				setSideMenuOpen(false);
-			}
-		};
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => document.removeEventListener("mousedown", handleClickOutside);
-	}, []);
-
-
 	return (
 		<>
 			<div className="dashboard-container">

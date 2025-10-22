@@ -7,7 +7,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const menuRef = useRef(null);
-	const { isActive, isPending, hasStarted, hasEnded } = useEventStatus(new Date(election.startDate), new Date(election.endDate))
+	const { isPending } = useEventStatus(new Date(election.startDate), new Date(election.endDate))
 
 	useEffect(() => {
 		const handleClickOutside = (e) => {
