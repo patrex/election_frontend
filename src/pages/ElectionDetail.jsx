@@ -1,7 +1,6 @@
 import { Link, redirect, useLoaderData, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { useEffect, useState, useContext } from 'react';
-import Swal from 'sweetalert2';
 import { AppContext } from '@/App';
 import ElectionActions from '@/components/ElectionActions';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
@@ -66,7 +65,7 @@ function ElectionDetail() {
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters);
-	const [votersFiltered, setVotersFiltered] = useState(votersList);
+	const [votersFiltered, setVotersFiltered] = useState(voters || []);
 
 	const { user } = useContext(AppContext);
 
@@ -441,15 +440,14 @@ function ElectionDetail() {
 	}
 
 	useEffect(() => {
-		if (election.type == 'Closed') {
-			if (votersFiltered.length > 0 ) {
-				const votersFiltered = election.userAuthType === 'email' ?
-					votersList.filter( (voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase()) ) :
-					votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
-					setVotersFiltered(votersFiltered)
-			}
+		if (election.type === 'Closed' && votersList) { // ✅ Check votersList exists
+		    const filtered = election.userAuthType === 'email' // ✅ Different variable name
+			? votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase()))
+			: votersList.filter((voter) => voter.phoneNo.includes(searchTerm));
+		    
+		    setVotersFiltered(filtered);
 		}
-	}, [searchTerm, votersList])
+	    }, [searchTerm, votersList, election.type, election.userAuthType]);
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
