@@ -61,14 +61,14 @@ export async function electionDetailLoader({ params }) {
 
 function ElectionDetail() {
 	const { election: loaderElection, positions, voters } = useLoaderData();
-
+    
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
-	const [votersList, setVotersList] = useState(voters);
+	const [votersList, setVotersList] = useState(voters || []);
 	const [votersFiltered, setVotersFiltered] = useState(voters || []);
-
+    
 	const { user } = useContext(AppContext);
-
+    
 	const [newPosition, setNewPosition] = useState("");
 	const [updatedPosition, setUpdatedPosition] = useState("");
 	const [currentlySelectedPosition, setCurrentlySelectedPosition] = useState("");
@@ -82,372 +82,426 @@ function ElectionDetail() {
 	const [addParticipantsModalOpen, setAddParticipantsModalOpen] = useState(false);
 	const [updateParticipantModal, setUpdateParticipantModal] = useState(false);
 	const [viewUsersModal, setViewUsersModal] = useState(false);
-	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false)
-
-
-	const { isActive, isPending, hasEnded } = useEventStatus(new Date(election.startDate), new Date(election.endDate))
-
-	function closeAddParticipant () {
-		setSearchTerm("")
-		setViewUsersModal(false)
+	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false);
+    
+	const { isActive, isPending, hasEnded } = useEventStatus(
+	    new Date(election.startDate), 
+	    new Date(election.endDate)
+	);
+    
+	function closeAddParticipant() {
+	    setSearchTerm("");
+	    setViewUsersModal(false);
 	}
-
+    
 	function handlePositionChange(e) {
-		setNewPosition(e.target.value);
+	    setNewPosition(e.target.value);
 	}
-
+    
 	function handlePositionUpdate(e) {
-		setUpdatedPosition(e.target.value)
+	    setUpdatedPosition(e.target.value);
 	}
-
+    
 	const openUpdatePositionModal = (position) => {
-		setUpdatedPosition("")
-		setUpdatePositionModalOpen(true)
+	    setUpdatedPosition("");
+	    setUpdatePositionModalOpen(true);
 	}
-
+    
 	const closeUpdatePositionModal = () => {
-		setUpdatePositionModalOpen(false)
+	    setUpdatePositionModalOpen(false);
 	}
-
+    
 	const openPostionModal = () => {
-		setNewPosition("")
-		setPositionModalOpen(true);
+	    setNewPosition("");
+	    setPositionModalOpen(true);
 	}
-
+    
 	const closePositionModal = () => {
-		setPositionModalOpen(false);
+	    setPositionModalOpen(false);
 	}
-
+    
 	const handleAddPosition = async (e) => {
-		e.preventDefault();
-
-		if (newPosition) {
-			closePositionModal();
-
-			try {
-				const response = await fetch(`${backendUrl}/election/${election._id}/position`, {
-					method: 'POST',
-					headers: {
-					  'Content-Type': 'application/json',
-					  Authorization: `Bearer ${await user?.getIdToken()}`
-					},
-					mode: 'cors',
-					body: JSON.stringify({
-						position: String(newPosition).trim(),
-						electionId: election._id
-					}),
-				});
-
-				if (response.ok) {
-					const newEntry = await response.json();
-					setPositionsList(prev => [...prev, newEntry])
-					Toast.success('Position was added')
-				} else if (response.status == 409) {
-					Toast.warning('Position already exists')
-				} else if (response.status == 400) {
-					Toast.warning(response.text())
-				} else {
-					Toast.warning('Could not add the position')
-				}
-			} catch (error) {
-				Toast.warning('Could not add the position')
-			}
-		} else Toast.warning("you need to enter a new position to continue")
-	}
-
-	const handleUpdatePosition = async (e) => {
-		if (updatedPosition) {
-			closeUpdatePositionModal();
-
-			try {
-				const response = await fetch(`${backendUrl}/election/${election._id}/position/update`, {
-					method: 'PATCH',
-					headers: {
-					  'Content-Type': 'application/json',
-					  Authorization: `Bearer ${await user?.getIdToken()}`
-					},
-					mode: 'cors',
-					body: JSON.stringify({
-						position: currentlySelectedPosition,
-						electionId: election._id,
-						new_position: String(updatedPosition).trim()
-					}),
-				});
-
-				if (response.ok) {
-					const updated_position = await response.json();
-
-					setPositionsList((prev) => 
-						prev.map((position) => position._id === updated_position._id ? updated_position: position
-					))
-				} else {
-					Toast.warning("Could not update the position")
-				}
-			} catch (error) {
-				Toast.error("There was an error updating the position")
-			}
-		}
-	}
-
-	function editPosition(position) {
-		openUpdatePositionModal()
-		setUpdatedPosition(position.position)
-		setCurrentlySelectedPosition(position.position)
-	}
-
-	async function removePosition(position) {
-		const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
-			method: 'delete',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${await user?.getIdToken()}`
-			}
-		})
-
-		if(res.ok) {
-			setPositionsList(positionsList.filter(p => p._id != position._id))
-			Toast.success("The position was removed")	
-		} else Toast.warning('Could not remove the position: ')		
-	}
-
-	async function sendListToDB (voterlist) {
-		try {
-			const post_list = await fetch(`${backendUrl}/election/${election._id}/closed_event/addvoters`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${await user?.getIdToken()}`
-				},
-				body: JSON.stringify({
-					election: election._id,
-					voterList: voterlist
-				}),
-			})
-
-			const new_list = await post_list.json()
-
-			if (post_list.ok) {
-				const updated_list = [...votersList, ...new_list.voters];
-				setVotersList(updated_list);
-				setVotersFiltered(updated_list);
-
-				// const duplicatesFound = new_list.existing_voters.length
-
-				Toast.success(`List was updated`)
-				setParticipantsList('');
-			}
-		} catch (error) {
-			Toast.error("An error occured. Try again")
-		}	
-	}
-
-	async function removeVoter(voter) {
-		try {
-			const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
-				method: 'post',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${await user?.getIdToken()}`
-				}
-			})
-
-			if(res.ok) {
-				setVotersList(votersList.filter(e => e._id != voter._id ));
-				Toast.success('The participant was removed successfully')
-			}
-			
-		} catch (error) {
-			Toast.error("There was an error removing the participant")
-		}
-			
-	}
-
-	function procList (participantsAuthType) {
-		if (!participantsList) {
-			Toast.warning("You did not enter any participants");
-			return;
-		}
-
-		if (participantsAuthType === 'email') {
-			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			let invalid = false;
-
-			let voterList = participantsList.split(',')
-				.map(email => {
-					const emailAddr = email.trim();
-
-					if (emailAddr.match(emailRegex)) return emailAddr;
-
-					invalid = true;
-					return emailAddr;
-				});
-			if (invalid) {
-				Toast.warning("One or more emails not properly formatted")
-				return;
-			}
-
-			setAddParticipantsModalOpen(false)
-			voterList = [...new Set(voterList)]
-			sendListToDB(voterList)
-
-		} else if (participantsAuthType === 'phone') {
-			const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
-			const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
-	
-			let invalid = false;
-			let voterList = participantsList.split(',')
-				.map(phoneno => {
-					const phoneNumber = phoneno.trim();
-	
-					if (phoneNumber.match(countryCodePattern)) return phoneNumber;
-					if (phoneNumber.match(phoneNumberPattern)) return phoneNumber.replace(phoneNumberPattern, '234$2');
-	
-					invalid = true;
-	
-					return phoneNumber;
-				});
-			
-			if (invalid) Toast.warning("One or more phone numbers not properly formatted")
-			
-			setAddParticipantsModalOpen(false)
-			voterList = [...new Set(voterList)]
-			sendListToDB(voterList)
-		}
-	}
-
-	function editParticipant(participant) {
-		setParticipant(participant)
-		setUpdateParticipantModal(true);
-	}
-
-	async function patchVoterEmail () {
-		if (updatedParticipantInfo) {
-			const emailAddr = String(updatedParticipantInfo).trim()
-			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			if (!emailAddr.match(emailRegex)) {
-				Toast.error("Email is invalid")
-				return;
-			}
-			setUpdateParticipantModal(false);
-			try {
-				const response = await fetch(`${backendUrl}/election/voter/update`, {
-					method: 'PATCH',
-					headers: {
-					  'Content-Type': 'application/json',
-					  Authorization: `Bearer ${await user?.getIdToken()}`
-					},
-					body: JSON.stringify({
-						emailAddr: emailAddr,
-						participantId: participant._id,
-						electionId: election._id
-					}),
-				});
-
-				if (response.ok) {
-					const updated_participant = await response.json();
-					setParticipantsList((prev) => 
-						prev.map( (participant) => participant._id === updated_participant._id ? updated_participant : participant
-					))
-				} else {
-					Toast.warning("Could not update the position")
-				}
-			} catch (error) {
-				Toast.error("There was an error with the request")
-			}
-		}
-	}
-
-	async function patchVoterPhone() {
-		if (updatedParticipantInfo) {
-			const phoneNumber = String(updatedParticipantInfo).trim()
-			let validatedPhoneNo = ''
-
-			const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
-			const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
-			
-			if (phoneNumber.match(countryCodePattern)) {
-				validatedPhoneNo = phoneNumber
-			} else if (phoneNumber.match(phoneNumberPattern)) {
-				validatedPhoneNo = phoneNumber.replace(phoneNumberPattern, '234$2');
-			} else {
-				Toast.warning("Phone number is invalid")
-				return;
-			}
-
-			try {
-				const response = await fetch(`${backendUrl}/election/voter/update`, {
-					method: 'PATCH',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${await user?.getIdToken()}`
-					},
-					body: JSON.stringify({
-						phoneNo: validatedPhoneNo,
-						participantId: participant._id,
-						electionId: election._id
-					}),
-				});
-				
-				if (response.ok) {
-					setUpdateParticipantModal(false);
-					const updated_participant = await response.json();
-					setParticipantsList((prev) => 
-						prev.map((participant) => participant._id === updated_participant._id ? updated_participant : participant
-					))
-				} else {
-					Toast.warning("Could not update the voter")
-				}
-			} catch (error) {
-				Toast.error("There was an error with the request")
-			}
-		}
-	}
-
-	async function endElection () {
-		if (hasEnded) {
-			Toast.warning("The election has already ended")
-			return;
+	    e.preventDefault();
+    
+	    if (!newPosition) {
+		Toast.warning("You need to enter a new position to continue");
+		return;
+	    }
+    
+	    closePositionModal();
+    
+	    try {
+		const response = await fetch(`${backendUrl}/election/${election._id}/position`, {
+		    method: 'POST',
+		    headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
+		    },
+		    mode: 'cors',
+		    body: JSON.stringify({
+			position: String(newPosition).trim(),
+			electionId: election._id
+		    }),
+		});
+    
+		if (response.ok) {
+		    const newEntry = await response.json();
+		    setPositionsList(prev => [...prev, newEntry]);
+		    Toast.success('Position was added');
+		} else if (response.status === 409) {
+		    Toast.warning('Position already exists');
+		} else if (response.status === 400) {
+		    const errorMsg = await response.text();
+		    Toast.warning(errorMsg);
 		} else {
-			try {
-				const end_res = await fetch(`${backendUrl}/elections/${election._id}/end`, {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${await user?.getIdToken()}`
-					}
-				})
-				
-				setEndElectionModalOpen(false)
+		    Toast.warning('Could not add the position');
+		}
+	    } catch (error) {
+		Toast.error('Could not add the position');
+	    }
+	}
+    
+	const handleUpdatePosition = async (e) => {
+	    if (!updatedPosition) {
+		Toast.warning("Please enter a position name");
+		return;
+	    }
+    
+	    closeUpdatePositionModal();
+    
+	    try {
+		const response = await fetch(`${backendUrl}/election/${election._id}/position/update`, {
+		    method: 'PATCH',
+		    headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
+		    },
+		    mode: 'cors',
+		    body: JSON.stringify({
+			position: currentlySelectedPosition,
+			electionId: election._id,
+			new_position: String(updatedPosition).trim()
+		    }),
+		});
+    
+		if (response.ok) {
+		    const updated_position = await response.json();
+		    setPositionsList((prev) => 
+			prev.map((position) => 
+			    position._id === updated_position._id ? updated_position : position
+			)
+		    );
+		    Toast.success('Position was updated');
+		} else {
+		    Toast.warning("Could not update the position");
+		}
+	    } catch (error) {
+		Toast.error("There was an error updating the position");
+	    }
+	}
+    
+	function editPosition(position) {
+	    openUpdatePositionModal();
+	    setUpdatedPosition(position.position);
+	    setCurrentlySelectedPosition(position.position);
+	}
+    
+	async function removePosition(position) {
+	    try {
+		const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
+		    method: 'DELETE',
+		    headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
+		    }
+		});
+    
+		if (res.ok) {
+		    setPositionsList(positionsList.filter(p => p._id !== position._id));
+		    Toast.success("The position was removed");	
+		} else {
+		    Toast.warning('Could not remove the position');
+		}
+	    } catch (error) {
+		Toast.error('There was an error removing the position');
+	    }
+	}
+    
+	async function sendListToDB(voterlist) {
+	    try {
+		const post_list = await fetch(`${backendUrl}/election/${election._id}/closed_event/addvoters`, {
+		    method: 'POST',
+		    headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
+		    },
+		    body: JSON.stringify({
+			election: election._id,
+			voterList: voterlist
+		    }),
+		});
+    
+		const new_list = await post_list.json();
+    
+		if (post_list.ok) {
+		    const updated_list = [...votersList, ...new_list.voters];
+		    setVotersList(updated_list);
+		    setVotersFiltered(updated_list);
+		    Toast.success(`List was updated`);
+		    setParticipantsList('');
+		} else {
+		    Toast.warning('Could not update the list');
+		}
+	    } catch (error) {
+		Toast.error("An error occurred. Try again");
+	    }	
+	}
+    
+	async function removeVoter(voter) {
+	    try {
+		const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
+		    method: 'POST',
+		    headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
+		    }
+		});
+    
+		if (res.ok) {
+		    const updatedList = votersList.filter(e => e._id !== voter._id);
+		    setVotersList(updatedList);
+		    // ✅ Also update filtered list
+		    setVotersFiltered(updatedList.filter((v) => 
+			election.userAuthType === 'email' 
+			    ? v.email.toLowerCase().includes(searchTerm.toLowerCase())
+			    : v.phoneNo.includes(searchTerm)
+		    ));
+		    Toast.success('The participant was removed successfully');
+		} else {
+		    Toast.warning('Could not remove the participant');
+		}
+	    } catch (error) {
+		Toast.error("There was an error removing the participant");
+	    }
+	}
+    
+	function procList(participantsAuthType) {
+	    if (!participantsList) {
+		Toast.warning("You did not enter any participants");
+		return;
+	    }
+    
+	    if (participantsAuthType === 'email') {
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		let invalid = false;
+    
+		let voterList = participantsList.split(',')
+		    .map(email => {
+			const emailAddr = email.trim();
+			if (emailAddr.match(emailRegex)) return emailAddr;
+			invalid = true;
+			return emailAddr;
+		    });
+    
+		if (invalid) {
+		    Toast.warning("One or more emails not properly formatted");
+		    return;
+		}
+    
+		setAddParticipantsModalOpen(false);
+		voterList = [...new Set(voterList)];
+		sendListToDB(voterList);
+    
+	    } else if (participantsAuthType === 'phone') {
+		const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
+		const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
 	
-				const new_res = await end_res.json();
-				setElection(prev => ({
-					...prev,
-					endDate: new Date(new_res?.new_date ?? prev.endDate)
-				}));
-	
-				Toast.success("Election was ended successfully")
-			} catch (error) {
-				Toast.error("Could not end the election")
+		let invalid = false;
+		let voterList = participantsList.split(',')
+		    .map(phoneno => {
+			const phoneNumber = phoneno.trim();
+			if (phoneNumber.match(countryCodePattern)) return phoneNumber;
+			if (phoneNumber.match(phoneNumberPattern)) {
+			    return phoneNumber.replace(phoneNumberPattern, '234$2');
 			}
+			invalid = true;
+			return phoneNumber;
+		    });
+		
+		if (invalid) {
+		    Toast.warning("One or more phone numbers not properly formatted");
+		    return;
 		}
+		
+		setAddParticipantsModalOpen(false);
+		voterList = [...new Set(voterList)];
+		sendListToDB(voterList);
+	    }
 	}
-
+    
+	function editParticipant(participant) {
+	    setParticipant(participant);
+	    setUpdateParticipantModal(true);
+	}
+    
+	async function patchVoterEmail() {
+	    if (!updatedParticipantInfo) {
+		Toast.warning("Please enter an email address");
+		return;
+	    }
+    
+	    const emailAddr = String(updatedParticipantInfo).trim();
+	    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	    
+	    if (!emailAddr.match(emailRegex)) {
+		Toast.error("Email is invalid");
+		return;
+	    }
+    
+	    setUpdateParticipantModal(false);
+    
+	    try {
+		const response = await fetch(`${backendUrl}/election/voter/update`, {
+		    method: 'PATCH',
+		    headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
+		    },
+		    body: JSON.stringify({
+			emailAddr: emailAddr,
+			participantId: participant._id,
+			electionId: election._id
+		    }),
+		});
+    
+		if (response.ok) {
+		    const updated_participant = await response.json();
+		    // ✅ Fix: Update votersList, not participantsList
+		    setVotersList((prev) => 
+			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
+		    );
+		    // ✅ Also update filtered list
+		    setVotersFiltered((prev) => 
+			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
+		    );
+		    Toast.success("Participant was updated");
+		} else {
+		    Toast.warning("Could not update the participant");
+		}
+	    } catch (error) {
+		Toast.error("There was an error with the request");
+	    }
+	}
+    
+	async function patchVoterPhone() {
+	    if (!updatedParticipantInfo) {
+		Toast.warning("Please enter a phone number");
+		return;
+	    }
+    
+	    const phoneNumber = String(updatedParticipantInfo).trim();
+	    let validatedPhoneNo = '';
+    
+	    const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
+	    const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
+	    
+	    if (phoneNumber.match(countryCodePattern)) {
+		validatedPhoneNo = phoneNumber;
+	    } else if (phoneNumber.match(phoneNumberPattern)) {
+		validatedPhoneNo = phoneNumber.replace(phoneNumberPattern, '234$2');
+	    } else {
+		Toast.warning("Phone number is invalid");
+		return;
+	    }
+    
+	    try {
+		const response = await fetch(`${backendUrl}/election/voter/update`, {
+		    method: 'PATCH',
+		    headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
+		    },
+		    body: JSON.stringify({
+			phoneNo: validatedPhoneNo,
+			participantId: participant._id,
+			electionId: election._id
+		    }),
+		});
+		
+		if (response.ok) {
+		    setUpdateParticipantModal(false);
+		    const updated_participant = await response.json();
+		    // ✅ Fix: Update votersList, not participantsList
+		    setVotersList((prev) => 
+			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
+		    );
+		    // ✅ Also update filtered list
+		    setVotersFiltered((prev) => 
+			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
+		    );
+		    Toast.success("Participant was updated");
+		} else {
+		    Toast.warning("Could not update the voter");
+		}
+	    } catch (error) {
+		Toast.error("There was an error with the request");
+	    }
+	}
+    
+	async function endElection() {
+	    if (hasEnded) {
+		Toast.warning("The election has already ended");
+		return;
+	    }
+    
+	    try {
+		const end_res = await fetch(`${backendUrl}/elections/${election._id}/end`, {
+		    method: 'PUT',
+		    headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${await user?.getIdToken()}`
+		    }
+		});
+		
+		setEndElectionModalOpen(false);
+    
+		if (end_res.ok) {
+		    const new_res = await end_res.json();
+		    setElection(prev => ({
+			...prev,
+			endDate: new Date(new_res?.new_date ?? prev.endDate)
+		    }));
+		    Toast.success("Election was ended successfully");
+		} else {
+		    Toast.warning("Could not end the election");
+		}
+	    } catch (error) {
+		Toast.error("Could not end the election");
+	    }
+	}
+    
 	function checkPositionExists(e) {
-		if (positionsList.length < 1) {
-			e.preventDefault();
-			Toast.warning("There are no positions added yet. Add a position first")
-		}
+	    if (positionsList.length < 1) {
+		e.preventDefault();
+		Toast.warning("There are no positions added yet. Add a position first");
+	    }
 	}
-
+    
 	useEffect(() => {
-		if (election.type === 'Closed' && votersList) { // ✅ Check votersList exists
-		    const filtered = election.userAuthType === 'email' // ✅ Different variable name
-			? votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase()))
-			: votersList.filter((voter) => voter.phoneNo.includes(searchTerm));
-		    
-		    setVotersFiltered(filtered);
-		}
-	    }, [searchTerm, votersList, election.type, election.userAuthType]);
+	    if (election.type === 'Closed' && votersList) {
+		const filtered = election.userAuthType === 'email'
+		    ? votersList.filter((voter) => 
+			voter.email.toLowerCase().includes(searchTerm.toLowerCase())
+		    )
+		    : votersList.filter((voter) => 
+			voter.phoneNo.includes(searchTerm)
+		    );
+		
+		setVotersFiltered(filtered);
+	    }
+	}, [searchTerm, votersList, election.type, election.userAuthType]);
+    
+	// ... rest of component (return statement)
 
 	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
