@@ -13,59 +13,48 @@ import { authman } from '@/utils/fireloader';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
 
-export async function electionDetailLoader({ params }) {
+export async function electionDetailLoader({params}) {
+	let election, positions, voters = undefined;
 	const currentUser = authman.currentUser;
 
 	try {
 		const token = await currentUser.getIdToken();
-		const headers = {
+		const headerSection = {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`
-		};
-
-		// Fetch election and positions in parallel
-		const [electionRes, positionsRes] = await Promise.all([
-			fetch(`${backendUrl}/election/${params.id}`, { headers }),
-			fetch(`${backendUrl}/election/${params.id}/positions`, { headers })
-		]);
-
-		// Check for HTTP errors
-		if (!electionRes.ok || !positionsRes.ok) {
-			throw new Error('Failed to fetch election data');
 		}
 
-		const [election, positions] = await Promise.all([
-			electionRes.json(),
-			positionsRes.json()
-		]);
+		const res1 = await fetch(`${backendUrl}/election/${params.id}`, {
+			headers: headerSection
+		})
+		const res2 = await fetch(`${backendUrl}/election/${params.id}/positions`, {
+			headers: headerSection
+		})
 
-		// Fetch voters only for closed elections
-		let voters = null;
-		if (election.type === 'Closed') {
-			const votersRes = await fetch(`${backendUrl}/election/${params.id}/voterlist`, { headers });
-			
-			if (!votersRes.ok) {
-				throw new Error('Failed to fetch voter list');
-			}
-			
-			voters = await votersRes.json();
+		election = await res1.json()
+		positions = await res2.json()
+
+		if (election.type == 'Closed') {
+			const v = await fetch(`${backendUrl}/election/${params.id}/voterlist`, {
+				headers: headerSection
+			})
+			voters = await v.json()
 		}
-
-		return { election, positions, voters };
 
 	} catch (error) {
-		console.error('Error loading election details:', error);
-		// Return null values or throw error depending on your error handling strategy
-		return { election: null, positions: null, voters: null };
+		console.log(error);
 	}
+
+	return [election, positions, voters]
 }
 
 function ElectionDetail() {
-	const { election: loaderElection, positions, voters } = useLoaderData();
-	const [election, setElection] = useState(loaderElection);
+	const [loaderElection, positions, voters] = useLoaderData();
+	const [election, setElection] = useState(loaderElection)
 	const [positionsList, setPositionsList] = useState(positions);
-	const [votersList, setVotersList] = useState(voters);
-	const [votersFiltered, setVotersFiltered] = useState([]);
+	const [votersList, setVotersList] = useState(voters)
+	const [votersFiltered, setVotersFiltered] = useState([])
+	const params = useParams()
 
 	const { user } = useContext(AppContext);
 
