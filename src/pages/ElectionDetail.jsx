@@ -65,7 +65,6 @@ function ElectionDetail() {
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters || []);
-	const [votersFiltered, setVotersFiltered] = useState(voters || []);
     
 	const { user } = useContext(AppContext);
     
@@ -89,6 +88,27 @@ function ElectionDetail() {
 	    new Date(election.endDate)
 	);
     
+	// ✅ Robust computed filtered voters
+	const votersFiltered = useMemo(() => {
+	    if (election.type !== 'Closed' || !votersList || votersList.length === 0) {
+		return [];
+	    }
+    
+	    const searchLower = searchTerm.toLowerCase();
+    
+	    if (election.userAuthType === 'email') {
+		return votersList.filter((voter) => {
+		    const email = voter?.email || '';
+		    return email.toLowerCase().includes(searchLower);
+		});
+	    } else {
+		return votersList.filter((voter) => {
+		    const phone = voter?.phoneNo || '';
+		    return phone.includes(searchTerm);
+		});
+	    }
+	}, [election.type, election.userAuthType, votersList, searchTerm]);
+    
 	function closeAddParticipant() {
 	    setSearchTerm("");
 	    setViewUsersModal(false);
@@ -102,7 +122,7 @@ function ElectionDetail() {
 	    setUpdatedPosition(e.target.value);
 	}
     
-	const openUpdatePositionModal = (position) => {
+	const openUpdatePositionModal = () => {
 	    setUpdatedPosition("");
 	    setUpdatePositionModalOpen(true);
 	}
@@ -246,7 +266,6 @@ function ElectionDetail() {
 		if (post_list.ok) {
 		    const updated_list = [...votersList, ...new_list.voters];
 		    setVotersList(updated_list);
-		    setVotersFiltered(updated_list);
 		    Toast.success(`List was updated`);
 		    setParticipantsList('');
 		} else {
@@ -270,12 +289,6 @@ function ElectionDetail() {
 		if (res.ok) {
 		    const updatedList = votersList.filter(e => e._id !== voter._id);
 		    setVotersList(updatedList);
-		    // ✅ Also update filtered list
-		    setVotersFiltered(updatedList.filter((v) => 
-			election.userAuthType === 'email' 
-			    ? v.email.toLowerCase().includes(searchTerm.toLowerCase())
-			    : v.phoneNo.includes(searchTerm)
-		    ));
 		    Toast.success('The participant was removed successfully');
 		} else {
 		    Toast.warning('Could not remove the participant');
@@ -376,12 +389,7 @@ function ElectionDetail() {
     
 		if (response.ok) {
 		    const updated_participant = await response.json();
-		    // ✅ Fix: Update votersList, not participantsList
 		    setVotersList((prev) => 
-			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
-		    );
-		    // ✅ Also update filtered list
-		    setVotersFiltered((prev) => 
 			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
 		    );
 		    Toast.success("Participant was updated");
@@ -431,12 +439,7 @@ function ElectionDetail() {
 		if (response.ok) {
 		    setUpdateParticipantModal(false);
 		    const updated_participant = await response.json();
-		    // ✅ Fix: Update votersList, not participantsList
 		    setVotersList((prev) => 
-			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
-		    );
-		    // ✅ Also update filtered list
-		    setVotersFiltered((prev) => 
 			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
 		    );
 		    Toast.success("Participant was updated");
@@ -486,20 +489,6 @@ function ElectionDetail() {
 		Toast.warning("There are no positions added yet. Add a position first");
 	    }
 	}
-    
-	useEffect(() => {
-	    if (election.type === 'Closed' && votersList) {
-		const filtered = election.userAuthType === 'email'
-		    ? votersList.filter((voter) => 
-			voter.email.toLowerCase().includes(searchTerm.toLowerCase())
-		    )
-		    : votersList.filter((voter) => 
-			voter.phoneNo.includes(searchTerm)
-		    );
-		
-		setVotersFiltered(filtered);
-	    }
-	}, [searchTerm, votersList, election.type, election.userAuthType]);
     
 	// ... rest of component (return statement)
 
@@ -579,7 +568,7 @@ function ElectionDetail() {
 																	<AlertDialog.Action asChild>
 																		<button className="Button red" onClick={ () => removeVoter(voter) }>Yes, remove</button>
 																	</AlertDialog.Action>
-																	</div>
+																		</div>
 																</AlertDialog.Content>
 																</AlertDialog.Portal>
 															</AlertDialog.Root>
