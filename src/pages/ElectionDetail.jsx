@@ -1,10 +1,11 @@
-import { Link, redirect, useLoaderData, useParams } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
-import { useEffect, useState, useContext, useMemo } from 'react';
+import { useState, useContext } from 'react';
 import { AppContext } from '@/App';
 import ElectionActions from '@/components/ElectionActions';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import StatusBadge from '@/components/StatusBadge';
+import isValidEmail from '@/utils/validateEmail';
 
 import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
@@ -83,31 +84,21 @@ function ElectionDetail() {
 	const [viewUsersModal, setViewUsersModal] = useState(false);
 	const [endElectionModalOpen, setEndElectionModalOpen] = useState(false);
     
-	const { isActive, isPending, hasEnded } = useEventStatus(
+	const { isPending, hasEnded } = useEventStatus(
 	    new Date(election.startDate), 
 	    new Date(election.endDate)
 	);
     
 	// ✅ Robust computed filtered voters
-	const votersFiltered = useMemo(() => {
-	    if (election.type !== 'Closed' || !votersList || votersList.length === 0) {
-		return [];
-	    }
-    
-	    const searchLower = searchTerm.toLowerCase();
-    
-	    if (election.userAuthType === 'email') {
-		return votersList.filter((voter) => {
-		    const email = voter?.email || '';
-		    return email.toLowerCase().includes(searchLower);
-		});
-	    } else {
-		return votersList.filter((voter) => {
-		    const phone = voter?.phoneNo || '';
-		    return phone.includes(searchTerm);
-		});
-	    }
-	}, [election.type, election.userAuthType, votersList, searchTerm]);
+	const votersFiltered = election.type === 'Closed' && votersList
+    		? election.userAuthType === 'email'
+        	? votersList.filter((voter) => 
+            		voter?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false
+        	)
+        	: votersList.filter((voter) => 
+           		voter?.phoneNo?.includes(searchTerm) ?? false
+        	)
+   		: [];
     
 	function closeAddParticipant() {
 	    setSearchTerm("");
@@ -303,52 +294,48 @@ function ElectionDetail() {
 		Toast.warning("You did not enter any participants");
 		return;
 	    }
+
+	    const voters = participantsList.split(',').map( v => v.trim());
+	    let invalidContactFound = false;
     
 	    if (participantsAuthType === 'email') {
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		let invalid = false;
-    
-		let voterList = participantsList.split(',')
+		let emailList = voters
 		    .map(email => {
-			const emailAddr = email.trim();
-			if (emailAddr.match(emailRegex)) return emailAddr;
-			invalid = true;
-			return emailAddr;
+			if ( isValidEmail(email) ) return email;
+			invalidContactFound = true
+			return
 		    });
     
-		if (invalid) {
+		if (invalidContactFound) {
 		    Toast.warning("One or more emails not properly formatted");
 		    return;
 		}
     
 		setAddParticipantsModalOpen(false);
-		voterList = [...new Set(voterList)];
-		sendListToDB(voterList);
+		const emailVoterList = [...new Set(emailList)];
+		sendListToDB(emailVoterList);
     
 	    } else if (participantsAuthType === 'phone') {
 		const countryCodePattern = /^(?:\+?234|0)?(7\d{8})$/;
 		const phoneNumberPattern = /^(0|\+?234)(\d{10})$/;
 	
-		let invalid = false;
-		let voterList = participantsList.split(',')
+		let phoneList = voters
 		    .map(phoneno => {
-			const phoneNumber = phoneno.trim();
-			if (phoneNumber.match(countryCodePattern)) return phoneNumber;
-			if (phoneNumber.match(phoneNumberPattern)) {
-			    return phoneNumber.replace(phoneNumberPattern, '234$2');
-			}
-			invalid = true;
-			return phoneNumber;
+			if (phoneno.match(countryCodePattern)) return phoneno;
+			if (phoneno.match(phoneNumberPattern)) return phoneno.replace(phoneNumberPattern, '234$2');
+			
+			invalidContactFound = true;
+			return;
 		    });
 		
-		if (invalid) {
+		if (invalidContactFound) {
 		    Toast.warning("One or more phone numbers not properly formatted");
 		    return;
 		}
 		
 		setAddParticipantsModalOpen(false);
-		voterList = [...new Set(voterList)];
-		sendListToDB(voterList);
+		const phoneVoterList = [...new Set(phoneList)];
+		sendListToDB(phoneVoterList);
 	    }
 	}
     
@@ -362,11 +349,10 @@ function ElectionDetail() {
 		Toast.warning("Please enter an email address");
 		return;
 	    }
-    
-	    const emailAddr = String(updatedParticipantInfo).trim();
-	    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	    const emailForUpdate = String(updatedParticipantInfo).trim();
 	    
-	    if (!emailAddr.match(emailRegex)) {
+	    if (!isValidEmail(emailForUpdate)) {
 		Toast.error("Email is invalid");
 		return;
 	    }
@@ -381,7 +367,7 @@ function ElectionDetail() {
 			Authorization: `Bearer ${await user?.getIdToken()}`
 		    },
 		    body: JSON.stringify({
-			emailAddr: emailAddr,
+			emailAddr: emailForUpdate,
 			participantId: participant._id,
 			electionId: election._id
 		    }),
