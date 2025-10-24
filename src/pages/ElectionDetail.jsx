@@ -51,7 +51,7 @@ export async function electionDetailLoader({ params }) {
 			voters = await votersRes.json();
 		}
 
-		return { election, positions, voters };
+		return [ election, positions, voters ];
 
 	} catch (error) {
 		console.error('Error loading election details:', error);
@@ -61,13 +61,12 @@ export async function electionDetailLoader({ params }) {
 }
 
 function ElectionDetail() {
-	const { election: loaderElection, positions, voters } = useLoaderData();
+	const [ loaderElection, positions, voters ] = useLoaderData();
     
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters || []);
 
-	console.log(voters);
     
 	const { user } = useContext(AppContext);
     
