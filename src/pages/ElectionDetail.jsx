@@ -102,6 +102,7 @@ function ElectionDetail() {
            		voter?.phoneNo?.includes(searchTerm) ?? false
         	)
    		: [];
+	console.log(votersFiltered);
     
 	function closeAddParticipant() {
 	    setSearchTerm("");
