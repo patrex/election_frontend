@@ -66,6 +66,8 @@ function ElectionDetail() {
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters || []);
+
+	console.log(voters);
     
 	const { user } = useContext(AppContext);
     
