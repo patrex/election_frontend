@@ -1,6 +1,6 @@
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AppContext } from '@/App';
 import ElectionActions from '@/components/ElectionActions';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
