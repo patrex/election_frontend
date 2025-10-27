@@ -12,7 +12,6 @@ import backendUrl from '../utils/backendurl'
 import { authman } from '@/utils/fireloader';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
-import { useEffect } from 'react';
 
 export async function electionDetailLoader({ params }) {
 	const currentUser = authman.currentUser;
