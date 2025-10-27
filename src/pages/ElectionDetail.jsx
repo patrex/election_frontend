@@ -66,6 +66,7 @@ function ElectionDetail() {
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters || []);
+	const [votersFiltered, setVotersFiltered] = useState(voters || []);
     
 	const { user } = useContext(AppContext);
     
@@ -88,22 +89,6 @@ function ElectionDetail() {
 	    new Date(election.startDate), 
 	    new Date(election.endDate)
 	);
-
-	useEffect( () => {
-		// ✅ Robust computed filtered voters
-		const votersFiltered = election.type === 'Closed' && votersList
-			    ? election.userAuthType === 'email'
-			? votersList.filter((voter) => 
-				    voter?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false
-			)
-			: votersList.filter((voter) => 
-				   voter?.phoneNo?.includes(searchTerm) ?? false
-			)
-			   : [];
-		setVotersList(votersFiltered);
-	}, [searchTerm])
-    
-	
     
 	function closeAddParticipant() {
 	    setSearchTerm("");
@@ -480,6 +465,29 @@ function ElectionDetail() {
 		Toast.warning("There are no positions added yet. Add a position first");
 	    }
 	}
+
+	useEffect(() => {
+		if (election.type !== 'Closed' || !votersList || votersList.length === 0) {
+		    setVotersFiltered([]);
+		    return;
+		}
+	
+		const searchLower = searchTerm.toLowerCase();
+	
+		if (election.userAuthType === 'email') {
+		    const filtered = votersList.filter((voter) => {
+			const email = voter?.email || '';
+			return email.toLowerCase().includes(searchLower);
+		    });
+		    setVotersFiltered(filtered);
+		} else {
+		    const filtered = votersList.filter((voter) => {
+			const phone = voter?.phoneNo || '';
+			return phone.includes(searchTerm);
+		    });
+		    setVotersFiltered(filtered);
+		}
+	}, [election.type, election.userAuthType, votersList, searchTerm]);
     
 	// ... rest of component (return statement)
 
