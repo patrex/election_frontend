@@ -15,9 +15,9 @@ import PositionsBox from '@/components/PositionsBox';
 
 export async function electionDetailLoader({ params }) {
 	const currentUser = authman.currentUser;
+	const token = await currentUser.getIdToken();
 
 	try {
-		const token = await currentUser.getIdToken();
 		const headers = {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`
@@ -544,7 +544,7 @@ function ElectionDetail() {
 
 							<div className="max-h-96 overflow-auto p-2">
 								<ul>
-									{votersFiltered.length === 0 ? (
+									{votersFiltered.length < 1 ? (
 										<p>No voters found</p>
 										) : (
 										votersFiltered.map(voter => (
