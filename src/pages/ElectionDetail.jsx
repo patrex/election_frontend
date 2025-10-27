@@ -12,6 +12,7 @@ import backendUrl from '../utils/backendurl'
 import { authman } from '@/utils/fireloader';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
+import { useEffect } from 'react';
 
 export async function electionDetailLoader({ params }) {
 	const currentUser = authman.currentUser;
@@ -66,9 +67,6 @@ function ElectionDetail() {
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters || []);
-
-	console.log(votersList);
-
     
 	const { user } = useContext(AppContext);
     
@@ -91,18 +89,22 @@ function ElectionDetail() {
 	    new Date(election.startDate), 
 	    new Date(election.endDate)
 	);
+
+	useEffect( () => {
+		// ✅ Robust computed filtered voters
+		const votersFiltered = election.type === 'Closed' && votersList
+			    ? election.userAuthType === 'email'
+			? votersList.filter((voter) => 
+				    voter?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false
+			)
+			: votersList.filter((voter) => 
+				   voter?.phoneNo?.includes(searchTerm) ?? false
+			)
+			   : [];
+		setVotersList(votersFiltered);
+	}, [searchTerm])
     
-	// ✅ Robust computed filtered voters
-	const votersFiltered = election.type === 'Closed' && votersList
-    		? election.userAuthType === 'email'
-        	? votersList.filter((voter) => 
-            		voter?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false
-        	)
-        	: votersList.filter((voter) => 
-           		voter?.phoneNo?.includes(searchTerm) ?? false
-        	)
-   		: [];
-	console.log(votersFiltered);
+	
     
 	function closeAddParticipant() {
 	    setSearchTerm("");
