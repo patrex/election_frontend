@@ -56,7 +56,7 @@ export async function electionDetailLoader({ params }) {
 	} catch (error) {
 		console.error('Error loading election details:', error);
 		// Return null values or throw error depending on your error handling strategy
-		return { election: null, positions: null, voters: null };
+		return;
 	}
 }
 
@@ -65,8 +65,8 @@ function ElectionDetail() {
     
 	const [election, setElection] = useState(loaderElection);
 	const [positionsList, setPositionsList] = useState(positions);
-	const [votersList, setVotersList] = useState(voters || []);
-	const [votersFiltered, setVotersFiltered] = useState(voters || []);
+	const [votersList, setVotersList] = useState(voters);
+	const [votersFiltered, setVotersFiltered] = useState([]);
     
 	const { user } = useContext(AppContext);
     
@@ -121,7 +121,7 @@ function ElectionDetail() {
 	    setPositionModalOpen(false);
 	}
     
-	const handleAddPosition = async (e) => {
+	async function handleAddPosition (e)  {
 	    e.preventDefault();
     
 	    if (!newPosition) {
@@ -247,6 +247,7 @@ function ElectionDetail() {
 		if (post_list.ok) {
 		    const updated_list = [...votersList, ...new_list.voters];
 		    setVotersList(updated_list);
+		    setVotersFiltered(updated_list);
 		    Toast.success(`List was updated`);
 		    setParticipantsList('');
 		} else {
@@ -467,27 +468,36 @@ function ElectionDetail() {
 	}
 
 	useEffect(() => {
-		if (election.type !== 'Closed' || !votersList || votersList.length === 0) {
-		    setVotersFiltered([]);
-		    return;
+		if (election.type == 'Closed'){
+			const votersFiltered = election.userAuthType == 'email' ?
+				votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
+				votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
+				setVotersFiltered(votersFiltered)
 		}
+	}, [searchTerm, votersList])
+
+	// useEffect(() => {
+	// 	if (election.type !== 'Closed' || !votersList || votersList.length === 0) {
+	// 	    setVotersFiltered([]);
+	// 	    return;
+	// 	}
 	
-		const searchLower = searchTerm.toLowerCase();
+	// 	const searchLower = searchTerm.toLowerCase();
 	
-		if (election.userAuthType === 'email') {
-		    const filtered = votersList.filter((voter) => {
-			const email = voter?.email || '';
-			return email.toLowerCase().includes(searchLower);
-		    });
-		    setVotersFiltered(filtered);
-		} else {
-		    const filtered = votersList.filter((voter) => {
-			const phone = voter?.phoneNo || '';
-			return phone.includes(searchTerm);
-		    });
-		    setVotersFiltered(filtered);
-		}
-	}, [election.type, election.userAuthType, votersList, searchTerm]);
+	// 	if (election.userAuthType === 'email') {
+	// 	    const filtered = votersList.filter((voter) => {
+	// 		const email = voter?.email || '';
+	// 		return email.toLowerCase().includes(searchLower);
+	// 	    });
+	// 	    setVotersFiltered(filtered);
+	// 	} else {
+	// 	    const filtered = votersList.filter((voter) => {
+	// 		const phone = voter?.phoneNo || '';
+	// 		return phone.includes(searchTerm);
+	// 	    });
+	// 	    setVotersFiltered(filtered);
+	// 	}
+	// }, [election.type, election.userAuthType, votersList, searchTerm]);
     
 	// ... rest of component (return statement)
 
