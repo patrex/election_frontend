@@ -8,17 +8,16 @@ import ElectionDashboardTD from '@/components/ElectionDashboardTD';
 
 import { queryClient } from '../queryClient.js'
 import { useQuery } from "@tanstack/react-query";
+import { fetcher } from '@/utils/fetcher';
 
 async function fetchElections(userId) {
-	const res = await fetch(`${backendUrl}/elections/${userId}`, {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	})
-
-	if (!res.ok) throw new Error("Network error");
-	const elections = await res.json()
-  	return elections;
+	try {
+		const res = await fetcher.get(`elections/${userId}`);	
+		const elections = await res.json();
+		return elections;
+	} catch (error) {
+		console.error('Failed to load elections')
+	}
 }
 
 export async function dashboardLoader({ params }) {

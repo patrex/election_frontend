@@ -463,18 +463,9 @@ function ElectionDetail() {
 	function checkPositionExists(e) {
 	    if (positionsList.length < 1) {
 		e.preventDefault();
-		Toast.warning("There are no positions added yet. Add a position first");
+		Toast.warning("You need to add a position first");
 	    }
 	}
-
-	// useEffect(() => {
-	// 	if (election.type == 'Closed'){
-	// 		const votersFiltered = election.userAuthType == 'email' ?
-	// 			votersList.filter((voter) => voter.email.toLowerCase().includes(searchTerm.toLowerCase())) :
-	// 			votersList.filter((voter) => voter.phoneNo.includes(searchTerm))
-	// 			setVotersFiltered(votersFiltered)
-	// 	}
-	// }, [searchTerm, votersList])
 
 	useEffect(() => {
 		if (election.type !== 'Closed' || !votersList || votersList.length === 0) {
@@ -550,7 +541,7 @@ function ElectionDetail() {
 										votersFiltered.map(voter => (
 											<li key={voter._id}>
 												<div className='voter-info'>
-													<span>{election.userAuthType == 'email' ? voter.email : voter.phoneNo}</span>
+													<span>{election.userAuthType === 'email' ? voter.email : voter.phoneNo}</span>
 													{ isPending && (
 														<div className='voter-actions'>
 															<button className='Button violet action-item' 
