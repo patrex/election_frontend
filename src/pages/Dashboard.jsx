@@ -13,8 +13,8 @@ import { fetcher } from '@/utils/fetcher';
 async function fetchElections(userId) {
 	const res = await fetcher.get(`elections/${userId}`)
 		
-	// const elections = await res.json()
-  	return await res.json();
+	const elections = await res.json()
+  	return elections;
 }
 
 export async function dashboardLoader({ params }) {
