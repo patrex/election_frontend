@@ -11,11 +11,13 @@ import { useQuery } from "@tanstack/react-query";
 import { fetcher } from '@/utils/fetcher';
 
 async function fetchElections(userId) {
-	const res = await fetcher.get(`elections/${userId}`)
-
-	if (!res.ok) throw new Error("Network error");
-	const elections = await res.json()
-  	return elections;
+	try {
+		const elections = await fetcher.get(`elections/${userId}`)
+		return elections;
+		
+	} catch (error) {
+		console.error('There was an error', error);
+	}
 }
 
 export async function dashboardLoader({ params }) {
