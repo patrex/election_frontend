@@ -9,46 +9,22 @@ import isValidEmail from '@/utils/validateEmail';
 
 import Toast from '@/utils/ToastMsg';
 import backendUrl from '../utils/backendurl'
-import { authman } from '@/utils/fireloader';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
+import { fetcher } from '@/utils/fetcher';
 
 export async function electionDetailLoader({ params }) {
-	const currentUser = authman.currentUser;
-	const token = await currentUser.getIdToken();
-
 	try {
-		const headers = {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`
-		};
-
 		// Fetch election and positions in parallel
-		const [electionRes, positionsRes] = await Promise.all([
-			fetch(`${backendUrl}/election/${params.id}`, { headers }),
-			fetch(`${backendUrl}/election/${params.id}/positions`, { headers })
-		]);
-
-		// Check for HTTP errors
-		if (!electionRes.ok || !positionsRes.ok) {
-			throw new Error('Failed to fetch election data');
-		}
-
 		const [election, positions] = await Promise.all([
-			electionRes.json(),
-			positionsRes.json()
+			fetcher.get(`election/${params.id}`),
+			fetcher.get(`election/${params.id}/positions`)
 		]);
 
 		// Fetch voters only for closed elections
 		let voters = null;
 		if (election.type === 'Closed') {
-			const votersRes = await fetch(`${backendUrl}/election/${params.id}/voterlist`, { headers });
-			
-			if (!votersRes.ok) {
-				throw new Error('Failed to fetch voter list');
-			}
-			
-			voters = await votersRes.json();
+			voters = await fetcher.get(`election/${params.id}/voterlist`);
 		}
 
 		return [ election, positions, voters ];

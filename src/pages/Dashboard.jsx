@@ -14,7 +14,6 @@ async function fetchElections(userId) {
 	try {
 		const elections = await fetcher.get(`elections/${userId}`)
 		return elections;
-		
 	} catch (error) {
 		console.error('There was an error', error);
 	}
