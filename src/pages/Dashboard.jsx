@@ -11,14 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 import { fetcher } from '@/utils/fetcher';
 
 async function fetchElections(userId) {
-	try {
-		const res = await fetcher.get(`elections/${userId}`);	
-		const elections = await res.json();
-		console.log(elections)
-		return elections;
-	} catch (error) {
-		console.error('Failed to load elections')
-	}
+	const res = await fetcher.get(`elections/${userId}`)
+		
+	// const elections = await res.json()
+  	return await res.json();
 }
 
 export async function dashboardLoader({ params }) {
