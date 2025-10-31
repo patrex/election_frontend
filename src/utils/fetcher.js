@@ -16,7 +16,9 @@ class FetchError extends Error {
  * Configuration object
  */
 const defaultConfig = {
-	baseURL: backendUrl, // Set your backend URL here
+	baseURL: backendUrl,
+	cors: 'cors', // 'cors', 'no-cors', 'same-origin'
+	credentials: 'same-origin', // 'omit', 'same-origin', 'include'
 	onAuthError: null,
 	onNetworkError: null,
 };
@@ -44,6 +46,8 @@ export async function baseFetch(url, options = {}, customConfig = {}) {
 
 	try {
 		const response = await fetch(fullURL, {
+			mode: finalConfig.cors,
+			credentials: finalConfig.credentials,
 			...options,
 			headers: {
 				'Content-Type': 'application/json',
@@ -106,13 +110,15 @@ export async function authFetch(url, options = {}, user, customConfig = {}) {
 		// Get authentication token
 		const token = await user.getIdToken();
 
-		// Make the request
+		// Make the request with Authorization header
 		const response = await fetch(fullURL, {
+			mode: finalConfig.cors,
+			credentials: finalConfig.credentials,
 			...options,
 			headers: {
 				'Content-Type': 'application/json',
 				...options.headers,
-				Authorization: `Bearer ${token}`
+				'Authorization': `Bearer ${token}` // ✅ Authorization header here
 			}
 		});
 

@@ -8,10 +8,9 @@ import StatusBadge from '@/components/StatusBadge';
 import isValidEmail from '@/utils/validateEmail';
 
 import Toast from '@/utils/ToastMsg';
-import backendUrl from '../utils/backendurl'
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
-import { fetcher } from '@/utils/fetcher';
+import { fetcher, FetchError } from '@/utils/fetcher';
 
 export async function electionDetailLoader({ params }) {
 	try {
@@ -108,33 +107,30 @@ function ElectionDetail() {
 	    closePositionModal();
     
 	    try {
-		const response = await fetch(`${backendUrl}/election/${election._id}/position`, {
-		    method: 'POST',
-		    headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
-		    },
-		    mode: 'cors',
-		    body: JSON.stringify({
-			position: String(newPosition).trim(),
-			electionId: election._id
-		    }),
-		});
-    
-		if (response.ok) {
-		    const newEntry = await response.json();
-		    setPositionsList(prev => [...prev, newEntry]);
-		    Toast.success('Position was added');
-		} else if (response.status === 409) {
-		    Toast.warning('Position already exists');
-		} else if (response.status === 400) {
-		    const errorMsg = await response.text();
-		    Toast.warning(errorMsg);
-		} else {
-		    Toast.warning('Could not add the position');
-		}
+		const response = await fetcher.auth.post(
+			`election/${election._id}/position`,
+			{
+				position: String(newPosition).trim(),
+				electionId: election._id
+			},
+			user,
+		);
+
+		setPositionsList(prev => [...prev, response]);
+		Toast.success('Position was added');
+		
 	    } catch (error) {
-		Toast.error('Could not add the position');
+		if (error instanceof FetchError) {
+			if (error.status === 409) {
+			    Toast.warning('Position already exists');
+			} else if (error.status === 400) {
+			    Toast.warning(error.message);
+			} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
+			    Toast.error('Could not add the position');
+			}
+		    } else {
+			Toast.error('An unexpected error occurred');
+		}
 	    }
 	}
     
@@ -147,33 +143,33 @@ function ElectionDetail() {
 	    closeUpdatePositionModal();
     
 	    try {
-		const response = await fetch(`${backendUrl}/election/${election._id}/position/update`, {
-		    method: 'PATCH',
-		    headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
-		    },
-		    mode: 'cors',
-		    body: JSON.stringify({
-			position: currentlySelectedPosition,
-			electionId: election._id,
-			new_position: String(updatedPosition).trim()
-		    }),
-		});
-    
-		if (response.ok) {
-		    const updated_position = await response.json();
-		    setPositionsList((prev) => 
-			prev.map((position) => 
-			    position._id === updated_position._id ? updated_position : position
-			)
-		    );
-		    Toast.success('Position was updated');
-		} else {
-		    Toast.warning("Could not update the position");
-		}
+		const response = await fetcher.auth.patch(
+			`election/${election._id}/position/update`,
+			{
+				position: currentlySelectedPosition,
+				electionId: election._id,
+				new_position: String(updatedPosition).trim()
+			},
+			user
+		);
+		setPositionsList((prev) => 
+		    prev.map((position) => 
+			position._id === response._id ? response : position
+		    )
+		);
+		Toast.success('Position was updated');
 	    } catch (error) {
-		Toast.error("There was an error updating the position");
+		if (error instanceof FetchError) {
+			if (error.status === 409) {
+			    Toast.warning('Position already exists');
+			} else if (error.status === 400) {
+			    Toast.warning(error.message);
+			} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
+			    Toast.error('Could not add the position');
+			}
+		    } else {
+			Toast.error('An unexpected error occurred');
+		}
 	    }
 	}
     
@@ -185,50 +181,49 @@ function ElectionDetail() {
     
 	async function removePosition(position) {
 	    try {
-		const res = await fetch(`${backendUrl}/election/${election._id}/${position._id}/delete`, {
-		    method: 'DELETE',
-		    headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
-		    }
-		});
+		const res = await fetcher.auth.delete(
+			`election/${election._id}/${position._id}/delete`,
+			user
+		);
     
+		setPositionsList(positionsList.filter(p => p._id !== position._id));
+		Toast.success("The position was removed");	
 		if (res.ok) {
-		    setPositionsList(positionsList.filter(p => p._id !== position._id));
-		    Toast.success("The position was removed");	
 		} else {
 		    Toast.warning('Could not remove the position');
 		}
 	    } catch (error) {
-		Toast.error('There was an error removing the position');
+		if (error instanceof FetchError) {
+			if (error.status === 500) {
+			    Toast.warning("There was an unexpected error");
+			} else if (error.status === 400) {
+			    Toast.warning(error.message);
+			} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
+			    Toast.error('There was an error removing the position');
+			}
+		    } else {
+			Toast.error('An unexpected error occurred');
+		}
 	    }
 	}
     
 	async function sendListToDB(voterlist) {
 	    try {
-		const post_list = await fetch(`${backendUrl}/election/${election._id}/closed_event/addvoters`, {
-		    method: 'POST',
-		    headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
-		    },
-		    body: JSON.stringify({
-			election: election._id,
-			voterList: voterlist
-		    }),
-		});
+		const votersToDb = await fetcher.auth.post(
+			`election/${election._id}/closed_event/addvoters`, 
+			{
+				election: election._id,
+				voterList: voterlist
+		    	},
+			user
+		);
+
     
-		const new_list = await post_list.json();
-    
-		if (post_list.ok) {
-		    const updated_list = [...votersList, ...new_list.voters];
-		    setVotersList(updated_list);
-		    setVotersFiltered(updated_list);
-		    Toast.success(`List was updated`);
-		    setParticipantsList('');
-		} else {
-		    Toast.warning('Could not update the list');
-		}
+		const updatedList = [...votersList, ...votersToDb.voters];
+		setVotersList(updatedList);
+		setVotersFiltered(updatedList);
+		Toast.success(`List was updated`);
+		setParticipantsList('');
 	    } catch (error) {
 		Toast.error("An error occurred. Try again");
 	    }	
@@ -236,21 +231,15 @@ function ElectionDetail() {
     
 	async function removeVoter(voter) {
 	    try {
-		const res = await fetch(`${backendUrl}/election/voter/${voter._id}/delete`, {
-		    method: 'POST',
-		    headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
-		    }
-		});
-    
-		if (res.ok) {
-		    const updatedList = votersList.filter(e => e._id !== voter._id);
-		    setVotersList(updatedList);
-		    Toast.success('The participant was removed successfully');
-		} else {
-		    Toast.warning('Could not remove the participant');
-		}
+		const res = await fetch(
+			`election/voter/${voter._id}/delete`,
+			user
+		)
+		
+		const updatedList = votersList.filter(e => e._id !== voter._id);
+		setVotersList(updatedList);
+		Toast.success('The participant was removed successfully');
+
 	    } catch (error) {
 		Toast.error("There was an error removing the participant");
 	    }
@@ -327,30 +316,22 @@ function ElectionDetail() {
 	    setUpdateParticipantModal(false);
     
 	    try {
-		const response = await fetch(`${backendUrl}/election/voter/update`, {
-		    method: 'PATCH',
-		    headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
-		    },
-		    body: JSON.stringify({
-			emailAddr: emailForUpdate,
-			participantId: participant._id,
-			electionId: election._id
-		    }),
-		});
-    
-		if (response.ok) {
-		    const updated_participant = await response.json();
-		    setVotersList((prev) => 
-			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
-		    );
-		    Toast.success("Participant was updated");
-		} else {
-		    Toast.warning("Could not update the participant");
-		}
-	    } catch (error) {
-		Toast.error("There was an error with the request");
+		const response = await fetcher.auth.patch(
+			`election/voter/update`, 
+			{
+				emailAddr: emailForUpdate,
+				participantId: participant._id,
+				electionId: election._id
+		    	},
+			user
+		);
+	
+		setVotersList((prev) => 
+		    prev.map((v) => v._id === response._id ? response : v)
+		);
+		Toast.success("Participant was updated");
+	} catch (error) {
+		Toast.warning("Could not update the participant");
 	    }
 	}
     
@@ -375,33 +356,25 @@ function ElectionDetail() {
 		return;
 	    }
     
-	    try {
-		const response = await fetch(`${backendUrl}/election/voter/update`, {
-		    method: 'PATCH',
-		    headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
-		    },
-		    body: JSON.stringify({
-			phoneNo: validatedPhoneNo,
-			participantId: participant._id,
-			electionId: election._id
-		    }),
-		});
-		
-		if (response.ok) {
-		    setUpdateParticipantModal(false);
-		    const updated_participant = await response.json();
-		    setVotersList((prev) => 
-			prev.map((v) => v._id === updated_participant._id ? updated_participant : v)
-		    );
-		    Toast.success("Participant was updated");
-		} else {
-		    Toast.warning("Could not update the voter");
+		try {
+			const response = await fetcher.auth.patch(
+				`election/voter/update`,
+				{
+					phoneNo: validatedPhoneNo,
+					participantId: participant._id,
+					electionId: election._id
+				},
+				user
+			);
+
+			setUpdateParticipantModal(false);
+			setVotersList((prev) =>
+				prev.map((v) => v._id === response._id ? response : v)
+			);
+			Toast.success("Participant was updated");
+		} catch (error) {
+			Toast.warning("Could not update the voter");
 		}
-	    } catch (error) {
-		Toast.error("There was an error with the request");
-	    }
 	}
     
 	async function endElection() {
@@ -411,26 +384,18 @@ function ElectionDetail() {
 	    }
     
 	    try {
-		const end_res = await fetch(`${backendUrl}/elections/${election._id}/end`, {
-		    method: 'PUT',
-		    headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${await user?.getIdToken()}`
-		    }
-		});
+		const endEvent = await fetcher.auth.put(
+			`elections/${election._id}/end`,
+			user
+		)
 		
 		setEndElectionModalOpen(false);
     
-		if (end_res.ok) {
-		    const new_res = await end_res.json();
-		    setElection(prev => ({
-			...prev,
-			endDate: new Date(new_res?.new_date ?? prev.endDate)
-		    }));
-		    Toast.success("Election was ended successfully");
-		} else {
-		    Toast.warning("Could not end the election");
-		}
+		setElection(prev => ({
+		    ...prev,
+		    endDate: new Date(endEvent?.new_date ?? prev.endDate)
+		}));
+		Toast.success("Election was ended successfully");
 	    } catch (error) {
 		Toast.error("Could not end the election");
 	    }
