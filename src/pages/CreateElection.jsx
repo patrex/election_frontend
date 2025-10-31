@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useContext } from "react";
-import backendUrl from '../utils/backendurl'
 
 import Toast from "@/utils/ToastMsg";
 
@@ -10,6 +9,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import { AppContext } from '@/App';
 
 import { PulseLoader } from 'react-spinners';
+import {fetcher, FetchError} from "@/utils/fetcher"
 
 
 
@@ -38,28 +38,28 @@ function CreateElection() {
 		setLoading(true)
 
 		try {
-			const token = await user?.getIdToken();
-
-			const res = await fetch(`${backendUrl}/elections`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${ token }`
-				},
-				body: JSON.stringify({
+			await fetcher.auth.post(
+				'elections', 
+				{
 					...formData,
 					host_name: window.location.origin
-				})
-			})
-
-			if (!res.ok) {
-				Toast.warning("Could not complete the request")
-				return
-			}
-	
+				},
+				user
+			);
+			
 			navigate(`/user/${params.userId}`)
 		} catch (error) {
-			Toast.error('There was an error')
+			if (error instanceof FetchError) {
+				if (error.status === 500) {
+					Toast.warning("There was an unexpected error");
+				} else if (error.status === 400) {
+					Toast.warning(error.message);
+				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
+					Toast.error('Could not create the election');
+				}
+			} else {
+				Toast.error('An unexpected error occurred');
+			}
 		} finally {
 			setLoading(false)
 		}
@@ -185,7 +185,7 @@ function CreateElection() {
 							name="rules"
 							placeholder="State any rules for this election(optional)"
 							{...register('rules')}
-							className="w-full px-4 py-2 border rounded-md resize-y focus:outline-none focus:ring-2"
+				
 						/>
 						{errors.rules && (
 							<p className="text-red-500 text-sm mt-1">Cannot be more than 1000 characters</p>
