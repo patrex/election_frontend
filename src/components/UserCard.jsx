@@ -10,8 +10,15 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import * as AlertDialog from '@radix-ui/react-alert-dialog';
+
+import { useEventStatus } from '@/hooks/useEventStatus';
 
 const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
+	const { isPending } = useEventStatus(
+		new Date(election.startDate),
+		new Date(election.endDate)
+	);
 
 	return (
 		<Card
@@ -65,14 +72,35 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 
 			{/* Action Buttons */}
 			<Box sx={{ minHeight: 48, mt: 2 }}>
-				{(new Date(election?.endDate) > Date.now() && new Date(election?.startDate) > Date.now()) && (
+				{ isPending && (
 					<Stack direction="row" spacing={1}>
 						<IconButton color="primary" onClick={onEdit}>
 							<EditIcon />
 						</IconButton>
-						<IconButton color="error" onClick={onDelete}>
-							<DeleteIcon />
-						</IconButton>
+						<AlertDialog.Root>
+							<AlertDialog.Trigger asChild>
+								<IconButton color="error">
+									<DeleteIcon />
+								</IconButton>
+							</AlertDialog.Trigger>
+							<AlertDialog.Portal>
+								<AlertDialog.Overlay className="AlertDialogOverlay" />
+								<AlertDialog.Content className="AlertDialogContent">
+									<AlertDialog.Title className="AlertDialogTitle">Remove Candidate</AlertDialog.Title>
+									<AlertDialog.Description className="AlertDialogDescription">
+										{`Remove this candidate: ${ name } ?`}
+									</AlertDialog.Description>
+									<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+										<AlertDialog.Cancel asChild>
+											<button className="Button mauve">Cancel</button>
+										</AlertDialog.Cancel>
+										<AlertDialog.Action asChild>
+											<button className="Button red" onClick={ onDelete }>Yes, remove</button>
+										</AlertDialog.Action>
+									</div>
+								</AlertDialog.Content>
+							</AlertDialog.Portal>
+						</AlertDialog.Root>
 					</Stack>
 				)}
 			</Box>

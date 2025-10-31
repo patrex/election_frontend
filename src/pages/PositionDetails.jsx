@@ -6,31 +6,28 @@ import UserCard from "@/components/UserCard"
 import { Grid, Container, Typography, Box } from '@mui/material';
 
 import { AppContext } from "@/App";
-import backendUrl from '../utils/backendurl'
+import { fetcher, FetchError } from "@/utils/fetcher";
 
-export async function loader({params}) {
-	let election, candidates = undefined;
-	let position = params.position;
-
+export async function loader({ params }) {
 	try {
-		const res1 = await fetch(`${backendUrl}/election/${params.id}`)
-		const candidateList = await fetch(`${backendUrl}/election/${params.id}/${params.position}/candidates`)
+		const [election, candidates] = await Promise.all([
+			fetcher.get(`election/${params.id}`),
+			fetcher.get(`election/${params.id}/${params.position}/candidates`)
+		])
 
-		election = await res1.json();
-		candidates = await candidateList.json();
-
+		return [election, candidates, params.position]
 	} catch (error) {
-		
+		console.error("Could not fetch resources");
 	}
-
-	return [election, candidates, position]
 }
 
 function PositionDetails() {
 	const [election, candidates, position] = useLoaderData();
-	const [candidatesList, setCandidatesList] = useState(candidates);
+	const [candidatesList, setCandidatesList] = useState(candidates || []);
 	const params = useParams();
+
 	const { user } = useContext(AppContext);
+
 	const navigate = useNavigate();
 
 	function handleEdit(edit_url) {
@@ -38,25 +35,21 @@ function PositionDetails() {
 	}
 
 	async function removeCandidate(candidate) {
-		const result = await Swal.fire({
-			title: `Delete ${candidate.firstname} ${candidate.lastname}?`,
-			showDenyButton: true,
-			confirmButtonText: "Delete",
-			denyButtonText: `Cancel`
-		});
-
-		if (result.isConfirmed) {
-			const res = await fetch(`${backendUrl}/election/${election._id}/candidate/${candidate._id}/delete`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${await user?.getIdToken()}`
+		try {
+			await fetcher.auth.delete(`election/${election._id}/candidate/${candidate._id}/delete`, user)
+			setCandidatesList(prev => prev.filter(c => c._id !== candidate._id));
+			Toast.success('Candidate was removed');
+		} catch (error) {
+			if (error instanceof FetchError) {
+				if (error.status === 500) {
+					Toast.warning("There was an unexpected error");
+				} else if (error.status === 400) {
+					Toast.warning(error.message);
+				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
+					Toast.error('There was an error removing the candidate');
 				}
-			});
-
-			if (res.ok) {
-				setCandidatesList(prev => prev.filter(c => c._id !== candidate._id));
-				Toast.success('Candidate was removed');
+			} else {
+				Toast.error('An unexpected error occurred');
 			}
 		}
 	}
@@ -67,6 +60,8 @@ function PositionDetails() {
 				<Typography variant="h4" component="h1" sx={{ mb: 3 }}>
 					Candidates for {position}
 				</Typography>
+
+				<hr />
 
 				<Grid container spacing={2}>
 					{candidatesList.map(candidate => (
