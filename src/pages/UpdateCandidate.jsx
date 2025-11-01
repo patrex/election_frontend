@@ -59,7 +59,7 @@ function UpdateCandidate() {
 				firstname: candidate.firstname || "",
 				lastname: candidate.lastname || "",
 				manifesto: candidate.manifesto || "",
-				selectedPosition: position.position || "",
+				selectedPosition: position || "",
 			}),
 			[candidate, position]
 		),
