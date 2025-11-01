@@ -1,5 +1,4 @@
-import { useLoaderData, useParams, Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useLoaderData, useParams, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
