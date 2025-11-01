@@ -17,9 +17,9 @@ export async function updateloader({ params }) {
 	try {
 		const candidate = await fetcher.get(`election/candidate/${params.candidateId}`);
 		const [positions, position, election] = await Promise.all(
-			await fetcher.get(`election/${candidate.electionId}/positions`),
-			await fetcher.get(`election/positions/${candidate.position}`),
-			await fetcher.get(`election/${candidate.electionId}`)
+			fetcher.get(`election/${candidate.electionId}/positions`),
+			fetcher.get(`election/positions/${candidate.position}`),
+			fetcher.get(`election/${candidate.electionId}`)
 		)
 		console.log(positions, position);
 
