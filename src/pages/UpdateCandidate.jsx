@@ -65,7 +65,12 @@ function UpdateCandidate() {
 		),
 	});
 
-	useEffect(() => {console.log(position)}, [])
+	useEffect(() => {
+		console.log(positions)
+		console.log(position)
+		console.log(candidate)
+		console.log(election)
+	}, [])
 
 
 	// useEffect(() => {
