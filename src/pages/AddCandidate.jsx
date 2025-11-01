@@ -20,7 +20,7 @@ export async function addCandidateLoader({ params }) {
 }
 
 function AddCandidate() {
-	const [listOfPositions] = useLoaderData()
+	const listOfPositions = useLoaderData()
 	const [positions, setPositions] = useState(listOfPositions || []);
 	const [selectedPosition, setSelectedPosition] = useState("");
 	
@@ -37,8 +37,6 @@ function AddCandidate() {
 		lastname: '',
 		manifesto: ''
 	});
-
-	useEffect(() => {console.log(positions);}, [positions])
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
@@ -127,19 +125,25 @@ function AddCandidate() {
 					<div className='mb-3'>
 						<label>
 							Select position:
-							<select name="position" 
+							<select 
+								name="position" 
 								className='form-select form-select-lg mb-3'
 								value={selectedPosition} 
 								onChange={handleSelect}
 							>
 								<option value="" disabled>Select a position</option>
-								{positions.length ? 
-									positions.map((position) => (
-										<option key={position.position} value={position.position}>
-											{position.position}
-										</option>
-									))
-								: "no positions.."}
+								{positions.length > 0 ? (
+								positions.map((position) => (
+									<option 
+										key={position._id || position.position} 
+										value={position.position}
+										>
+										{position.position}
+									</option>
+								))
+								) : (
+									<option value="" disabled>No positions available</option>
+								)}
 							</select>
 						</label>
 					</div>
