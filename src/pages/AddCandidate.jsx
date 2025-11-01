@@ -9,11 +9,11 @@ import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from '@/utils/fetcher';
 
 import { PulseLoader } from 'react-spinners';
+import { useEffect } from 'react';
 
 export async function addCandidateLoader({ params }) {
 	try {
-		const positions = await fetcher.get(`election/${params.id}/positions`)
-		return positions;
+		return await fetcher.get(`election/${params.id}/positions`)
 	} catch (error) {
 		console.error("There was a problem fetching positions");
 	}
@@ -37,6 +37,8 @@ function AddCandidate() {
 		lastname: '',
 		manifesto: ''
 	});
+
+	useEffect(() => {console.log(positions);}, [positions])
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
