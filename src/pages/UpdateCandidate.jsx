@@ -215,7 +215,7 @@ function UpdateCandidate() {
 						<input type="text" id="lastname" aria-describedby="lastname" {...register("lastname")} />
 					</div>
 
-					<div>
+					{/* <div>
 						<label>
 							Select position
 							<select {...register("selectedPosition")} className="form-select form-select-lg mb-3">
@@ -232,7 +232,7 @@ function UpdateCandidate() {
 										
 							</select>
 						</label>
-					</div>
+					</div> */}
 
 					<div className="mb-3">
 						<textarea name="manifesto" className="p-2.5 my-2" {...register("manifesto")} />
