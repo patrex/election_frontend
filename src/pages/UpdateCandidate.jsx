@@ -16,13 +16,11 @@ import { PulseLoader } from "react-spinners";
 export async function updateloader({ params }) {
 	try {
 		const candidate = await fetcher.get(`election/candidate/${params.candidateId}`);
-		const [positions, position, election] = await Promise.all(
+		const [positions, position, election] = await Promise.all([
 			fetcher.get(`election/${candidate.electionId}/positions`),
 			fetcher.get(`election/positions/${candidate.position}`),
 			fetcher.get(`election/${candidate.electionId}`)
-		)
-		console.log(positions, position);
-
+		])
 		return [ candidate, positions, position, election ]
 	} catch (error) { 
 		console.error("Could not finish loading resources");
