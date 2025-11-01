@@ -212,14 +212,16 @@ function UpdateCandidate() {
 							Select position
 							<select {...register("selectedPosition")} className="form-select form-select-lg mb-3">
 								<option value={position.position}>{position.position}</option>
-								{state.positions.length > 0 &&
+								{state.positions.length > 0 && (
 									state.positions
 										.filter((pos) => pos._id !== candidate.position)
 										.map((pos) => (
-											<option key={pos.position} value={pos.position}>
-												{pos.position}
+											<option key={pos._id} value={pos}>
+												{pos}
 											</option>
-										))}
+										)))
+								}
+										
 							</select>
 						</label>
 					</div>
