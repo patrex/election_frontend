@@ -8,7 +8,7 @@ import Login from './pages/Login';
 import Dashboard, { dashboardLoader } from './pages/Dashboard';
 import CreateElection from './pages/CreateElection';
 import SignUp from './pages/SignUp';
-import AddCandidate from './pages/AddCandidate';
+import AddCandidate, { addCandidateLoader } from './pages/AddCandidate';
 import Election, { electionLoader } from './pages/Election';
 import Layout from './components/Layout';
 import UserLayout from './components/UserLayout';
@@ -91,7 +91,8 @@ const router = createBrowserRouter(
 						loader={updateElectionLoader} 
 						errorElement={<Error />}
 					/>
-					<Route path="election/:id/addcandidate" 
+					<Route path="election/:id/addcandidate"
+						loader={addCandidateLoader}
 						element={<AddCandidate />} 
 						errorElement={<Error />}
 					/>

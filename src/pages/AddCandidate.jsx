@@ -1,33 +1,42 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
-import backendUrl from '../utils/backendurl'
+import { useLoaderData } from 'react-router-dom';
 import { AppContext } from '@/App';
 
 import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
+import { fetcher, FetchError } from '@/utils/fetcher';
 
 import { PulseLoader } from 'react-spinners';
 
+export async function addCandidateLoader({ params }) {
+	try {
+		const positions = await fetcher.get(`election/${params.id}/positions`)
+		return positions;
+	} catch (error) {
+		console.error("There was a problem fetching positions");
+	}
+}
+
 function AddCandidate() {
+	const [listOfPositions] = useLoaderData()
+	const [positions, setPositions] = useState(listOfPositions || []);
+	const [selectedPosition, setSelectedPosition] = useState("");
+	
+	const [image, setImage] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [preview, setPreview] = useState(null);
+
 	const params = useParams();
 	const navigate = useNavigate();
+	const { user } = useContext(AppContext);
 
 	const [formData, setFormData] = useState({
 		firstname: '',
 		lastname: '',
 		manifesto: ''
 	});
-
-	const { user } = useContext(AppContext);
-	
-	const [positions, setPositions] = useState([]);
-	const [selectedPosition, setSelectedPosition] = useState("");
-
-	const [image, setImage] = useState('');
-	const [filename, setFilename] = useState("");
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [preview, setPreview] = useState(null);
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
@@ -41,27 +50,12 @@ function AddCandidate() {
 		}
 	};
 
-	const fetchPositions = () => {
-		fetch(`${backendUrl}/election/${params.id}/positions`)
-			.then(data => data.json())
-			.then(positions => setPositions(positions))
-			.catch(err => console.log(err))
-	}
-
 	const handleRemoveImage = () => {
 		setPreview(null);
 		document.getElementById('uploadpic').value = '';
 	};
 
-	// const handleFileNameChange = (e) => {
-	// 	const file = e.target.files[0];
-	// 	if (file) {
-	// 		setImage(file)
-	// 		setFilename(file.name)
-	// 	}
-	// }
-
-	const uploadImage = async () => {
+	async function uploadImage() {
 		try {
 			const imgRef = ref(
 			    fireman, 
@@ -71,23 +65,18 @@ function AddCandidate() {
 			const snapshot = await uploadBytes(imgRef, image);
 			const photoUrl = await getDownloadURL(snapshot.ref);
 		
-			const res = await fetch(`${backendUrl}/election/${params.id}/add-candidate`, {
-			    method: 'POST',
-			    headers: { 'Content-Type': 'application/json',
-				Authorization: `Bearer ${await user?.getIdToken()}`
-			    },
-			    body: JSON.stringify({ ...formData, photoUrl, selectedPosition }),
-			});
-		
-			if (res.ok) {
-			    navigate(`/user/${params.userId}/election/${params.id}`);
-			}
+			await fetcher.auth.post(
+				`election/${params.id}/add-candidate`, 	
+			    	{ ...formData, photoUrl, selectedPosition },
+				user
+			);
+			navigate(`/user/${params.userId}/election/${params.id}`);
 		    } catch (err) {
 			Toast.error(err.message || "An error occurred");
 		}
 	}
 
-	const handleSubmit = async function (e) {
+	async function handleSubmit (e) {
 		e.preventDefault();
 
 		if (isSubmitting) return; 
@@ -106,10 +95,6 @@ function AddCandidate() {
 	const handleChange = useCallback(({ target: { name, value}}) => {
 		setFormData((prev) => ({...prev, [name]: value}))
 	}, [])
-
-	useEffect(() => {
-		fetchPositions();
-	}, [params.id]);
 
 	return (
 		<div className='container'>
@@ -146,7 +131,7 @@ function AddCandidate() {
 								onChange={handleSelect}
 							>
 								<option value="" disabled>Select a position</option>
-								{positions.length > 0 ? 
+								{positions.length ? 
 									positions.map((position) => (
 										<option key={position.position} value={position.position}>
 											{position.position}
