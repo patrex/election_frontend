@@ -29,14 +29,17 @@ export async function updateloader({ params }) {
 }
 
 function UpdateCandidate() {
-	const [ candidate, positions, position, election ] = useLoaderData();
+	const [ a, b, c, d ] = useLoaderData();
 	const [loading, setLoading] = useState(false);
+	const [candidate, setCandidate] = useState(a);
+	const [positions, setPositions] = useState(b || []);
+	const [position, setPosition] = useState(c);
+	const [election, setElection] = useState(d);
 
 	const [state, setState] = useState({
 		image: candidate.imgUrl || null,
 		newPicture: null,
 		newFile: "",
-		positions: positions || [],
 	});
 
 	const schema = z.object({
