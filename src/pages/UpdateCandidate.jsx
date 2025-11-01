@@ -35,6 +35,7 @@ function UpdateCandidate() {
 		image: candidate.imgUrl || null,
 		newPicture: null,
 		newFile: "",
+		positions: positions || []
 	});
 
 	const schema = z.object({
