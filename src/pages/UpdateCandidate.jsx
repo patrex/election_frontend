@@ -65,6 +65,8 @@ function UpdateCandidate() {
 		),
 	});
 
+	useEffect(() => console.log(position), [])
+
 
 	// useEffect(() => {
 	// 	setState((prev) => ({
