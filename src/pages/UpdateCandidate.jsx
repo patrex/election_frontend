@@ -21,6 +21,7 @@ export async function updateloader({ params }) {
 			await fetcher.get(`election/positions/${candidate.position}`),
 			await fetcher.get(`election/${candidate.electionId}`)
 		)
+		console.log(positions, position);
 
 		return [ candidate, positions, position, election ]
 	} catch (error) { 
