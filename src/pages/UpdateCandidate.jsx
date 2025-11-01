@@ -16,10 +16,10 @@ import { PulseLoader } from "react-spinners";
 export async function updateloader({ params }) {
 	try {
 		const candidate = await fetcher.get(`election/candidate/${params.candidateId}`);
-		const [positions, election, position] = Promise.all(
+		const [positions, position, election] = Promise.all(
 			await fetcher.get(`election/${candidate.electionId}/positions`),
-			await fetcher.get(`election/${candidate.electionId}`),
-			await fetcher.get(`election/positions/${candidate.position}`)
+			await fetcher.get(`election/positions/${candidate.position}`),
+			await fetcher.get(`election/${candidate.electionId}`)
 		)
 
 		return [candidate, positions, position, election]
@@ -65,12 +65,14 @@ function UpdateCandidate() {
 		),
 	});
 
-	useEffect(() => {
-		setState((prev) => ({
-			...prev,
-			image: candidate.imgUrl || null,
-		}));
-	}, [candidate]);
+	useEffect(() => {console.log(candidate);}, [])
+
+	// useEffect(() => {
+	// 	setState((prev) => ({
+	// 		...prev,
+	// 		image: candidate.imgUrl || null,
+	// 	}));
+	// }, [candidate]);
 
 	const handleFileUpload = useCallback((e) => {
 		const file = e.target.files[0];
