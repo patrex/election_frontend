@@ -1,11 +1,10 @@
 import { useLoaderData } from "react-router-dom";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { useState, useEffect, useCallback, useMemo, useContext } from "react";
 import { fireman } from "../utils/fireloader";
 import Toast from "@/utils/ToastMsg";
-import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import avatar from '@/assets/avatar.svg'
-
+import { fetcher, FetchError } from "@/utils/fetcher";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 import { AppContext } from "@/App";
 
@@ -14,40 +13,30 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PulseLoader } from "react-spinners";
 
-import backendUrl from "../utils/backendurl";
-
 export async function updateloader({ params }) {
-	let position = undefined;
-	let positionsList = undefined;
-	let candidate = undefined;
-	let election = undefined;
-
 	try {
-		const c = await fetch(`${backendUrl}/election/candidate/${params.candidateId}`);
-		candidate = await c.json();
+		const candidate = await fetcher.get(`election/candidate/${params.candidateId}`);
+		const [positions, election, position] = Promise.all(
+			await fetcher.get(`election/${candidate.electionId}/positions`),
+			await fetcher.get(`election/${candidate.electionId}`),
+			await fetcher.get(`election/positions/${candidate.position}`)
+		)
 
-		const pos_res = await fetch(`${backendUrl}/election/${candidate.electionId}/positions`);
-		positionsList = await pos_res.json();
-
-		const e = await fetch(`${backendUrl}/election/${candidate.electionId}`);
-		election = await e.json();
-
-		const pos_name_res = await fetch(`${backendUrl}/election/positions/${candidate.position}`);
-		position = await pos_name_res.json();
-	} catch (error) { }
-
-	return [candidate, position, positionsList, election];
+		return [candidate, positions, position, election]
+	} catch (error) { 
+		console.error("Could not finish loading resources");
+	}
 }
 
 function UpdateCandidate() {
-	const [candidate, position, positionsList, election] = useLoaderData();
+	const [candidate, positions, position, election] = useLoaderData();
 	const [loading, setLoading] = useState(false);
 
 	const [state, setState] = useState({
-		image: candidate.imgUrl || avatar,
+		image: candidate.imgUrl || null,
 		newPicture: null,
 		newFile: "",
-		positions: positionsList || [],
+		positions: positions || [],
 	});
 
 	const schema = z.object({
@@ -79,53 +68,58 @@ function UpdateCandidate() {
 	useEffect(() => {
 		setState((prev) => ({
 			...prev,
-			image: candidate.imgUrl || avatar,
+			image: candidate.imgUrl || null,
 		}));
 	}, [candidate]);
 
 	const handleFileUpload = useCallback((e) => {
 		const file = e.target.files[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onload = (event) => {
-				setState((prev) => ({
-					...prev,
-					image: event.target.result,
-					newPicture: file,
-					newFile: file.name,
-				}));
-			};
-			reader.readAsDataURL(file);
+		if (!file) return;
+		
+		if (!file.type.startsWith('image/')) {
+			Toast.warning("Please upload an image file");
+			return;
 		}
+
+		if (file.size > (3 * 1024 * 1024)) {
+			Toast.warning("Image size must be less than 3MB");
+			return;
+		}
+
+		const reader = new FileReader();
+		reader.onload = (event) => {
+			setState((prev) => ({
+				...prev,
+				image: event.target.result,
+				newPicture: file,
+				newFile: file.name,
+			}));
+		};
+		reader.readAsDataURL(file);
+		
 	}, []);
 
-	const patchCandidate = async function (formdata, photoUrl) {
+	async function patchCandidate (formdata, photoUrl) {
 		try {
-			const response = await fetch(`${backendUrl}/election/updatecandidate`, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${await user?.getIdToken()}`,
-				},
-				body: JSON.stringify({
+			await fetcher.auth.patch(
+				`election/updatecandidate`,
+				{
 					electionId: election._id,
 					candidate_id: candidate._id,
 					...formdata,
 					photoUrl,
-				}),
-			});
-
-			if (!response.ok) throw new Error("Failed to update candidate");
-
+				},
+				user
+			);
 			Toast.success("Candidate updated successfully!");
 		} catch (error) {
-			Toast.error("Update failed");
+			Toast.error("Failed to update candidate");
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	const onSubmit = async (formdata) => {
+	async function onSubmit (formdata)  {
 		setLoading(true);
 
 		if (!isDirty && !state.newPicture) {
@@ -136,6 +130,9 @@ function UpdateCandidate() {
 
 		try {
 			let photoUrl = state.image; // Default to existing image
+			const delRef = ref(fireman, photoUrl)
+
+			await deleteObject(delRef)
 
 			if (state.newPicture) {
 				const imgRef = ref(
@@ -159,66 +156,31 @@ function UpdateCandidate() {
 			<div className="candidate-update-form-container">
 				{/* top */}
 				<div className="update-candidate-top">
-					{candidate.imgUrl ? (
 						<div className="image-wrapper">
-							<img 	
-								src={state.image} 
-								alt="Candidate" 
-								className="candidate-image" 
-							/>
+							{state.image ? (
+								<img 	
+									src={ state.image }
+									loading="lazy"
+									alt="Candidate" 
+									className="candidate-image"
+								/>
+
+								) : (
+									<div className="avatar-placeholder">
+										{`${candidate.firstname.charAt(0).toUpperCase()}${candidate.lastname.charAt(0).toUpperCase()}`}
+									</div>
+								)
+							}
 
 							<div className="image-actions">
 								{/* Change image (upload) */}
 								<label className="icon-btn" title="Change picture">
-									<span><i class="bi bi-arrow-left-right"></i></span>
+									<span><AddPhotoAlternateIcon /></span>
 									<input type="file" accept="image/*" id="imageUpload" 
 									onChange={handleFileUpload} style={{display: 'none'}} />
 								</label>
-
-								{/* Remove image */}
-								{/* <AlertDialog.Root>
-									<AlertDialog.Trigger asChild>
-										<button
-											type="button"
-											className="icon-btn"
-											title="Remove picture"
-										>
-										<span><i class="bi bi-trash-fill" style={{color: 'red'}}></i></span>
-										</button>
-									</AlertDialog.Trigger>
-									<AlertDialog.Portal>
-									<AlertDialog.Overlay className="AlertDialogOverlay" />
-									<AlertDialog.Content className="AlertDialogContent">
-										<AlertDialog.Title className="AlertDialogTitle">Delete Picture</AlertDialog.Title>
-										<AlertDialog.Description className="AlertDialogDescription">
-											{`Remove this picture for ${candidate.firstname}?`}
-										</AlertDialog.Description>
-											<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
-										<AlertDialog.Cancel asChild>
-											<button  className="Button mauve">Cancel</button>
-										</AlertDialog.Cancel>
-										<AlertDialog.Action asChild>
-											<button className="Button red" 
-												onClick={() => setState((prev) => ({
-													...prev,
-													image: "",
-													newPicture: avatar,
-												}))}>Remove
-											</button>
-										</AlertDialog.Action>
-										</div>
-									</AlertDialog.Content>
-									</AlertDialog.Portal>
-								</AlertDialog.Root> */}
-								
 							</div>
 						</div>
-
-					) : (
-						<div>
-							<p>Add picture for {`${candidate.firstname} ${candidate.lastname}`}</p>
-						</div>
-					) }
 				</div>
 
 				{/* middle */}
