@@ -22,14 +22,14 @@ export async function updateloader({ params }) {
 			await fetcher.get(`election/${candidate.electionId}`)
 		)
 
-		return [candidate, positions, position, election]
+		return [ candidate, positions, position, election ]
 	} catch (error) { 
 		console.error("Could not finish loading resources");
 	}
 }
 
 function UpdateCandidate() {
-	const [candidate, positions, position, election] = useLoaderData();
+	const [ candidate, positions, position, election ] = useLoaderData();
 	const [loading, setLoading] = useState(false);
 
 	const [state, setState] = useState({
@@ -65,7 +65,7 @@ function UpdateCandidate() {
 		),
 	});
 
-	useEffect(() => console.log(position), [])
+	useEffect(() => {console.log(position)}, [])
 
 
 	// useEffect(() => {
