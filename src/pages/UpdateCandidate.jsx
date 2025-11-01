@@ -20,7 +20,7 @@ export async function updateloader({ params }) {
 			fetcher.get(`election/${candidate.electionId}/positions`),
 			fetcher.get(`election/positions/${candidate.position}`),
 			fetcher.get(`election/${candidate.electionId}`)
-		])
+		]);
 		return [ candidate, positions, position, election ]
 	} catch (error) { 
 		console.error("Could not finish loading resources");
@@ -28,12 +28,8 @@ export async function updateloader({ params }) {
 }
 
 function UpdateCandidate() {
-	const [ a, b, c, d ] = useLoaderData();
+	const [ candidate, positions, position, election ] = useLoaderData();
 	const [loading, setLoading] = useState(false);
-	const [candidate, setCandidate] = useState(a);
-	const [positions, setPositions] = useState(b || []);
-	const [position, setPosition] = useState(c);
-	const [election, setElection] = useState(d);
 
 	const [state, setState] = useState({
 		image: candidate.imgUrl || null,
@@ -61,18 +57,11 @@ function UpdateCandidate() {
 				firstname: candidate.firstname || "",
 				lastname: candidate.lastname || "",
 				manifesto: candidate.manifesto || "",
-				selectedPosition: position || "",
+				selectedPosition: position.position || "",
 			}),
 			[candidate, position]
 		),
 	});
-
-	useEffect(() => {
-		console.log(positions)
-		console.log(position)
-		console.log(candidate)
-		console.log(election)
-	}, [])
 
 
 	// useEffect(() => {
@@ -214,7 +203,7 @@ function UpdateCandidate() {
 						<input type="text" id="lastname" aria-describedby="lastname" {...register("lastname")} />
 					</div>
 
-					{/* <div>
+					<div>
 						<label>
 							Select position
 							<select {...register("selectedPosition")} className="form-select form-select-lg mb-3">
@@ -223,15 +212,15 @@ function UpdateCandidate() {
 									state.positions
 										.filter((pos) => pos._id !== candidate.position)
 										.map((pos) => (
-											<option key={pos._id} value={pos}>
-												{pos}
+											<option key={pos._id} value={pos.position}>
+												{pos.position}
 											</option>
 										)))
 								}
 										
 							</select>
 						</label>
-					</div> */}
+					</div>
 
 					<div className="mb-3">
 						<textarea name="manifesto" className="p-2.5 my-2" {...register("manifesto")} />
