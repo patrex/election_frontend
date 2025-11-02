@@ -128,17 +128,38 @@ function UpdateCandidate() {
 			return;
 		}
 
+		const startIndex = candidate.imgUrl.indexOf('/o/') + 3;
+		const endIndex = candidate.imgUrl.indexOf('?');
+		const path = candidate.imgUrl.substring(startIndex, endIndex);
+		const imgPath = decodeURIComponent(path);
+		const delRef = ref(fireman, imgPath);
+		const photoUrl = null;
+
 		try {
-			let photoUrl = state.image; // Default to existing image
 
-			const startIndex = candidate.imgUrl.indexOf('/o/') + 3;
-			const endIndex = candidate.imgUrl.indexOf('?');
-			const path = candidate.imgUrl.substring(startIndex, endIndex)
-			const imgPath = decodeURIComponent(path)
-
-			const delRef = ref(fireman, imgPath)
-
-			await deleteObject(delRef)	// delete previous photo
+			try {
+				await deleteObject(delRef)	// delete previous photo	
+			} catch (error) {
+				switch (error.code) {
+					case 'storage/unauthorized':
+						Toast.error("Permission denied. Check your user permissions.");
+						break;
+					case 'storage/unauthenticated':
+						Toast.error("You must be logged in to change the photo.");
+						break;
+					case 'storage/object-not-found':
+					// Log this as a soft error, as the goal (deleting a file) is failed, 
+					// but the new upload/patch can potentially still proceed if not blocked by the error.
+						console.warn("Attempted to delete a non-existent file.");
+						break;
+					case 'storage/canceled':
+						Toast.error("The photo upload was canceled.");
+						break;
+					default:
+						Toast.error("An error occurred while uploading candidate picture.");
+						break;
+			    }
+			}
 
 			const imgRef = ref(
 				fireman,
@@ -146,13 +167,21 @@ function UpdateCandidate() {
 					formdata.lastname
 				)}`
 			);
+
 			const snapshot = await uploadBytes(imgRef, state.newPicture);
 			photoUrl = await getDownloadURL(snapshot.ref);
 
 			await patchCandidate(formdata, photoUrl);
+			setLoading(false)
 		} catch (err) {
-			console.error("****Error: ***", err.code, err.message);
-			Toast.error("An error occurred while uploading candidate picture.");
+			try {
+				const cleanUpRef = ref(fireman, photoUrl.fullPath);
+				await deleteObject(cleanUpRef);
+				console.log("Rolled back changes");
+			} catch (error) {
+				console.error("Critical failure. Changes were rolled back");
+			}
+			console.error("Critical failure during candidate update", err);
 		}
 	};
 
@@ -239,7 +268,7 @@ function UpdateCandidate() {
 						type="submit"
 						form="candidate-update-form"
 						className="Button violet"
-						disabled={!isDirty && !state.newPicture}
+						disabled={!isDirty || !state.newPicture}
 					>
 						{loading ? (
 							<PulseLoader color="#fff" size={5} loading={loading} />
