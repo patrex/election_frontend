@@ -130,11 +130,15 @@ function UpdateCandidate() {
 
 		try {
 			let photoUrl = state.image; // Default to existing image
-			const delRef = ref(fireman, photoUrl)
 
-			console.log(photoUrl);
+			const startIndex = photoUrl.indexOf('/o/') + 3;
+			const endIndex = photoUrl.indexOf('?');
+			const path = photoUrl.substring(startIndex, endIndex)
+			const imgPath = decodeURIComponent(path)
 
-			await deleteObject(delRef)
+			const delRef = ref(fireman, imgPath)
+
+			await deleteObject(delRef)	// delete previous photo
 
 			if (state.newPicture) {
 				const imgRef = ref(
