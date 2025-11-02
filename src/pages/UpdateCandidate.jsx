@@ -132,6 +132,8 @@ function UpdateCandidate() {
 			let photoUrl = state.image; // Default to existing image
 			const delRef = ref(fireman, photoUrl)
 
+			console.log(photoUrl);
+
 			await deleteObject(delRef)
 
 			if (state.newPicture) {
@@ -147,6 +149,7 @@ function UpdateCandidate() {
 
 			await patchCandidate(formdata, photoUrl);
 		} catch (err) {
+			console.error("Error: ", err.code, err.message);
 			Toast.error("An error occurred while uploading candidate picture.");
 		}
 	};
