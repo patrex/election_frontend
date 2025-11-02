@@ -122,7 +122,7 @@ function UpdateCandidate() {
 	async function onSubmit (formdata)  {
 		setLoading(true);
 
-		if (!isDirty && !state.newPicture) {
+		if (!isDirty || !state.newPicture) {
 			Toast.info("You did not make any changes");
 			setLoading(false);
 			return;
@@ -131,29 +131,27 @@ function UpdateCandidate() {
 		try {
 			let photoUrl = state.image; // Default to existing image
 
-			const startIndex = photoUrl.indexOf('/o/') + 3;
-			const endIndex = photoUrl.indexOf('?');
-			const path = photoUrl.substring(startIndex, endIndex)
+			const startIndex = candidate.imgUrl.indexOf('/o/') + 3;
+			const endIndex = candidate.imgUrl.indexOf('?');
+			const path = candidate.imgUrl.substring(startIndex, endIndex)
 			const imgPath = decodeURIComponent(path)
 
 			const delRef = ref(fireman, imgPath)
 
 			await deleteObject(delRef)	// delete previous photo
 
-			if (state.newPicture) {
-				const imgRef = ref(
-					fireman,
-					`vote4me/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(
-						formdata.lastname
-					)}`
-				);
-				const snapshot = await uploadBytes(imgRef, state.newPicture);
-				photoUrl = await getDownloadURL(snapshot.ref);
-			}
+			const imgRef = ref(
+				fireman,
+				`votify/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(
+					formdata.lastname
+				)}`
+			);
+			const snapshot = await uploadBytes(imgRef, state.newPicture);
+			photoUrl = await getDownloadURL(snapshot.ref);
 
-			await patchCandidate(formdata, photoUrl);
+			await patchCandidate(formdata, imageUrl);
 		} catch (err) {
-			console.error("Error: ", err.code, err.message);
+			console.error("****Error: ***", err.code, err.message);
 			Toast.error("An error occurred while uploading candidate picture.");
 		}
 	};

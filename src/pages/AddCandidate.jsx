@@ -59,7 +59,7 @@ function AddCandidate() {
 		try {
 			const imgRef = ref(
 			    fireman, 
-			    `votersystem/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname)}`
+			    `votify/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname)}`
 			);
 		
 			const snapshot = await uploadBytes(imgRef, image);
