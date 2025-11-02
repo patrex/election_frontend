@@ -149,7 +149,7 @@ function UpdateCandidate() {
 			const snapshot = await uploadBytes(imgRef, state.newPicture);
 			photoUrl = await getDownloadURL(snapshot.ref);
 
-			await patchCandidate(formdata, imageUrl);
+			await patchCandidate(formdata, photoUrl);
 		} catch (err) {
 			console.error("****Error: ***", err.code, err.message);
 			Toast.error("An error occurred while uploading candidate picture.");
