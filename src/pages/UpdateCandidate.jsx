@@ -28,15 +28,15 @@ export async function updateloader({ params }) {
 }
 
 function UpdateCandidate() {
-	const [ candidate, positions, position, election ] = useLoaderData();
-	const [loading, setLoading] = useState(false);
+	const [candidate, positions, position, election] = useLoaderData();
+	const { user } = useContext(AppContext);
 
-	const [state, setState] = useState({
-		image: candidate.imgUrl || null,
-		newPicture: null,
-		newFile: "",
-		positions: positions || []
-	});
+	// Separated state variables
+	const [loading, setLoading] = useState(false);
+	const [image, setImage] = useState(candidate.imgUrl || null);
+	const [newPicture, setNewPicture] = useState(null);
+	const [newFileName, setNewFileName] = useState("");
+	const [availablePositions] = useState(positions || []);
 
 	const schema = z.object({
 		firstname: z.string().min(2, { message: "Firstname cannot be less than two characters" }),
@@ -44,8 +44,6 @@ function UpdateCandidate() {
 		selectedPosition: z.string(),
 		manifesto: z.string().min(0),
 	});
-
-	const { user } = useContext(AppContext);
 
 	const {
 		register,
@@ -64,14 +62,6 @@ function UpdateCandidate() {
 		),
 	});
 
-
-	// useEffect(() => {
-	// 	setState((prev) => ({
-	// 		...prev,
-	// 		image: candidate.imgUrl || null,
-	// 	}));
-	// }, [candidate]);
-
 	const handleFileUpload = useCallback((e) => {
 		const file = e.target.files[0];
 		if (!file) return;
@@ -88,18 +78,66 @@ function UpdateCandidate() {
 
 		const reader = new FileReader();
 		reader.onload = (event) => {
-			setState((prev) => ({
-				...prev,
-				image: event.target.result,
-				newPicture: file,
-				newFile: file.name,
-			}));
+			setImage(event.target.result);
+			setNewPicture(file);
+			setNewFileName(file.name);
 		};
 		reader.readAsDataURL(file);
-		
 	}, []);
 
-	async function patchCandidate (formdata, photoUrl) {
+	// Helper function to extract path from Firebase URL
+	const getPathFromUrl = useCallback((url) => {
+		const startIndex = url.indexOf('/o/') + 3;
+		const endIndex = url.indexOf('?');
+		const path = url.substring(startIndex, endIndex);
+		return decodeURIComponent(path);
+	}, []);
+
+	// Helper function to delete old image
+	const deleteOldImage = async (imageUrl) => {
+		try {
+			const imgPath = getPathFromUrl(imageUrl);
+			const delRef = ref(fireman, imgPath);
+			await deleteObject(delRef);
+			return { success: true };
+		} catch (error) {
+			switch (error.code) {
+				case 'storage/unauthorized':
+					Toast.error("Permission denied. Check your user permissions.");
+					break;
+				case 'storage/unauthenticated':
+					Toast.error("You must be logged in to change the photo.");
+					break;
+				case 'storage/object-not-found':
+					// Soft error - file already doesn't exist
+					console.warn("Attempted to delete a non-existent file.");
+					return { success: true, message: 'File already deleted' };
+				case 'storage/canceled':
+					Toast.error("The photo deletion was canceled.");
+					break;
+				default:
+					Toast.error("An error occurred while deleting the old photo.");
+					break;
+			}
+			return { success: false, error };
+		}
+	};
+
+	// Helper function to upload new image
+	const uploadNewImage = async (formdata) => {
+		const imgRef = ref(
+			fireman,
+			`votify/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(formdata.lastname)}`
+		);
+
+		const snapshot = await uploadBytes(imgRef, newPicture);
+		const photoUrl = await getDownloadURL(snapshot.ref);
+		
+		return { photoUrl, snapshot };
+	};
+
+	// Helper function to update candidate in database
+	const patchCandidate = async (formdata, photoUrl) => {
 		try {
 			await fetcher.auth.patch(
 				`election/updatecandidate`,
@@ -112,166 +150,235 @@ function UpdateCandidate() {
 				user
 			);
 			Toast.success("Candidate updated successfully!");
+			return { success: true };
 		} catch (error) {
 			Toast.error("Failed to update candidate");
-		} finally {
-			setLoading(false);
+			return { success: false, error };
 		}
 	};
 
-	async function onSubmit (formdata)  {
+	// Rollback function to delete newly uploaded image on failure
+	const rollbackUpload = async (snapshotRef) => {
+		try {
+			const cleanUpRef = ref(fireman, snapshotRef.fullPath);
+			await deleteObject(cleanUpRef);
+			console.log("Successfully rolled back changes");
+		} catch (error) {
+			console.error("Critical failure during rollback", error);
+		}
+	};
+
+	const onSubmit = async (formdata) => {
 		setLoading(true);
 
-		if (!isDirty || !state.newPicture) {
+		// Check if any changes were made
+		if (!isDirty && !newPicture) {
 			Toast.info("You did not make any changes");
 			setLoading(false);
 			return;
 		}
 
-		const startIndex = candidate.imgUrl.indexOf('/o/') + 3;
-		const endIndex = candidate.imgUrl.indexOf('?');
-		const path = candidate.imgUrl.substring(startIndex, endIndex);
-		const imgPath = decodeURIComponent(path);
-		const delRef = ref(fireman, imgPath);
-		const photoUrl = null;
+		let uploadedSnapshot = null;
 
 		try {
-
-			try {
-				await deleteObject(delRef)	// delete previous photo	
-			} catch (error) {
-				switch (error.code) {
-					case 'storage/unauthorized':
-						Toast.error("Permission denied. Check your user permissions.");
-						break;
-					case 'storage/unauthenticated':
-						Toast.error("You must be logged in to change the photo.");
-						break;
-					case 'storage/object-not-found':
-					// Log this as a soft error, as the goal (deleting a file) is failed, 
-					// but the new upload/patch can potentially still proceed if not blocked by the error.
-						console.warn("Attempted to delete a non-existent file.");
-						break;
-					case 'storage/canceled':
-						Toast.error("The photo upload was canceled.");
-						break;
-					default:
-						Toast.error("An error occurred while uploading candidate picture.");
-						break;
-			    }
+			// Step 1: Delete old image if it exists
+			if (candidate.imgUrl) {
+				const deleteResult = await deleteOldImage(candidate.imgUrl);
+				if (!deleteResult.success && deleteResult.error?.code !== 'storage/object-not-found') {
+					// Only throw if it's not a "file not found" error
+					throw deleteResult.error;
+				}
 			}
 
-			const imgRef = ref(
-				fireman,
-				`votify/${election.title}/${formdata.selectedPosition}/${formdata.firstname.concat(
-					formdata.lastname
-				)}`
-			);
+			// Step 2: Upload new image if provided
+			let photoUrl = candidate.imgUrl; // Keep old URL if no new picture
+			if (newPicture) {
+				const uploadResult = await uploadNewImage(formdata);
+				photoUrl = uploadResult.photoUrl;
+				uploadedSnapshot = uploadResult.snapshot;
+			}
 
-			const snapshot = await uploadBytes(imgRef, state.newPicture);
-			photoUrl = await getDownloadURL(snapshot.ref);
+			// Step 3: Update candidate in database
+			const patchResult = await patchCandidate(formdata, photoUrl);
+			
+			if (!patchResult.success) {
+				throw new Error("Failed to update candidate in database");
+			}
 
-			await patchCandidate(formdata, photoUrl);
-			setLoading(false)
 		} catch (err) {
-			try {
-				const cleanUpRef = ref(fireman, photoUrl.fullPath);
-				await deleteObject(cleanUpRef);
-				console.log("Rolled back changes");
-			} catch (error) {
-				console.error("Critical failure. Changes were rolled back");
-			}
 			console.error("Critical failure during candidate update", err);
+			Toast.error("Failed to update candidate. Changes rolled back.");
+			
+			// Rollback: Delete newly uploaded image if it exists
+			if (uploadedSnapshot) {
+				await rollbackUpload(uploadedSnapshot.ref);
+			}
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	return (
 		<div className="container">
 			<div className="candidate-update-form-container">
-				{/* top */}
+				{/* Profile Image Section */}
 				<div className="update-candidate-top">
-						<div className="image-wrapper">
-							{state.image ? (
-								<img 	
-									src={ state.image }
-									loading="lazy"
-									alt="Candidate" 
-									className="candidate-image"
-								/>
-
-								) : (
-									<div className="avatar-placeholder">
-										{`${candidate.firstname.charAt(0).toUpperCase()}${candidate.lastname.charAt(0).toUpperCase()}`}
-									</div>
-								)
-							}
-
-							<div className="image-actions">
-								{/* Change image (upload) */}
-								<label className="icon-btn" title="Change picture">
-									<span><AddPhotoAlternateIcon /></span>
-									<input type="file" accept="image/*" id="imageUpload" 
-									onChange={handleFileUpload} style={{display: 'none'}} />
-								</label>
+					<div className="image-wrapper">
+						{/* Image or Avatar Display */}
+						{image ? (
+							<img
+								src={image}
+								loading="lazy"
+								alt={`${candidate.firstname} ${candidate.lastname}`}
+								className="candidate-image"
+							/>
+						) : (
+							<div
+								className="avatar-placeholder"
+								aria-label={`${candidate.firstname} ${candidate.lastname} avatar`}
+							>
+								{candidate.firstname.charAt(0).toUpperCase()}
+								{candidate.lastname.charAt(0).toUpperCase()}
 							</div>
+						)}
+
+						{/* Image Upload Button */}
+						<div className="image-actions">
+							<label
+								htmlFor="imageUpload"
+								className="icon-btn"
+								title="Change picture"
+								aria-label="Change profile picture"
+							>
+								<AddPhotoAlternateIcon />
+								<input
+									type="file"
+									accept="image/*"
+									id="imageUpload"
+									onChange={handleFileUpload}
+									className="visually-hidden"
+									aria-label="Upload new profile picture"
+								/>
+							</label>
 						</div>
+					</div>
 				</div>
 
-				{/* middle */}
-				<form id="candidate-update-form" onSubmit={handleSubmit(onSubmit)}>
-					<div>
+				{/* Candidate Update Form */}
+				<form
+					id="candidate-update-form"
+					onSubmit={handleSubmit(onSubmit)}
+					aria-label="Update candidate information"
+				>
+					{/* Firstname Field */}
+					<div className="form-group">
 						<label htmlFor="firstname" className="form-label">
 							Firstname:
 						</label>
 						<input
 							type="text"
 							id="firstname"
-							aria-describedby="firstname"
+							className="form-input"
+							aria-describedby={errors.firstname ? "firstname-error" : undefined}
+							aria-invalid={errors.firstname ? "true" : "false"}
 							autoFocus
 							{...register("firstname")}
 						/>
+						{errors.firstname && (
+							<span id="firstname-error" className="error-message" role="alert">
+								{errors.firstname.message}
+							</span>
+						)}
 					</div>
-					<div>
+
+					{/* Lastname Field */}
+					<div className="form-group">
 						<label htmlFor="lastname" className="form-label">
 							Lastname:
 						</label>
-						<input type="text" id="lastname" aria-describedby="lastname" {...register("lastname")} />
+						<input
+							type="text"
+							id="lastname"
+							className="form-input"
+							aria-describedby={errors.lastname ? "lastname-error" : undefined}
+							aria-invalid={errors.lastname ? "true" : "false"}
+							{...register("lastname")}
+						/>
+						{errors.lastname && (
+							<span id="lastname-error" className="error-message" role="alert">
+								{errors.lastname.message}
+							</span>
+						)}
 					</div>
 
-					<div>
-						<label>
-							Select position
-							<select {...register("selectedPosition")} className="form-select form-select-lg mb-3">
-								<option value={position.position}>{position.position}</option>
-								{state.positions.length > 0 && (
-									state.positions
-										.filter((pos) => pos._id !== candidate.position)
-										.map((pos) => (
-											<option key={pos._id} value={pos.position}>
-												{pos.position}
-											</option>
-										)))
-								}
-										
-							</select>
+					{/* Position Select Field */}
+					<div className="form-group">
+						<label htmlFor="selectedPosition" className="form-label">
+							Select Position
 						</label>
+						<select
+							id="selectedPosition"
+							className="form-select form-select-lg"
+							aria-describedby={errors.selectedPosition ? "position-error" : undefined}
+							aria-invalid={errors.selectedPosition ? "true" : "false"}
+							{...register("selectedPosition")}
+						>
+							<option value={position.position}>
+								{position.position}
+							</option>
+							{availablePositions
+								.filter((pos) => pos._id !== candidate.position)
+								.map((pos) => (
+									<option key={pos._id} value={pos.position}>
+										{pos.position}
+									</option>
+								))
+							}
+						</select>
+						{errors.selectedPosition && (
+							<span id="position-error" className="error-message" role="alert">
+								{errors.selectedPosition.message}
+							</span>
+						)}
 					</div>
 
-					<div className="mb-3">
-						<textarea name="manifesto" className="p-2.5 my-2" {...register("manifesto")} />
+					{/* Manifesto Textarea */}
+					<div className="form-group">
+						<label htmlFor="manifesto" className="form-label">
+							Manifesto
+						</label>
+						<textarea
+							id="manifesto"
+							name="manifesto"
+							className="form-textarea"
+							rows="6"
+							placeholder="Enter candidate manifesto..."
+							aria-describedby={errors.manifesto ? "manifesto-error" : undefined}
+							aria-invalid={errors.manifesto ? "true" : "false"}
+							{...register("manifesto")}
+						/>
+						{errors.manifesto && (
+							<span id="manifesto-error" className="error-message" role="alert">
+								{errors.manifesto.message}
+							</span>
+						)}
 					</div>
 				</form>
 
-				{/* bottom */}
+				{/* Form Actions */}
 				<div className="candidate-update-bottom">
 					<button
 						type="submit"
 						form="candidate-update-form"
 						className="Button violet"
-						disabled={!isDirty && !state.newPicture}
+						disabled={loading || (!isDirty && !newPicture)}
+						aria-busy={loading}
 					>
 						{loading ? (
-							<PulseLoader color="#fff" size={5} loading={loading} />
+							<>
+								<span className="visually-hidden">Updating candidate...</span>
+								<PulseLoader color="#fff" size={5} loading={loading} />
+							</>
 						) : (
 							"Update Candidate"
 						)}
@@ -279,7 +386,7 @@ function UpdateCandidate() {
 				</div>
 			</div>
 		</div>
-	);
+	)
 }
 
 export default UpdateCandidate;
