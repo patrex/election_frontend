@@ -268,7 +268,7 @@ function UpdateCandidate() {
 						type="submit"
 						form="candidate-update-form"
 						className="Button violet"
-						disabled={!isDirty || !state.newPicture}
+						disabled={!isDirty && !state.newPicture}
 					>
 						{loading ? (
 							<PulseLoader color="#fff" size={5} loading={loading} />
