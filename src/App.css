@@ -158,24 +158,6 @@ body {
 	background-color: #0056b3;
 }
 
-/* ############  navbar styles */
-/* ul {
-	list-style-type: none;
-	padding: 0;
-}
-      
-li {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 10px;
-	border-bottom: 1px solid #ddd;
-}
-
-li:hover {
-	background-color: #f9f9f9;
-} */
-
 .subnav {
 	height: 2em;
 	display: flex;
@@ -806,8 +788,7 @@ input[type="number"] {
 .form-textarea:focus,
 .form-select:focus {
 	outline: none;
-	border-color: #8b5cf6;
-	box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+	box-shadow: 0 0 5px rgba(218, 165, 32, 0.5);
 }
 
 .datetime-input {
@@ -823,13 +804,9 @@ input[type="number"] {
 
 .hr-divider {
 	width: 60%;
-	/* Thin vertical line */
 	height: 1px;
-	/* Full height */
 	background-color: #ccc;
-	/* Neutral color */
 	margin: 5px 2px;
-	/* Space around the divider */
 }
 
 .winner-badge {
