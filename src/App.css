@@ -572,6 +572,26 @@ input[type="number"] {
 	cursor: pointer;
 	overflow: hidden;
 	position: relative;
+	transition: all 0.2s ease-in-out;
+	color: #6b7280;
+}
+
+.icon-btn:hover {
+	background: rgba(139, 92, 246, 0.1);
+	border-color: rgba(139, 92, 246, 0.4);
+	color: #8b5cf6;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(139, 92, 246, 0.15);
+}
+
+.icon-btn:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+}
+
+.icon-btn:focus-visible {
+	outline: 2px solid #8b5cf6;
+	outline-offset: 2px;
 }
       
 .icon-btn input[type="file"] {
