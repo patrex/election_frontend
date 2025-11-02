@@ -10,22 +10,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import backendUrl from '../utils/backendurl'
 import { AppContext } from "@/App";
+import { fetcher } from "@/utils/fetcher";
 
 export async function updateElectionLoader({ params }) {
-	let election = undefined;
-
 	try {
-		const e = await fetch(`${backendUrl}/election/${params.electionId}`)
-		election = await e.json();
+		return await fetcher.get(`election/${params.electionId}`)
 	} catch (error) {
-		
+		console.error("Failed to load election");
 	}
-
-	return [election];
 }
 
 function UpdateElection() {
-	const [election] = useLoaderData();
+	const election = useLoaderData();
 	const electionTypes = ['Open', 'Closed']
 	const params = useParams();
 	const navigate = useNavigate();
@@ -99,123 +95,194 @@ function UpdateElection() {
 	async function onSubmit(formData) {
 		setLoading(true);
 
-		if (isDirty) {
-			const res = await fetch(`${backendUrl}/elections/${election._id}`, {
-				method: 'PATCH',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${await user?.getIdToken()}`
-				},
-				mode: 'cors',
-				      body: JSON.stringify({
-					...formData,
-				})
-			    })
-	
-			if(res.ok) {
-				Toast.success("Event was updated")
-				navigate(`/user/${params.userId}`)
-			}
-			
-			else if (res.status === '404') {
-				Toast.warning('Event not found')
-				setLoading(false)
-				return;
-			}
-
-			else if (res.status === '500') {
-				Toast.error("There was a problem in the app")
-				setLoading(false)
-				return;
-			}
-		} else {
+		if (!isDirty) {
 			Toast.info("You did not make any changes")
 			setLoading(false)
 			return
 		}
+
+		try {
+			await fetcher.auth.patch(
+				`elections/${election._id}`, {
+					...formData
+				},
+				user
+			)
+			Toast.success("Event was updated")
+			navigate(`/user/${params.userId}`)
+		} catch (error) {
+			Toast.error("There was a problem in the app")	
+		}
 	}
 
 	return ( 
-		<>
-			<div className="container">
-				<div className="form-container">
-					<form onSubmit={ handleSubmit(onSubmit) }>
-						<div className="mb-3">
-							<label htmlFor="electionTitle" className="form-label">Election Name: </label>
-							<input type="text" 
-								id="electionTitle" 
-								aria-describedby="electionName" 
-								name="electiontitle"
-								autoFocus
-								{...register('electiontitle')}
-							/> {errors.electiontitle && <span className='error-msg'>Title must be at least two characters</span>}
-							<div id="electionName" className="form-text">Enter a descriptive title this election</div>
-						</div>
-
-
-						<div className="mb-3">
-							<label htmlFor="startDate" className="px-2">Start Date</label>
-							<span>
-								<input type="datetime-local" 
-									id="startDate" 
-									name="startdate"
-									className="Button mauve"
-									{...register('startdate')}
-								/>
-							</span> <br /> {errors.startdate && <span className='error-msg'>{errors.startdate.message}</span>}
-						</div>
-
-						<div className="mb-3">
-							<label htmlFor="endDate" className="px-2">End Date</label>
-							<span>
-								<input type="datetime-local" 
-									id="endDate"
-									className="Button mauve"
-									{...register('enddate')}
-								/> <br /> {errors.enddate && <span className='error-msg'>{errors.enddate.message}</span>}
+		<div className="container">
+			<div className="form-container">
+				<form onSubmit={handleSubmit(onSubmit)} aria-label="Update election form">
+					{/* Election Title */}
+					<div className="form-group">
+						<label htmlFor="electionTitle" className="form-label">
+							Election Name:
+						</label>
+						<input
+							type="text"
+							id="electionTitle"
+							name="electiontitle"
+							className="form-input"
+							aria-describedby="electionName-help electionTitle-error"
+							aria-invalid={errors.electiontitle ? "true" : "false"}
+							autoFocus
+							{...register('electiontitle')}
+						/>
+						{errors.electiontitle && (
+							<span id="electionTitle-error" className="error-msg" role="alert">
+								{errors.electiontitle.message}
 							</span>
-							
+						)}
+						<div id="electionName-help" className="form-text">
+							Enter a descriptive title for this election
 						</div>
+					</div>
 
-						<label htmlFor="type">Select the election type</label>
-						<select className="form-select form-select-lg mb-3 w-50"
-							id="type" 
+					{/* Start Date */}
+					<div className="form-group">
+						<label htmlFor="startDate" className="form-label">
+							Start Date
+						</label>
+						<input
+							type="datetime-local"
+							id="startDate"
+							name="startdate"
+							className="form-input datetime-input"
+							aria-describedby={errors.startdate ? "startDate-error" : undefined}
+							aria-invalid={errors.startdate ? "true" : "false"}
+							{...register('startdate')}
+						/>
+						{errors.startdate && (
+							<span id="startDate-error" className="error-msg" role="alert">
+								{errors.startdate.message}
+							</span>
+						)}
+					</div>
+
+					{/* End Date */}
+					<div className="form-group">
+						<label htmlFor="endDate" className="form-label">
+							End Date
+						</label>
+						<input
+							type="datetime-local"
+							id="endDate"
+							name="enddate"
+							className="form-input datetime-input"
+							aria-describedby={errors.enddate ? "endDate-error" : undefined}
+							aria-invalid={errors.enddate ? "true" : "false"}
+							{...register('enddate')}
+						/>
+						{errors.enddate && (
+							<span id="endDate-error" className="error-msg" role="alert">
+								{errors.enddate.message}
+							</span>
+						)}
+					</div>
+
+					{/* Election Type */}
+					<div className="form-group">
+						<label htmlFor="type" className="form-label">
+							Select the Election Type
+						</label>
+						<select
+							id="type"
+							className="form-select"
 							aria-label="Select election type"
+							aria-describedby={errors.electiontype ? "type-error" : undefined}
+							aria-invalid={errors.electiontype ? "true" : "false"}
 							{...register('electiontype')}
 						>
-							<option value={election.type} selected>{election.type}</option>
-							{electionTypes.filter(type => election.type != type).map(type => (
-								<option key={type} value={type}>{type}</option>
-							))}
+							<option value={election.type}>
+								{election.type}
+							</option>
+							{electionTypes
+								.filter(type => type !== election.type)
+								.map(type => (
+									<option key={type} value={type}>
+										{type}
+									</option>
+								))
+							}
 						</select>
+						{errors.electiontype && (
+							<span id="type-error" className="error-msg" role="alert">
+								{errors.electiontype.message}
+							</span>
+						)}
+					</div>
 
+					{/* Description */}
+					<div className="form-group">
+						<label htmlFor="description" className="form-label">
+							Description
+						</label>
 						<textarea
-							id=""
+							id="description"
+							name="description"
+							className="form-textarea"
+							rows="4"
+							placeholder="Enter election description (max 200 characters)..."
+							aria-describedby={errors.description ? "description-error" : undefined}
+							aria-invalid={errors.description ? "true" : "false"}
 							{...register('description')}
-							className="p-2 my-2"
-						/>{errors.description && <span className='error-msg'>Cannot be more than 200 characters</span>}
+						/>
+						{errors.description && (
+							<span id="description-error" className="error-msg" role="alert">
+								{errors.description.message}
+							</span>
+						)}
+					</div>
 
-						<textarea name="rules" 
-							id=""
-							className="p-2 my-2"
+					{/* Rules */}
+					<div className="form-group">
+						<label htmlFor="rules" className="form-label">
+							Rules and Guidelines
+						</label>
+						<textarea
+							id="rules"
+							name="rules"
+							className="form-textarea"
+							rows="6"
+							placeholder="Enter election rules and guidelines (max 1000 characters)..."
+							aria-describedby={errors.rules ? "rules-error" : undefined}
+							aria-invalid={errors.rules ? "true" : "false"}
 							{...register('rules')}
-						/>{errors.rules && <span className='error-msg'>Cannot be more than 1000 characters</span>}
-						
+						/>
+						{errors.rules && (
+							<span id="rules-error" className="error-msg" role="alert">
+								{errors.rules.message}
+							</span>
+						)}
+					</div>
+
+					{/* Submit Button */}
+					<div className="form-actions">
 						<button
 							type="submit"
 							className="Button violet"
-							disabled={ !isDirty }
+							disabled={loading || !isDirty}
+							aria-busy={loading}
 						>
 							{loading ? (
-								<PulseLoader color="#fff" size={5} loading={loading} />
+								<>
+									<span className="visually-hidden">Updating election...</span>
+									<PulseLoader color="#fff" size={5} loading={loading} />
+								</>
 							) : (
 								"Update Election"
 							)}
 						</button>
-					</form>
-				</div>
+					</div>
+				</form>
 			</div>
-		</>
+		</div>
 	);
 }
 
