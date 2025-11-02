@@ -668,6 +668,66 @@ input[type="number"] {
 	color: #ef4444;
 }
 
+/* Mobile - Full width with small padding */
+.candidate-update-form-container {
+	margin: 0 auto;
+	width: 100%;
+	max-width: 100%;
+	min-height: 70vh;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	border-radius: 5px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 1rem;
+}
+
+/* Small tablets - 576px */
+@media (min-width: 576px) {
+	.candidate-update-form-container {
+		width: 90%;
+		max-width: 540px;
+		padding: 1.25rem;
+	}
+}
+
+/* Tablets - 768px */
+@media (min-width: 768px) {
+	.candidate-update-form-container {
+		width: 85%;
+		max-width: 650px;
+		padding: 1.5rem;
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+	}
+}
+
+/* Desktop - 1024px */
+@media (min-width: 1024px) {
+	.candidate-update-form-container {
+		width: 60%;
+		max-width: 750px;
+		min-height: 75vh;
+		padding: 2rem;
+	}
+}
+
+/* Large Desktop - 1440px */
+@media (min-width: 1440px) {
+	.candidate-update-form-container {
+		width: 45%;
+		max-width: 850px;
+		padding: 2.5rem;
+	}
+}
+
+/* Extra Large Desktop - 1920px */
+@media (min-width: 1920px) {
+	.candidate-update-form-container {
+		width: 35%;
+		max-width: 900px;
+		padding: 3rem;
+	}
+}
+
 /* end candidate update styles */
 
 
