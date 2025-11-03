@@ -7,8 +7,6 @@ import { PulseLoader } from "react-spinners";
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-
-import backendUrl from '../utils/backendurl'
 import { AppContext } from "@/App";
 import { fetcher } from "@/utils/fetcher";
 

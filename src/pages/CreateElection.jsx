@@ -5,10 +5,9 @@ import { AppContext } from '@/App';
 import { PulseLoader } from 'react-spinners';
 import {fetcher, FetchError} from "@/utils/fetcher"
 import { useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import * as z from 'zod';
 
 function CreateElection() {
 	const params = useParams();
