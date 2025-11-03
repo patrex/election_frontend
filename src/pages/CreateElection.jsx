@@ -252,40 +252,55 @@ function CreateElection() {
 						</legend>
 
 						<div className="space-y-3 mt-3">
-							<label 
-								htmlFor="auth-email" 
-								className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition"
+							<label
+								htmlFor="auth-email"
+								className="flex items-center justify-between cursor-pointer p-3 rounded-lg border-2 border-gray-200 hover:bg-gray-50 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50"
 							>
-								<input
-									{...register('userAuthType')}
-									type="radio"
-									id="auth-email"
-									value="email"
-									className="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500"
-								/>
-								<span className="ml-3 text-gray-700">Email</span>
+								<div className="flex items-center">
+									<input
+										{...register('userAuthType')}
+										type="radio"
+										id="auth-email"
+										value="email"
+										className="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500"
+									/>
+									<span className="ml-3 text-gray-700 font-medium">Email</span>
+								</div>
+								<svg
+									className="w-5 h-5 text-blue-600 opacity-0 has-[:checked]:opacity-100 transition-opacity"
+									fill="currentColor"
+									viewBox="0 0 20 20"
+								>
+									<path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+								</svg>
 							</label>
 
-							<label 
-								htmlFor="auth-phone" 
-								className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition"
+							<label
+								htmlFor="auth-phone"
+								className="flex items-center justify-between cursor-pointer p-3 rounded-lg border-2 border-gray-200 hover:bg-gray-50 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50"
 							>
-								<input
-									{...register('userAuthType')}
-									type="radio"
-									id="auth-phone"
-									value="phone"
-									className="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500"
-								/>
-								<span className="ml-3 text-gray-700">Phone</span>
+								<div className="flex items-center">
+									<input
+										{...register('userAuthType')}
+										type="radio"
+										id="auth-phone"
+										value="phone"
+										className="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500"
+									/>
+									<span className="ml-3 text-gray-700 font-medium">Phone</span>
+								</div>
+								<svg
+									className="w-5 h-5 text-blue-600 opacity-0 has-[:checked]:opacity-100 transition-opacity"
+									fill="currentColor"
+									viewBox="0 0 20 20"
+								>
+									<path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+								</svg>
 							</label>
 						</div>
 
 						{errors.userAuthType && (
-							<p 
-								className="text-red-500 text-sm mt-2" 
-								role="alert"
-							>
+							<p className="text-red-500 text-sm mt-2" role="alert">
 								{errors.userAuthType.message}
 							</p>
 						)}
@@ -307,8 +322,8 @@ function CreateElection() {
 							aria-describedby={errors.description ? "description-error" : undefined}
 							aria-invalid={errors.description ? "true" : "false"}
 							{...register('description')}
-							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-y ${
-								errors.description ? 'border-red-500' : 'border-gray-300'
+							className={` ${
+								errors.description ? 'border-red-500' : ''
 							}`}
 						/>
 						{errors.description && (
@@ -338,8 +353,8 @@ function CreateElection() {
 							aria-describedby={errors.rules ? "rules-error" : undefined}
 							aria-invalid={errors.rules ? "true" : "false"}
 							{...register('rules')}
-							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-y ${
-								errors.rules ? 'border-red-500' : 'border-gray-300'
+							className={` ${
+								errors.rules ? 'border-red-500' : ''
 							}`}
 						/>
 						{errors.rules && (
