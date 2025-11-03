@@ -1,41 +1,84 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useContext } from "react";
-
 import Toast from "@/utils/ToastMsg";
-
-import Joi from 'joi';
-import { useForm } from 'react-hook-form'
-import { joiResolver } from '@hookform/resolvers/joi'
 import { AppContext } from '@/App';
 
 import { PulseLoader } from 'react-spinners';
 import {fetcher, FetchError} from "@/utils/fetcher"
-
-
+import { useState, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 function CreateElection() {
 	const params = useParams();
 	const navigate = useNavigate();
-
 	const { user } = useContext(AppContext);
 	const [loading, setLoading] = useState(false);
 
-	const schema = Joi.object({
-		electiontitle: Joi.string().min(2).required(),
-		startdate: Joi.date().iso().min(new Date().getFullYear()).required(),
-		enddate: Joi.date().iso().min(new Date().getFullYear()).required(),
-		electiontype: Joi.string().required(),
-		description: Joi.string(),
-		rules: Joi.string(),
-		userAuthType: Joi.string().required()
-	})
-	
-	const { register, handleSubmit, formState: {errors} } = useForm({
-		resolver: joiResolver(schema),
+	// Zod Schema
+	const schema = z.object({
+		electiontitle: z
+			.string()
+			.min(2, { message: "Election title must be at least 2 characters" })
+			.max(100, { message: "Election title cannot exceed 100 characters" }),
+		startdate: z
+			.string()
+			.refine((date) => {
+				const selectedDate = new Date(date);
+				const currentYear = new Date().getFullYear();
+				return selectedDate.getFullYear() >= currentYear;
+			}, { message: "Start date cannot be before the current year" }),
+		enddate: z
+			.string()
+			.refine((date) => {
+				const selectedDate = new Date(date);
+				return selectedDate.getFullYear() <= 3000;
+			}, { message: "End date cannot be later than the year 3000" }),
+		electiontype: z
+			.string()
+			.min(1, { message: "Please select an election type" }),
+		userAuthType: z
+			.enum(['email', 'phone'], { 
+				errorMap: () => ({ message: "Please select how voters will participate" }) 
+			}),
+		description: z
+			.string()
+			.max(200, { message: "Description cannot exceed 200 characters" })
+			.optional(),
+		rules: z
+			.string()
+			.max(1000, { message: "Rules cannot exceed 1000 characters" })
+			.optional(),
+	}).refine((data) => {
+		// Validate that end date is after start date
+		const start = new Date(data.startdate);
+		const end = new Date(data.enddate);
+		return end > start;
+	}, {
+		message: "End date must be after start date",
+		path: ["enddate"], // This error will appear on the enddate field
 	});
 
-	async function onSubmit(formData) {
-		setLoading(true)
+	const { 
+		register, 
+		handleSubmit, 
+		formState: { errors, isSubmitting } 
+	} = useForm({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			electiontitle: '',
+			startdate: '',
+			enddate: '',
+			electiontype: '',
+			userAuthType: '',
+			description: '',
+			rules: '',
+		}
+	});
+
+	const onSubmit = async (formData) => {
+		setLoading(true);
 
 		try {
 			await fetcher.auth.post(
@@ -47,7 +90,8 @@ function CreateElection() {
 				user
 			);
 			
-			navigate(`/user/${params.userId}`)
+			Toast.success('Election created successfully!');
+			navigate(`/user/${params.userId}`);
 		} catch (error) {
 			if (error instanceof FetchError) {
 				if (error.status === 500) {
@@ -61,153 +105,278 @@ function CreateElection() {
 				Toast.error('An unexpected error occurred');
 			}
 		} finally {
-			setLoading(false)
+			setLoading(false);
 		}
-	}
+	};
 
 	return (
 		<div className="container flex justify-center py-10">
 			<div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-md">
-				<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
+				<h1 className="text-2xl font-bold mb-6 text-gray-800">Create New Election</h1>
+				
+				<form 
+					onSubmit={handleSubmit(onSubmit)} 
+					className="space-y-6"
+					aria-label="Create election form"
+				>
 					{/* Election Name */}
-					<div>
-						<label htmlFor="electionTitle" className="block font-medium mb-1">Election Name</label>
+					<div className="form-group">
+						<label 
+							htmlFor="electionTitle" 
+							className="block font-medium mb-1 text-gray-700"
+						>
+							Election Name <span className="text-red-500">*</span>
+						</label>
 						<input
 							type="text"
 							id="electionTitle"
 							name="electiontitle"
 							autoFocus
+							aria-describedby="electionTitle-help electionTitle-error"
+							aria-invalid={errors.electiontitle ? "true" : "false"}
 							{...register('electiontitle')}
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
-							
+							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+								errors.electiontitle ? 'border-red-500' : 'border-gray-300'
+							}`}
 						/>
 						{errors.electiontitle && (
-							<p className="text-red-500 text-sm mt-1">You need at least two characters</p>
+							<p 
+								id="electionTitle-error" 
+								className="text-red-500 text-sm mt-1" 
+								role="alert"
+							>
+								{errors.electiontitle.message}
+							</p>
 						)}
-						<p className="text-gray-500 text-sm mt-1">Enter a descriptive title for this election</p>
+						<p id="electionTitle-help" className="text-gray-500 text-sm mt-1">
+							Enter a descriptive title for this election
+						</p>
 					</div>
 
 					{/* Start Date */}
-					<div>
-						<label htmlFor="startDate" className="block font-medium mb-1">Start Date</label>
+					<div className="form-group">
+						<label 
+							htmlFor="startDate" 
+							className="block font-medium mb-1 text-gray-700"
+						>
+							Start Date <span className="text-red-500">*</span>
+						</label>
 						<input
 							type="datetime-local"
 							id="startDate"
 							name="startdate"
+							aria-describedby={errors.startdate ? "startDate-error" : undefined}
+							aria-invalid={errors.startdate ? "true" : "false"}
 							{...register('startdate')}
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
+							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+								errors.startdate ? 'border-red-500' : 'border-gray-300'
+							}`}
 						/>
 						{errors.startdate && (
-							<p className="text-red-500 text-sm mt-1">Start date cannot be less than the current year</p>
+							<p 
+								id="startDate-error" 
+								className="text-red-500 text-sm mt-1" 
+								role="alert"
+							>
+								{errors.startdate.message}
+							</p>
 						)}
 					</div>
 
 					{/* End Date */}
-					<div>
-						<label htmlFor="endDate" className="block font-medium mb-1">End Date</label>
+					<div className="form-group">
+						<label 
+							htmlFor="endDate" 
+							className="block font-medium mb-1 text-gray-700"
+						>
+							End Date <span className="text-red-500">*</span>
+						</label>
 						<input
 							type="datetime-local"
 							id="endDate"
 							name="enddate"
+							aria-describedby={errors.enddate ? "endDate-error" : undefined}
+							aria-invalid={errors.enddate ? "true" : "false"}
 							{...register('enddate')}
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
-							style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
+							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+								errors.enddate ? 'border-red-500' : 'border-gray-300'
+							}`}
 						/>
 						{errors.enddate && (
-							<p className="text-red-500 text-sm mt-1">End date cannot be later than the year 3000</p>
+							<p 
+								id="endDate-error" 
+								className="text-red-500 text-sm mt-1" 
+								role="alert"
+							>
+								{errors.enddate.message}
+							</p>
 						)}
 					</div>
 
 					{/* Election Type */}
-					<div>
-						<label htmlFor="type" className="block font-medium mb-1">Election Type</label>
+					<div className="form-group">
+						<label 
+							htmlFor="type" 
+							className="block font-medium mb-1 text-gray-700"
+						>
+							Election Type <span className="text-red-500">*</span>
+						</label>
 						<select
 							id="type"
 							name="electiontype"
+							aria-describedby={errors.electiontype ? "type-error" : undefined}
+							aria-invalid={errors.electiontype ? "true" : "false"}
 							{...register('electiontype')}
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
-							style={{ '--tw-ring-color': 'rgba(218, 165, 32, 0.5)' }}
+							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer ${
+								errors.electiontype ? 'border-red-500' : 'border-gray-300'
+							}`}
 						>
-							<option value="" disabled>Select type</option>
+							<option value="">Select type</option>
 							<option value="Open">Open</option>
 							<option value="Closed">Closed</option>
 						</select>
+						{errors.electiontype && (
+							<p 
+								id="type-error" 
+								className="text-red-500 text-sm mt-1" 
+								role="alert"
+							>
+								{errors.electiontype.message}
+							</p>
+						)}
 					</div>
 
 					{/* Voter Authentication Type */}
-					<div className="border border-[#feb47b] rounded-md my-4 p-4 w-full max-w-2xl">
-						<p className="font-semibold mb-3">How will voters participate?</p>
+					<fieldset className="border border-orange-300 rounded-md p-4">
+						<legend className="font-semibold px-2 text-gray-700">
+							How will voters participate? <span className="text-red-500">*</span>
+						</legend>
 
-						<label htmlFor="auth-email" className="block cursor-pointer my-4">
-							<input
-								{...register('userAuthType')}
-								type="radio"
-								id="auth-email"
-								value="email"
-								className="hidden peer"
-							/>
-							<span className="inline-flex items-center rounded-[10px] transition-all duration-200 before:content-[''] before:h-5 before:w-5 before:rounded-full before:ml-2 before:mr-4 before:bg-transparent before:shadow-[inset_0_0_0_1px_black] peer-checked:before:shadow-[inset_0_0_0_5px_black]">
-								Email
-							</span>
-						</label>
+						<div className="space-y-3 mt-3">
+							<label 
+								htmlFor="auth-email" 
+								className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition"
+							>
+								<input
+									{...register('userAuthType')}
+									type="radio"
+									id="auth-email"
+									value="email"
+									className="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500"
+								/>
+								<span className="ml-3 text-gray-700">Email</span>
+							</label>
 
-						<label htmlFor="auth-phone" className="block cursor-pointer my-4">
-							<input
-								{...register('userAuthType')}
-								type="radio"
-								id="auth-phone"
-								value="phone"
-								className="hidden peer"
-							/>
-							<span className="inline-flex items-center rounded-[10px] transition-all duration-200 before:content-[''] before:h-5 before:w-5 before:rounded-full before:ml-2 before:mr-4 before:bg-transparent before:shadow-[inset_0_0_0_1px_black] peer-checked:before:shadow-[inset_0_0_0_5px_black]">
-								Phone
-							</span>
-						</label>
-					</div>
+							<label 
+								htmlFor="auth-phone" 
+								className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition"
+							>
+								<input
+									{...register('userAuthType')}
+									type="radio"
+									id="auth-phone"
+									value="phone"
+									className="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500"
+								/>
+								<span className="ml-3 text-gray-700">Phone</span>
+							</label>
+						</div>
 
+						{errors.userAuthType && (
+							<p 
+								className="text-red-500 text-sm mt-2" 
+								role="alert"
+							>
+								{errors.userAuthType.message}
+							</p>
+						)}
+					</fieldset>
 
 					{/* Description */}
-					<div>
+					<div className="form-group">
+						<label 
+							htmlFor="description" 
+							className="block font-medium mb-1 text-gray-700"
+						>
+							Description (Optional)
+						</label>
 						<textarea
+							id="description"
 							name="description"
+							rows="4"
 							placeholder="Describe this election (optional)"
+							aria-describedby={errors.description ? "description-error" : undefined}
+							aria-invalid={errors.description ? "true" : "false"}
 							{...register('description')}
+							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-y ${
+								errors.description ? 'border-red-500' : 'border-gray-300'
+							}`}
 						/>
 						{errors.description && (
-							<p className="text-red-500 text-sm mt-1">Cannot be more than 200 characters</p>
+							<p 
+								id="description-error" 
+								className="text-red-500 text-sm mt-1" 
+								role="alert"
+							>
+								{errors.description.message}
+							</p>
 						)}
 					</div>
 
 					{/* Rules */}
-					<div>
+					<div className="form-group">
+						<label 
+							htmlFor="rules" 
+							className="block font-medium mb-1 text-gray-700"
+						>
+							Rules and Guidelines (Optional)
+						</label>
 						<textarea
+							id="rules"
 							name="rules"
-							placeholder="State any rules for this election(optional)"
+							rows="6"
+							placeholder="State any rules for this election (optional)"
+							aria-describedby={errors.rules ? "rules-error" : undefined}
+							aria-invalid={errors.rules ? "true" : "false"}
 							{...register('rules')}
-				
+							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-y ${
+								errors.rules ? 'border-red-500' : 'border-gray-300'
+							}`}
 						/>
 						{errors.rules && (
-							<p className="text-red-500 text-sm mt-1">Cannot be more than 1000 characters</p>
+							<p 
+								id="rules-error" 
+								className="text-red-500 text-sm mt-1" 
+								role="alert"
+							>
+								{errors.rules.message}
+							</p>
 						)}
 					</div>
 
 					{/* Submit Button */}
-					<div className="text-center">
+					<div className="form-actions text-center pt-4">
 						<button
 							type="submit"
-							disabled={loading}
-							className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 transition duration-200"
+							disabled={loading || isSubmitting}
+							aria-busy={loading}
+							className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed min-w-[200px]"
 						>
-							{loading ? <PulseLoader color="#fff" size={5} loading={loading} /> : 'Create Election'}
+							{loading ? (
+								<>
+									<span className="sr-only">Creating election...</span>
+									<PulseLoader color="#fff" size={5} loading={loading} />
+								</>
+							) : (
+								'Create Election'
+							)}
 						</button>
 					</div>
 				</form>
 			</div>
 		</div>
-
-
 	);
-}
+};
+
  
 export default CreateElection;
