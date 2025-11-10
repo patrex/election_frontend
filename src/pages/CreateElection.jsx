@@ -322,9 +322,7 @@ function CreateElection() {
 							aria-describedby={errors.description ? "description-error" : undefined}
 							aria-invalid={errors.description ? "true" : "false"}
 							{...register('description')}
-							className={` ${
-								errors.description ? 'border-red-500' : ''
-							}`}
+							
 						/>
 						{errors.description && (
 							<p 
@@ -353,9 +351,7 @@ function CreateElection() {
 							aria-describedby={errors.rules ? "rules-error" : undefined}
 							aria-invalid={errors.rules ? "true" : "false"}
 							{...register('rules')}
-							className={` ${
-								errors.rules ? 'border-red-500' : ''
-							}`}
+							
 						/>
 						{errors.rules && (
 							<p 
