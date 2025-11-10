@@ -524,12 +524,6 @@ function Home() {
 						</div>
 					</div>
 				</div>
-
-				{/* Footer */}
-				<footer className="py-6 text-center text-gray-600 dark:text-gray-400 text-sm">
-					<p>© 2024 Votify. Empowering democracy through technology.</p>
-				</footer>
-
 				{/* reCAPTCHA Container */}
 				<div id="recaptcha-container"></div>
 			</div>
