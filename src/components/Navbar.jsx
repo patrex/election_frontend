@@ -71,7 +71,7 @@ function NavBar({ user, onLogout }) {
 					<div className="flex-shrink-0">
 						<Link
 							to="/"
-							className="text-2xl font-bold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+							className="text-2xl font-bold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors no-underline"
 						>
 							Votify
 						</Link>
@@ -85,10 +85,10 @@ function NavBar({ user, onLogout }) {
 									to={`/user/${user.uid}`}
 									end
 									className={({ isActive }) =>
-										`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+										`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
 											isActive
-												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
+												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
 										}`
 									}
 								>
@@ -97,10 +97,10 @@ function NavBar({ user, onLogout }) {
 								<NavLink
 									to={`/user/${user.uid}/create-election`}
 									className={({ isActive }) =>
-										`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+										`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
 											isActive
-												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
+												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
 										}`
 									}
 								>
@@ -132,10 +132,10 @@ function NavBar({ user, onLogout }) {
 								<NavLink
 									to="/login"
 									className={({ isActive }) =>
-										`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+										`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
 											isActive
-												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
+												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
 										}`
 									}
 								>
@@ -143,7 +143,7 @@ function NavBar({ user, onLogout }) {
 								</NavLink>
 								<NavLink
 									to="/signup"
-									className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+									className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors no-underline"
 								>
 									Sign Up
 								</NavLink>
@@ -189,10 +189,10 @@ function NavBar({ user, onLogout }) {
 											end
 											onClick={closeMenu}
 											className={({ isActive }) =>
-												`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+												`block px-4 py-3 rounded-lg text-base font-medium transition-colors no-underline ${
 													isActive
-														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
+														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
 												}`
 											}
 										>
@@ -202,10 +202,10 @@ function NavBar({ user, onLogout }) {
 											to={`/user/${user.uid}/create-election`}
 											onClick={closeMenu}
 											className={({ isActive }) =>
-												`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+												`block px-4 py-3 rounded-lg text-base font-medium transition-colors no-underline ${
 													isActive
-														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
+														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
 												}`
 											}
 										>
@@ -243,10 +243,10 @@ function NavBar({ user, onLogout }) {
 											to="/login"
 											onClick={closeMenu}
 											className={({ isActive }) =>
-												`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+												`block px-4 py-3 rounded-lg text-base font-medium transition-colors no-underline ${
 													isActive
-														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
+														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
 												}`
 											}
 										>
@@ -255,7 +255,7 @@ function NavBar({ user, onLogout }) {
 										<NavLink
 											to="/signup"
 											onClick={closeMenu}
-											className="block px-4 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-base font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors text-center"
+											className="block px-4 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-base font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors text-center no-underline"
 										>
 											Sign Up
 										</NavLink>
