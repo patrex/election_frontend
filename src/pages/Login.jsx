@@ -230,7 +230,7 @@ function Login() {
 						<button
 							type="submit"
 							disabled={loading}
-							className="w-full px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+							className="w-full px-6 py-3 bg-gray-900 dark:bg-white text-white  text-center dark:text-gray-900 font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
 						>
 							{loading ? (
 								<span className="flex items-center justify-center">
@@ -288,7 +288,7 @@ function Login() {
 						Don't have an account?{' '}
 						<a
 							href="/signup"
-							className="font-medium text-gray-900 dark:text-white hover:underline"
+							className="font-medium text-blue-600 dark:text-white hover:underline text-center"
 						>
 							Sign up
 						</a>
