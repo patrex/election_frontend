@@ -267,7 +267,7 @@ function SignUp() {
 						<button
 							type="submit"
 							disabled={loading}
-							className="Button violet"
+							className="Button violet text-center"
 						>
 							{loading ? (
 								<span className="flex items-center justify-center">
