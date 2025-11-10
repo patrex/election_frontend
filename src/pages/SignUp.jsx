@@ -79,10 +79,16 @@ function SignUp() {
 	};
 
 	return (
-		<div className="h-screen flex min-h-screen">
+		<div className="flex min-h-screen bg-white dark:bg-gray-950">
 			{/* Left Side (Hidden on Mobile) */}
-			<div className="hidden md:flex w-1/2 bg-gray-200 items-center justify-center dark:bg-gray-800">
-				<img src={signUpGraphic} alt="Signup Graphic" className="w-3/4" />
+			<div className="hidden lg:flex lg:w-1/2 bg-gray-50 dark:bg-gray-900 items-center justify-center p-12">
+				<div className="max-w-xl">
+					<img
+						src={signUpGraphic}
+						alt="Login illustration"
+						className="w-full h-auto"
+					/>
+				</div>
 			</div>
 
 			{/* Right Side (Signup Form) */}
