@@ -146,7 +146,7 @@ function CreateAccount() {
 							<button
 								type="submit"
 								disabled={loading}
-								className="submit-btn"
+								className=" Button violet submit-btn"
 							> { loading ? <PulseLoader  color="#fff" size={5} loading={loading}/> : "Signup" }
 							</button>
 						</div>

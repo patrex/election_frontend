@@ -137,11 +137,8 @@ function Login() {
 					{/* Header */}
 					<div className="mb-8">
 						<h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-							Welcome back
+							Sign In
 						</h1>
-						<p className="text-gray-600 dark:text-gray-400">
-							Sign in to your account to continue
-						</p>
 					</div>
 
 					{/* Login Form */}
@@ -161,7 +158,6 @@ function Login() {
 								aria-invalid={errors.email ? 'true' : 'false'}
 								aria-describedby={errors.email ? 'email-error' : undefined}
 								{...register('email')}
-								className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition"
 								placeholder="you@example.com"
 								disabled={loading}
 							/>
@@ -199,7 +195,6 @@ function Login() {
 								aria-invalid={errors.password ? 'true' : 'false'}
 								aria-describedby={errors.password ? 'password-error' : undefined}
 								{...register('password')}
-								className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition"
 								placeholder="••••••••"
 								disabled={loading}
 							/>
@@ -230,7 +225,7 @@ function Login() {
 						<button
 							type="submit"
 							disabled={loading}
-							className="w-full px-6 py-3 bg-gray-900 dark:bg-white text-white  text-center dark:text-gray-900 font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+							className="Button violet"
 						>
 							{loading ? (
 								<span className="flex items-center justify-center">
