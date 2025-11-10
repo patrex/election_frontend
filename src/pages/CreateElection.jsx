@@ -134,8 +134,8 @@ function CreateElection() {
 							aria-describedby="electionTitle-help electionTitle-error"
 							aria-invalid={errors.electiontitle ? "true" : "false"}
 							{...register('electiontitle')}
-							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
-								errors.electiontitle ? 'border-red-500' : 'border-gray-300'
+							className={`${
+								errors.electiontitle ? 'border-red-500' : ''
 							}`}
 						/>
 						{errors.electiontitle && (
