@@ -1,13 +1,8 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 import { AppContext } from "@/App";
-
-import { useState, useEffect, useRef, useContext } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { AppContext } from '@/App';
-import { Menu, X } from 'lucide-react';
 
 function NavBar({ user, onLogout }) {
 	const [navOpen, setNavOpen] = useState(false);
