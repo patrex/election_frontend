@@ -1,0 +1,42 @@
+.no-data-container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	min-height: 100vh;
+	padding-top: 120px;
+}
+
+.no-data-content {
+	text-align: center;
+	max-width: 500px;
+}
+
+.no-data-image {
+	width: 100%;
+	max-width: 300px;
+	height: auto;
+	margin: 0 auto;
+	display: block;
+}
+
+.no-data-message {
+	margin-top: 2rem;
+	font-size: 1.125rem;
+	color: #4a5568;
+	line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+	.no-data-container {
+		padding-top: 80px;
+	}
+
+	.no-data-image {
+		max-width: 250px;
+	}
+
+	.no-data-message {
+		font-size: 1rem;
+		margin-top: 1.5rem;
+	}
+}

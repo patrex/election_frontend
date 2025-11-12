@@ -134,7 +134,7 @@ function CreateElection() {
 							aria-describedby="electionTitle-help electionTitle-error"
 							aria-invalid={errors.electiontitle ? "true" : "false"}
 							{...register('electiontitle')}
-							className={`${
+							className={` ${
 								errors.electiontitle ? 'border-red-500' : ''
 							}`}
 						/>
@@ -322,7 +322,9 @@ function CreateElection() {
 							aria-describedby={errors.description ? "description-error" : undefined}
 							aria-invalid={errors.description ? "true" : "false"}
 							{...register('description')}
-							
+							className={` ${
+								errors.description ? 'border-red-500' : ''
+							}`}
 						/>
 						{errors.description && (
 							<p 
@@ -351,7 +353,9 @@ function CreateElection() {
 							aria-describedby={errors.rules ? "rules-error" : undefined}
 							aria-invalid={errors.rules ? "true" : "false"}
 							{...register('rules')}
-							
+							className={`${
+								errors.rules ? 'border-red-500' : ''
+							}`}
 						/>
 						{errors.rules && (
 							<p 
@@ -370,7 +374,7 @@ function CreateElection() {
 							type="submit"
 							disabled={loading || isSubmitting}
 							aria-busy={loading}
-							className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed min-w-[200px]"
+							className="Button violet"
 						>
 							{loading ? (
 								<>
