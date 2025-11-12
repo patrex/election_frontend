@@ -349,12 +349,12 @@ input[type="radio"]:checked+span:before {
 textarea {
 	width: 100%;
 	height: 100px;
-	padding: 0.85rem 1rem;
+	padding: 0.85rem 1rem !important;
 	border: 1px solid goldenrod;
 	border-radius: 6px;
 	margin: 0.5em 0;
 	resize: none;
-	box-sizing: border-box;
+	box-sizing: border-box !important;
 	line-height: 1.5; /* improves readability */
 }
 
