@@ -1,7 +1,7 @@
 .no-data-container {
 	display: flex;
 	justify-content: center;
-	align-items: flex-start;
+	align-items: center;
 	min-height: 80vh;
 	padding-top: 50px;
 	width: 300px;
