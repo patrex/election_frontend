@@ -4,6 +4,7 @@
 	align-items: flex-start;
 	min-height: 80vh;
 	padding-top: 50px;
+	width: 300px;
 }
 
 .no-data-content {
@@ -12,9 +13,9 @@
 }
 
 .no-data-image {
-	width: 100%;
+	width: 50%;
 	max-width: 300px;
-	height: 80%;
+	height: 50%;
 	margin: 0 auto;
 	display: block;
 }
