@@ -291,7 +291,7 @@ input[type="number"] {
 	width: 100%;
 	height: 40px;
 	padding: 10px;
-	border: 1px solid goldenrod;
+	border: 1px solid cornflowerblue;
 	border-radius: 5px;
 	font-size: 16px;
 	margin: 0.5em 0;
@@ -302,7 +302,7 @@ input[type="password"]:focus,
 input[type="email"]:focus,
 input[type="tel"]:focus,
 input[type="number"]:focus {
-	box-shadow: 0 0 5px rgba(218, 165, 32, 0.5);
+	box-shadow: 0 0 5px rgba(100, 149, 237, 0.5);
 	outline: none;
 }
 
@@ -314,7 +314,7 @@ input[type="datetime-local"] {
 	padding: 5px;
 	margin: 0.5em 0;
 	border-radius: 5px;
-	border: solid goldenrod 1px;
+	border: solid cornflowerblue 1px;
 }
 
 .auth-type-label {
@@ -350,7 +350,7 @@ textarea {
 	width: 100%;
 	height: 100px;
 	padding: 0.85rem 1rem !important;
-	border: 1px solid goldenrod;
+	border: 1px solid cornflowerblue;
 	border-radius: 6px;
 	margin: 0.5em 0;
 	resize: none;
@@ -394,7 +394,7 @@ button.submit-btn:active {
 }
 
 textarea:focus {
-	box-shadow: 0 0 5px rgba(218, 165, 32, 0.5);
+	box-shadow: 0 0 5px rgba(100, 149, 237, 0.5);
 	outline: none;
 }
 
