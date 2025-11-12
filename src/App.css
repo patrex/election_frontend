@@ -1218,20 +1218,13 @@ button {
 
 .datetime-local {
 	width: 100%;
-	/* Full width for responsiveness */
 	max-width: 400px;
-	/* Limit the width */
 	padding: 10px 15px;
-	/* Inner padding */
 	font-size: 16px;
-	/* Readable font size */
 	font-family: Arial, sans-serif;
-	/* Clean font */
-	border: 1px solid #ccc;
-	/* Subtle border */
+	border: 1px solid cornflowerblue;
 	border-radius: 6px;
 	/* Rounded corners */
-	background-color: #feb47b;
 	/* Light background */
 	color: #333;
 	/* Text color */

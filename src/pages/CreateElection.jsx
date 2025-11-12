@@ -167,7 +167,7 @@ function CreateElection() {
 							aria-describedby={errors.startdate ? "startDate-error" : undefined}
 							aria-invalid={errors.startdate ? "true" : "false"}
 							{...register('startdate')}
-							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+							className={`datetime-local ${
 								errors.startdate ? 'border-red-500' : 'border-gray-300'
 							}`}
 						/>
@@ -197,7 +197,7 @@ function CreateElection() {
 							aria-describedby={errors.enddate ? "endDate-error" : undefined}
 							aria-invalid={errors.enddate ? "true" : "false"}
 							{...register('enddate')}
-							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+							className={`datetime-local ${
 								errors.enddate ? 'border-red-500' : 'border-gray-300'
 							}`}
 						/>
