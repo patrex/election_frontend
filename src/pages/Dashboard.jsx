@@ -103,7 +103,7 @@ function Dashboard() {
 				): (
 					<NoData 
 						image={noDataGraphic}
-						message="No elections found"
+						message={<>You've not created any elections. <Link to={`/user/${user.uid}/create-election`}>Create one to continue</Link></>}
 					/>
 				)}
 
