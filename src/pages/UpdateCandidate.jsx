@@ -350,7 +350,6 @@ function UpdateCandidate() {
 						<textarea
 							id="manifesto"
 							name="manifesto"
-							className="form-textarea"
 							rows="6"
 							placeholder="Enter candidate manifesto..."
 							aria-describedby={errors.manifesto ? "manifesto-error" : undefined}
