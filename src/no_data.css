@@ -3,12 +3,12 @@
 	justify-content: center;
 	align-items: flex-start;
 	min-height: 80vh;
-	padding-top: 120px;
+	padding-top: 50px;
 }
 
 .no-data-content {
 	text-align: center;
-	max-width: 500px;
+	max-width: 300px;
 }
 
 .no-data-image {
@@ -28,7 +28,7 @@
 
 @media (max-width: 768px) {
 	.no-data-container {
-		padding-top: 80px;
+		padding-top: 70px;
 	}
 
 	.no-data-image {
