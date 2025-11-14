@@ -53,7 +53,10 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 								className="side-list-item"
 								style={{ color: "red" }}
 							>
-								<button onClick={() => setAlertOpen(true)}><i className="bi bi-trash3-fill side-menu-icon"></i>Delete</button>
+								<button onClick={() => {
+									setSideMenuOpen(false)
+									setAlertOpen(true);
+								}}><i className="bi bi-trash3-fill side-menu-icon"></i>Delete</button>
 							</li>
 
 						</ul>
