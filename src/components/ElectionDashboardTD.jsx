@@ -49,7 +49,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 							</li>
 						)} 
 
-						<AlertDialog.Root open={alertOpen} onOpenChange={setAlertOpen}>
+						<AlertDialog.Root>
 							<AlertDialog.Trigger asChild>
 								<li
 									className="side-list-item"
