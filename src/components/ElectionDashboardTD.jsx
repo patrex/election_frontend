@@ -31,55 +31,75 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 			{sideMenuOpen && (
 				<div className="side-menu-div">
 					<ul className="side-menu-list" ref={menuRef}>
-						<li className="side-list-item" onClick={() => {copyLink(election._id); setSideMenuOpen(false)}}>
+						<li className="side-list-item" onClick={() => {
+							copyLink(election._id);
+							setSideMenuOpen(false);
+						}}>
 							<i className="bi bi-cursor-fill side-menu-icon"></i> Copy Id
 						</li>
-						<li className="side-list-item" onClick={() => {copyLink(election.shareLink); setSideMenuOpen(false)}}>
+						<li className="side-list-item" onClick={() => {
+							copyLink(election.shareLink);
+							setSideMenuOpen(false);
+						}}>
 							<i className="bi bi-link-45deg side-menu-icon"></i> Copy link
 						</li>
-						{ isPending && (
+						{isPending && (
 							<li
 								className="side-list-item"
 								onClick={() => {
-									navigate(`/user/${params.userId}/election/${election._id}/update`)
-									setSideMenuOpen(false)
+									navigate(`/user/${params.userId}/election/${election._id}/update`);
+									setSideMenuOpen(false);
 								}}
 							>
 								<i className="bi bi-pencil-fill side-menu-icon"></i> Edit
 							</li>
-						)} 
+						)}
 
-						<AlertDialog.Root>
+						<AlertDialog.Root
+							open={alertOpen}
+							onOpenChange={(open) => {
+								setAlertOpen(open);
+								if (open) {
+									setSideMenuOpen(false); // ✅ Close menu when dialog opens
+								}
+							}}
+						>
 							<AlertDialog.Trigger asChild>
 								<li
 									className="side-list-item"
 									style={{ color: "red" }}
 								>
-									<button onClick={() => setSideMenuOpen(false)}><i className="bi bi-trash3-fill side-menu-icon" ></i>Delete</button>
+									<button>
+										<i className="bi bi-trash3-fill side-menu-icon"></i> Delete
+									</button>
 								</li>
 							</AlertDialog.Trigger>
 							<AlertDialog.Portal>
 								<AlertDialog.Overlay className="AlertDialogOverlay" />
 								<AlertDialog.Content className="AlertDialogContent">
-									<AlertDialog.Title className="AlertDialogTitle">Delete Election</AlertDialog.Title>
+									<AlertDialog.Title className="AlertDialogTitle">
+										Delete Election
+									</AlertDialog.Title>
 									<AlertDialog.Description className="AlertDialogDescription">
-										{`Delete election: ${ election.title }?`}
+										{`Delete election: ${election.title}?`}
 									</AlertDialog.Description>
 									<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
 										<AlertDialog.Cancel asChild>
-											<button className="Button mauve" onClick={() => setAlertOpen(false)}>Cancel</button>
+											<button className="Button mauve">
+												Cancel
+											</button>
 										</AlertDialog.Cancel>
 										<AlertDialog.Action asChild>
 											<button className="Button red" onClick={() => {
-												setSideMenuOpen(false);
 												removeElection(election);
-												setAlertOpen(false);
-											}}>Delete</button>
+											}}>
+												Delete
+											</button>
 										</AlertDialog.Action>
 									</div>
 								</AlertDialog.Content>
 							</AlertDialog.Portal>
-  						</AlertDialog.Root>
+						</AlertDialog.Root>
 					</ul>
 				</div>
 			)}
