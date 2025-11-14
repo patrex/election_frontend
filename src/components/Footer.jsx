@@ -5,14 +5,13 @@ function Footer() {
 		<Box
 			component="footer"
 			sx={{
-				backgroundColor: '#f5f5f5',
 				py: 2,
 				textAlign: 'center',
 				mt: 'auto',
 			}}
 		>
 			<Typography variant="body2" color="text.secondary">
-				&copy; {new Date().getFullYear()} made with ❤️ by silabs
+				&copy; {new Date().getFullYear()} made with ❤️ by Lolia Data Systems
 			</Typography>
 		</Box>
 	);

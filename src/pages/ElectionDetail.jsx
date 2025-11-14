@@ -180,17 +180,13 @@ function ElectionDetail() {
 
 	async function removePosition(position) {
 		try {
-			const res = await fetcher.auth.delete(
+			fetcher.auth.delete(
 				`election/${election._id}/${position._id}/delete`,
 				user
 			);
 
 			setPositionsList(positionsList.filter(p => p._id !== position._id));
 			Toast.success("The position was removed");
-			if (res.ok) {
-			} else {
-				Toast.warning('Could not remove the position');
-			}
 		} catch (error) {
 			if (error instanceof FetchError) {
 				if (error.status === 500) {
@@ -198,7 +194,7 @@ function ElectionDetail() {
 				} else if (error.status === 400) {
 					Toast.warning(error.message);
 				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
-					Toast.error('There was an error removing the position');
+					Toast.error('You need to be logged in');
 				}
 			} else {
 				Toast.error('An unexpected error occurred');
@@ -208,7 +204,7 @@ function ElectionDetail() {
 
 	async function sendListToDB(voterlist) {
 		try {
-			const votersToDb = await fetcher.auth.post(
+			const votersToDb = fetcher.auth.post(
 				`election/${election._id}/closed_event/addvoters`,
 				{
 					election: election._id,
@@ -230,15 +226,14 @@ function ElectionDetail() {
 
 	async function removeVoter(voter) {
 		try {
-			const res = await fetch(
+			fetcher.auth.post(
 				`election/voter/${voter._id}/delete`,
 				user
-			)
+			);
 
 			const updatedList = votersList.filter(e => e._id !== voter._id);
 			setVotersList(updatedList);
 			Toast.success('The participant was removed successfully');
-
 		} catch (error) {
 			Toast.error("There was an error removing the participant");
 		}
