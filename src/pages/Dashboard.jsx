@@ -9,12 +9,12 @@ import NoData from '@/components/NoData';
 
 // import { queryClient } from '../queryClient.js'
 // import { useQuery } from "@tanstack/react-query";
-import { fetcher, FetchError } from '@/utils/fetcher';
+import { fetcher } from '@/utils/fetcher';
 
 export async function dashboardLoader({ params }) {
 	try {
 		// load elections for this user from database
-		return await fetcher.get(`elections/${params.userId}`)	
+		return fetcher.get(`elections/${params.userId}`)	
 	} catch (error) {
 		console.error('There was an error', error);
 	}
@@ -34,7 +34,7 @@ function Dashboard() {
 	async function removeElection (election) {
 		try {
 
-			await fetcher.auth.delete(
+			fetcher.auth.delete(
 				`election/${election._id}/delete`, 
 				user
 			)
