@@ -66,8 +66,8 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 					<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
 						<h3>Delete Election</h3>
 						<div className='p-6'>
-							<h4>Are you sure you want to delete the election</h4>
-							<h5>{election.title}</h5>
+							<p>Are you sure you want to delete the election</p>
+							<p><i className='text-red text-bold'>{election.title}</i></p>
 						</div>
 						<div className="action-btn-container">
 							<button className='Button violet action-item' onClick={() => setAlertOpen(false)}>Cancel</button>
