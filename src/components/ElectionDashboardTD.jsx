@@ -63,9 +63,9 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 
 			{alertOpen && (
 				<div className="modal-overlay">
-					<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
+					<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white">
 						<h3>Delete Election</h3>
-						<div className='p-6'>
+						<div className='p-4'>
 							<p>Are you sure you want to delete the election</p>
 							<p><i className='text-red text-bold'>{election.title}</i></p>
 						</div>
