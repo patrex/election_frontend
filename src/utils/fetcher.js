@@ -230,11 +230,11 @@ export const fetcher = {
 	get: (url, customConfig) =>
 		baseFetchJSON(url, { method: 'GET' }, customConfig),
 
-	// post: (url, data, customConfig) =>
-	// 	baseFetchJSON(url, {
-	// 		method: 'POST',
-	// 		body: JSON.stringify(data)
-	// 	}, customConfig),
+	post: (url, data, customConfig) =>
+		baseFetchJSON(url, {
+			method: 'POST',
+			body: JSON.stringify(data)
+		}, customConfig),
 
 	// put: (url, data, customConfig) =>
 	// 	baseFetchJSON(url, {

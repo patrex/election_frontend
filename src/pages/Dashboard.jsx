@@ -1,4 +1,4 @@
-import  { useState, useContext, useRef, useEffect } from 'react';
+import  { useState, useContext } from 'react';
 import { Link, useLoaderData, useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Toast from '@/utils/ToastMsg';
@@ -98,15 +98,13 @@ function Dashboard() {
 								))
 							}
 						</tbody>
-
 					</table>
 				): (
 					<NoData 
 						image={noDataGraphic}
-						message={<>You've not created any elections. <Link to={`/user/${user.uid}/create-election`}>Create one </Link>to continue</>}
+						message={<>You've not created any elections. <Link to={`/user/${user.uid}/create-election`}>Create one</Link> to continue</>}
 					/>
 				)}
-
 			</div>
 		</div>
 	);

@@ -6,8 +6,8 @@ import isValidPhoneNumber from "@/utils/validatePhone";
 import isValidEmail from "@/utils/validateEmail";
 import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
-import backendUrl from '../utils/backendurl';
 import { authman } from "@/utils/fireloader";
+import { fetcher, FetchError } from "@/utils/fetcher";
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
@@ -48,23 +48,18 @@ function Home() {
 		setIsLoading(true);
 
 		try {
-			const response = await fetch(`${backendUrl}/election/${id}`);
-			
-			if (!response.ok) {
-				throw new Error('Election not found');
-			}
+			const election = await fetcher.get(`election/${id}`);
 
-			const electionData = await response.json();
-			setElection(electionData);
+			setElection(election);
 
 			// Validate election timing
-			const startDate = new Date(electionData.startDate);
-			const endDate = new Date(electionData.endDate);
+			const startDate = new Date(election.startDate);
+			const endDate = new Date(election.endDate);
 			const currentDate = new Date();
 
 			if (endDate < currentDate) {
 				Toast.warning("This election has concluded");
-				navigate(`/election/${electionData._id}/results`);
+				navigate(`/election/${election._id}/results`);
 			} else if (startDate > currentDate) {
 				Toast.warning(`This election starts on ${startDate.toLocaleDateString()}`);
 			} else {
@@ -95,7 +90,7 @@ function Home() {
 			}
 		} else if (election.userAuthType === 'phone') {
 			if (!isValidPhoneNumber(trimmedParticipant)) {
-				Toast.warning("Please enter a valid phone number (e.g., +1234567890)");
+				Toast.warning("Please enter a valid phone number (e.g., 234706XXXXXXX)");
 				return;
 			}
 		}
@@ -109,8 +104,7 @@ function Home() {
 		setIsLoading(true);
 
 		try {
-			const response = await fetch(`${backendUrl}/election/${election._id}/voterlist`);
-			const voterList = await response.json();
+			const voterList = await fetcher.get(`election/${election._id}/voterlist`);
 
 			const existingVoters = election.userAuthType === 'phone' 
 				? voterList.map(v => v.phoneNo)
@@ -187,22 +181,16 @@ function Home() {
 	// Send OTP via email
 	const sendEmailOtp = async (email) => {
 		try {
-			const response = await fetch(`${backendUrl}/otp/getOTP/email`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
+			await fetcher.post(`otp/getOTP/email`, {	
 					participant: email,
 					electionId: election._id
-				}),
-			});
+				},
+			);
 
-			if (response.ok) {
-				Toast.success('Verification code sent to your email');
-				setShowAuthModal(false);
-				setShowOtpModal(true);
-			} else {
-				throw new Error('Failed to send email OTP');
-			}
+			Toast.success('Verification code sent to your email');
+			setShowAuthModal(false);
+			setShowOtpModal(true);
+			
 		} catch (error) {
 			Toast.error('Failed to send verification email');
 			console.error('Error sending email OTP:', error);
@@ -235,7 +223,7 @@ function Home() {
 	// Verify phone OTP
 	const verifyPhoneOtp = async () => {
 		try {
-			const result = await window.confirmationResult.confirm(otpValue);
+			await window.confirmationResult.confirm(otpValue);
 			await addVoterToDatabase();
 		} catch (error) {
 			Toast.warning("Invalid verification code");
@@ -246,29 +234,20 @@ function Home() {
 	// Verify email OTP
 	const verifyEmailOtp = async () => {
 		try {
-			const response = await fetch(`${backendUrl}/otp/${otpValue}/verifyOTP`);
-			
-			if (response.ok) {
-				await addVoterToDatabase();
-			} else {
-				Toast.warning("Invalid verification code");
-				throw new Error('Invalid OTP');
-			}
+			await fetcher.get(`otp/${otpValue}/verifyOTP`);
+			await addVoterToDatabase();
 		} catch (error) {
-			throw error;
+			Toast.warning("Invalid verification code");
 		}
 	};
 
 	// Add voter to database
 	const addVoterToDatabase = async () => {
 		try {
-			await fetch(`${backendUrl}/election/${election._id}/addvoter/participant`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ 
-					participant, 
-					electionId: election._id 
-				}),
+			await fetcher.post(`election/${election._id}/addvoter/participant`,	
+			{ 
+				participant, 
+				electionId: election._id 
 			});
 
 			setVoter(participant);
@@ -281,7 +260,6 @@ function Home() {
 		} catch (error) {
 			Toast.error('Failed to register voter');
 			console.error('Error adding voter:', error);
-			throw error;
 		}
 	};
 
@@ -325,7 +303,7 @@ function Home() {
 								id="participant-input"
 								value={participant}
 								onChange={(e) => setParticipant(e.target.value)}
-								onKeyPress={(e) => e.key === 'Enter' && handleParticipantSubmit()}
+								onKeyDown={(e) => e.key === 'Enter' && handleParticipantSubmit()}
 								placeholder={election.userAuthType === 'email' ? 'your.email@example.com' : '+1234567890'}
 								className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
 								disabled={isLoading}
@@ -391,7 +369,7 @@ function Home() {
 								id="otp-input"
 								value={otpValue}
 								onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ''))}
-								onKeyPress={(e) => e.key === 'Enter' && handleOtpVerification()}
+								onKeyDown={(e) => e.key === 'Enter' && handleOtpVerification()}
 								placeholder="Enter 6-digit code"
 								maxLength="6"
 								className="w-full px-4 py-3 text-center text-2xl tracking-widest border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
