@@ -71,9 +71,9 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 										</AlertDialog.Cancel>
 										<AlertDialog.Action asChild>
 											<button className="Button red" onClick={() => {
+												setSideMenuOpen(false);
 												removeElection(election);
 												setAlertOpen(false);
-												setSideMenuOpen(false);
 											}}>Delete</button>
 										</AlertDialog.Action>
 									</div>

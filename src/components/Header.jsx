@@ -11,7 +11,7 @@ function Header() {
 
 	async function logout(){
 		try {
-			const logout_req = await signOut(authman);
+			await signOut(authman);
 		} catch (error) {
 			Toast.error("There was an error logging you out");
 		}
