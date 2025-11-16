@@ -75,7 +75,6 @@ function Home() {
 			setShowAuthModal(true);
 		} catch (error) {
 			Toast.error("There was an error fetching the election");
-			console.error('Error fetching election:', error);
 		} finally {
 			setIsLoading(false);
 		}
