@@ -55,13 +55,13 @@ function Home() {
 		setIsLoading(true);
 
 		try {
-			const e = fetcher.get(`election/${id}`);
+			const e = await fetcher.get(`election/${id}`);
 
 			setElection(e);
 
 			const { isPending, hasEnded } = useEventStatus(
-				new Date(election.startDate),
-				new Date(election.endDate)
+				new Date(e.startDate),
+				new Date(e.endDate)
 			);
 
 			if (hasEnded) {
@@ -112,7 +112,7 @@ function Home() {
 		setIsLoading(true);
 
 		try {
-			const voterList = fetcher.get(`election/${election._id}/voterlist`);
+			const voterList = await fetcher.get(`election/${election._id}/voterlist`);
 
 			const existingVoters = election.userAuthType === 'phone' 
 				? voterList.map(v => v.phoneNo)
