@@ -38,34 +38,12 @@ function Home() {
 	const [showAuthModal, setShowAuthModal] = useState(false);
 	const [showOtpModal, setShowOtpModal] = useState(false);
 
-	useEffect(() => {
-		if (electionFromQueryParams) {
-			setAnElection(electionFromQueryParams);
-		}
-	}, [electionFromQueryParams])
-
 	// Process election from query params on mount
 	useEffect(() => {
 		if (electionFromQueryParams) {
 			processElection(electionFromQueryParams);
 		}
 	}, [electionFromQueryParams]);
-
-	
-
-	function setAnElection(id) {
-		setIsLoading(true)
-
-		try {
-			const e = fetcher.get(`election/${id}`);
-			setElection(e);
-		} catch (error) {
-			Toast.error("Could not fetch election");
-			console.error('Error fetching election:', error);
-		} finally {
-			setIsLoading(false)
-		}
-	}
 
 	// Fetch and validate election
 	const processElection = async (id) => {
@@ -74,20 +52,33 @@ function Home() {
 			return;
 		}
 
-		const { isPending, hasEnded } = useEventStatus(
-			new Date(election.startDate),
-			new Date(election.endDate)
-		);
+		setIsLoading(true);
 
-		if (hasEnded) {
-			Toast.warning("This election has been concluded");
-			navigate(`/election/${election._id}/results`);
-		} else if (isPending) {
-			Toast.warning(`Election not started. Starts in ${moment(election.startDate).fromNow()}`);
-			return;
+		try {
+			const e = fetcher.get(`election/${id}`);
+
+			setElection(e);
+
+			const { isPending, hasEnded } = useEventStatus(
+				new Date(election.startDate),
+				new Date(election.endDate)
+			);
+
+			if (hasEnded) {
+				Toast.warning("This election has been concluded");
+				navigate(`/election/${e._id}/results`);
+			} else if (isPending) {
+				Toast.warning(`Election not started. Starts in ${moment(e.startDate).fromNow()}`);
+				return;
+			}
+
+			setShowAuthModal(true);
+		} catch (error) {
+			Toast.error("There was an error fetching the election");
+			console.error('Error fetching election:', error);
+		} finally {
+			setIsLoading(false);
 		}
-
-		setShowAuthModal(true);
 	}
 
 	// Validate and process participant input
