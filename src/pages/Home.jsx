@@ -1,7 +1,6 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { AppContext } from "@/App";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import isValidPhoneNumber from "@/utils/validatePhone";
 import isValidEmail from "@/utils/validateEmail";
 import { b64encode } from "@/utils/obfuscate";
@@ -45,6 +44,15 @@ function Home() {
 		}
 	}, [electionFromQueryParams]);
 
+	function getEventStatus(startDate, endDate) {
+		const now = new Date();
+		const isPending = now < startDate;
+		const hasEnded = now > endDate;
+		const isActive = !isPending && !hasEnded;
+		
+		return { isPending, hasEnded, isActive };
+	    }
+
 	// Fetch and validate election
 	const processElection = async (id) => {
 		if (!id || !id.trim()) {
@@ -59,7 +67,7 @@ function Home() {
 
 			setElection(e);
 
-			const { isPending, hasEnded } = useEventStatus(
+			const { isPending, hasEnded } = getEventStatus(
 				new Date(e.startDate),
 				new Date(e.endDate)
 			);
