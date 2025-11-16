@@ -29,10 +29,10 @@ function Home() {
 	const [otpValue, setOtpValue] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 
-	const { isPending, hasEnded } = useEventStatus(
-		new Date(election.startDate),
-		new Date(election.endDate)
-	);
+	const base = process.env.NOTIFICATIONS_BASE_URL;
+	const apiKey = process.env.NOTIFICATIONS_PROVIDER_KEY;
+
+	const [termii, setTermii] = useState(null);	//	for Termii
 
 	
 	// Modal states
@@ -56,24 +56,24 @@ function Home() {
 		setIsLoading(true);
 
 		try {
-			const election = await fetcher.get(`election/${id}`);
+			const election = fetcher.get(`election/${id}`);
 
 			setElection(election);
 
-			// Validate election timing
-			const startDate = new Date(election.startDate);
-			const endDate = new Date(election.endDate);
-			const currentDate = new Date();
+			const { isPending, hasEnded } = useEventStatus(
+				new Date(election.startDate),
+				new Date(election.endDate)
+			);
 
 			if (hasEnded) {
-				Toast.warning("This election has concluded");
+				Toast.warning("This election has been concluded");
 				navigate(`/election/${election._id}/results`);
 			} else if (isPending) {
-				Toast.warning(`Election not started. Starts in ${moment(startDate).fromNow()}}`);
+				Toast.warning(`Election not started. Starts in ${moment(election.startDate).fromNow()}`);
 				return;
-			} else {
-				setShowAuthModal(true);
 			}
+
+			setShowAuthModal(true);
 		} catch (error) {
 			Toast.error("Election not found. Please check the ID and try again");
 			console.error('Error fetching election:', error);
@@ -113,7 +113,7 @@ function Home() {
 		setIsLoading(true);
 
 		try {
-			const voterList = await fetcher.get(`election/${election._id}/voterlist`);
+			const voterList = fetcher.get(`election/${election._id}/voterlist`);
 
 			const existingVoters = election.userAuthType === 'phone' 
 				? voterList.map(v => v.phoneNo)
@@ -161,28 +161,36 @@ function Home() {
 	// Send OTP via phone
 	const sendPhoneOtp = async (phoneNumber) => {
 		try {
-			window.recaptchaVerifier = new RecaptchaVerifier(
-				authman,
-				'recaptcha-container',
-				{
-					size: 'invisible',
-					callback: () => {
-						setShowAuthModal(false);
-						setShowOtpModal(true);
-					}
-				},
-				authman
+			const payload = {
+				api_key: apiKey,
+				pin_type: "NUMERIC",
+				phone_number: phoneNumber,
+				pin_attempts: 3,
+				pin_time_to_live: 10,
+				pin_length: 4
+			}
+
+			const token_req = await fetch(
+				`${base}/api/sms/otp/generate`, {
+					method: 'POST',
+					headers: {
+						"Content-Type": 'application/json'
+					},
+					body: JSON.stringify(payload),
+					credentials: "include"
+				}
 			);
 
-			const appVerifier = window.recaptchaVerifier;
-			const confirmationResult = await signInWithPhoneNumber(authman, phoneNumber, appVerifier);
+			const token_response = await token_req.json();
+			setTermii(token_response);
 			
-			window.confirmationResult = confirmationResult;
-			Toast.success('Verification code sent to your phone');
+			Toast.success('Verification code was sent to your phone');
 			setShowAuthModal(false);
 			setShowOtpModal(true);
 		} catch (error) {
-			Toast.error('Failed to send SMS. Please check your phone number');
+			const errMsg = handleOTPErrors(error)
+
+			Toast.error(errMsg);
 			console.error('Error sending phone OTP:', error);
 		}
 	};
@@ -232,11 +240,27 @@ function Home() {
 	// Verify phone OTP
 	const verifyPhoneOtp = async () => {
 		try {
-			await window.confirmationResult.confirm(otpValue);
+			const payload = {
+				api_key: apiKey,
+             			pin_id: termii.pin_id,
+             			pin: termii.otp
+			}
+
+			await fetch(
+				`${base}/api/sms/otp/verify`, {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(payload),
+				credentials: 'include'
+			}); 
+
 			await addVoterToDatabase();
 		} catch (error) {
-			Toast.warning("Invalid verification code");
-			throw error;
+			const errMsg = handleOTPErrors(error);
+			Toast.warning(errMsg);
+			console.log(error);
 		}
 	};
 
@@ -253,7 +277,7 @@ function Home() {
 	// Add voter to database
 	const addVoterToDatabase = async () => {
 		try {
-			await fetcher.post(`election/${election._id}/addvoter/participant`,	
+			fetcher.post(`election/${election._id}/addvoter/participant`,	
 			{ 
 				participant, 
 				electionId: election._id 
@@ -282,6 +306,142 @@ function Home() {
 		setShowOtpModal(false);
 		setOtpValue('');
 	};
+
+	function handleOTPErrors (error) {
+		const statusCode = error.response?.status || error.status || 500;
+		const errorDetails = error.response?.data || error.message || 'Unknown error';
+
+		let result;
+
+		switch (statusCode) {
+			case 200:
+				result = {
+					success: true,
+					title: "Success",
+					message: "OTP sent successfully",
+					userMessage: "Check your phone for the verification code.",
+					code: statusCode
+				};
+				break;
+
+			case 400:
+				result = {
+					success: false,
+					title: "Invalid Request",
+					message: "Bad request - check phone number format",
+					userMessage: "Please check the phone number and try again.",
+					code: statusCode,
+					details: errorDetails
+				};
+				break;
+
+			case 401:
+				result = {
+					success: false,
+					title: "Authentication Failed",
+					message: "API key is missing or invalid",
+					userMessage: "Service temporarily unavailable. Please try again later.",
+					code: statusCode,
+					details: errorDetails,
+					action: "CHECK_API_KEY"
+				};
+				break;
+
+			case 403:
+				result = {
+					success: false,
+					title: "Access Denied",
+					message: "API key lacks required permissions",
+					userMessage: "Service temporarily unavailable. Please contact support.",
+					code: statusCode,
+					details: errorDetails,
+					action: "CHECK_PERMISSIONS"
+				};
+				break;
+
+			case 404:
+				result = {
+					success: false,
+					title: "Not Found",
+					message: "The requested resource doesn't exist",
+					userMessage: "Service temporarily unavailable. Please try again.",
+					code: statusCode,
+					details: errorDetails
+				};
+				break;
+
+			case 405:
+				result = {
+					success: false,
+					title: "Method Not Allowed",
+					message: "Invalid HTTP method used",
+					userMessage: "Something went wrong. Please try again.",
+					code: statusCode,
+					details: errorDetails,
+					action: "CHECK_HTTP_METHOD"
+				};
+				break;
+
+			case 422:
+				result = {
+					success: false,
+					title: "Invalid Data",
+					message: "Phone number format is incorrect or data is invalid",
+					userMessage: "Please enter a valid Nigerian phone number (e.g., 08012345678).",
+					code: statusCode,
+					details: errorDetails,
+					action: "VALIDATE_PHONE_NUMBER"
+				};
+				break;
+
+			case 429:
+				result = {
+					success: false,
+					title: "Too Many Attempts",
+					message: "Rate limit exceeded",
+					userMessage: "Too many requests. Please wait a moment and try again.",
+					code: statusCode,
+					details: errorDetails,
+					retryAfter: 60 // seconds
+				};
+				break;
+
+			case 500:
+			case 502:
+			case 503:
+			case 504:
+				result = {
+					success: false,
+					title: "Server Error",
+					message: "Something went wrong on Termii's servers",
+					userMessage: "Service temporarily unavailable. Please try again in a few moments.",
+					code: statusCode,
+					details: errorDetails,
+					retryAfter: 30
+				};
+				break;
+
+			default:
+				result = {
+					success: false,
+					title: "Unknown Error",
+					message: `Unexpected error: ${statusCode}`,
+					userMessage: "An unexpected error occurred. Please try again.",
+					code: statusCode,
+					details: errorDetails
+				};
+		}
+
+		// Log for debugging (in production, send to your logging service)
+		if (!result.success) {
+			console.error(`[OTP Error ${result.code}] ${result.title}: ${result.message}`, {
+				details: result.details,
+				timestamp: new Date().toISOString()
+			});
+		}
+
+		return result;
+	}
 
 	return (
 		<>
@@ -320,7 +480,7 @@ function Home() {
 							/>
 							{election.userAuthType === 'phone' && (
 								<p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-									Include country code (e.g., +1 for USA)
+									Include country code (e.g., 234 for USA)
 								</p>
 							)}
 						</div>
@@ -484,7 +644,7 @@ function Home() {
 									type="text"
 									value={electionId}
 									onChange={(e) => setElectionId(e.target.value)}
-									onKeyPress={(e) => e.key === 'Enter' && processElection(electionId)}
+									onKeyDown={(e) => e.key === 'Enter' && processElection(electionId)}
 									placeholder="Enter election ID..."
 									className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition"
 									disabled={isLoading}
@@ -511,8 +671,6 @@ function Home() {
 						</div>
 					</div>
 				</div>
-				{/* reCAPTCHA Container */}
-				<div id="recaptcha-container"></div>
 			</div>
 		</>
 	);
