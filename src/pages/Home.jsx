@@ -6,7 +6,6 @@ import isValidPhoneNumber from "@/utils/validatePhone";
 import isValidEmail from "@/utils/validateEmail";
 import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
-import { authman } from "@/utils/fireloader";
 import { fetcher, FetchError } from "@/utils/fetcher";
 import { useEventStatus } from "@/hooks/useEventStatus";
 import moment from "moment";
@@ -39,12 +38,34 @@ function Home() {
 	const [showAuthModal, setShowAuthModal] = useState(false);
 	const [showOtpModal, setShowOtpModal] = useState(false);
 
+	useEffect(() => {
+		if (electionFromQueryParams) {
+			setAnElection(electionFromQueryParams);
+		}
+	}, [electionFromQueryParams])
+
 	// Process election from query params on mount
 	useEffect(() => {
 		if (electionFromQueryParams) {
 			processElection(electionFromQueryParams);
 		}
 	}, [electionFromQueryParams]);
+
+	
+
+	function setAnElection(id) {
+		setIsLoading(true)
+
+		try {
+			const e = fetcher.get(`election/${id}`);
+			setElection(e);
+		} catch (error) {
+			Toast.error("Could not fetch election");
+			console.error('Error fetching election:', error);
+		} finally {
+			setIsLoading(false)
+		}
+	}
 
 	// Fetch and validate election
 	const processElection = async (id) => {
@@ -53,33 +74,20 @@ function Home() {
 			return;
 		}
 
-		setIsLoading(true);
+		const { isPending, hasEnded } = useEventStatus(
+			new Date(election.startDate),
+			new Date(election.endDate)
+		);
 
-		try {
-			const election = fetcher.get(`election/${id}`);
-
-			setElection(election);
-
-			const { isPending, hasEnded } = useEventStatus(
-				new Date(election.startDate),
-				new Date(election.endDate)
-			);
-
-			if (hasEnded) {
-				Toast.warning("This election has been concluded");
-				navigate(`/election/${election._id}/results`);
-			} else if (isPending) {
-				Toast.warning(`Election not started. Starts in ${moment(election.startDate).fromNow()}`);
-				return;
-			}
-
-			setShowAuthModal(true);
-		} catch (error) {
-			Toast.error("Election not found. Please check the ID and try again");
-			console.error('Error fetching election:', error);
-		} finally {
-			setIsLoading(false);
+		if (hasEnded) {
+			Toast.warning("This election has been concluded");
+			navigate(`/election/${election._id}/results`);
+		} else if (isPending) {
+			Toast.warning(`Election not started. Starts in ${moment(election.startDate).fromNow()}`);
+			return;
 		}
+
+		setShowAuthModal(true);
 	}
 
 	// Validate and process participant input
