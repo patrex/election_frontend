@@ -204,7 +204,7 @@ function UpdateElection() {
 								{election.type}
 							</option>
 							{electionTypes
-								.filter(type => type.toString() !== (election.type).toString())
+								.filter(type => type !== election.type)
 								.map(type => (
 									<option key={type} value={type}>
 										{type}
@@ -233,11 +233,11 @@ function UpdateElection() {
 							aria-invalid={errors.addCandidatesBy ? "true" : "false"}
 							{...register('addCandidatesBy')}
 						>
-							<option value={election.addCandidatesBy} disabled>
+							<option value={election.addCandidatesBy}>
 								{election.addCandidatesBy}
 							</option>
 							{addCandidatesMethods
-								.filter(c => c.toString() !== (election.addCandidatesBy).toString())
+								.filter(c => c !== election.addCandidatesBy)
 								.map(addMethod => (
 									<option key={addMethod} value={addMethod}>
 										{addMethod}

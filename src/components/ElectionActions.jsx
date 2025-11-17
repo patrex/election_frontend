@@ -17,15 +17,18 @@ const ElectionActions = ({ election, openPostionModal, checkPositionExists, setA
 							Add Position
 						</button>
 					</p>
-					<p>
-						<Link
-							to={`/user/${params.userId}/election/${election._id}/addcandidate`}
-							className='Button violet action-item no-underline'
-							onClick={checkPositionExists}
-						>
-							Add Candidate
-						</Link>
-					</p>
+					{/* only show this button if the admin is going to add elections by himself */}
+					{election.addCandidatesBy === "I will Add Candidates Myself" && (
+						<p>
+							<Link
+								to={`/user/${params.userId}/election/${election._id}/addcandidate`}
+								className='Button violet action-item no-underline'
+								onClick={checkPositionExists}
+							>
+								Add Candidate
+							</Link>
+						</p>)
+					}
 					{election.type === "Closed" && (
 						<p>
 							<button className='Button violet action-item' onClick={() => setAddParticipantsModalOpen(true)}>
