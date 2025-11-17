@@ -7,14 +7,12 @@ import ElectionDashboardTD from '@/components/ElectionDashboardTD';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 import NoData from '@/components/NoData';
 
-// import { queryClient } from '../queryClient.js'
-// import { useQuery } from "@tanstack/react-query";
 import { fetcher } from '@/utils/fetcher';
 
 export async function dashboardLoader({ params }) {
 	try {
 		// load elections for this user from database
-		return fetcher.get(`elections/${params.userId}`)	
+		return await fetcher.get(`elections/${params.userId}`)	
 	} catch (error) {
 		console.error('There was an error', error);
 	}
@@ -29,16 +27,13 @@ function Dashboard() {
 
 	const { user } = useContext(AppContext);
 
-	// const [electionsList, setElectionsList] = useState(elections);
-
 	async function removeElection (election) {
 		try {
 
-			fetcher.auth.delete(
+			await fetcher.auth.delete(
 				`election/${election._id}/delete`, 
 				user
 			)
-
 
 			setElections( (old) =>
 				old ? old.filter((e) => e._id !== election._id) : []

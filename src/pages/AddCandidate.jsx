@@ -6,7 +6,7 @@ import { AppContext } from '@/App';
 
 import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
-import { fetcher, FetchError } from '@/utils/fetcher';
+import { fetcher } from '@/utils/fetcher';
 
 import { PulseLoader } from 'react-spinners';
 import { useEffect } from 'react';

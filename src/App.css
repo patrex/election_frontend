@@ -88,13 +88,11 @@ body {
 	background: #ffffff;
 	border-radius: 12px;
 	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-	/* Subtle shadow */
 	width: 90%;
 	max-width: 500px;
 	padding: 20px;
 	position: relative;
 	animation: fadeIn 0.3s ease-out;
-	/* Smooth entry animation */
 }
 
 .card-buttons {
@@ -1216,7 +1214,7 @@ button {
 	box-shadow: 0 0 0 2px var(--violet-8);
 }
 
-.datetime-local {
+datetime-local {
 	width: 100%;
 	max-width: 400px;
 	padding: 10px 15px;
@@ -1224,25 +1222,16 @@ button {
 	font-family: Arial, sans-serif;
 	border: 1px solid cornflowerblue;
 	border-radius: 6px;
-	/* Rounded corners */
-	/* Light background */
 	color: #333;
-	/* Text color */
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	/* Soft shadow */
 	transition: border-color 0.3s, box-shadow 0.3s;
-	/* Smooth transition */
 }
 
 .datetime-local:focus {
 	border-color: #007bff;
-	/* Highlight border on focus */
 	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-	/* Glow effect */
 	outline: none;
-	/* Remove default focus outline */
 	background-color: #fff;
-	/* Brighter background */
 }
 
 .datetime-local::-webkit-calendar-picker-indicator {

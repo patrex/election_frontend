@@ -6,7 +6,6 @@ import isValidEmail from "@/utils/validateEmail";
 import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from "@/utils/fetcher";
-import { useEventStatus } from "@/hooks/useEventStatus";
 import moment from "moment";
 
 export async function homeLoader({ request }) {
@@ -103,7 +102,7 @@ function Home() {
 				Toast.warning("Please enter a valid email address");
 				return;
 			}
-		} else if (election.userAuthType === 'phone') {
+		} else {
 			if (!isValidPhoneNumber(trimmedParticipant)) {
 				Toast.warning("Please enter a valid phone number (e.g., 234706XXXXXXX)");
 				return;
@@ -479,14 +478,14 @@ function Home() {
 								value={participant}
 								onChange={(e) => setParticipant(e.target.value)}
 								onKeyDown={(e) => e.key === 'Enter' && handleParticipantSubmit()}
-								placeholder={election.userAuthType === 'email' ? 'your.email@example.com' : '+1234567890'}
+								placeholder={election.userAuthType === 'email' ? 'your.email@example.com' : '234803XXXXXXX'}
 								className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
 								disabled={isLoading}
 								autoFocus
 							/>
 							{election.userAuthType === 'phone' && (
 								<p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-									Include country code (e.g., 234 for USA)
+									Include country code (e.g., 234 for Nigeria)
 								</p>
 							)}
 						</div>

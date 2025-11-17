@@ -25,9 +25,9 @@ function CreateElection() {
 			.string()
 			.refine((date) => {
 				const selectedDate = new Date(date);
-				const currentYear = new Date().getFullYear();
-				return selectedDate.getFullYear() >= currentYear;
-			}, { message: "Start date cannot be before the current year" }),
+				const now = Date.now();
+				return selectedDate > now;
+			}, { message: "Start date cannot be in the past" }),
 		enddate: z
 			.string()
 			.refine((date) => {
@@ -167,7 +167,7 @@ function CreateElection() {
 							aria-describedby={errors.startdate ? "startDate-error" : undefined}
 							aria-invalid={errors.startdate ? "true" : "false"}
 							{...register('startdate')}
-							className={`datetime-local ${
+							className={`${
 								errors.startdate ? 'border-red-500' : 'border-gray-300'
 							}`}
 						/>
@@ -197,7 +197,7 @@ function CreateElection() {
 							aria-describedby={errors.enddate ? "endDate-error" : undefined}
 							aria-invalid={errors.enddate ? "true" : "false"}
 							{...register('enddate')}
-							className={`datetime-local ${
+							className={`${
 								errors.enddate ? 'border-red-500' : 'border-gray-300'
 							}`}
 						/>

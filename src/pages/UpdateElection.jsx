@@ -1,6 +1,5 @@
-import { useLoaderData, Link, useParams, useNavigate } from "react-router-dom";
-import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
-import { useState, useEffect, useContext } from "react";
+import { useLoaderData, useParams, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
 import Toast from "@/utils/ToastMsg";
 import { PulseLoader } from "react-spinners";
 

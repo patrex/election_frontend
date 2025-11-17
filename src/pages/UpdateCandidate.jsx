@@ -1,9 +1,9 @@
 import { useLoaderData } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { useState, useEffect, useCallback, useMemo, useContext } from "react";
+import { useState, useCallback, useMemo, useContext } from "react";
 import { fireman } from "../utils/fireloader";
 import Toast from "@/utils/ToastMsg";
-import { fetcher, FetchError } from "@/utils/fetcher";
+import { fetcher } from "@/utils/fetcher";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 import { AppContext } from "@/App";

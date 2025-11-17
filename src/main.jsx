@@ -5,9 +5,6 @@ import './index.css'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
-import { queryClient } from './queryClient.js'
 import { configureFetcher } from './utils/fetcher';
 import backendUrl from './utils/backendurl.js'
 import Toast from './utils/ToastMsg.js'
@@ -34,9 +31,7 @@ configureFetcher({
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 	<ErrorBoundary>
-		<QueryClientProvider client={queryClient}>
-			<App />
-		</QueryClientProvider>
+		<App />
 	</ErrorBoundary>
   </React.StrictMode>,
 )
