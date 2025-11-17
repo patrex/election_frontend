@@ -118,7 +118,7 @@ export async function authFetch(url, options = {}, user, customConfig = {}) {
 			headers: {
 				'Content-Type': 'application/json',
 				...options.headers,
-				'Authorization': `Bearer ${token}` // ✅ Authorization header here
+				'Authorization': `Bearer ${token}` //  Authorization header here
 			}
 		});
 

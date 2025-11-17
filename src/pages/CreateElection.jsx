@@ -79,8 +79,6 @@ function CreateElection() {
 	const onSubmit = async (formData) => {
 		setLoading(true);
 
-		console.log(formData);
-
 		try {
 			await fetcher.auth.post(
 				'elections', 
