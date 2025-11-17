@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Toast from "@/utils/ToastMsg";
 import { AppContext } from '@/App';
-
 import { PulseLoader } from 'react-spinners';
 import {fetcher, FetchError} from "@/utils/fetcher"
 import { useState, useContext } from 'react';
@@ -34,6 +33,10 @@ function CreateElection() {
 				const selectedDate = new Date(date);
 				return selectedDate.getFullYear() <= 3000;
 			}, { message: "End date cannot be later than the year 3000" }),
+		addCandidatesBy: z
+			.enum(['adminAdd', 'selfAdd'], {
+				errorMap: () => ({ message: "Please choose how candidates will be added"})
+			}),
 		electiontype: z
 			.string()
 			.min(1, { message: "Please select an election type" }),
@@ -73,6 +76,7 @@ function CreateElection() {
 			userAuthType: '',
 			description: '',
 			rules: '',
+			addCandidatesBy: ''
 		}
 	});
 
@@ -245,10 +249,43 @@ function CreateElection() {
 						)}
 					</div>
 
+					{/* Candidate Adding Type */}
+					<div className="form-group">
+						<label 
+							htmlFor="candidateAddType" 
+							className="block font-medium mb-1 text-gray-700"
+						>
+							How will candidates get added? <span className="text-red-500">*</span>
+						</label>
+						<select
+							id="candidateAddType"
+							name="addCandidatesBy"
+							aria-describedby={errors.addCandidatesBy ? "type-error" : undefined}
+							aria-invalid={errors.addCandidatesBy ? "true" : "false"}
+							{...register('addCandidatesBy')}
+							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer ${
+								errors.addCandidatesBy ? 'border-red-500' : 'border-gray-300'
+							}`}
+						>
+							<option value="">Please Select</option>
+							<option value="adminAdd">I will Add Candidates Myself</option>
+							<option value="selfAdd">Candidates Will Add Themselves</option>
+						</select>
+						{errors.addCandidatesBy && (
+							<p 
+								id="type-error" 
+								className="text-red-500 text-sm mt-1" 
+								role="alert"
+							>
+								{errors.addCandidatesBy.message}
+							</p>
+						)}
+					</div>
+
 					{/* Voter Authentication Type */}
 					<fieldset className="border border-orange-300 rounded-md p-4">
 						<legend className="font-semibold px-2 text-gray-700">
-							How will voters participate? <span className="text-red-500">*</span>
+							How will voters be verified? <span className="text-red-500">*</span>
 						</legend>
 
 						<div className="space-y-3 mt-3">
