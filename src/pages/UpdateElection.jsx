@@ -20,6 +20,7 @@ export async function updateElectionLoader({ params }) {
 function UpdateElection() {
 	const election = useLoaderData();
 	const electionTypes = ['Open', 'Closed']
+	const addCandidatesMethods = ["adminAdd", "selfAdd"]
 	const params = useParams();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
@@ -32,6 +33,7 @@ function UpdateElection() {
 		startdate: z.string().datetime({ local: true }),
 		enddate: z.string().datetime({ local: true }),
 		electiontype: z.string(),
+		addCandidatesBy: z.string(),
 		description: z.string().max(200),
 		rules: z.string().max(1000)
 	      }).superRefine((data, ctx) => {
@@ -84,6 +86,7 @@ function UpdateElection() {
 			startdate: formatDate(new Date(election.startDate)),
 			enddate: formatDate(new Date(election.endDate)),
 			electiontype: election.type,
+			addCandidatesBy: election.addCandidatesBy,
 			description: election.desc,
 			rules: election.rules
 		}
@@ -191,6 +194,7 @@ function UpdateElection() {
 						<select
 							id="type"
 							className="form-select"
+							name="electiontype"
 							aria-label="Select election type"
 							aria-describedby={errors.electiontype ? "type-error" : undefined}
 							aria-invalid={errors.electiontype ? "true" : "false"}
@@ -211,6 +215,39 @@ function UpdateElection() {
 						{errors.electiontype && (
 							<span id="type-error" className="error-msg" role="alert">
 								{errors.electiontype.message}
+							</span>
+						)}
+					</div>
+
+					{/* Candidates Add Method */}
+					<div className="form-group">
+						<label htmlFor="candidateAddType" className="form-label">
+							Select how candidates will be added
+						</label>
+						<select
+							id="candidateAddType"
+							className="form-select"
+							name="addCandidatesBy"
+							aria-label="Select election type"
+							aria-describedby={errors.addCandidatesBy ? "type-error" : undefined}
+							aria-invalid={errors.addCandidatesBy ? "true" : "false"}
+							{...register('addCandidatesBy')}
+						>
+							<option value={election.addCandidatesBy}>
+								{election.addCandidatesBy}
+							</option>
+							{addCandidatesMethods
+								.filter(candidateAdd => candidateAdd !== election.addCandidatesBy)
+								.map(addMethod => (
+									<option key={addMethod} value={addMethod}>
+										{addMethod}
+									</option>
+								))
+							}
+						</select>
+						{errors.addCandidatesBy && (
+							<span id="type-error" className="error-msg" role="alert">
+								{errors.addCandidatesBy.message}
 							</span>
 						)}
 					</div>

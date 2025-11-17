@@ -234,7 +234,7 @@ function CreateElection() {
 								errors.electiontype ? 'border-red-500' : 'border-gray-300'
 							}`}
 						>
-							<option value="">Select type</option>
+							<option value="" disabled>-- Select type --</option>
 							<option value="Open">Open</option>
 							<option value="Closed">Closed</option>
 						</select>
@@ -267,7 +267,7 @@ function CreateElection() {
 								errors.addCandidatesBy ? 'border-red-500' : 'border-gray-300'
 							}`}
 						>
-							<option value="">Please Select</option>
+							<option value="" disabled>-- Please select --</option>
 							<option value="adminAdd">I will Add Candidates Myself</option>
 							<option value="selfAdd">Candidates Will Add Themselves</option>
 						</select>
