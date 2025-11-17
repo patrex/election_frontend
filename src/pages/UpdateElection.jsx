@@ -189,7 +189,7 @@ function UpdateElection() {
 					{/* Election Type */}
 					<div className="form-group">
 						<label htmlFor="type" className="form-label">
-							Select the Election Type
+							Select election type
 						</label>
 						<select
 							id="type"

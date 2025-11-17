@@ -268,8 +268,8 @@ function CreateElection() {
 							}`}
 						>
 							<option value="" disabled>-- Please select --</option>
-							<option value="adminAdd">I will Add Candidates Myself</option>
-							<option value="selfAdd">Candidates Will Add Themselves</option>
+							<option value="I will Add Candidates Myself">I will Add Candidates Myself</option>
+							<option value="Candidates Will Add Themselves">Candidates Will Add Themselves</option>
 						</select>
 						{errors.addCandidatesBy && (
 							<p 
