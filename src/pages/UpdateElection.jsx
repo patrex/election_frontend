@@ -20,7 +20,7 @@ export async function updateElectionLoader({ params }) {
 function UpdateElection() {
 	const election = useLoaderData();
 	const electionTypes = ['Open', 'Closed']
-	const addCandidatesMethods = ["adminAdd", "selfAdd"]
+	const addCandidatesMethods = ["I will Add Candidates Myself", "Candidates Will Add Themselves"]
 	const params = useParams();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
