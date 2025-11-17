@@ -34,15 +34,14 @@ function CreateElection() {
 				return selectedDate.getFullYear() <= 3000;
 			}, { message: "End date cannot be later than the year 3000" }),
 		addCandidatesBy: z
-			.enum(['adminAdd', 'selfAdd'], {
-				errorMap: () => ({ message: "Please choose how candidates will be added"})
-			}),
+			.string()
+			.min(1, { message: "Please select how candidates will get added" }),
 		electiontype: z
 			.string()
 			.min(1, { message: "Please select an election type" }),
 		userAuthType: z
 			.enum(['email', 'phone'], { 
-				errorMap: () => ({ message: "Please select how voters will participate" }) 
+				errorMap: () => ({ message: "Please select how voters will get verified" }) 
 			}),
 		description: z
 			.string()
