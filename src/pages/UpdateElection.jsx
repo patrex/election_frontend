@@ -204,7 +204,7 @@ function UpdateElection() {
 								{election.type}
 							</option>
 							{electionTypes
-								.filter(type => type !== election.type)
+								.filter(type => type !== (election.type).toString())
 								.map(type => (
 									<option key={type} value={type}>
 										{type}
@@ -237,7 +237,7 @@ function UpdateElection() {
 								{election.addCandidatesBy}
 							</option>
 							{addCandidatesMethods
-								.filter(candidateAdd => candidateAdd !== election.addCandidatesBy)
+								.filter(c => c !== (election.addCandidatesBy).toString())
 								.map(addMethod => (
 									<option key={addMethod} value={addMethod}>
 										{addMethod}
