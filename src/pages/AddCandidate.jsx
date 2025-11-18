@@ -9,7 +9,6 @@ import Toast from '@/utils/ToastMsg';
 import { fetcher } from '@/utils/fetcher';
 
 import { PulseLoader } from 'react-spinners';
-import { useEffect } from 'react';
 
 export async function addCandidateLoader({ params }) {
 	try {

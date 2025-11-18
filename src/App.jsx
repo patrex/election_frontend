@@ -19,6 +19,8 @@ import ElectionResults, { resultsLoader } from './pages/ElectionResults';
 import NotFound from './pages/NotFound';
 import UpdateCandidate, { updateloader } from './pages/UpdateCandidate';
 import UpdateElection, { updateElectionLoader } from './pages/UpdateElection';
+import ApproveCandidates, { approveCandidatesLoader } from './pages/ApproveCandidates';
+
 import Error from './pages/Error';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -79,9 +81,17 @@ const router = createBrowserRouter(
 						errorElement={<Error />}
 					/>
 
+
 					<Route path="create-election" 
 						element={<CreateElection />} 
 					/>
+
+					<Route path="election/:id/approveCandidates"
+						element={<ApproveCandidates />}
+						errorElement={<Error />}
+						loader={approveCandidatesLoader}
+					/>
+
 					<Route path="election/:id" 
 						element={<ElectionDetail />} 
 						loader={electionDetailLoader}

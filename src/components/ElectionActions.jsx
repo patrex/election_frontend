@@ -4,7 +4,6 @@ import { useEventStatus } from '@/hooks/useEventStatus';
 const ElectionActions = ({ election, openPostionModal, checkPositionExists, setAddParticipantsModalOpen, setViewUsersModal, setEndElectionModalOpen }) => {
 	const params = useParams();
 	const { isActive, 
-		hasStarted, 
 		hasEnded, 
 		isPending } = useEventStatus(new Date(election.startDate), new Date(election.endDate));
 
@@ -18,7 +17,7 @@ const ElectionActions = ({ election, openPostionModal, checkPositionExists, setA
 						</button>
 					</p>
 					{/* only show this button if the admin is going to add elections by himself */}
-					{election.addCandidatesBy === "I will Add Candidates Myself" && (
+					{election.addCandidatesBy === "I will Add Candidates Myself" ? (
 						<p>
 							<Link
 								to={`/user/${params.userId}/election/${election._id}/addcandidate`}
@@ -27,7 +26,16 @@ const ElectionActions = ({ election, openPostionModal, checkPositionExists, setA
 							>
 								Add Candidate
 							</Link>
-						</p>)
+						</p>) : (
+							<p>
+								<Link
+									to={`/user/${params.userId}/election/${election._id}/approveCandidates`}
+									className='Button violet action-item no-underline'
+								>
+									Approve Candidates
+								</Link>
+							</p>
+						)
 					}
 					{election.type === "Closed" && (
 						<p>
