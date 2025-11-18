@@ -30,48 +30,76 @@ const ApproveCandidates = () => {
     const [positions] = useState(p || []);
     const [candidates] = useState(c || []);
 
-    useEffect (() => {console.log(positions, candidates);
-    }, [positions])
-
     return (
-        <div className="container">
+        <div
+            className="
+            max-w-4xl mx-auto space-y-8 p-4 
+            // Overriding old styles: Removed 'flex', 'justify-center', 'align-items', etc.
+            // to enforce a standard block (stacked) layout.
+            "
+        >
             <h2 className="text-2xl font-bold mb-6 border-b pb-2">
-                Positions and Candidates for Approval
+                Candidates for Approval
             </h2>
+
             {positions.length > 0 ? (
                 positions.map(p => (
-                    <div key={p._id}>
-                        <h3 text-xl font-semibold text-indigo-700 mb-2 border-b pb-1>{p.position}</h3>
-                        {candidates.length > 0 ? candidates.filter((candidate) => (
-                                <ul mt-6 space-y-4>
-                                    <li 
-                                        key = {candidate._id}
-                                        className="flex items-center justify-between 
-                                        p-4 bg-gray-50 rounded-md border border-gray-200 
-                                        hover:bg-gray-100 transition-colors"
-                                    >
-                                        <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
-                                            <img 
-                                                src={candidate.imgUrl} 
-                                                alt="Candidate Image"
-                                                className="w-full h-full object-cover object-center" 
-                                            />
-                                        </div>
-                                        {`${candidate.firstname} ${candidate.lastname}`} 
-                                        {candidate.isApproved ? (
-                                            <button disabled="disabled" className="Button violet">Approved</button>
-                                        ) : (
-                                            <button className="Button mauve">Approve</button>
-                                        )}
-                                    </li>
-                                </ul>
-                        )) : (
-                            <p>No candidates for this position yet</p>
+                    <div
+                        key={p._id}
+                        className="PositionCard p-6 border border-gray-200 rounded-xl shadow-lg bg-white" // Position Card Styling
+                    >
+                        {/* Position Title Styling */}
+                        <h3 className="text-xl font-semibold text-indigo-700 mb-2 border-b pb-1">
+                            {p.position}
+                        </h3>
+
+                        {/* Check if the position has candidates. Assuming candidates are attached to the 'p' object or you need to filter the global 'candidates' array. */}
+                        {/* NOTE: You were using .filter() to render components. Changed the structure to use .map() to render the list. */}
+                        {candidates.length > 0 ? (
+                            <ul className="mt-6 space-y-4"> {/* Candidates List Container Styling */}
+                                {candidates
+                                    .filter(candidate => candidate.positionId === p._id) // Assuming you filter candidates by positionId
+                                    .map((candidate) => (
+                                        <li
+                                            key={candidate._id}
+                                            // Professional List Item Styling
+                                            className="flex items-center justify-between 
+                                    p-4 bg-gray-50 rounded-md border border-gray-200 
+                                    hover:bg-gray-100 transition-colors"
+                                        >
+                                            {/* Left side: Avatar and Name */}
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
+                                                    <img
+                                                        src={candidate.imgUrl}
+                                                        alt="Candidate Image"
+                                                        className="w-full h-full object-cover object-center"
+                                                    />
+                                                </div>
+                                                <span className="CandidateName text-lg font-medium text-gray-800">
+                                                    {`${candidate.firstname} ${candidate.lastname}`}
+                                                </span>
+                                            </div>
+
+                                            {/* Right side: Action Buttons/Status */}
+                                            <div className="ActionsOrStatus flex space-x-3 ml-4">
+                                                {candidate.isApproved ? (
+                                                    <button disabled="disabled" className="Button violet opacity-70 px-3 py-1 text-sm rounded">Approved</button>
+                                                ) : (
+                                                    <button className="Button mauve bg-indigo-600 text-white hover:bg-indigo-700 px-3 py-1 text-sm rounded">Approve</button>
+                                                )}
+                                            </div>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        ) : (
+                            <p className="mt-4 text-gray-500 italic">No candidates have applied for this position yet.</p>
                         )}
                     </div>
                 ))
             ) : (
-                <NoData image={noDataGraphic} message='No positions yet for this election'/>
+                <NoData image={noDataGraphic} message='No positions yet for this election' />
             )}
         </div>
     );
