@@ -57,10 +57,6 @@ function Dashboard() {
 	return (
 		<div className="p-4 md:p-6 lg:p-8 bg-gray-50 min-h-[50vh]">
 			<div className="max-w-7xl mx-auto">
-				<h2 className="text-3xl font-extrabold text-gray-900 mb-6 border-b-2 border-indigo-500 pb-3">
-					Your Elections Dashboard
-				</h2>
-
 				<div className="dashboard-table-container overflow-x-auto rounded-xl shadow-lg border border-gray-200 bg-white">
 					{elections.length ? (
 						<table id='dashboard-table' className="min-w-full divide-y divide-gray-200">
