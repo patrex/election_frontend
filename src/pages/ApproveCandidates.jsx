@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useLoaderData } from 'react-router-dom';
