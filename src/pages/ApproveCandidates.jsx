@@ -34,7 +34,7 @@ const ApproveCandidates = () => {
     }, [positions])
 
     return (
-        <div className="container max-w-4xl mx-auto space-y-8 p-4">
+        <div className="container">
             <h2 className="text-2xl font-bold mb-6 border-b pb-2">
                 Positions and Candidates for Approval
             </h2>
@@ -42,25 +42,14 @@ const ApproveCandidates = () => {
                 positions.map(p => (
                     <div key={p._id}>
                         <h3 text-xl font-semibold text-indigo-700 mb-2 border-b pb-1>{p.position}</h3>
-                        <hr />
                         {candidates.length > 0 ? candidates.filter((candidate) => (
-                            <>
-                                <div class="grid grid-cols-4 gap-4 py-2 px-4 mb-1 
-                                            text-xs md:text-sm uppercase font-semibold 
-                                            bg-gray-100 dark:bg-gray-700 
-                                            text-gray-600 dark:text-gray-300 
-                                            border-b border-gray-300 dark:border-gray-600">
-
-                                    <div class="col-span-1"><input type="checkbox" name={p._id} id={p._id} /></div>
-
-                                    <div class="col-span-2"></div>
-
-                                    <div class="col-span-1 text-right">Approve</div>
-
-                                </div>
-                                <ul>
+                                <ul mt-6 space-y-4>
                                     <li 
-                                        key = {candidate._id}>
+                                        key = {candidate._id}
+                                        className="flex items-center justify-between 
+                                        p-4 bg-gray-50 rounded-md border border-gray-200 
+                                        hover:bg-gray-100 transition-colors"
+                                    >
                                         <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
                                             <img 
                                                 src={candidate.imgUrl} 
@@ -76,9 +65,8 @@ const ApproveCandidates = () => {
                                         )}
                                     </li>
                                 </ul>
-                            </>
                         )) : (
-                            <p>No candidates for this position</p>
+                            <p>No candidates for this position yet</p>
                         )}
                     </div>
                 ))
