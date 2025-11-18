@@ -13,12 +13,12 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
 export async function approveCandidatesLoader({ params }) {
     try {
-        const [positions, candidates] = await Promise.all([
+        const [p, c] = await Promise.all([
             fetcher.get(`election/${params.id}/positions`),
             fetcher.get(`election/${params.id}/candidates/addedself`)
         ])
 
-        return { positions, candidates }
+        return { p, c }
     } catch (error) {
         console.error("There was a problem fetching positions");
     }

@@ -88,8 +88,8 @@ const router = createBrowserRouter(
 
 					<Route path="election/:id/approveCandidates"
 						element={<ApproveCandidates />}
-						errorElement={<Error />}
 						loader={approveCandidatesLoader}
+						errorElement={<Error />}
 					/>
 
 					<Route path="election/:id" 
