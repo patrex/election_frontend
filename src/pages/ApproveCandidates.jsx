@@ -18,14 +18,15 @@ export async function approveCandidatesLoader({ params }) {
             fetcher.get(`election/${params.id}/candidates/addedself`)
         ])
 
-        return {positions, candidates}
+        return { positions, candidates }
     } catch (error) {
         console.error("There was a problem fetching positions");
     }
 }
 
 const ApproveCandidates = () => {
-    const [p, c] = useLoaderData();
+    const {p, c} = useLoaderData();
+
     const [positions] = useState(p || []);
     const [candidates] = useState(c || []);
 
