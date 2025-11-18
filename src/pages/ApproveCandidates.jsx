@@ -34,11 +34,14 @@ const ApproveCandidates = () => {
     }, [positions])
 
     return (
-        <div className="container">
+        <div className="container max-w-4xl mx-auto space-y-8 p-4">
+            <h2 className="text-2xl font-bold mb-6 border-b pb-2">
+                Positions and Candidates for Approval
+            </h2>
             {positions.length > 0 ? (
                 positions.map(p => (
                     <div key={p._id}>
-                        <h3>{p.position}</h3>
+                        <h3 text-xl font-semibold text-indigo-700 mb-2 border-b pb-1>{p.position}</h3>
                         <hr />
                         {candidates.length > 0 ? candidates.filter((candidate) => (
                             <>
