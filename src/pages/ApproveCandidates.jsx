@@ -53,8 +53,6 @@ const ApproveCandidates = () => {
                             {p.position}
                         </h3>
 
-                        {/* Check if the position has candidates. Assuming candidates are attached to the 'p' object or you need to filter the global 'candidates' array. */}
-                        {/* NOTE: You were using .filter() to render components. Changed the structure to use .map() to render the list. */}
                         {candidates.length > 0 ? (
                             <ul className="mt-6 space-y-4"> {/* Candidates List Container Styling */}
                                 {candidates
@@ -64,8 +62,8 @@ const ApproveCandidates = () => {
                                             key={candidate._id}
                                             // Professional List Item Styling
                                             className="flex items-center justify-between 
-                                    p-4 bg-gray-50 rounded-md border border-gray-200 
-                                    hover:bg-gray-100 transition-colors"
+                                                        p-4 bg-gray-50 rounded-md border border-gray-200 
+                                                        hover:bg-gray-100 transition-colors"
                                         >
                                             {/* Left side: Avatar and Name */}
                                             <div className="flex items-center space-x-3">

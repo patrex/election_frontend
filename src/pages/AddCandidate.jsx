@@ -7,7 +7,6 @@ import { AppContext } from '@/App';
 import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
 import { fetcher } from '@/utils/fetcher';
-
 import { PulseLoader } from 'react-spinners';
 
 export async function addCandidateLoader({ params }) {

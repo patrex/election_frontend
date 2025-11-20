@@ -536,7 +536,7 @@ function ElectionDetail() {
 
 				{endElectionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-2 rounded-lg shadow-md relative bg-white">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
 							<p><em>Are you sure you want to End this election. This cannot be undone!</em></p>
 							<div className="action-btn-container">
 								<button className='Button red action-item' onClick={endElection}>Yes, End it</button>
@@ -550,7 +550,7 @@ function ElectionDetail() {
 
 				{positionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
 							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<input
@@ -571,7 +571,7 @@ function ElectionDetail() {
 
 				{updateParticipantModal && (
 					<div className="modal-overlay">
-						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-gray-200">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
 							<span>Update participant info: <strong>{`${election.userAuthType == 'email' ? participant.email : participant.phoneNo}`}</strong></span>
 							<br />
 							<input
@@ -592,7 +592,7 @@ function ElectionDetail() {
 
 				{updatePositionModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
 							<span>Edit position for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<input
@@ -612,7 +612,7 @@ function ElectionDetail() {
 
 				{addParticipantsModalOpen && (
 					<div className="modal-overlay">
-						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
 							<span>Enter list of participants for <strong>{`${election.title}`}</strong></span>
 							<br />
 							<textarea

@@ -1,5 +1,5 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useLoaderData, useNavigate, Link } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/App";
 import isValidPhoneNumber from "@/utils/validatePhone";
 import isValidEmail from "@/utils/validateEmail";
@@ -25,6 +25,7 @@ function Home() {
 	const [election, setElection] = useState(null);
 	const [participant, setParticipant] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [openOptionsModal, setOpenOptionsModal] = useState(false);
 
 	// Process election from query params on mount
 	useEffect(() => {
@@ -65,7 +66,7 @@ function Home() {
 				Toast.warning("This election has been concluded");
 				navigate(`/election/${e._id}/results`);
 			} else if (isPending) {
-				Toast.warning(`Election not started. Starts in ${moment(e.startDate).fromNow()}`);
+				setOpenOptionsModal(true);
 				return;
 			}
 
@@ -386,6 +387,57 @@ function Home() {
 					</div>
 				</div>
 			</div>
+
+			{openOptionsModal && (
+					<div className="modal-overlay">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white overflow-hidden z-100">
+							{/* 1. Card Header Section (Cornflower Blue) */}
+							<div className="bg-indigo-600 p-5 rounded-t-xl"> 
+								<h3 className="text-2xl font-bold text-white">
+									{election.title}
+								</h3>
+								{/* Optional Subtitle */}
+								<p className="text-indigo-200 text-sm mt-1">
+									This election has not started yet...
+								</p>
+							</div>
+
+							{/* 2. Scrollable Content Body */}
+							<div className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
+								{/* Information Section 1 */}
+								<div>
+									<p className="text-gray-600">
+										Click <Link to={``}>here</Link> to register as a candidate.
+									</p>
+									
+								</div>
+							</div>
+						</div>
+						<div className="mt-4 flex items-start p-3 bg-gray-100 rounded-lg text-gray-600 text-xs">
+							{/* Information Icon (Inline SVG) */}
+							<svg 
+								xmlns="http://www.w3.org/2000/svg" 
+								className="h-4 w-4 flex-shrink-0 mr-2 text-indigo-500" 
+								fill="none" 
+								viewBox="0 0 24 24" 
+								stroke="currentColor" 
+								strokeWidth="2"
+							>
+								<path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+							
+							{/* Footer Text Content */}
+							<p>
+								**Important:** Registering here does not imply you'll get shortlisted. The admin still needs to approve your application
+							</p>
+						</div>
+							
+						{/* footer buttons */}
+						<div className="action-btn-container">
+							<button className='Button violet action-item' onClick={ ()=> setOpenOptionsModal(false) }>Ok</button>
+						</div>
+					</div>
+			)}
 		</>
 	);
 }
