@@ -459,7 +459,6 @@ function Home() {
 								Ok
 							</button>
 						</div>
-        
     				</div>
 				</div>
 			)}
