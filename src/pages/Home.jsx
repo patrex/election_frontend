@@ -389,7 +389,7 @@ function Home() {
 			</div>
 
 			{openOptionsModal && (
-				<div className="moodal-overlay">
+				<div className="modal-overlay">
 					<div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all relative">
     
 						{/* Close Button (Top Right) */}
