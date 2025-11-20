@@ -24,18 +24,7 @@ function Home() {
 	const [electionId, setElectionId] = useState('');
 	const [election, setElection] = useState(null);
 	const [participant, setParticipant] = useState('');
-	const [otpValue, setOtpValue] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-
-	const base = process.env.NOTIFICATIONS_BASE_URL;
-	const apiKey = process.env.NOTIFICATIONS_PROVIDER_KEY;
-
-	const [termii, setTermii] = useState(null);	//	for Termii
-
-	
-	// Modal states
-	const [showAuthModal, setShowAuthModal] = useState(false);
-	const [showOtpModal, setShowOtpModal] = useState(false);
 
 	// Process election from query params on mount
 	useEffect(() => {
@@ -51,7 +40,7 @@ function Home() {
 		const isActive = !isPending && !hasEnded;
 		
 		return { isPending, hasEnded, isActive };
-	    }
+	}
 
 	// Fetch and validate election
 	const processElection = async (id) => {
@@ -283,7 +272,7 @@ function Home() {
 	// Add voter to database
 	const addVoterToDatabase = async () => {
 		try {
-			fetcher.post(`election/${election._id}/addvoter/participant`,	
+			await fetcher.post(`election/${election._id}/addvoter/participant`,	
 			{ 
 				participant, 
 				electionId: election._id 
@@ -302,155 +291,8 @@ function Home() {
 		}
 	};
 
-	// Reset modals
-	const closeAuthModal = () => {
-		setShowAuthModal(false);
-		setParticipant('');
-	};
-
-	const closeOtpModal = () => {
-		setShowOtpModal(false);
-		setOtpValue('');
-	};
-
-
-
 	return (
 		<>
-			{/* Authentication Modal */}
-			{showAuthModal && election && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all">
-						{/* Modal Header */}
-						<div className="mb-6">
-							<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-								{election.title}
-							</h2>
-							<p className="text-gray-600 dark:text-gray-300">
-								Enter your {election.userAuthType === 'email' ? 'email address' : 'phone number'} to participate
-							</p>
-						</div>
-
-						{/* Input Field */}
-						<div className="mb-6">
-							<label 
-								htmlFor="participant-input" 
-								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-							>
-								{election.userAuthType === 'email' ? 'Email Address' : 'Phone Number'}
-							</label>
-							<input
-								type={election.userAuthType === 'email' ? 'email' : 'tel'}
-								id="participant-input"
-								value={participant}
-								onChange={(e) => setParticipant(e.target.value)}
-								onKeyDown={(e) => e.key === 'Enter' && handleParticipantSubmit()}
-								placeholder={election.userAuthType === 'email' ? 'your.email@example.com' : '234803XXXXXXX'}
-								className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
-								disabled={isLoading}
-								autoFocus
-							/>
-							{election.userAuthType === 'phone' && (
-								<p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-									Include country code (e.g., 234 for Nigeria)
-								</p>
-							)}
-						</div>
-
-						{/* Action Buttons */}
-						<div className="flex gap-3">
-							<button
-								onClick={handleParticipantSubmit}
-								disabled={isLoading}
-								className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-							>
-								{isLoading ? 'Processing...' : 'Continue'}
-							</button>
-							<button
-								onClick={closeAuthModal}
-								disabled={isLoading}
-								className="px-6 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-							>
-								Cancel
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
-
-			{/* OTP Verification Modal */}
-			{showOtpModal && election && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all">
-						{/* Modal Header */}
-						<div className="mb-6">
-							<div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
-								<svg className="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-								</svg>
-							</div>
-							<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">
-								Verify Your Identity
-							</h2>
-							<p className="text-gray-600 dark:text-gray-300 text-center text-sm">
-								We've sent a verification code to your {election.userAuthType === 'email' ? 'email' : 'phone'}
-							</p>
-						</div>
-
-						{/* OTP Input */}
-						<div className="mb-6">
-							<label 
-								htmlFor="otp-input" 
-								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-							>
-								Verification Code
-							</label>
-							<input
-								type="text"
-								id="otp-input"
-								value={otpValue}
-								onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ''))}
-								onKeyDown={(e) => e.key === 'Enter' && handleOtpVerification()}
-								placeholder="Enter 6-digit code"
-								maxLength="6"
-								className="w-full px-4 py-3 text-center text-2xl tracking-widest border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
-								disabled={isLoading}
-								autoFocus
-							/>
-						</div>
-
-						{/* Action Buttons */}
-						<div className="flex gap-3">
-							<button
-								onClick={handleOtpVerification}
-								disabled={isLoading || otpValue.length < 4}
-								className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-							>
-								{isLoading ? 'Verifying...' : 'Verify'}
-							</button>
-							<button
-								onClick={closeOtpModal}
-								disabled={isLoading}
-								className="px-6 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-							>
-								Cancel
-							</button>
-						</div>
-
-						{/* Resend Link */}
-						<div className="mt-4 text-center">
-							<button
-								onClick={() => sendOtp(participant)}
-								disabled={isLoading}
-								className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium disabled:opacity-50"
-							>
-								Didn't receive code? Resend
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
-
 			{/* Main Content */}
 			<div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
 				{/* Hero Section */}
