@@ -389,71 +389,79 @@ function Home() {
 			</div>
 
 			{openOptionsModal && (
-					<div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all">
-    {/* 1. Card Header Section (Cornflower Blue/Indigo) */}
-    {/* The rounded-xl class should be on the top-level container for unified corners, 
-        and rounded-t-xl on the header */}
-    <div className="bg-indigo-600 p-6 rounded-t-xl"> 
-        <h3 className="text-2xl font-extrabold text-white">
-            {election.title}
-        </h3>
-        {/* Subtitle/Status */}
-        <p className="text-indigo-200 text-sm mt-1 font-light">
-            This election has not started yet...
-        </p>
-    </div>
-
-    {/* 2. Scrollable Content Body */}
-    {/* Removed redundant fixed sizing classes and ensured smooth overflow */}
-    <div className="p-6 max-h-[70vh] overflow-y-auto flex flex-col space-y-6">
-        
-        {/* Information Section 1: Candidate Registration Link */}
-        <div className="text-center bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-400">
-            <p className="text-gray-700 text-md font-medium">
-                Click 
-                <Link 
-                    to={``} 
-                    className="text-indigo-600 font-semibold hover:text-indigo-800 underline mx-1 transition-colors"
-                >
-                    here
-                </Link> 
-                if you want to register as a candidate.
-            </p>
-        </div>
-
-        {/* 3. Informational Footer Text */}
-        {/* Applied padding to the bottom to match the top content padding */}
-        <div className="flex items-start p-3 bg-gray-100 rounded-lg text-gray-600 text-xs">
-            {/* Information Icon (Inline SVG) */}
-            <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="h-4 w-4 flex-shrink-0 mr-2 text-indigo-500 mt-0.5" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor" 
-                strokeWidth="2"
-            >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            
-            {/* Footer Text Content */}
-            <p>
-                <strong className="font-semibold text-gray-800">Important:</strong> Registering here does not imply you will be automatically shortlisted. The administrator still needs to approve your application before you appear on the final ballot.
-            </p>
-        </div>
-        
-    </div>
+				<div className="moodal-overlay">
+					<div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all relative">
     
-    {/* 4. Footer Buttons (Unchanged but styled container) */}
-    <div className="p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
-        <button 
-            className='bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition' 
-            onClick={ ()=> setOpenOptionsModal(false) }
-        >
-            Ok
-        </button>
-    </div>
-</div>
+						{/* Close Button (Top Right) */}
+						<button
+							onClick={() => setOpenOptionsModal(false)}
+							className="absolute top-4 right-4 text-white hover:text-indigo-200 transition p-1 z-20"
+							aria-label="Close modal"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+								<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</button>
+    
+						{/* 1. Card Header Section (Cornflower Blue/Indigo) */}
+						<div className="bg-indigo-600 p-6 rounded-t-xl"> 
+							<h3 className="text-2xl font-extrabold text-white pr-8"> {/* Added pr-8 to prevent overlap with X button */}
+								{election.title}
+							</h3>
+							{/* Subtitle/Status */}
+							<p className="text-indigo-200 text-sm mt-1 font-light">
+								This election has not started yet...
+							</p>
+						</div>
+
+						{/* 2. Scrollable Content Body */}
+						<div className="p-6 max-h-[70vh] overflow-y-auto flex flex-col space-y-6">
+							{/* Information Section 1: Candidate Registration Link */}
+							<div className="text-center bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-400">
+								<p className="text-gray-700 text-md font-medium">
+									Click 
+									<Link 
+										to={``} 
+										className="text-indigo-600 font-semibold hover:text-indigo-800 underline mx-1 transition-colors"
+									>
+										here
+									</Link> 
+									if you want to register as a candidate.
+								</p>
+							</div>
+						</div>
+
+						{/* 3. Informational Footer Text */}
+						<div className="flex items-start p-3 bg-gray-100 rounded-lg text-gray-600 text-xs">
+							{/* Information Icon (Inline SVG) */}
+							<svg 
+								xmlns="http://www.w3.org/2000/svg" 
+								className="h-4 w-4 flex-shrink-0 mr-2 text-indigo-500 mt-0.5" 
+								fill="none" 
+								viewBox="0 0 24 24" 
+								stroke="currentColor" 
+								strokeWidth="2"
+							>
+								<path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+							
+							{/* Footer Text Content */}
+							<p>
+								<strong className="font-semibold text-gray-800">Important:</strong> Registering here does not imply you will be automatically shortlisted. The administrator still needs to approve your application before you appear on the final ballot.
+							</p>
+						</div>
+						{/* 4. Footer Buttons (Unchanged but styled container) */}
+						<div className="p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+							<button 
+								className='bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition' 
+								onClick={ ()=> setOpenOptionsModal(false) }
+							>
+								Ok
+							</button>
+						</div>
+        
+    				</div>
+				</div>
 			)}
 		</>
 	);
