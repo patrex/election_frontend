@@ -222,7 +222,7 @@ function AddCandidate() {
 						type='submit'
 						disabled={isSubmitting}
 						className={`
-                    w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150
+                    w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
                     ${isSubmitting
 								? 'bg-indigo-400 cursor-not-allowed'
 								: 'bg-indigo-600 hover:bg-indigo-700 text-white'
