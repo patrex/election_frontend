@@ -139,7 +139,7 @@ const OTPService = () => {
              <div className="w-full">
                 <button
                     type="submit"
-                    className="w-full px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+                    className="w-2/3 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
                     disabled={!destination.trim()}
                 >
                     Send Verification Code
