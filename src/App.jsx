@@ -74,6 +74,8 @@ const router = createBrowserRouter(
 				errorElement={<Error />}
 			/>
 
+			<Route path="addSelf" element ={<AddCandidate/>} />
+
 			{/* Protected User Routes */}
 			<Route element={<ProtectedRoute />}>
 				<Route path="user/:userId" element={<UserLayout />}>
