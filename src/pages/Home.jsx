@@ -155,41 +155,7 @@ function Home() {
 	};
 
 	// Send OTP via phone
-	const sendPhoneOtp = async (phoneNumber) => {
-		try {
-			const payload = {
-				api_key: apiKey,
-				pin_type: "NUMERIC",
-				phone_number: phoneNumber,
-				pin_attempts: 3,
-				pin_time_to_live: 10,
-				pin_length: 4
-			}
-
-			const token_req = await fetch(
-				`${base}/api/sms/otp/generate`, {
-					method: 'POST',
-					headers: {
-						"Content-Type": 'application/json'
-					},
-					body: JSON.stringify(payload),
-					credentials: "include"
-				}
-			);
-
-			const token_response = await token_req.json();
-			setTermii(token_response);
-			
-			Toast.success('Verification code was sent to your phone');
-			setShowAuthModal(false);
-			setShowOtpModal(true);
-		} catch (error) {
-			const errMsg = handleOTPErrors(error)
-
-			Toast.error(errMsg.userMessage);
-			console.error('Error sending phone OTP:', error, errMsg.message);
-		}
-	};
+	
 
 	// Send OTP via email
 	const sendEmailOtp = async (email) => {
@@ -234,31 +200,7 @@ function Home() {
 	};
 
 	// Verify phone OTP
-	const verifyPhoneOtp = async () => {
-		try {
-			const payload = {
-				api_key: apiKey,
-             			pin_id: termii.pin_id,
-             			pin: termii.otp
-			}
-
-			await fetch(
-				`${base}/api/sms/otp/verify`, {
-				method: 'POST',
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(payload),
-				credentials: 'include'
-			}); 
-
-			await addVoterToDatabase();
-		} catch (error) {
-			const errMsg = handleOTPErrors(error);
-			Toast.warning(errMsg.userMessage);
-			console.log(error, errMsg.message);
-		}
-	};
+	
 
 	// Verify email OTP
 	const verifyEmailOtp = async () => {
@@ -314,7 +256,7 @@ function Home() {
 						{/* Election ID Input - Flatter, cleaner style */}
 						<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-8 max-w-2xl mx-auto">
 							<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-								Join an Election
+								Find an Election
 							</h2>
 							<p className="text-gray-600 dark:text-gray-400 mb-6">
 								Enter the election ID provided by your election administrator
@@ -357,7 +299,6 @@ function Home() {
 			{openOptionsModal && (
 				<div className="modal-overlay">
 					<div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all relative">
-    
 						{/* Close Button (Top Right) */}
 						<button
 							onClick={() => setOpenOptionsModal(false)}
