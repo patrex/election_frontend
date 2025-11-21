@@ -7,8 +7,6 @@ import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from "@/utils/fetcher";
 import moment from "moment";
-import handleOTPErrors from "@/utils/otpErr";
-import OTPService from "@/components/OTPService";
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
@@ -27,7 +25,6 @@ function Home() {
 	const [participant, setParticipant] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [openOptionsModal, setOpenOptionsModal] = useState(false);
-	const [openOTPModal, setOpenOTPModal] = useState(false)
 
 	// Process election from query params on mount
 	useEffect(() => {
@@ -331,12 +328,8 @@ function Home() {
 									<p className="text-gray-700 text-md font-medium">
 										Click 
 										<Link 
+											to='/otpserv'
 											className="text-indigo-600 font-semibold hover:text-indigo-800 underline mx-1 transition-colors"
-											onClick = {(e) => {
-												e.preventDefault();
-												setOpenOptionsModal(false)
-												setOpenOTPModal(true)
-											}}
 										>
 											here
 										</Link> 
