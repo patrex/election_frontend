@@ -370,7 +370,7 @@ function Home() {
 						</button>
     
 						{/* 1. Card Header Section (Cornflower Blue/Indigo) */}
-						<div className="bg-indigo-600 p-6 rounded-t-xl"> 
+						<div className="bg-blue-500 p-6 rounded-t-xl"> 
 							<h3 className="text-2xl font-extrabold text-white pr-8"> {/* Added pr-8 to prevent overlap with X button */}
 								{election.title}
 							</h3>
@@ -421,7 +421,7 @@ function Home() {
 						{/* 4. Footer Buttons (Unchanged but styled container) */}
 						<div className="p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
 							<button 
-								className='bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition' 
+								className='bg-blue-500 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition' 
 								onClick={ ()=> setOpenOptionsModal(false) }
 							>
 								Ok
