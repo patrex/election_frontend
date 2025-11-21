@@ -136,10 +136,10 @@ const OTPService = () => {
                     <p className="mt-2 text-sm text-red-600">{inputError}</p>
                 )}
             </div>
-             <div className="w-full">
+            <div className="w-full flex justify-center">
                 <button
                     type="submit"
-                    className="w-2/3 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+                    className="w-2/3 px-6 py-3 bg-indigo-600 text-center hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
                     disabled={!destination.trim()}
                 >
                     Send Verification Code
