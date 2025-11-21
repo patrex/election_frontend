@@ -396,28 +396,28 @@ function Home() {
 										if you want to register as a candidate.
 									</p>
 								</div>
+								{/* 3. Informational Footer Text */}
+								<div className="flex items-start p-3 bg-gray-100 rounded-lg text-gray-600 text-xs">
+									{/* Information Icon (Inline SVG) */}
+									<svg 
+										xmlns="http://www.w3.org/2000/svg" 
+										className="h-4 w-4 flex-shrink-0 mr-2 text-indigo-500 mt-0.5" 
+										fill="none" 
+										viewBox="0 0 24 24" 
+										stroke="currentColor" 
+										strokeWidth="2"
+									>
+										<path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+									
+									{/* Footer Text Content */}
+									<p>
+										<strong className="font-semibold text-gray-800">Important:</strong> Registering here does not imply you will be automatically shortlisted. The administrator still needs to approve your application before you appear on the final ballot.
+									</p>
+								</div>
 							</div>
 						)}
 
-						{/* 3. Informational Footer Text */}
-						<div className="flex items-start p-3 bg-gray-100 rounded-lg text-gray-600 text-xs">
-							{/* Information Icon (Inline SVG) */}
-							<svg 
-								xmlns="http://www.w3.org/2000/svg" 
-								className="h-4 w-4 flex-shrink-0 mr-2 text-indigo-500 mt-0.5" 
-								fill="none" 
-								viewBox="0 0 24 24" 
-								stroke="currentColor" 
-								strokeWidth="2"
-							>
-								<path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-							</svg>
-							
-							{/* Footer Text Content */}
-							<p>
-								<strong className="font-semibold text-gray-800">Important:</strong> Registering here does not imply you will be automatically shortlisted. The administrator still needs to approve your application before you appear on the final ballot.
-							</p>
-						</div>
 						{/* 4. Footer Buttons (Unchanged but styled container) */}
 						<div className="p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
 							<button 
