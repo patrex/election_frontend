@@ -1,13 +1,16 @@
-const sendPhoneOtp = async (phoneNumber) => {
+const base = process.env.NOTIFICATIONS_BASE_URL
+const apiKey = process.env.NOTIFICATIONS_PROVIDER_KEY
+
+export const sendPhoneOtp = async (phoneNumber) => {
+	const payload = {
+		api_key: apiKey,
+		pin_type: "NUMERIC",
+		phone_number: phoneNumber,
+		pin_attempts: 3,
+		pin_time_to_live: 10,
+		pin_length: 4
+	}
 	try {
-		const payload = {
-			api_key: apiKey,
-			pin_type: "NUMERIC",
-			phone_number: phoneNumber,
-			pin_attempts: 3,
-			pin_time_to_live: 10,
-			pin_length: 4
-		}
 
 		const token_req = await fetch(
 			`${base}/api/sms/otp/generate`, {
@@ -21,26 +24,23 @@ const sendPhoneOtp = async (phoneNumber) => {
 		);
 
 		const token_response = await token_req.json();
-		setTermii(token_response);
-		
-		Toast.success('Verification code was sent to your phone');
-		setShowAuthModal(false);
-		setShowOtpModal(true);
+
+		return token_response;
 	} catch (error) {
 		const errMsg = handleOTPErrors(error)
-
-		Toast.error(errMsg.userMessage);
 		console.error('Error sending phone OTP:', error, errMsg.message);
 	}
 };
 
-const verifyPhoneOtp = async () => {
+export const verifyPhoneOtp = async (pinId, pin) => {
+	const payload = {
+		api_key: apiKey,
+		pin_id: pinId,
+		pin: pin
+	}
+	
+	let status_success = false;
 	try {
-		const payload = {
-			api_key: apiKey,
-			     pin_id: termii.pin_id,
-			     pin: termii.otp
-		}
 
 		await fetch(
 			`${base}/api/sms/otp/verify`, {
@@ -51,11 +51,13 @@ const verifyPhoneOtp = async () => {
 			body: JSON.stringify(payload),
 			credentials: 'include'
 		}); 
+		status_success = true;
 
-		await addVoterToDatabase();
+		return status_success
 	} catch (error) {
 		const errMsg = handleOTPErrors(error);
-		Toast.warning(errMsg.userMessage);
 		console.log(error, errMsg.message);
+		return status_success;
 	}
 };
+
