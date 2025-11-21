@@ -334,6 +334,7 @@ function Home() {
 											className="text-indigo-600 font-semibold hover:text-indigo-800 underline mx-1 transition-colors"
 											onClick = {(e) => {
 												e.preventDefault();
+												setOpenOptionsModal(false)
 												setOpenOTPModal(true)
 											}}
 										>
