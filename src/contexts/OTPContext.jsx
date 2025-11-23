@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext, createContext, useCallback } from 'react';
 import OTPInput from '../components/OTPInput.jsx'; // FIX: Added .jsx extension
-import { sendOtpApi, verifyOtpApi, normalizeNigerianPhone, isNigerianPhoneValid } from '../api/mockApi.js'; // FIX: Added .js extension
+// import { sendOtpApi, verifyOtpApi, normalizeNigerianPhone, isNigerianPhoneValid } from '../api/mockApi.js'; // FIX: Added .js extension
 
 // =================================================================
 // Context Setup

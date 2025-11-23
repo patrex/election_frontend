@@ -1,8 +1,6 @@
 import { useLoaderData, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/App";
-import isValidPhoneNumber from "@/utils/validatePhone";
-import isValidEmail from "@/utils/validateEmail";
 import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from "@/utils/fetcher";
