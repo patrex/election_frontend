@@ -232,7 +232,7 @@ function Home() {
 						</div>
 
 						{/* 2. Scrollable Content Body */}
-						{election.addCandidatesBy === "I will Add Candidates Myself" && (
+						{election.addCandidatesBy === "Candidates Will Add Themselves" && (
 							<div className="p-6 max-h-[70vh] overflow-y-auto flex flex-col space-y-6">
 								{/* Information Section 1: Candidate Registration Link */}
 								<div className="text-center bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-400">
