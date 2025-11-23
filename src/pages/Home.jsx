@@ -7,7 +7,7 @@ import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from "@/utils/fetcher";
 import moment from "moment";
-import handleOTPErrors from "@/utils/otpErr";
+import OTPStarterPhone from "@/components/OtpStarterPhone";
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
@@ -26,6 +26,7 @@ function Home() {
 	const [participant, setParticipant] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [openOptionsModal, setOpenOptionsModal] = useState(false);
+	const [otpStarterModal, setOtpStarterModal] = useState(false)
 
 	// Process election from query params on mount
 	useEffect(() => {
@@ -78,32 +79,6 @@ function Home() {
 		}
 	}
 
-	// Validate and process participant input
-	const handleParticipantSubmit = async () => {
-		if (!participant.trim()) {
-			Toast.warning(`Please enter your ${election.userAuthType === 'email' ? 'email' : 'phone number'}`);
-			return;
-		}
-
-		const trimmedParticipant = participant.trim();
-
-		// Validate based on auth type
-		if (election.userAuthType === 'email') {
-			if (!isValidEmail(trimmedParticipant)) {
-				Toast.warning("Please enter a valid email address");
-				return;
-			}
-		} else {
-			if (!isValidPhoneNumber(trimmedParticipant)) {
-				Toast.warning("Please enter a valid phone number (e.g., 234706XXXXXXX)");
-				return;
-			}
-		}
-
-		setParticipant(trimmedParticipant);
-		await checkAndProcessVoter(trimmedParticipant);
-	}
-
 	// Check if voter exists and process accordingly
 	const checkAndProcessVoter = async (participantId) => {
 		setIsLoading(true);
@@ -140,77 +115,6 @@ function Home() {
 		}
 	};
 
-	// Send OTP based on auth type
-	const sendOtp = async (participantId) => {
-		try {
-			if (election.userAuthType === 'phone') {
-				await sendPhoneOtp(participantId);
-			} else {
-				await sendEmailOtp(participantId);
-			}
-		} catch (error) {
-			Toast.error('Failed to send verification code. Please try again');
-			console.error('Error sending OTP:', error);
-		}
-	};
-
-	// Send OTP via phone
-	
-
-	// Send OTP via email
-	const sendEmailOtp = async (email) => {
-		try {
-			await fetcher.post(`otp/getOTP/email`, {	
-					participant: email,
-					electionId: election._id
-				},
-			);
-
-			Toast.success('Verification code sent to your email');
-			setShowAuthModal(false);
-			setShowOtpModal(true);
-			
-		} catch (error) {
-			Toast.error('Failed to send verification email');
-			console.error('Error sending email OTP:', error);
-		}
-	};
-
-	// Verify OTP and add voter
-	const handleOtpVerification = async () => {
-		if (!otpValue.trim()) {
-			Toast.warning("Please enter the verification code");
-			return;
-		}
-
-		setIsLoading(true);
-
-		try {
-			if (election.userAuthType === 'phone') {
-				await verifyPhoneOtp();
-			} else {
-				await verifyEmailOtp();
-			}
-		} catch (error) {
-			Toast.error('Verification failed. Please check your code and try again');
-			console.error('OTP verification error:', error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	// Verify phone OTP
-	
-
-	// Verify email OTP
-	const verifyEmailOtp = async () => {
-		try {
-			await fetcher.get(`otp/${otpValue}/verifyOTP`);
-			await addVoterToDatabase();
-		} catch (error) {
-			Toast.warning("Invalid verification code");
-		}
-	};
 
 	// Add voter to database
 	const addVoterToDatabase = async () => {
@@ -296,6 +200,12 @@ function Home() {
 				</div>
 			</div>
 
+			{otpStarterModal && (
+				<OTPStarterPhone />
+			)}
+
+
+
 			{openOptionsModal && (
 				<div className="modal-overlay">
 					<div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all relative">
@@ -328,12 +238,14 @@ function Home() {
 								<div className="text-center bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-400">
 									<p className="text-gray-700 text-md font-medium">
 										Click 
-										<Link 
-											to={``} 
-											className="text-indigo-600 font-semibold hover:text-indigo-800 underline mx-1 transition-colors"
+										<span 
+											onClick={ () => {
+												setOtpStarterModal(true);
+											}}
+											className="text-indigo-600 font-semibold hover:text-indigo-800 underline mx-1 transition-colors text-undeline"
 										>
 											here
-										</Link> 
+										</span> 
 										if you want to register as a candidate.
 									</p>
 								</div>

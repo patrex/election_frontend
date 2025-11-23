@@ -21,11 +21,6 @@ const sendPhoneOtp = async (phoneNumber) => {
 		);
 
 		const token_response = await token_req.json();
-		setTermii(token_response);
-		
-		Toast.success('Verification code was sent to your phone');
-		setShowAuthModal(false);
-		setShowOtpModal(true);
 	} catch (error) {
 		const errMsg = handleOTPErrors(error)
 

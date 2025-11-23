@@ -9,6 +9,8 @@ import { configureFetcher } from './utils/fetcher';
 import backendUrl from './utils/backendurl.js'
 import Toast from './utils/ToastMsg.js'
 
+import { OTPProvider } from './contexts/OTPContext.jsx'
+
 // Configure once at app startup
 configureFetcher({
 	baseURL: backendUrl, // or process.env.REACT_APP_BACKEND_URL
@@ -31,7 +33,9 @@ configureFetcher({
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 	<ErrorBoundary>
-		<App />
+		<OTPProvider>
+			<App />
+		</OTPProvider>
 	</ErrorBoundary>
   </React.StrictMode>,
 )
