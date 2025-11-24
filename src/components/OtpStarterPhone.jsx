@@ -38,7 +38,7 @@ const OTPStarterPhone = () => {
 							disabled={!destinationInput}
 							className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
 						>
-							Send Code
+							Send OTP
 						</button>
 					</div>
 				</div>
