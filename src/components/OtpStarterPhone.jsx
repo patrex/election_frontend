@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useOTP } from './context/OTPContext'; // Removed .jsx
+import { useOTP } from '@/contexts/OTPContext'; // Removed .jsx
 import { cleanNgPhoneNo, validatePhoneNo } from '@/utils/cleanPhoneNo'
 import Toast from '@/utils/ToastMsg';
 
