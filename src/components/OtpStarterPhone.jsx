@@ -74,10 +74,10 @@ const OTPStarterPhone = () => {
 						'Request OTP'
 					)}
 				</button>
-				<p className="text-xs text-gray-500 text-center">
-					*Standard SMS rates may apply. Use country code without '+'.
-				</p>
 			</div>
+			<p className="text-xs text-gray-500 text-center">
+				*Standard SMS rates may apply. Use country code without '+'.
+			</p>
 		</div>
 	);
 }
