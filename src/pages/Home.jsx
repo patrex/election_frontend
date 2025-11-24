@@ -239,6 +239,7 @@ function Home() {
 										<span 
 											onClick={ () => {
 												setOtpStarterModal(true);
+												setOpenOptionsModal(false);
 											}}
 											className="text-indigo-600 font-semibold hover:text-indigo-800 underline mx-1 transition-colors text-undeline"
 										>

@@ -22,7 +22,7 @@ const OTPStarterPhone = () => {
 
 	return (
 		<div className="modal-overlay">
-			<div className="min-h-screen bg-gray-50 p-8 font-sans flex flex-col items-center">
+			<div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all relative">
 				<div className="max-w-4xl mx-auto w-full">
 					<h1 className="text-4xl font-extrabold text-gray-900 mb-4 text-center">
 						Let's verify you
