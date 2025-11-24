@@ -8,7 +8,8 @@ export const sendPhoneOtp = async (phoneNumber) => {
 		phone_number: phoneNumber,
 		pin_attempts: 3,
 		pin_time_to_live: 10,
-		pin_length: 4
+		pin_length: 4,
+		channel: 'dnd'
 	}
 
 	try {
@@ -24,7 +25,7 @@ export const sendPhoneOtp = async (phoneNumber) => {
 			}
 		);
 
-		if (!response.ok) {
+		if (!token_req.ok) {
 			let errorData;
 			try {
 				errorData = await response.json();
@@ -56,7 +57,8 @@ export const verifyPhoneOtp = async ({ otpCode, pinId }) => {
 			method: 'POST',
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(payload),
-			credentials: 'include'
+			credentials: 'include',
+			mode: 'no-cors'
 		});
 	
 		if (!response.ok) {
