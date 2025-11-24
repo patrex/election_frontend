@@ -2,7 +2,6 @@ const base = import.meta.env.VITE_BASE;
 const apiKey = import.meta.env.VITE_NOTIFICATIONS_PROVIDER;
 
 export const sendPhoneOtp = async (phoneNumber) => {
-	console.log(base, apiKey);
 	const payload = {
 		api_key: apiKey,
 		pin_type: "NUMERIC",
@@ -20,7 +19,7 @@ export const sendPhoneOtp = async (phoneNumber) => {
 					"Content-Type": 'application/json'
 				},
 				body: JSON.stringify(payload),
-				credentials: "include"
+				credentials: "include",
 			}
 		);
 
