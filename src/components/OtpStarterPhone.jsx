@@ -24,7 +24,7 @@ const OTPStarterPhone = () => {
 	};
 
 	return (
-		<div className="p-8 space-y-6">
+		<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
 			<h2 className="text-3xl font-bold text-gray-800">Phone Verification</h2>
 			<p className="text-gray-600">Enter your phone number to receive a verification code.</p>
 
