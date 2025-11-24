@@ -44,7 +44,7 @@ const OTPStarterPhone = () => {
 					value={phoneNumber}
 					onChange={(e) => setPhoneNumber(e.target.value)}
 					placeholder="e.g., 2348012345678"
-					className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition shadow-inner"
+					className="w-full !pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition shadow-inner"
 					disabled={isLoading}
 				/>
 			</div>
