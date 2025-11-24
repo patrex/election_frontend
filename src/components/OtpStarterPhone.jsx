@@ -9,6 +9,7 @@ const OTPStarterPhone = () => {
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [resultMessage, setResultMessage] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState('')
 
 	const handleStartClick = async (dest) => {
 		let phoneNo = cleanNgPhoneNo(dest);
