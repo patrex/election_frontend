@@ -8,6 +8,7 @@ const OTPStarterPhone = () => {
 	const { startVerification, status } = useOTP();
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [resultMessage, setResultMessage] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleStartClick = async (dest) => {
 		let phoneNo = cleanNgPhoneNo(dest);
@@ -46,7 +47,10 @@ const OTPStarterPhone = () => {
 			)}
 
 			<button
-				onClick={handleStartClick}
+				onClick={() => {
+					handleStartClick(phoneNumber);
+					setIsLoading(true)
+				}}
 				disabled={isLoading || phoneNumber.length < 10}
 				className="w-full flex items-center justify-center py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-200 disabled:bg-indigo-400"
 			>
