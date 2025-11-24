@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useOTP } from './context/OTPContext'; // Removed .jsx
+import { cleanNgPhoneNo, validatePhoneNo } from '@/utils/cleanPhoneNo'
+import Toast from '@/utils/ToastMsg';
 
 const OTPStarterPhone = () => {
 	const { startVerification, status } = useOTP();
@@ -7,11 +9,12 @@ const OTPStarterPhone = () => {
 	const [resultMessage, setResultMessage] = useState('');
 
 	const handleStartClick = async (dest) => {
+		let phoneNo = cleanNgPhoneNo(dest);
+
 		setResultMessage('');
 		try {
 			// Call the globally available function to trigger the modal
-			const result = await startVerification(dest);
-			setResultMessage(`Verification successful! Token: ${result.token.substring(0, 15)}...`);
+			const result = await startVerification(phoneNo);
 		} catch (error) {
 			setResultMessage(`Verification failed: ${error.message}`);
 		}
@@ -33,13 +36,6 @@ const OTPStarterPhone = () => {
 						<strong>Global Status:</strong> {status}
 					</div>
 
-					{/* Verification Result */}
-					{resultMessage && (
-						<div className={`mb-8 p-4 font-semibold rounded-lg ${resultMessage.startsWith('✅') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-							{resultMessage}
-						</div>
-					)}
-
 				
 					<div className="bg-white rounded-xl shadow-xl p-8 mb-8">
 						<h3 className="text-xl font-semibold mb-4 text-indigo-700">Trigger Point A: Manual Input</h3>
@@ -48,7 +44,7 @@ const OTPStarterPhone = () => {
 								type="text"
 								value={destinationInput}
 								onChange={(e) => setDestinationInput(e.target.value)}
-								placeholder="Enter email (test@example.com) or phone (080...)"
+								placeholder="Enter phone number eg 0803XXXXXXX"
 								className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
 							/>
 							<button
