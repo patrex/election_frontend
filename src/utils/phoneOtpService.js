@@ -20,6 +20,7 @@ export const sendPhoneOtp = async (phoneNumber) => {
 				},
 				body: JSON.stringify(payload),
 				credentials: "include",
+				mode: 'no-cors'
 			}
 		);
 
