@@ -1,6 +1,3 @@
-const base = import.meta.env.VITE_BASE;
-const apiKey = import.meta.env.VITE_NOTIFICATIONS_PROVIDER;
-
 export const sendPhoneOtp = async (phoneNumber) => {
 	const payload = {
 		api_key: apiKey,
