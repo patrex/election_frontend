@@ -13,7 +13,6 @@ import AddCandidate, { addCandidateLoader } from './pages/AddCandidate';
 import Election, { electionLoader } from './pages/Election';
 import Layout from './components/Layout';
 import UserLayout from './components/UserLayout';
-import OtpLandingPage from './pages/OtpLandingPage';
 import ElectionDetail, { electionDetailLoader } from './pages/ElectionDetail';
 import PositionDetails, { loader } from './pages/PositionDetails';
 import ElectionResults, { resultsLoader } from './pages/ElectionResults';
@@ -60,7 +59,6 @@ const router = createBrowserRouter(
 			<Route path="/" element={<Home />} loader={homeLoader} />
 			<Route path="login" element={<Login />} />
 			<Route path="signup" element={<SignUp />} />
-			<Route path="otpserv" element={<OtpLandingPage />} />
 			
 			<Route path="/election/:id/results" 
 				element={<ElectionResults />} 

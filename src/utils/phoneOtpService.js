@@ -1,36 +1,24 @@
+import { fetcher } from "./fetcher";
+import handleOTPErrors from "./otpErr";
+
 export const sendPhoneOtp = async (phoneNumber) => {
 	const payload = {
-		api_key: apiKey,
-		pin_type: "NUMERIC",
-		phone_number: phoneNumber,
-		pin_attempts: 3,
-		pin_time_to_live: 10,
-		pin_length: 4,
-		channel: 'dnd'
+		phoneNo: phoneNumber,
 	}
 
 	try {
-		const token_req = await fetch(
-			`${base}/api/sms/otp/generate`, {
+		const token_req = await fetcher.post(
+			`otp/getOTP/phone`, {
 				method: 'POST',
 				headers: {
 					"Content-Type": 'application/json'
 				},
 				body: JSON.stringify(payload),
-				credentials: "include",
-				mode: 'no-cors'
 			}
 		);
 
 		if (!token_req.ok) {
-			let errorData;
-			try {
-				errorData = await response.json();
-			} catch {
-			errorData = { message: `HTTP Error ${response.status}: Failed to process request.` };
-			}
-
-			throw new Error(errorData.message || 'Verification failed on server.');
+			throw new Error("There was an error sending your OTP code")
 		}
 
 		const token_response = await token_req.json();
@@ -42,36 +30,23 @@ export const sendPhoneOtp = async (phoneNumber) => {
 	}
 };
 
-export const verifyPhoneOtp = async ({ otpCode, pinId }) => {
+export const verifyPhoneOtp = async ({ pinId }) => {
 	const payload = {
-		api_key: apiKey,
 		pin_id: pinId,
 		pin: otpCode
 	}
 
 	try {
-		const response = await fetch(`${base}/api/sms/otp/verify`, {
-			method: 'POST',
-			headers: { "Content-Type": "application/json" },
+		const response = await fetcher.get(
+			`otp/verifyOtp/${pinId}`,
+			{
 			body: JSON.stringify(payload),
-			credentials: 'include',
-			mode: 'no-cors'
 		});
 	
 		if (!response.ok) {
-			let errorData;
-			try {
-				errorData = await response.json();
-			} catch {
-			errorData = { message: `HTTP Error ${response.status}: Failed to process request.` };
-			}
-
-			throw new Error(errorData.message || 'Verification failed on server.');
+			throw new Error("Could not verify your OTP. Please retry")
 		}
 	
-		// 2. Success Path (Only reached if status is 200-299)
-		
-		// IMPORTANT: You might also want to parse and return the successful JSON response body here:
 		const successData = await response.json();
 		return { success: true, data: successData }; 
 	} catch (error) {
@@ -81,6 +56,6 @@ export const verifyPhoneOtp = async ({ otpCode, pinId }) => {
 		console.log("Handled Error Message:", errMsg.message);
 		
 		// Return false on any failure
-		return false;
+		return {success: false, data: {}}
 	}   
 };
