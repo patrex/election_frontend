@@ -3,13 +3,16 @@ import { useOTP } from '@/contexts/OTPContext'; // Removed .jsx
 import { cleanNgPhoneNo, validatePhoneNo } from '@/utils/cleanPhoneNo'
 import Toast from '@/utils/ToastMsg';
 import { Loader2, Phone, AlertTriangle } from 'lucide-react';
+import { useEffect } from 'react';
 
-const OTPStarterPhone = ({electionId}) => {
+const OTPStarterPhone = ({ electionId }) => {
 	const { startVerification, status } = useOTP();
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [resultMessage, setResultMessage] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('')
+
+	useEffect(() => {electionId}, [])
 
 	const handleStartClick = async (dest) => {
 		let phoneNo = cleanNgPhoneNo(dest);

@@ -268,7 +268,7 @@ export const OTPProvider = ({ children }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [destination, setDestination] = useState('');
 	const [status, setStatus] = useState('Awaiting Verification Trigger');
-	const [electionId, setElectionId] = useState(null);
+	const [electionId, setElectionId] = useState();
 	const resolveRef = useRef(null);
 	const rejectRef = useRef(null);
 
