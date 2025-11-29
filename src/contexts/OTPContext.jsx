@@ -49,6 +49,7 @@ const OTPVerificationModal = () => {
 	const [error, setError] = useState('');
 	const [resendTimer, setResendTimer] = useState(0);
 	const [otpResponseObj, setOtpResponseObj] = useState(null);
+	const [electionID, setElectionID] = useState(electionId)
 
 	const timerRef = useRef(null);
 
@@ -85,14 +86,14 @@ const OTPVerificationModal = () => {
 	const startTimer = () => setResendTimer(60);
 
 	const handleSendOtp = useCallback(async (dest) => {
-		console.log(`handleSendOtp: ${electionId}`);
-
+		
 		if (resendTimer > 0 && isSent) return;
-
+		
 		setIsLoading(true);
 		setError('');
 		setStatus(`Sending OTP to ${dest}...`);
 		try {
+			console.log(`handleSendOtp: ${electionID}`);
 			let req_obj = await sendPhoneOtp(dest, electionId);
 			setOtpResponseObj(req_obj.data)
 
