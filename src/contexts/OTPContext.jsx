@@ -68,7 +68,7 @@ const OTPVerificationModal = () => {
 
 	useEffect(() => {
 		console.log(`OTPVerification Modal: ${electionId}`);
-	})
+	}, [electionId])
 
 	// Timer Logic
 	useEffect(() => {
@@ -85,6 +85,8 @@ const OTPVerificationModal = () => {
 	const startTimer = () => setResendTimer(60);
 
 	const handleSendOtp = useCallback(async (dest) => {
+		console.log(`handleSendOtp: ${electionId}`);
+
 		if (resendTimer > 0 && isSent) return;
 
 		setIsLoading(true);
@@ -280,7 +282,7 @@ export const OTPProvider = ({ children }) => {
 
 	// Function exposed to trigger the verification flow from any component
 	const startVerification = (inputDestination, election_id) => {
-		console.log(`Start Verification: ${election_id}`);
+		console.log(`startVerification: ${election_id}`);
 		return new Promise((resolve, reject) => {
 			let finalDestination = inputDestination.trim();
 			if (EMAIL_REGEX.test(finalDestination)) {

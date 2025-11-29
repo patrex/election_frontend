@@ -1,7 +1,7 @@
 import { fetcher } from "./fetcher";
 import handleOTPErrors from "./otpErr";
 
-export const sendPhoneOtp = async ({dest, electionId}) => {
+export const sendPhoneOtp = async (dest, electionId) => {
 	console.log(`sendPhoneOtp => ${electionId}`);
 	const payload = {
 		phoneNo: dest,
