@@ -12,7 +12,7 @@ const OTPStarterPhone = ({ electionId }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('')
 
-	useEffect(() => {electionId}, [])
+	useEffect(() => {console.log(electionId)}, [])
 
 	const handleStartClick = async (dest) => {
 		let phoneNo = cleanNgPhoneNo(dest);
