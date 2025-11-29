@@ -4,7 +4,7 @@ import { cleanNgPhoneNo, validatePhoneNo } from '@/utils/cleanPhoneNo'
 import Toast from '@/utils/ToastMsg';
 import { Loader2, Phone, AlertTriangle } from 'lucide-react';
 
-const OTPStarterPhone = () => {
+const OTPStarterPhone = ({electionId}) => {
 	const { startVerification, status } = useOTP();
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [resultMessage, setResultMessage] = useState('');
@@ -17,7 +17,7 @@ const OTPStarterPhone = () => {
 		setResultMessage('');
 		try {
 			// Call the globally available function to trigger the modal
-			const result = await startVerification(phoneNo);
+			const result = await startVerification(phoneNo, electionId);
 		} catch (error) {
 			setResultMessage(`Verification failed: ${error.message}`);
 		}

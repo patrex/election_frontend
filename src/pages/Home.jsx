@@ -211,7 +211,7 @@ function Home() {
 									<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
 								</svg>
 							</button>
-							<OTPStarterPhone />
+							<OTPStarterPhone electionId={election._id}/>
 						</div>
 					</>
 				</div>
