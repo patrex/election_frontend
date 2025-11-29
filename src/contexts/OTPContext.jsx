@@ -85,8 +85,7 @@ const OTPVerificationModal = () => {
 
 	const startTimer = () => setResendTimer(60);
 
-	const handleSendOtp = useCallback(async (dest) => {
-		
+	const handleSendOtp = async (dest) => {
 		if (resendTimer > 0 && isSent) return;
 		
 		setIsLoading(true);
@@ -107,7 +106,7 @@ const OTPVerificationModal = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [isSent, resendTimer, setStatus]);
+	};
 
 	const handleVerifyOtp = useCallback(async (otpOverride = null) => {
 		const otpToVerify = otpOverride || otpValue;
