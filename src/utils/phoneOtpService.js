@@ -1,20 +1,16 @@
 import { fetcher } from "./fetcher";
 import handleOTPErrors from "./otpErr";
 
-export const sendPhoneOtp = async (phoneNumber) => {
+export const sendPhoneOtp = async ({dest, electionId}) => {
 	const payload = {
-		phoneNo: phoneNumber,
+		phoneNo: dest,
+		electionId
 	}
 
 	try {
 		const token_req = await fetcher.post(
-			`otp/getOTP/phone`, {
-				method: 'POST',
-				headers: {
-					"Content-Type": 'application/json'
-				},
-				body: JSON.stringify(payload),
-			}
+			`otp/getOTP/phone`, 
+			payload
 		);
 
 		if (!token_req.ok) {
@@ -30,18 +26,17 @@ export const sendPhoneOtp = async (phoneNumber) => {
 	}
 };
 
-export const verifyPhoneOtp = async ({ pinId }) => {
+export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 	const payload = {
 		pin_id: pinId,
 		pin: otpCode
 	}
 
 	try {
-		const response = await fetcher.get(
-			`otp/verifyOtp/${pinId}`,
-			{
-			body: JSON.stringify(payload),
-		});
+		const response = await fetcher.post(
+			`otp/verifyOtp/`,
+			payload
+		);
 	
 		if (!response.ok) {
 			throw new Error("Could not verify your OTP. Please retry")
