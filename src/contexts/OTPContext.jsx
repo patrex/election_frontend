@@ -66,6 +66,10 @@ const OTPVerificationModal = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isModalOpen, destination]);
 
+	useEffect(() => {
+		console.log(`OTPVerification Modal: ${electionId}`);
+	})
+
 	// Timer Logic
 	useEffect(() => {
 		if (resendTimer > 0) {
@@ -87,7 +91,7 @@ const OTPVerificationModal = () => {
 		setError('');
 		setStatus(`Sending OTP to ${dest}...`);
 		try {
-			let req_obj = await sendPhoneOtp({dest, electionId});
+			let req_obj = await sendPhoneOtp(dest, electionId);
 			setOtpResponseObj(req_obj.data)
 
 			setIsSent(true);
@@ -276,6 +280,7 @@ export const OTPProvider = ({ children }) => {
 
 	// Function exposed to trigger the verification flow from any component
 	const startVerification = (inputDestination, election_id) => {
+		console.log(`Start Verification: ${election_id}`);
 		return new Promise((resolve, reject) => {
 			let finalDestination = inputDestination.trim();
 			if (EMAIL_REGEX.test(finalDestination)) {
