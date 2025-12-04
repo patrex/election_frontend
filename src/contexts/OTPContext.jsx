@@ -39,7 +39,7 @@ const OTPVerificationModal = () => {
 	const {
 		isModalOpen, destination,
 		handleCancel, handleSuccess,
-		setStatus, electionId
+		setStatus, otpObject
 	} = useOTP();
 
 	const [otpValue, setOtpValue] = useState('');
@@ -48,9 +48,8 @@ const OTPVerificationModal = () => {
 	const [isVerified, setIsVerified] = useState(false);
 	const [error, setError] = useState('');
 	const [resendTimer, setResendTimer] = useState(0);
-	const [otpResponseObj, setOtpResponseObj] = useState(null);
-	const [electionID, setElectionID] = useState(electionId)
-
+	
+	const otpResponseObj = useRef(otpObject);
 	const timerRef = useRef(null);
 
 	// Reset state and trigger initial send when modal opens
@@ -59,17 +58,12 @@ const OTPVerificationModal = () => {
 			setOtpValue('');
 			setIsVerified(false);
 			setError('');
-			handleSendOtp(destination);
 		} else {
 			clearTimeout(timerRef.current);
 			setResendTimer(0);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isModalOpen, destination]);
-
-	useEffect(() => {
-		console.log(`OTPVerification Modal: ${electionId}`);
-	}, [electionId])
 
 	// Timer Logic
 	useEffect(() => {
@@ -92,9 +86,8 @@ const OTPVerificationModal = () => {
 		setError('');
 		setStatus(`Sending OTP to ${dest}...`);
 		try {
-			console.log(`handleSendOtp: ${electionID}`);
-			let req_obj = await sendPhoneOtp(dest, electionId);
-			setOtpResponseObj(req_obj.data)
+			let req_obj = await sendPhoneOtp(dest);
+			otpResponseObj.current = req_obj;
 
 			setIsSent(true);
 			startTimer();
@@ -121,10 +114,7 @@ const OTPVerificationModal = () => {
 		setStatus(`Verifying OTP: ${otpToVerify}...`);
 
 		try {
-			const result = await verifyPhoneOtp({
-				code: otpResponseObj.otp,
-				pinId: otpResponseObj.pin_id
-			});
+			const result = await verifyPhoneOtp({pinId: otpResponseObj.pinId, otpCode: otpValue});
 
 			if (result.success) {
 				setIsVerified(true);
@@ -274,15 +264,14 @@ export const OTPProvider = ({ children }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [destination, setDestination] = useState('');
 	const [status, setStatus] = useState('Awaiting Verification Trigger');
-	const [electionId, setElectionId] = useState();
+	const [otpObject, setOtpOject] = useState(null)
 	const resolveRef = useRef(null);
 	const rejectRef = useRef(null);
 
 	const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 	// Function exposed to trigger the verification flow from any component
-	const startVerification = (inputDestination, election_id) => {
-		console.log(`startVerification: ${election_id}`);
+	const startVerification = (inputDestination, otpObject) => {
 		return new Promise((resolve, reject) => {
 			let finalDestination = inputDestination.trim();
 			if (EMAIL_REGEX.test(finalDestination)) {
@@ -298,7 +287,7 @@ export const OTPProvider = ({ children }) => {
 
 			// Set state to open modal and store promise handlers
 			setDestination(finalDestination);
-			setElectionId(election_id);
+			setOtpOject(otpObject)
 			setIsModalOpen(true);
 			setStatus(`Verification started for: ${finalDestination}`);
 			resolveRef.current = resolve;
@@ -327,11 +316,11 @@ export const OTPProvider = ({ children }) => {
 		isModalOpen,
 		destination,
 		status,
-		electionId,
 		startVerification,
 		handleCancel,
 		handleSuccess,
-		setStatus
+		setStatus,
+		otpObject
 	};
 
 	return (

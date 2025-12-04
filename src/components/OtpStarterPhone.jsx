@@ -4,6 +4,7 @@ import { cleanNgPhoneNo, validatePhoneNo } from '@/utils/cleanPhoneNo'
 import Toast from '@/utils/ToastMsg';
 import { Loader2, Phone, AlertTriangle } from 'lucide-react';
 import { useEffect } from 'react';
+import { sendPhoneOtp } from '@/utils/phoneOtpService';
 
 const OTPStarterPhone = ({ electionId }) => {
 	const { startVerification, status } = useOTP();
@@ -11,14 +12,24 @@ const OTPStarterPhone = ({ electionId }) => {
 	const [resultMessage, setResultMessage] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('')
+	const [termiiResponse, setTermiiResponse] = useState({});
 
 	const handleStartClick = async (dest) => {
 		let phoneNo = cleanNgPhoneNo(dest);
 
 		setResultMessage('');
 		try {
-			// Call the globally available function to trigger the modal
-			const result = await startVerification(phoneNo, electionId);
+			const otpRequest = await sendPhoneOtp(phoneNo, electionId)
+
+			if (otpRequest.success) {
+				setTermiiResponse(otpRequest);
+				const result = await startVerification(phoneNo, termiiResponse);
+				
+			} else {
+				Toast.error("Sending OTP failed");
+				throw new Error("Could not send OTP")
+			}
+			
 		} catch (error) {
 			setResultMessage(`Verification failed: ${error.message}`);
 		}
@@ -54,7 +65,7 @@ const OTPStarterPhone = ({ electionId }) => {
 						handleStartClick(phoneNumber);
 						setIsLoading(true)
 					}}
-					disabled={isLoading || phoneNumber.length < 10}
+					disabled={isLoading || phoneNumber.length < 11}
 					className="w-full flex items-center justify-center py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-200 disabled:bg-indigo-400"
 				>
 					{isLoading ? (
