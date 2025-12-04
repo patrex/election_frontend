@@ -34,7 +34,7 @@ export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 
 	try {
 		const response = await fetcher.post(
-			`otp/verifyOtp/`,
+			`otp/verifyOtp`,
 			payload
 		);
 	
