@@ -13,7 +13,12 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
 export async function addCandidateLoader({ params }) {
 	try {
-		return await fetcher.get(`election/${params.id}/positions`)
+		const [positions, election] = Promise.all([
+			fetcher.get(`election/${params.id}/positions`),
+			fetcher.get(`election/${params.id}`)
+		])
+
+		return [positions, election];
 	} catch (error) {
 		console.error("There was a problem fetching positions");
 		return {}
@@ -21,10 +26,9 @@ export async function addCandidateLoader({ params }) {
 }
 
 function AddCandidate() {
-	const listOfPositions = useLoaderData()
+	const [listOfPositions, election] = useLoaderData()
 	const [positions, setPositions] = useState(listOfPositions || []);
 	const [selectedPosition, setSelectedPosition] = useState("");
-	const [election, setElection] = useState(null);
 	
 	const [image, setImage] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,11 +44,6 @@ function AddCandidate() {
 		lastname: '',
 		manifesto: ''
 	});
-
-	useEffect(async () => {
-		const e = await fetcher.get(`election/${params.id}`)
-		setElection(e);
-	}, [params.id])
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
