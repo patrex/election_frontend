@@ -76,10 +76,14 @@ function AddCandidate() {
 				`election/${params.id}/add-candidate`, 	
 				payload
 			);
+
+			if (user) {
+				navigate(`/user/${params.userId}/election/${params.id}`)
+			} else {
+				Toast.success("You've been registered")
+				navigate('/');
+			}
 			
-			user && navigate(`/user/${params.userId}/election/${params.id}`);
-			Toast.success("You've been registered")
-			navigate('/');
 		    } catch (err) {
 			Toast.error(err.message || "An error occurred");
 		}
