@@ -13,7 +13,7 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
 export async function addCandidateLoader({ params }) {
 	try {
-		const [positions, election] = Promise.all([
+		const [positions, election] = await Promise.all([
 			fetcher.get(`election/${params.id}/positions`),
 			fetcher.get(`election/${params.id}`)
 		])
