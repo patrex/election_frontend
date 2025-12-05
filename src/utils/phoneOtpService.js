@@ -19,7 +19,7 @@ export const sendPhoneOtp = async (dest, electionId) => {
 	
 		// const token_response = await token_req.json();
 		console.log(token_response);
-		return {success: true, data: token_response};
+		return {success: true, data: token_req};
 	} catch (error) {
 		const errMsg = handleOTPErrors(error)
 		console.error('Error sending phone OTP:', error, errMsg.message);
@@ -44,7 +44,7 @@ export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 		}
 	
 		// const successData = await response.json();
-		return { success: true, data: successData }; 
+		return { success: true, data: response }; 
 	} catch (error) {
 		// This catch now handles both network errors AND server-side HTTP errors (4xx/5xx)
 		const errMsg = handleOTPErrors(error);
