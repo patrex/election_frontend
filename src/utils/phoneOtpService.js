@@ -47,10 +47,6 @@ export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 		return { success: true, data: response }; 
 	} catch (error) {
 		// This catch now handles both network errors AND server-side HTTP errors (4xx/5xx)
-		const errMsg = handleOTPErrors(error);
-		console.log("Verification failed:", error.message);
-		console.log("Handled Error Message:", errMsg.message);
-		
 		// Return false on any failure
 		return {success: false, data: {}}
 	}   
