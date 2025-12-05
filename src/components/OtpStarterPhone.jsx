@@ -23,7 +23,7 @@ const OTPStarterPhone = ({ electionId }) => {
 
 		setResultMessage('');
 		try {
-			const otpRequest = sendPhoneOtp(phoneNo, electionId)
+			const otpRequest = await sendPhoneOtp(phoneNo, electionId)
 
 			if (otpRequest.success) {
 				setTermiiResponse(otpRequest);
