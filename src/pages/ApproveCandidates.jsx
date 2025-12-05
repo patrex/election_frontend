@@ -53,14 +53,13 @@ const ApproveCandidates = () => {
                             {p.position}
                         </h3>
 
-                        {candidates.length > 0 ? (
-                            <ul className="mt-6 space-y-4"> {/* Candidates List Container Styling */}
-                                {candidates
-                                    .filter(candidate => candidate.position === p._id) // Assuming you filter candidates by positionId
+                        {candidates.length > 0 && (
+                            <ul className="mt-6 space-y-4"> 
+                                {candidates.some( candidate => candidate.position === p._id) ? (
+                                    candidates.filter(candidate => candidate.position === p._id)
                                     .map((candidate) => (
                                         <li
                                             key={candidate._id}
-                                            // Professional List Item Styling
                                             className="flex items-center justify-between 
                                                         p-4 bg-gray-50 rounded-md border border-gray-200 
                                                         hover:bg-gray-100 transition-colors"
@@ -81,18 +80,12 @@ const ApproveCandidates = () => {
 
                                             {/* Right side: Action Buttons/Status */}
                                             <div className="ActionsOrStatus flex space-x-3 ml-4">
-                                                {candidate.isApproved ? (
-                                                    <button disabled="disabled" className="Button violet opacity-70 px-3 py-1 text-sm rounded">Approved</button>
-                                                ) : (
-                                                    <button className="Button violet bg-indigo-600 hover:bg-indigo-700 ">Approve</button>
-                                                )}
+                                                <button className="Button violet bg-indigo-600 hover:bg-indigo-700 ">Approve</button>
                                             </div>
                                         </li>
                                     ))
-                                }
+                                ): ( <p className="mt-4 text-gray-500 italic">No candidates have applied for this position yet.</p>)}
                             </ul>
-                        ) : (
-                            <p className="mt-4 text-gray-500 italic">No candidates have applied for this position yet.</p>
                         )}
                     </div>
                 ))
