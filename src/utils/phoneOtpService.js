@@ -18,7 +18,7 @@ export const sendPhoneOtp = async (dest, electionId) => {
 		// }
 	
 		// const token_response = await token_req.json();
-		console.log(token_response);
+		// console.log(token_response);
 		return {success: true, data: token_req};
 	} catch (error) {
 		const errMsg = handleOTPErrors(error)
