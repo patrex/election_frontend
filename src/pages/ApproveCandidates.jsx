@@ -84,7 +84,7 @@ const ApproveCandidates = () => {
                                                 {candidate.isApproved ? (
                                                     <button disabled="disabled" className="Button violet opacity-70 px-3 py-1 text-sm rounded">Approved</button>
                                                 ) : (
-                                                    <button className="Button mauve bg-indigo-600 text-white hover:bg-indigo-700 px-3 py-1 text-sm rounded">Approve</button>
+                                                    <button className="Button mauve bg-indigo-600 hover:bg-indigo-700 ">Approve</button>
                                                 )}
                                             </div>
                                         </li>
