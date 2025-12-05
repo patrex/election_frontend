@@ -8,12 +8,15 @@ import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
 import { fetcher } from '@/utils/fetcher';
 import { PulseLoader } from 'react-spinners';
+import NoData from '@/components/NoData';
+import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
 export async function addCandidateLoader({ params }) {
 	try {
 		return await fetcher.get(`election/${params.id}/positions`)
 	} catch (error) {
 		console.error("There was a problem fetching positions");
+		return {}
 	}
 }
 
@@ -28,6 +31,7 @@ function AddCandidate() {
 
 	const params = useParams();
 	const navigate = useNavigate();
+
 	const { user } = useContext(AppContext);
 
 	const [formData, setFormData] = useState({
@@ -54,21 +58,28 @@ function AddCandidate() {
 	};
 
 	async function uploadImage() {
+		
 		try {
 			const imgRef = ref(
-			    fireman, 
+			    fireman,
 			    `votify/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname)}`
 			);
 		
 			const snapshot = await uploadBytes(imgRef, image);
 			const photoUrl = await getDownloadURL(snapshot.ref);
-		
-			await fetcher.auth.post(
+
+			const payload = {
+				...formData, photoUrl, selectedPosition, isApproved: user ? true : false
+			}
+
+			await fetcher.post(
 				`election/${params.id}/add-candidate`, 	
-			    	{ ...formData, photoUrl, selectedPosition },
-				user
+				payload
 			);
-			navigate(`/user/${params.userId}/election/${params.id}`);
+			
+			user && navigate(`/user/${params.userId}/election/${params.id}`);
+			Toast.success("You've been registered")
+			navigate('/');
 		    } catch (err) {
 			Toast.error(err.message || "An error occurred");
 		}
@@ -95,144 +106,150 @@ function AddCandidate() {
 	}, [])
 
 	return (
-		<div className='flex items-center justify-center min-h-screen bg-gray-50 p-4'> {/* Centering and background */}
-			<div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl border border-gray-100"> {/* Form Container Card */}
-				<h2 className="text-3xl font-extrabold text-gray-900 mb-6 text-center border-b pb-4">
-					Candidate Application
-				</h2>
-
-				<form onSubmit={handleSubmit} className='space-y-6'> {/* Spacing between form groups */}
-
-					{/* First Name Input Group */}
-					<div className="mb-4">
-						<label htmlFor="fname" className="block text-sm font-medium text-gray-700 mb-1">Firstname</label>
-						<input
-							type="text"
-							id="fname"
-							name='firstname'
-							value={formData.firstname}
-							onChange={handleChange}
-							autoFocus
-							className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
-							placeholder="Enter first name"
-						/>
-					</div>
-
-					{/* Last Name Input Group */}
-					<div className="mb-4">
-						<label htmlFor="lname" className="block text-sm font-medium text-gray-700 mb-1">Lastname</label>
-						<input
-							type="text"
-							id="lname"
-							name='lastname'
-							value={formData.lastname}
-							onChange={handleChange}
-							className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
-							placeholder="Enter last name"
-						/>
-					</div>
-
-					{/* Position Select Group */}
-					<div className='mb-4'>
-						<label className="block text-sm font-medium text-gray-700 mb-1">
-							Select position
-							<select
-								name="position"
-								value={selectedPosition}
-								onChange={handleSelect}
-								className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition'
-							>
-								<option value="" disabled>Select a position</option>
-								{positions.length > 0 ? (
-									positions.map((position) => (
-										<option
-											key={position._id || position.position}
-											value={position.position}
-										>
-											{position.position}
-										</option>
-									))
-								) : (
-									<option value="" disabled>No positions available</option>
-								)}
-							</select>
-						</label>
-					</div>
-
-					{/* Manifesto Textarea Group */}
-					<div className="mb-4">
-						<label htmlFor="manifesto" className="block text-sm font-medium text-gray-700 mb-1">Manifesto</label>
-						<textarea
-							name="manifesto"
-							id="manifesto"
-							rows="4"
-							value={formData.manifesto}
-							onChange={handleChange}
-							placeholder="Write your manifesto here..."
-							className='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition'
-						/>
-					</div>
-
-					{/* File Upload and Preview Group */}
-					<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 pt-2">
-
-						<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-							{/* Hidden File Input */}
-							<input
-								type="file"
-								id="uploadpic"
-								accept="image/*"
-								onChange={handleFileChange}
-								className="hidden"
-							/>
-
-							{/* Styled Label/Button */}
-							<label
-								htmlFor="uploadpic"
-								className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg cursor-pointer hover:bg-indigo-700 transition duration-150 shadow-md"
-							> Choose a picture
-							</label>
-
-							{/* Remove Image Button */}
-							{preview && (
-								<button
-									type="button" // Important for buttons inside a form not to submit it
-									onClick={handleRemoveImage}
-									className="px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-150 shadow-md"
-								> Remove Image
-								</button>
-							)}
-						</div>
-
-						{/* Image Preview */}
-						{preview && (
-							<div className="sm:ml-auto">
-								<img
-									src={preview}
-									alt="Preview"
-									className="w-24 h-24 object-cover rounded-full border-4 border-gray-200 shadow-lg"
+		<>
+			{positions.length > 0 ? (
+				<div className='flex items-center justify-center min-h-screen bg-gray-50 p-4'> {/* Centering and background */}
+					<div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl border border-gray-100"> {/* Form Container Card */}
+						<h2 className="text-3xl font-extrabold text-gray-900 mb-6 text-center border-b pb-4">
+							Candidate Application
+						</h2>
+		
+						<form onSubmit={handleSubmit} className='space-y-6'> {/* Spacing between form groups */}
+		
+							{/* First Name Input Group */}
+							<div className="mb-4">
+								<label htmlFor="fname" className="block text-sm font-medium text-gray-700 mb-1">Firstname</label>
+								<input
+									type="text"
+									id="fname"
+									name='firstname'
+									value={formData.firstname}
+									onChange={handleChange}
+									autoFocus
+									className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
+									placeholder="Enter first name"
 								/>
 							</div>
-						)}
+		
+							{/* Last Name Input Group */}
+							<div className="mb-4">
+								<label htmlFor="lname" className="block text-sm font-medium text-gray-700 mb-1">Lastname</label>
+								<input
+									type="text"
+									id="lname"
+									name='lastname'
+									value={formData.lastname}
+									onChange={handleChange}
+									className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
+									placeholder="Enter last name"
+								/>
+							</div>
+		
+							{/* Position Select Group */}
+							<div className='mb-4'>
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									Select position
+									<select
+										name="position"
+										value={selectedPosition}
+										onChange={handleSelect}
+										className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition'
+									>
+										<option value="" disabled>Select a position</option>
+										{positions.length > 0 ? (
+											positions.map((position) => (
+												<option
+													key={position._id || position.position}
+													value={position.position}
+												>
+													{position.position}
+												</option>
+											))
+										) : (
+											<option value="" disabled>No positions available</option>
+										)}
+									</select>
+								</label>
+							</div>
+		
+							{/* Manifesto Textarea Group */}
+							<div className="mb-4">
+								<label htmlFor="manifesto" className="block text-sm font-medium text-gray-700 mb-1">Manifesto</label>
+								<textarea
+									name="manifesto"
+									id="manifesto"
+									rows="4"
+									value={formData.manifesto}
+									onChange={handleChange}
+									placeholder="Write your manifesto here..."
+									className='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition'
+								/>
+							</div>
+		
+							{/* File Upload and Preview Group */}
+							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 pt-2">
+		
+								<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+									{/* Hidden File Input */}
+									<input
+										type="file"
+										id="uploadpic"
+										accept="image/*"
+										onChange={handleFileChange}
+										className="hidden"
+									/>
+		
+									{/* Styled Label/Button */}
+									<label
+										htmlFor="uploadpic"
+										className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg cursor-pointer hover:bg-indigo-700 transition duration-150 shadow-md"
+									> Choose a picture
+									</label>
+		
+									{/* Remove Image Button */}
+									{preview && (
+										<button
+											type="button" // Important for buttons inside a form not to submit it
+											onClick={handleRemoveImage}
+											className="px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-150 shadow-md"
+										> Remove Image
+										</button>
+									)}
+								</div>
+		
+								{/* Image Preview */}
+								{preview && (
+									<div className="sm:ml-auto">
+										<img
+											src={preview}
+											alt="Preview"
+											className="w-24 h-24 object-cover rounded-full border-4 border-gray-200 shadow-lg"
+										/>
+									</div>
+								)}
+							</div>
+		
+							{/* Submit Button */}
+							<button
+								type='submit'
+								disabled={isSubmitting}
+								className={`
+										w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
+										${isSubmitting
+											? 'bg-indigo-400 cursor-not-allowed'
+											: 'bg-indigo-600 hover:bg-indigo-700 text-white'
+										}
+									`}
+							>
+								{isSubmitting ? <PulseLoader color="#fff" size={5} loading={isSubmitting} /> : "Add Candidate"}
+							</button>
+						</form>
 					</div>
-
-					{/* Submit Button */}
-					<button
-						type='submit'
-						disabled={isSubmitting}
-						className={`
-                    w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
-                    ${isSubmitting
-								? 'bg-indigo-400 cursor-not-allowed'
-								: 'bg-indigo-600 hover:bg-indigo-700 text-white'
-							}
-                	`}
-					>
-						{isSubmitting ? <PulseLoader color="#fff" size={5} loading={isSubmitting} /> : "Add Candidate"}
-					</button>
-				</form>
-			</div>
-		</div>
+				</div> ) 
+				: 
+				<NoData message='No positions have been added' image={noDataGraphic}/> 
+			}
+		</>
 	);
 }
  

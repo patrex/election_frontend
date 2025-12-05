@@ -60,8 +60,8 @@ const router = createBrowserRouter(
 			<Route path="login" element={<Login />} />
 			<Route path="signup" element={<SignUp />} />
 			
-			<Route path="/election/:id/results" 
-				element={<ElectionResults />} 
+			<Route path="/election/:id/results"
+				element={<ElectionResults />}
 				loader={resultsLoader}
 				errorElement={<Error />}
 			/>
@@ -72,7 +72,11 @@ const router = createBrowserRouter(
 				errorElement={<Error />}
 			/>
 
-			<Route path="addSelf" element ={<AddCandidate/>} />
+			<Route path="/election/:id/addcandidate"
+				loader={addCandidateLoader}
+				element={<AddCandidate />} 
+				errorElement={<Error />}
+			/>
 
 			{/* Protected User Routes */}
 			<Route element={<ProtectedRoute />}>
@@ -82,7 +86,6 @@ const router = createBrowserRouter(
 						loader={dashboardLoader}
 						errorElement={<Error />}
 					/>
-
 
 					<Route path="create-election" 
 						element={<CreateElection />} 
@@ -104,11 +107,7 @@ const router = createBrowserRouter(
 						loader={updateElectionLoader} 
 						errorElement={<Error />}
 					/>
-					<Route path="election/:id/addcandidate"
-						loader={addCandidateLoader}
-						element={<AddCandidate />} 
-						errorElement={<Error />}
-					/>
+					
 					<Route path="election/:id/position/:position" 
 						element={<PositionDetails />} 
 						loader={loader} 

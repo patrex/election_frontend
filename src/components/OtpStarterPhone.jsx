@@ -6,7 +6,11 @@ import { Loader2, Phone, AlertTriangle } from 'lucide-react';
 import { useEffect } from 'react';
 import { sendPhoneOtp } from '@/utils/phoneOtpService';
 
+import { useLoaderData, useNavigate, Link, useNavigation } from "react-router-dom";
+
 const OTPStarterPhone = ({ electionId }) => {
+	const nav = useNavigate()
+
 	const { startVerification, status } = useOTP();
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [resultMessage, setResultMessage] = useState('');
@@ -19,12 +23,13 @@ const OTPStarterPhone = ({ electionId }) => {
 
 		setResultMessage('');
 		try {
-			const otpRequest = await sendPhoneOtp(phoneNo, electionId)
+			const otpRequest = sendPhoneOtp(phoneNo, electionId)
 
 			if (otpRequest.success) {
 				setTermiiResponse(otpRequest);
-				const result = await startVerification(phoneNo, termiiResponse);
-				
+				await startVerification(phoneNo, termiiResponse);
+
+				nav(`election/${electionId}/addcandidate`);
 			} else {
 				Toast.error("Sending OTP failed");
 				throw new Error("Could not send OTP")

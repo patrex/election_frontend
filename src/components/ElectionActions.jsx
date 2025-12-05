@@ -20,7 +20,7 @@ const ElectionActions = ({ election, openPostionModal, checkPositionExists, setA
 					{election.addCandidatesBy === "I will Add Candidates Myself" ? (
 						<p>
 							<Link
-								to={`/user/${params.userId}/election/${election._id}/addcandidate`}
+								to={`/election/${election._id}/addcandidate`}
 								className='Button violet action-item no-underline'
 								onClick={checkPositionExists}
 							>

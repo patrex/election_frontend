@@ -16,7 +16,7 @@ export const sendPhoneOtp = async (dest, electionId) => {
 		if (!token_req.ok) {
 			throw new Error("There was an error sending your OTP code")
 		}
-
+		
 		const token_response = await token_req.json();
 		return {success: true, data: token_response};
 	} catch (error) {
