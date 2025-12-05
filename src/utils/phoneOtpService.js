@@ -29,8 +29,8 @@ export const sendPhoneOtp = async (dest, electionId) => {
 
 export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 	const payload = {
-		pin_id: pinId,
-		pin: otpCode
+		pinId,
+		otpCode
 	}
 
 	try {
@@ -39,9 +39,9 @@ export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 			payload
 		);
 	
-		if (!response.ok) {
-			throw new Error("Could not verify your OTP. Please retry")
-		}
+		// if (!response.ok) {
+		// 	throw new Error("Could not verify your OTP. Please retry")
+		// }
 	
 		// const successData = await response.json();
 		return { success: true, data: response }; 
