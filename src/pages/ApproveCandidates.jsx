@@ -56,7 +56,7 @@ const ApproveCandidates = () => {
                         {candidates.length > 0 ? (
                             <ul className="mt-6 space-y-4"> {/* Candidates List Container Styling */}
                                 {candidates
-                                    .filter(candidate => candidate.positionId === p._id) // Assuming you filter candidates by positionId
+                                    .filter(candidate => candidate.position === p._id) // Assuming you filter candidates by positionId
                                     .map((candidate) => (
                                         <li
                                             key={candidate._id}
