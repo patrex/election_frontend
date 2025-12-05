@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useLoaderData } from 'react-router-dom';
@@ -24,6 +24,7 @@ function AddCandidate() {
 	const listOfPositions = useLoaderData()
 	const [positions, setPositions] = useState(listOfPositions || []);
 	const [selectedPosition, setSelectedPosition] = useState("");
+	const [election, setElection] = useState(null);
 	
 	const [image, setImage] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,6 +40,11 @@ function AddCandidate() {
 		lastname: '',
 		manifesto: ''
 	});
+
+	useEffect(async () => {
+		const e = await fetcher.get(`election/${params.id}`)
+		setElection(e);
+	}, [params.id])
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
@@ -60,16 +66,21 @@ function AddCandidate() {
 	async function uploadImage() {
 		
 		try {
+			const photoUrl = '';
 			const imgRef = ref(
 			    fireman,
-			    `votify/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname)}`
+			    `${user ? 'votify' : 'staging'}/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname)}`
 			);
 		
 			const snapshot = await uploadBytes(imgRef, image);
-			const photoUrl = await getDownloadURL(snapshot.ref);
+			
+			// only fetch download url for when admin is adding candidates himself
+			if (user) {
+				photoUrl = await getDownloadURL(snapshot.ref);
+			}
 
 			const payload = {
-				...formData, photoUrl, selectedPosition, isApproved: user ? true : false
+				...formData, photoUrl: user ? photoUrl: imgRef.fullPath, selectedPosition, isApproved: user ? true : false
 			}
 
 			await fetcher.post(
@@ -115,7 +126,7 @@ function AddCandidate() {
 				<div className='flex items-center justify-center min-h-screen bg-gray-50 p-4'> {/* Centering and background */}
 					<div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl border border-gray-100"> {/* Form Container Card */}
 						<h2 className="text-3xl font-extrabold text-gray-900 mb-6 text-center border-b pb-4">
-							Candidate Application
+							{election.addCandidatesBy === "I will Add Candidates Myself" ? 'Add a Candidate' : `Register for ${election.title}`}
 						</h2>
 		
 						<form onSubmit={handleSubmit} className='space-y-6'> {/* Spacing between form groups */}
@@ -160,7 +171,7 @@ function AddCandidate() {
 										className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition'
 									>
 										<option value="" disabled>Select a position</option>
-										{positions.length > 0 ? (
+										{positions.length > 0 && (
 											positions.map((position) => (
 												<option
 													key={position._id || position.position}
@@ -169,8 +180,6 @@ function AddCandidate() {
 													{position.position}
 												</option>
 											))
-										) : (
-											<option value="" disabled>No positions available</option>
 										)}
 									</select>
 								</label>
@@ -245,7 +254,8 @@ function AddCandidate() {
 										}
 									`}
 							>
-								{isSubmitting ? <PulseLoader color="#fff" size={5} loading={isSubmitting} /> : "Add Candidate"}
+								{isSubmitting ? <PulseLoader color="#fff" size={5} loading={isSubmitting} /> : 
+								election.addCandidatesBy === "I will Add Candidates Myself" ? 'Add Candidate' : `Register`}
 							</button>
 						</form>
 					</div>
