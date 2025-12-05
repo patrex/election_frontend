@@ -17,7 +17,7 @@ export const sendPhoneOtp = async (dest, electionId) => {
 		// 	throw new Error("There was an error sending your OTP code")
 		// }
 	
-		const token_response = await token_req.json();
+		// const token_response = await token_req.json();
 		console.log(token_response);
 		return {success: true, data: token_response};
 	} catch (error) {
@@ -43,7 +43,7 @@ export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 			throw new Error("Could not verify your OTP. Please retry")
 		}
 	
-		const successData = await response.json();
+		// const successData = await response.json();
 		return { success: true, data: successData }; 
 	} catch (error) {
 		// This catch now handles both network errors AND server-side HTTP errors (4xx/5xx)
