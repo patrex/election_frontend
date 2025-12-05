@@ -66,7 +66,7 @@ function AddCandidate() {
 	async function uploadImage() {
 		
 		try {
-			const photoUrl = '';
+			let photoUrl = '';
 			const imgRef = ref(
 			    fireman,
 			    `${user ? 'votify' : 'staging'}/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname)}`
