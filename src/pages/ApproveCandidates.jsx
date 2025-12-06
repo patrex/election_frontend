@@ -8,7 +8,7 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
 export async function approveCandidatesLoader({ params }) {
 	try {
-		const [p, c, election] = await Promise.all([
+		const [p, c, e] = await Promise.all([
 			fetcher.get(`election/${params.id}/positions`),
 			fetcher.get(`election/${params.id}/candidates/addedself`),
 			fetcher.get(`election/${params.id}`)
