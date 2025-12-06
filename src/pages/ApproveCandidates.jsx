@@ -85,7 +85,7 @@ const ApproveCandidates = () => {
 		if (modalAction === 'approve') {
 		    approveCandidate()
 		} else if (modalAction === 'remove') {
-		    removeCandidate().then(() => {
+		    removeCandidate().then((data) => {
 			Toast.success('Candidate was removed');
 		    }).catch(err => console.error(err))
 		}
@@ -117,6 +117,7 @@ const ApproveCandidates = () => {
 				}
 			} else {
 				Toast.error('An unexpected error occurred');
+				console.log(error);
 			}
 		}
 	}
