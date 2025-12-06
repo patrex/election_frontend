@@ -4,6 +4,7 @@ import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useLoaderData } from 'react-router-dom';
 import { AppContext } from '@/App';
 
+import { genUUID } from '@/utils/getUUID';
 import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
 import { fetcher } from '@/utils/fetcher';
@@ -63,12 +64,12 @@ function AddCandidate() {
 	};
 
 	async function uploadImage() {
-		
+		const fileExt = image.name.split('.').pop();
 		try {
 			let photoUrl = '';
 			const imgRef = ref(
 			    fireman,
-			    `${user ? 'votify' : 'staging'}/${params.id}/${selectedPosition}/${formData.firstname.concat(formData.lastname)}`
+			    `${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${formData.firstname.concat(formData.lastname).concat(genUUID)}.${fileExt}`
 			);
 		
 			const snapshot = await uploadBytes(imgRef, image);
