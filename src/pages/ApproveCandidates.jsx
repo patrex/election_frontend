@@ -21,6 +21,7 @@ export async function approveCandidatesLoader({ params }) {
 	}
 }
 
+
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, action, candidate }) => {
 	if (!isOpen || !candidate) return null;
 
@@ -83,15 +84,14 @@ const ApproveCandidates = () => {
 
 	console.log(election);
 
-	const handleConfirm = () => {
+	const handleConfirm = async () => {
 		if (!selectedCandidate || !modalAction) return;
 	
 		if (modalAction === 'approve') {
 		    approveCandidate()
 		} else if (modalAction === 'remove') {
-		    removeCandidate().then((data) => {
-			Toast.success('Candidate was removed');
-		    }).catch(err => console.error(err))
+		  await removeCandidate();
+		  Toast.success("Candidate was removed")
 		}
 	
 		// Close and reset modal state after action
