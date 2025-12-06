@@ -14,7 +14,7 @@ export async function approveCandidatesLoader({ params }) {
 			fetcher.get(`election/${params.id}`)
 		])
 
-		return { p, c, election}
+		return { p, c, e}
 	} catch (error) {
 		console.error("There was a problem fetching positions");
 		return null;
@@ -81,8 +81,6 @@ const ApproveCandidates = () => {
 		setModalAction(action);
 		setIsModalOpen(true);
 	};
-
-	console.log(election);
 
 	const handleConfirm = async () => {
 		if (!selectedCandidate || !modalAction) return;
