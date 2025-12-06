@@ -9,9 +9,6 @@ import { fetcher, FetchError } from '@/utils/fetcher';
 import { PulseLoader } from 'react-spinners';
 import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
-import { AppContext } from "@/App";
-
-
 
 export async function approveCandidatesLoader({ params }) {
 	try {
