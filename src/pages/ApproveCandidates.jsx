@@ -22,53 +22,52 @@ export async function approveCandidatesLoader({ params }) {
 
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, action, candidate }) => {
 	if (!isOpen || !candidate) return null;
-    
+
 	const isApproval = action === 'approve';
 	const actionText = isApproval ? 'Approve' : 'Remove';
 	const candidateName = `${candidate.firstname} ${candidate.lastname}`;
 	const buttonClass = isApproval ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700';
-    
+
 	return (
-	    // Modal Overlay (The backdrop)
-	    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[99] p-4 overflow-y-auto">
-		
-		{/* Modal Content */}
-		<div className="
-		    w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3
-		    p-6 rounded-lg shadow-2xl relative bg-white z-10 
-		    max-h-[90vh] overflow-y-auto mx-auto
-		">
-		    <h3 className={`text-xl font-bold mb-4 ${isApproval ? 'text-green-700' : 'text-red-700'}`}>
-			Confirm {actionText} Action
-		    </h3>
-		    <p className="text-gray-700 mb-6">
-			Are you sure you want to {actionText.toLowerCase()} the candidate {candidateName}
-		    </p>
-    
-		    <div className="flex justify-end space-x-3">
-			<button
-			    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
-			    onClick={onClose}
+		// Modal Overlay (The backdrop)
+		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[99] p-4 overflow-y-auto">
+			{/* Modal Content */}
+			<div className="
+				w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3
+				p-6 rounded-lg shadow-2xl relative bg-white z-10 
+				max-h-[90vh] overflow-y-auto mx-auto"
 			>
-			    Cancel
-			</button>
-			<button
-			    className={`px-4 py-2 text-white font-semibold rounded-lg transition-colors ${buttonClass}`}
-			    onClick={onConfirm}
-			>
-			    Yes, {actionText}
-			</button>
-		    </div>
+				<h3 className={`text-xl font-bold mb-4 ${isApproval ? 'text-green-700' : 'text-red-700'}`}>
+					Confirm {actionText} Action
+				</h3>
+				<p className="text-gray-700 mb-6">
+					Are you sure you want to {actionText.toLowerCase()} the candidate {candidateName}
+				</p>
+
+				<div className="flex justify-end space-x-3">
+					<button
+						className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+						onClick={onClose}
+					>
+						Cancel
+					</button>
+					<button
+						className={`px-4 py-2 text-white font-semibold rounded-lg transition-colors ${buttonClass}`}
+						onClick={onConfirm}
+					>
+						Yes, {actionText}
+					</button>
+				</div>
+			</div>
 		</div>
-	    </div>
 	);
 };
 
 const ApproveCandidates = () => {
 	const { p, c } = useLoaderData();
 
-	const [positions] = useState(p || []);
-	const [candidates, setCandidates] = useState(c || []);
+	const [positions] = useState(p || {});
+	const [candidates, setCandidates] = useState(c || {});
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalAction, setModalAction] = useState(null);
@@ -85,10 +84,10 @@ const ApproveCandidates = () => {
 	
 		if (modalAction === 'approve') {
 		    approveCandidate()
-		    console.log(`Candidate Approved: ${selectedCandidate._id}`);
 		} else if (modalAction === 'remove') {
-		    removeCandidate();
-		    console.log(`Candidate Removed: ${selectedCandidate._id}`);
+		    removeCandidate().then(() => {
+			Toast.success('Candidate was removed');
+		    }).catch(err => console.error(err))
 		}
 	
 		// Close and reset modal state after action
@@ -107,7 +106,6 @@ const ApproveCandidates = () => {
 		try {
 			await fetcher.auth.delete(`election/${election._id}/candidate/${selectedCandidate._id}/delete`, user)
 			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
-			Toast.success('Candidate was removed');
 		} catch (error) {
 			if (error instanceof FetchError) {
 				if (error.status === 500) {
