@@ -20,23 +20,94 @@ export async function approveCandidatesLoader({ params }) {
 	}
 }
 
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, action, candidate }) => {
+	if (!isOpen || !candidate) return null;
+    
+	const isApproval = action === 'approve';
+	const actionText = isApproval ? 'Approve' : 'Remove';
+	const candidateName = `${candidate.firstname} ${candidate.lastname}`;
+	const buttonClass = isApproval ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700';
+    
+	return (
+	    // Modal Overlay (The backdrop)
+	    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[99] p-4 overflow-y-auto">
+		
+		{/* Modal Content */}
+		<div className="
+		    w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3
+		    p-6 rounded-lg shadow-2xl relative bg-white z-10 
+		    max-h-[90vh] overflow-y-auto mx-auto
+		">
+		    <h3 className={`text-xl font-bold mb-4 ${isApproval ? 'text-green-700' : 'text-red-700'}`}>
+			Confirm {actionText} Action
+		    </h3>
+		    <p className="text-gray-700 mb-6">
+			Are you sure you want to **{actionText.toLowerCase()}** the candidate **{candidateName}** for the position of **{candidate.position}**?
+		    </p>
+    
+		    <div className="flex justify-end space-x-3">
+			<button
+			    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+			    onClick={onClose}
+			>
+			    Cancel
+			</button>
+			<button
+			    className={`px-4 py-2 text-white font-semibold rounded-lg transition-colors ${buttonClass}`}
+			    onClick={onConfirm}
+			>
+			    Yes, {actionText}
+			</button>
+		    </div>
+		</div>
+	    </div>
+	);
+};
+
 const ApproveCandidates = () => {
 	const { p, c } = useLoaderData();
 
 	const [positions] = useState(p || []);
 	const [candidates, setCandidates] = useState(c || []);
-	const [alertOpen, setAlertOpen] = useState(false);
+
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [modalAction, setModalAction] = useState(null);
+	const [selectedCandidate, setSelectedCandidate] = useState(null);
+
+	const openModal = (candidate, action) => {
+		setSelectedCandidate(candidate);
+		setModalAction(action);
+		setIsModalOpen(true);
+	};
+
+	const handleConfirm = () => {
+		if (!selectedCandidate || !modalAction) return;
+	
+		if (modalAction === 'approve') {
+		    approveCandidate()
+		    console.log(`Candidate Approved: ${selectedCandidate._id}`);
+		} else if (modalAction === 'remove') {
+		    // Placeholder for your actual removal logic (e.g., API call)
+		    // onRemove(selectedCandidate._id);
+		    console.log(`Candidate Removed: ${selectedCandidate._id}`);
+		}
+	
+		// Close and reset modal state after action
+		setIsModalOpen(false);
+		setSelectedCandidate(null);
+		setModalAction(null);
+	};
 
 	const { user } = useContext(AppContext);
 
-	async function approveCandidate(candidate) {
+	async function approveCandidate() {
 
 	}
 
-	async function removeCandidate(candidate) {
+	async function removeCandidate() {
 		try {
-			await fetcher.auth.delete(`election/${election._id}/candidate/${candidate._id}/delete`, user)
-			setCandidates(prev => prev.filter(c => c._id !== candidate._id));
+			await fetcher.auth.delete(`election/${election._id}/candidate/${selectedCandidate._id}/delete`, user)
+			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
 			Toast.success('Candidate was removed');
 		} catch (error) {
 			if (error instanceof FetchError) {
@@ -99,24 +170,9 @@ const ApproveCandidates = () => {
 												</div>
 
 												<div className="ActionsOrStatus flex space-x-3 ml-4">
-													<button className="Button violet hover:bg-indigo-700" onClick={() => approveCandidate(candidate)}>Approve</button>
-													<button className="Button red hover:bg-red-200" onClick={() => setAlertOpen(true)}>Remove</button>
+													<button className="Button violet hover:bg-indigo-700" onClick={() => openModal(candidate, 'approve')}>Approve</button>
+													<button className="Button red hover:bg-red-200" onClick={() => openModal(candidate, 'remove')}>Remove</button>
 												</div>
-
-												{alertOpen && (
-													<div className="modal-overlay">
-														<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-															<h3>Remove Candidate?</h3>
-															<div className='p-2'>
-																<p>Are you sure you want to remove {`${candidate.firstname} ${candidate.lastname}`}</p>
-															</div>
-															<div className="action-btn-container">
-																<button className='Button violet action-item' onClick={() => setAlertOpen(false)}>Cancel</button>
-																<button className='Button red action-item' onClick={() => removeCandidate(candidate)}>Delete</button>
-															</div>
-														</div>
-													</div>
-												)}
 											</li>
 										))
 								) : (<p className="mt-4 text-gray-500 italic">No candidates have applied for this position yet.</p>)}
@@ -127,6 +183,14 @@ const ApproveCandidates = () => {
 			) : (
 				<NoData image={noDataGraphic} message='No positions yet for this election' />
 			)}
+
+			<ConfirmationModal
+				isOpen={isModalOpen}
+				onClose={() => setIsModalOpen(false)}
+				onConfirm={handleConfirm}
+				action={modalAction}
+				candidate={selectedCandidate}
+			/>
 		</div>
 
 	);
