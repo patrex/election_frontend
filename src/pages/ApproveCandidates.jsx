@@ -87,8 +87,7 @@ const ApproveCandidates = () => {
 		    approveCandidate()
 		    console.log(`Candidate Approved: ${selectedCandidate._id}`);
 		} else if (modalAction === 'remove') {
-		    // Placeholder for your actual removal logic (e.g., API call)
-		    // onRemove(selectedCandidate._id);
+		    removeCandidate();
 		    console.log(`Candidate Removed: ${selectedCandidate._id}`);
 		}
 	
