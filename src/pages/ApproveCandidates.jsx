@@ -8,12 +8,13 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
 export async function approveCandidatesLoader({ params }) {
 	try {
-		const [p, c] = await Promise.all([
+		const [p, c, election] = await Promise.all([
 			fetcher.get(`election/${params.id}/positions`),
-			fetcher.get(`election/${params.id}/candidates/addedself`)
+			fetcher.get(`election/${params.id}/candidates/addedself`),
+			fetcher.get(`election/${params.id}`)
 		])
 
-		return { p, c }
+		return { p, c, election}
 	} catch (error) {
 		console.error("There was a problem fetching positions");
 		return null;
@@ -64,10 +65,11 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, action, candidate }) =>
 };
 
 const ApproveCandidates = () => {
-	const { p, c } = useLoaderData();
+	const { p, c, e } = useLoaderData();
 
 	const [positions] = useState(p || {});
 	const [candidates, setCandidates] = useState(c || {});
+	const election = useState(e);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalAction, setModalAction] = useState(null);
