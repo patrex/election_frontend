@@ -42,7 +42,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, action, candidate }) =>
 			Confirm {actionText} Action
 		    </h3>
 		    <p className="text-gray-700 mb-6">
-			Are you sure you want to **{actionText.toLowerCase()}** the candidate **{candidateName}** for the position of **{candidate.position}**?
+			Are you sure you want to {actionText.toLowerCase()} the candidate {candidateName}
 		    </p>
     
 		    <div className="flex justify-end space-x-3">
