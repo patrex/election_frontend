@@ -69,7 +69,7 @@ const ApproveCandidates = () => {
 
 	const [positions] = useState(p || {});
 	const [candidates, setCandidates] = useState(c || {});
-	const election = useState(e);
+	const [election, setElection] = useState(e || {});
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalAction, setModalAction] = useState(null);
