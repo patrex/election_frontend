@@ -81,6 +81,8 @@ const ApproveCandidates = () => {
 		setIsModalOpen(true);
 	};
 
+	console.log(election);
+
 	const handleConfirm = () => {
 		if (!selectedCandidate || !modalAction) return;
 	
