@@ -30,7 +30,7 @@ export async function electionDetailLoader({ params }) {
 	} catch (error) {
 		console.error('Error loading election details:', error);
 		// Return null values or throw error depending on your error handling strategy
-		return;
+		return null;
 	}
 }
 

@@ -1,12 +1,8 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
-import { useParams, useNavigate } from "react-router-dom";
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useState, useContext} from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { AppContext } from '@/App';
-import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from '@/utils/fetcher';
-import { PulseLoader } from 'react-spinners';
 import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
@@ -20,6 +16,7 @@ export async function approveCandidatesLoader({ params }) {
 		return { p, c }
 	} catch (error) {
 		console.error("There was a problem fetching positions");
+		return null;
 	}
 }
 
@@ -28,7 +25,8 @@ const ApproveCandidates = () => {
 
 	const [positions] = useState(p || []);
 	const [candidates, setCandidates] = useState(c || []);
-	
+	const [alertOpen, setAlertOpen] = useState(false);
+
 	const { user } = useContext(AppContext);
 
 	async function approveCandidate(candidate) {
@@ -56,6 +54,7 @@ const ApproveCandidates = () => {
 	}
 
 	return (
+
 		<div
 			className="max-w-4xl mx-auto space-y-8 p-4"
 		>
@@ -82,8 +81,8 @@ const ApproveCandidates = () => {
 											<li
 												key={candidate._id}
 												className="flex items-center justify-between 
-													p-4 bg-gray-50 rounded-md border border-gray-200 
-													hover:bg-gray-100 transition-colors"
+														p-4 bg-gray-50 rounded-md border border-gray-200 
+														hover:bg-gray-100 transition-colors"
 											>
 												{/* Left side: Avatar and Name */}
 												<div className="flex items-center space-x-3">
@@ -101,8 +100,23 @@ const ApproveCandidates = () => {
 
 												<div className="ActionsOrStatus flex space-x-3 ml-4">
 													<button className="Button violet hover:bg-indigo-700" onClick={() => approveCandidate(candidate)}>Approve</button>
-													<button className="Button red hover:bg-red-200" onClick={() => removeCandidate(candidate)}>Remove</button>
+													<button className="Button red hover:bg-red-200" onClick={() => setAlertOpen(true)}>Remove</button>
 												</div>
+
+												{alertOpen && (
+													<div className="modal-overlay">
+														<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
+															<h3>Remove Candidate?</h3>
+															<div className='p-2'>
+																<p>Are you sure you want to remove {`${candidate.firstname} ${candidate.lastname}`}</p>
+															</div>
+															<div className="action-btn-container">
+																<button className='Button violet action-item' onClick={() => setAlertOpen(false)}>Cancel</button>
+																<button className='Button red action-item' onClick={() => removeCandidate(candidate)}>Delete</button>
+															</div>
+														</div>
+													</div>
+												)}
 											</li>
 										))
 								) : (<p className="mt-4 text-gray-500 italic">No candidates have applied for this position yet.</p>)}
@@ -114,6 +128,7 @@ const ApproveCandidates = () => {
 				<NoData image={noDataGraphic} message='No positions yet for this election' />
 			)}
 		</div>
+
 	);
 }
 
