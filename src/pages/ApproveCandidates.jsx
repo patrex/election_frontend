@@ -112,6 +112,7 @@ const ApproveCandidates = () => {
 			
 			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
 		} catch (error) {
+			console.error(error)
 			Toast.error("Could not approve Candidate")
 		}
 		
