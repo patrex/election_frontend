@@ -69,7 +69,7 @@ function AddCandidate() {
 			let photoUrl = '';
 			const imgRef = ref(
 			    fireman,
-			    `${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${formData.firstname.concat(formData.lastname).concat(genUUID)}.${fileExt}`
+			    `${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${genUUID()}.${fileExt}`
 			);
 		
 			const snapshot = await uploadBytes(imgRef, image);
@@ -84,7 +84,7 @@ function AddCandidate() {
 			}
 
 			await fetcher.post(
-				`election/${params.id}/add-candidate`, 	
+				`election/${params.id}/add-candidate`,	
 				payload
 			);
 

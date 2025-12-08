@@ -86,10 +86,11 @@ const ApproveCandidates = () => {
 		if (!selectedCandidate || !modalAction) return;
 	
 		if (modalAction === 'approve') {
-		    approveCandidate()
+		    	await approveCandidate();
+		 	Toast.success("Candidate was approved")
 		} else if (modalAction === 'remove') {
-		  await removeCandidate();
-		  Toast.success("Candidate was removed")
+			await removeCandidate();
+			Toast.success("Candidate was removed")
 		}
 	
 		// Close and reset modal state after action
@@ -101,7 +102,19 @@ const ApproveCandidates = () => {
 	const { user } = useContext(AppContext);
 
 	async function approveCandidate() {
+		try {
+			const approved = await fetcher.auth.patch(
+				`election/${election._id}/${selectedCandidate._id}/approve`,
+				user
+			)
 
+			if (!approved) throw new Error("Could not approve candidate");
+			
+			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
+		} catch (error) {
+			Toast.error("Could not approve Candidate")
+		}
+		
 	}
 
 	async function removeCandidate() {
@@ -192,7 +205,6 @@ const ApproveCandidates = () => {
 				candidate={selectedCandidate}
 			/>
 		</div>
-
 	);
 }
 
