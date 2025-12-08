@@ -105,6 +105,7 @@ const ApproveCandidates = () => {
 		try {
 			const approved = await fetcher.auth.patch(
 				`election/${election._id}/${selectedCandidate._id}/approve`,
+				{},
 				user
 			)
 
