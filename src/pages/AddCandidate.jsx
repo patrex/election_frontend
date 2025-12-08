@@ -64,7 +64,7 @@ function AddCandidate() {
 	};
 
 	async function uploadImage() {
-		const fileExt = image.name.split('.').pop();
+		const fileExt = image ? image.name.split('.').pop() : '';
 		try {
 			let photoUrl = '';
 			const imgRef = ref(
@@ -94,7 +94,6 @@ function AddCandidate() {
 				Toast.success("You've been registered")
 				navigate('/');
 			}
-			
 		    } catch (err) {
 			Toast.error(err.message || "An error occurred");
 		}
