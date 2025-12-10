@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
+import { getLocalTimezoneDate } from "@/utils/setLocalTime";
+
 function CreateElection() {
 	const params = useParams();
 	const navigate = useNavigate();
@@ -15,24 +17,49 @@ function CreateElection() {
 	const [loading, setLoading] = useState(false);
 
 	// Zod Schema
+	const getLocalTodayStart = () => {
+		const now = new Date();
+		// Set time to 00:00:00.000 in the local timezone
+		now.setHours(0, 0, 0, 0);
+		return now;
+	};
+
 	const schema = z.object({
 		electiontitle: z
 			.string()
 			.min(2, { message: "Election title must be at least 2 characters" })
 			.max(100, { message: "Election title cannot exceed 100 characters" }),
+
+		// --- REFINEMENT FOR LOCAL DATE/TIME VALIDATION ---
 		startdate: z
-			.string()
+			// 1. Convert string input to a Date object for easier comparison
+			.preprocess((arg) => {
+				if (typeof arg == "string" || arg instanceof Date) return getLocalTimezoneDate(arg);
+			}, z.date({
+				required_error: "Start date is required",
+				invalid_type_error: "Invalid date format",
+			}))
+			// 2. Refine the date to ensure it is not in the past (using Date objects)
 			.refine((date) => {
-				const selectedDate = new Date(date);
-				const now = Date.now();
-				return selectedDate > now;
-			}, { message: "Start date cannot be in the past" }),
+				// Compare the selected Date object directly with the current Date object
+				// This checks that the selected date/time is strictly in the future.
+				return date > new Date();
+			}, {
+				message: "Start date/time cannot be in the past"
+			}),
+
 		enddate: z
-			.string()
+			.preprocess((arg) => {
+				if (typeof arg == "string" || arg instanceof Date) return getLocalTimezoneDate(arg);
+			}, z.date({
+				required_error: "End date is required",
+				invalid_type_error: "Invalid date format",
+			}))
 			.refine((date) => {
-				const selectedDate = new Date(date);
-				return selectedDate.getFullYear() <= 3000;
+				return date.getFullYear() <= 3000;
 			}, { message: "End date cannot be later than the year 3000" }),
+		// --------------------------------------------------
+
 		addCandidatesBy: z
 			.string()
 			.min(1, { message: "Please select how candidates will get added" }),
@@ -40,8 +67,8 @@ function CreateElection() {
 			.string()
 			.min(1, { message: "Please select an election type" }),
 		userAuthType: z
-			.enum(['email', 'phone'], { 
-				errorMap: () => ({ message: "Please select how voters will get verified" }) 
+			.enum(['email', 'phone'], {
+				errorMap: () => ({ message: "Please select how voters will get verified" })
 			}),
 		description: z
 			.string()
@@ -53,12 +80,11 @@ function CreateElection() {
 			.optional(),
 	}).refine((data) => {
 		// Validate that end date is after start date
-		const start = new Date(data.startdate);
-		const end = new Date(data.enddate);
-		return end > start;
+		// This is now clean because both are guaranteed to be valid Date objects
+		return data.enddate > data.startdate;
 	}, {
 		message: "End date must be after start date",
-		path: ["enddate"], // This error will appear on the enddate field
+		path: ["enddate"],
 	});
 
 	const { 

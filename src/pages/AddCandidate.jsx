@@ -129,7 +129,6 @@ function AddCandidate() {
 						</h2>
 		
 						<form onSubmit={handleSubmit} className='space-y-6'> {/* Spacing between form groups */}
-		
 							{/* First Name Input Group */}
 							<div className="mb-4">
 								<label htmlFor="fname" className="block text-sm font-medium text-gray-700 mb-1">Firstname</label>
