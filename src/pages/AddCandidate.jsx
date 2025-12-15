@@ -65,12 +65,15 @@ function AddCandidate() {
 
 	async function uploadImage() {
 		const fileExt = image ? image.name.split('.').pop() : '';
+		let imgRef = null;
 		try {
 			let photoUrl = '';
-			const imgRef = ref(
-			    fireman,
-			    `${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${genUUID()}.${fileExt}`
-			);
+			if (image) {
+				imgRef = ref(
+					fireman,
+					`${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${genUUID()}.${fileExt}`
+				);
+			}
 		
 			const snapshot = await uploadBytes(imgRef, image);
 			
@@ -80,7 +83,7 @@ function AddCandidate() {
 			}
 
 			const payload = {
-				...formData, photoUrl: user ? photoUrl: imgRef.fullPath, selectedPosition, isApproved: user ? true : false
+				...formData, photoUrl: user ? photoUrl: image ? imgRef.fullPath: '', selectedPosition, isApproved: user ? true : false
 			}
 
 			await fetcher.post(
