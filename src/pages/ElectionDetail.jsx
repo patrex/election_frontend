@@ -588,7 +588,7 @@ function ElectionDetail() {
 							<input
 								type='text'
 								id='updateparticipant'
-								value={`${election.userAuthType == 'email' ? participant.email : participant.phoneNo}`}
+								value={ updatedParticipantInfo }
 								onChange={(e) =>  setUpdatedParticipantInfo(e.target.value) }
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
