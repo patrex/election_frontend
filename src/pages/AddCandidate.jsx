@@ -87,12 +87,12 @@ function AddCandidate() {
 			}
 
 			await fetcher.post(
-				`election/${params.id}/add-candidate`,	
+				`election/${election._id}/add-candidate`,	
 				payload
 			);
 
 			if (user) {
-				navigate(`/user/${params.userId}/election/${params.id}`)
+				navigate(`/user/${user.uid}/election/${election._id}`)
 			} else {
 				Toast.success("You've been registered")
 				navigate('/');
