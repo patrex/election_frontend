@@ -5,24 +5,17 @@ import Toast from "@/utils/ToastMsg";
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { AppContext } from "@/App";
 
-import backendUrl from '../utils/backendurl'
+import { fetcher, FetchError } from "@/utils/fetcher";
       
 export async function electionLoader({ params }) {
-	const e = await fetch(`${backendUrl}/election/${params.id}`);
-	const o = await fetch(`${backendUrl}/election/${params.id}/ownerinfo`);
-	const p = await fetch(`${backendUrl}/election/${params.id}/positions`);
-	
-
-	let election = await e.json();
-	let positions = await p.json();
-	let owner = await o.json();
+	const [e, o, p] = await Promise.all([
+		fetcher(`election/${params.id}`),
+		fetcher(`election/${params.id}/ownerinfo`),
+		fetcher(`election/${params.id}/positions`),
+	])
 
 
-	return [
-		election,
-		positions,
-		owner
-	]
+	return [ e, o, p ]
 }
 
 
@@ -47,15 +40,15 @@ export default function Election() {
 		}
 
 		try {
-			const userVotes = await fetch(`${backendUrl}/election/${electionData._id}/${voterId}/votes`);
+			const userVotes = await fetcher.get(`election/${electionData._id}/${voterId}/votes`);
 			let userHasVoted = false;
 
 			if (userVotes.ok) {
 				// let availablePositions = positions.map(p => p._id);
 				let currentPosition = positions.filter(p => p._id == candidate.position)
-				const votesByUser = await userVotes.json();
+	
 
-				let voteList = votesByUser.votes;
+				let voteList = userVotes.votes;
 				
 				for (let i = 0; i < voteList.length; i++) {
 					if (voteList.includes(currentPosition[0]._id)) {
@@ -66,19 +59,15 @@ export default function Election() {
 			}
 
 			if (!userHasVoted) {
-				const v = await fetch(`${backendUrl}/election/vote`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
+				const v = await fetcher.post(
+					`election/vote`, 
+					{
 						election: electionData._id,
 						candidate: candidate._id,
 						voterId,
 						position: candidate.position
-					}),
-				})
-	
+					})
+
 				if (v.ok ) {
 					Toast.success('Your vote was recorded')
 				} else {
@@ -98,9 +87,8 @@ export default function Election() {
 		setSelectedPosition(selected);
 		try {
 			// attempt to fetch candidates for selected position
-			const req = await fetch(`${backendUrl}/election/${params.id}/${selected}/candidates`);
-			const c = await req.json();
-			setCandidates(c)
+			const req = await fetcher.get(`election/${params.id}/${selected}/candidates`);
+			setCandidates(req)
 		} catch (error) {
 			setCandidates([]);
 			Toast.warning(error);
