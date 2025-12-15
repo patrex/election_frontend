@@ -125,7 +125,7 @@ function ElectionResults() {
 						<h3 className="text-lg font-bold border-b pb-2 text-slate-700">Current Standing: {selectedPosition}</h3>
 
 						<div className="divide-y divide-slate-100">
-							{resultsData.map((datum) => {
+							{data.map((datum) => {
 								const percentage = ((datum.votes / totalVotes) * 100).toFixed(1);
 
 								return (
