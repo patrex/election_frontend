@@ -6,10 +6,10 @@ import { fetcher, FetchError } from '@/utils/fetcher';
 export async function resultsLoader({ params }) {
 
 	const [election, positions, candidates, votes] = await Promise.all([
-		fetcher.get(`${backendUrl}/election/${params.id}`),
-		fetcher.get(`${backendUrl}/election/${params.id}/positions`),
-		fetcher.get(`${backendUrl}/election/${params.id}/candidates`),
-		fetcher.get(`${backendUrl}/election/${params.id}/votes`),
+		fetcher.get(`election/${params.id}`),
+		fetcher.get(`election/${params.id}/positions`),
+		fetcher.get(`election/${params.id}/candidates`),
+		fetcher.get(`election/${params.id}/votes`),
 	]);
 
 	return [election, positions, candidates, votes];

@@ -43,6 +43,7 @@ function Dashboard() {
 		} catch (error) {
 			Toast.error("An error occurred while deleting");
 			console.error("Delete error for election:", election._id, error);
+			return {}
 		}
 	};
 	      

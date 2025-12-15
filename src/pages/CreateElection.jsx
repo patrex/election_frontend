@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import { getLocalTimezoneDate } from "@/utils/setLocalTime";
+import getLocalTimezoneDate  from "@/utils/setLocalTime";
 
 function CreateElection() {
 	const params = useParams();
@@ -29,20 +29,14 @@ function CreateElection() {
 			.string()
 			.min(2, { message: "Election title must be at least 2 characters" })
 			.max(100, { message: "Election title cannot exceed 100 characters" }),
-
-		// --- REFINEMENT FOR LOCAL DATE/TIME VALIDATION ---
 		startdate: z
-			// 1. Convert string input to a Date object for easier comparison
 			.preprocess((arg) => {
 				if (typeof arg == "string" || arg instanceof Date) return getLocalTimezoneDate(arg);
 			}, z.date({
 				required_error: "Start date is required",
 				invalid_type_error: "Invalid date format",
 			}))
-			// 2. Refine the date to ensure it is not in the past (using Date objects)
 			.refine((date) => {
-				// Compare the selected Date object directly with the current Date object
-				// This checks that the selected date/time is strictly in the future.
 				return date > new Date();
 			}, {
 				message: "Start date/time cannot be in the past"
@@ -58,8 +52,6 @@ function CreateElection() {
 			.refine((date) => {
 				return date.getFullYear() <= 3000;
 			}, { message: "End date cannot be later than the year 3000" }),
-		// --------------------------------------------------
-
 		addCandidatesBy: z
 			.string()
 			.min(1, { message: "Please select how candidates will get added" }),
