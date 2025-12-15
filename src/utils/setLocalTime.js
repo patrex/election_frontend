@@ -1,4 +1,4 @@
-export const getLocalTimezoneDate = (dateString) => {
+export default getLocalTimezoneDate = (dateString) => {
 	// 1. Create a temporary Date object from the string (it will use the local timezone)
 	const tempDate = new Date(dateString);
 	
