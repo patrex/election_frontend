@@ -588,8 +588,8 @@ function ElectionDetail() {
 							<input
 								type='text'
 								id='updateparticipant'
-								value={updatedParticipantInfo}
-								onChange={(e) => { setUpdatedParticipantInfo(e.target.value) }}
+								value={participant}
+								onChange={(e) =>  setUpdatedParticipantInfo(e.target.value) }
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
 							<div className="action-btn-container" >
