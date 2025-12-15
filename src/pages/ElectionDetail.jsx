@@ -47,7 +47,7 @@ function ElectionDetail() {
 	const [updatedPosition, setUpdatedPosition] = useState("");
 	const [currentlySelectedPosition, setCurrentlySelectedPosition] = useState("");
 	const [participantsList, setParticipantsList] = useState("");
-	const [participant, setParticipant] = useState('');
+	const [participant, setParticipant] = useState();
 	const [updatedParticipantInfo, setUpdatedParticipantInfo] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
 
@@ -72,9 +72,9 @@ function ElectionDetail() {
 		setNewPosition(e.target.value);
 	}
 
-	// function handlePositionUpdate(e) {
-	// 	setUpdatedPosition(e.target.value);
-	// }
+	function handlePositionUpdate(e) {
+		setUpdatedPosition(e.target.value);
+	}
 
 	const openUpdatePositionModal = () => {
 		setUpdatedPosition("");
@@ -228,6 +228,7 @@ function ElectionDetail() {
 		try {
 			await fetcher.auth.post(
 				`election/voter/${voter._id}/delete`,
+				{},
 				user
 			);
 
@@ -300,7 +301,6 @@ function ElectionDetail() {
 
 	function editParticipant(participant) {
 		setParticipant(participant);
-		setUpdatedParticipantInfo(participant)
 		setUpdateParticipantModal(true);
 	}
 
@@ -588,8 +588,8 @@ function ElectionDetail() {
 							<input
 								type='text'
 								id='updateparticipant'
-								value={ updatedParticipantInfo }
-								onChange={(e) =>  setUpdatedParticipantInfo(e.target.value) }
+								value={updatedParticipantInfo}
+								onChange={(e) => { setUpdatedParticipantInfo(e.target.value) }}
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
 							<div className="action-btn-container" >
@@ -610,7 +610,7 @@ function ElectionDetail() {
 								type='text'
 								id='updateposition'
 								value={updatedPosition}
-								onChange={(e) => setUpdatedPosition(e.target.value)}
+								onChange={handlePositionUpdate}
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
 							<div className="action-btn-container">
