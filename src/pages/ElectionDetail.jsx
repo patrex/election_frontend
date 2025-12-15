@@ -47,7 +47,7 @@ function ElectionDetail() {
 	const [updatedPosition, setUpdatedPosition] = useState("");
 	const [currentlySelectedPosition, setCurrentlySelectedPosition] = useState("");
 	const [participantsList, setParticipantsList] = useState("");
-	const [participant, setParticipant] = useState();
+	const [participant, setParticipant] = useState('');
 	const [updatedParticipantInfo, setUpdatedParticipantInfo] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
 
