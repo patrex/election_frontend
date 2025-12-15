@@ -203,7 +203,7 @@ function ElectionDetail() {
 
 	async function sendListToDB(voterlist) {
 		try {
-			const votersToDb = fetcher.auth.post(
+			const votersToDb = await fetcher.auth.post(
 				`election/${election._id}/closed_event/addvoters`,
 				{
 					election: election._id,
@@ -219,7 +219,8 @@ function ElectionDetail() {
 			Toast.success(`List was updated`);
 			setParticipantsList('');
 		} catch (error) {
-			Toast.error("An error occurred. Try again");
+			console.error(error);
+			Toast.error("An error occurred. Try again")
 		}
 	}
 
@@ -286,10 +287,10 @@ function ElectionDetail() {
 				})
 				.filter(phone => phone !== null); // Remove the nulls from the list
 
-if (invalidContactFound) {
-    Toast.warning("One or more phone numbers not properly formatted");
-    return;
-}
+			if (invalidContactFound) {
+				Toast.warning("One or more phone numbers not properly formatted");
+				return;
+			}
 
 			setAddParticipantsModalOpen(false);
 			const phoneVoterList = [...new Set(phoneList)];
