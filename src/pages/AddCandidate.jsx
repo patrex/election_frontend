@@ -66,8 +66,14 @@ function AddCandidate() {
 	async function uploadImage() {
 		const fileExt = image ? image.name.split('.').pop() : '';
 		let imgRef = null;
+
+		if (image) {
+			
+		}
+
 		try {
 			let photoUrl = '';
+
 			if (image) {
 				imgRef = ref(
 					fireman,
@@ -87,7 +93,7 @@ function AddCandidate() {
 			}
 
 			await fetcher.post(
-				`election/${election._id}/add-candidate`,	
+				`election/${election._id}/add-candidate`,
 				payload
 			);
 
