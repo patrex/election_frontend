@@ -8,14 +8,18 @@ import { AppContext } from "@/App";
 import { fetcher, FetchError } from "@/utils/fetcher";
       
 export async function electionLoader({ params }) {
-	const [e, o, p] = await Promise.all([
-		fetcher(`election/${params.id}`),
-		fetcher(`election/${params.id}/ownerinfo`),
-		fetcher(`election/${params.id}/positions`),
-	])
+	try {
+		const [e, o, p] = await Promise.all([
+			fetcher(`election/${params.id}`),
+			fetcher(`election/${params.id}/ownerinfo`),
+			fetcher(`election/${params.id}/positions`),
+		]);
 
-
-	return [ e, o, p ]
+		return [ e, o, p ]
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
 }
 
 

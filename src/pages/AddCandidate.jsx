@@ -22,7 +22,7 @@ export async function addCandidateLoader({ params }) {
 		return [positions, election];
 	} catch (error) {
 		console.error("There was a problem fetching positions");
-		return {}
+		return null;
 	}
 }
 

@@ -17,6 +17,7 @@ export async function loader({ params }) {
 		return [election, candidates, params.position]
 	} catch (error) {
 		console.error("Could not fetch resources");
+		return null;
 	}
 }
 

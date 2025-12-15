@@ -29,7 +29,6 @@ export async function electionDetailLoader({ params }) {
 		return [election, positions, voters];
 	} catch (error) {
 		console.error('Error loading election details:', error);
-		// Return null values or throw error depending on your error handling strategy
 		return null;
 	}
 }
@@ -425,7 +424,7 @@ function ElectionDetail() {
 		}
 	}, [election.type, election.userAuthType, votersList, searchTerm]);
 
-	// ########################################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	// ########################################
 
 	return (
 		<div className="container">
@@ -505,6 +504,7 @@ function ElectionDetail() {
 																	</AlertDialog.Content>
 																</AlertDialog.Portal>
 															</AlertDialog.Root>
+
 														</div>
 													)}
 												</div>
