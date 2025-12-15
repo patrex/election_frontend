@@ -72,9 +72,9 @@ function ElectionDetail() {
 		setNewPosition(e.target.value);
 	}
 
-	function handlePositionUpdate(e) {
-		setUpdatedPosition(e.target.value);
-	}
+	// function handlePositionUpdate(e) {
+	// 	setUpdatedPosition(e.target.value);
+	// }
 
 	const openUpdatePositionModal = () => {
 		setUpdatedPosition("");
@@ -226,7 +226,7 @@ function ElectionDetail() {
 
 	async function removeVoter(voter) {
 		try {
-			fetcher.auth.post(
+			await fetcher.auth.post(
 				`election/voter/${voter._id}/delete`,
 				user
 			);
@@ -300,6 +300,7 @@ function ElectionDetail() {
 
 	function editParticipant(participant) {
 		setParticipant(participant);
+		setUpdatedParticipantInfo(participant)
 		setUpdateParticipantModal(true);
 	}
 
@@ -609,7 +610,7 @@ function ElectionDetail() {
 								type='text'
 								id='updateposition'
 								value={updatedPosition}
-								onChange={handlePositionUpdate}
+								onChange={(e) => setUpdatedPosition(e.target.value)}
 								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
 							/>
 							<div className="action-btn-container">
