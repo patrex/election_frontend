@@ -462,15 +462,18 @@ function ElectionDetail() {
         </div>
 
         <div className="px-6 pb-6 border-t border-gray-100 pt-4">
-          <ElectionActions
-            election={election}
-            openPostionModal={openPostionModal}
-            checkPositionExists={checkPositionExists}
-            setAddParticipantsModalOpen={setAddParticipantsModalOpen}
-            setViewUsersModal={setViewUsersModal}
-            setEndElectionModalOpen={setEndElectionModalOpen}
-          />
-        </div>
+  {/* Add 'overflow-x-auto' for mobile swiping or 'flex-wrap' for wrapping buttons */}
+  <div className="flex flex-nowrap md:flex-wrap items-center gap-3 overflow-x-auto pb-2 scrollbar-hide md:overflow-visible">
+    <ElectionActions
+      election={election}
+      openPostionModal={openPostionModal}
+      checkPositionExists={checkPositionExists}
+      setAddParticipantsModalOpen={setAddParticipantsModalOpen}
+      setViewUsersModal={setViewUsersModal}
+      setEndElectionModalOpen={setEndElectionModalOpen}
+    />
+  </div>
+</div>
       </div>
 
       {/* Main Content Grid */}
