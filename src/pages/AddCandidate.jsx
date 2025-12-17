@@ -64,32 +64,31 @@ function AddCandidate() {
 	};
 
 	async function uploadImage() {
-		const fileExt = image ? image.name.split('.').pop() : '';
-		let imgRef = null;
-
-		if (image) {
-			
-		}
-
+		
 		try {
+			let imgRef;
 			let photoUrl = '';
-
+			
 			if (image) {
+				const fileExt = image.name.split('.').pop();
+
 				imgRef = ref(
 					fireman,
 					`${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${genUUID()}.${fileExt}`
 				);
-			}
-		
-			const snapshot = await uploadBytes(imgRef, image);
-			
-			// only fetch download url for when admin is adding candidates himself
-			if (user) {
-				photoUrl = await getDownloadURL(snapshot.ref);
+				const snapshot = await uploadBytes(imgRef, image);
+				
+				// only fetch download url for when admin is adding candidates himself
+				if (user) {
+					photoUrl = await getDownloadURL(snapshot.ref);
+				}
 			}
 
 			const payload = {
-				...formData, photoUrl: user ? photoUrl: image ? imgRef.fullPath: '', selectedPosition, isApproved: user ? true : false
+				...formData,
+				photoUrl: ((user) ? photoUrl: image ? imgRef.fullPath : ""),
+				selectedPosition,
+				isApproved: user ? true : false
 			}
 
 			await fetcher.post(
