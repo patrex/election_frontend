@@ -438,220 +438,166 @@ function ElectionDetail() {
 	// ########################################
 
 	return (
-		<div className="container">
-			<div className="pos-detail-container">
-				<div className="pos-heading-banner">
-					<table className="table table-hover table-striped">
-						<thead>
-							<tr>
-								<th>Election</th>
-								<th>{election.title} <StatusBadge election={election} /></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th scope='row'>Created On</th>
-								<td>{moment(election.dateCreated).format('LLL')}</td>
-							</tr>
-							<tr>
-								<th scope='row'>Starting On</th>
-								<td>{moment(election.startDate).format('LLL')}</td>
-							</tr>
-							<tr>
-								<th scope='row'>Ending On</th>
-								<td>{moment(election.endDate).format('LLL')}</td>
-							</tr>
-						</tbody>
-					</table>
-					<ElectionActions
-						election={election}
-						openPostionModal={openPostionModal}
-						checkPositionExists={checkPositionExists}
-						setAddParticipantsModalOpen={setAddParticipantsModalOpen}
-						setViewUsersModal={setViewUsersModal}
-						setEndElectionModalOpen={setEndElectionModalOpen}
-					/>
-				</div>
+		<div className="max-w-6xl mx-auto p-4 lg:p-8 bg-gray-50 min-h-screen">
+      {/* Header Section */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+        <div className="bg-gradient-to-r from-violet-600 to-indigo-700 p-6 flex justify-between items-center text-white">
+          <h1 className="text-2xl font-bold">{election.title}</h1>
+          <StatusBadge election={election} />
+        </div>
 
-				{viewUsersModal && (
-					<div className="modal-overlay">
-						<div className="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 p-4 rounded-lg shadow-md relative bg-white">
-							<p>Registered participants</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Created On</p>
+            <p className="text-gray-700 font-medium">{moment(election.dateCreated).format('LLL')}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Starting On</p>
+            <p className="text-gray-700 font-medium">{moment(election.startDate).format('LLL')}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Ending On</p>
+            <p className="text-gray-700 font-medium">{moment(election.endDate).format('LLL')}</p>
+          </div>
+        </div>
 
-							<div className="max-h-96 overflow-auto p-2">
-								<ul>
-									{votersFiltered.length < 1 ? (
-										<p>No voters found</p>
-									) : (
-										votersFiltered.map(voter => (
-											<li key={voter._id}>
-												<div className='voter-info'>
-													<span>{election.userAuthType === 'email' ? voter.email : voter.phoneNo}</span>
-													{isPending && (
-														<div className='voter-actions'>
-															<button className='Button violet action-item'
-																onClick={() => editParticipant(voter)}>Edit
-															</button>
+        <div className="px-6 pb-6 border-t border-gray-100 pt-4">
+          <ElectionActions
+            election={election}
+            openPostionModal={openPostionModal}
+            checkPositionExists={checkPositionExists}
+            setAddParticipantsModalOpen={setAddParticipantsModalOpen}
+            setViewUsersModal={setViewUsersModal}
+            setEndElectionModalOpen={setEndElectionModalOpen}
+          />
+        </div>
+      </div>
 
-															<AlertDialog.Root>
-																<AlertDialog.Trigger asChild>
-																	<button className='Button red action-item'><i className="bi bi-trash3 m-1"></i></button>
-																</AlertDialog.Trigger>
-																<AlertDialog.Portal>
-																	<AlertDialog.Overlay className="AlertDialogOverlay" />
-																	<AlertDialog.Content className="AlertDialogContent">
-																		<AlertDialog.Title className="AlertDialogTitle">Remove Voter</AlertDialog.Title>
-																		<AlertDialog.Description className="AlertDialogDescription">
-																			{`Remove ${election.userAuthType === 'email' ? voter.email : voter.phoneNo}?`}
-																		</AlertDialog.Description>
-																		<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
-																			<AlertDialog.Cancel asChild>
-																				<button className="Button mauve">Cancel</button>
-																			</AlertDialog.Cancel>
-																			<AlertDialog.Action asChild>
-																				<button className="Button red" onClick={() => removeVoter(voter)}>Yes, remove</button>
-																			</AlertDialog.Action>
-																		</div>
-																	</AlertDialog.Content>
-																</AlertDialog.Portal>
-															</AlertDialog.Root>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 gap-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-lg font-bold mb-4 text-gray-800">Available Positions</h2>
+          <PositionsBox 
+            list_of_positions={positionsList}
+            isPending={isPending}
+            editPosition={editPosition}
+            removePosition={removePosition}
+          />
+        </div>
+      </div>
 
-														</div>
-													)}
-												</div>
-											</li>
-										)))
-									}
-								</ul>
-							</div>
+      {/* --- MODALS SECTION --- */}
 
+      {/* View/Search Participants Modal */}
+      {viewUsersModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-xl font-bold text-gray-800">Registered Participants</h3>
+              <input
+                type="text"
+                placeholder="Search by name, email or phone..."
+                className="mt-4 w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none transition-all"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
-							<div className='flex flex-col sm:flex-row items-center justify-between w-full p-1 gap-2'>
-								<div className='p-2'>
-									<input
-										type="text"
-										placeholder="Search..."
-										className="w-full p-2 border rounded-md"
-										value={searchTerm}
-										onChange={(e) => setSearchTerm(e.target.value)}
-									/>
-								</div>
+            <div className="flex-1 overflow-y-auto p-6">
+              {votersFiltered.length < 1 ? (
+                <div className="text-center py-10 text-gray-400">No voters found</div>
+              ) : (
+                <ul className="space-y-3">
+                  {votersFiltered.map(voter => (
+                    <li key={voter._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                      <span className="font-medium text-gray-700">
+                        {election.userAuthType === 'email' ? voter.email : voter.phoneNo}
+                      </span>
+                      {isPending && (
+                        <div className="flex gap-2">
+                          <button onClick={() => editParticipant(voter)} className="px-3 py-1.5 text-sm bg-violet-100 text-violet-700 rounded-lg hover:bg-violet-200 font-semibold">Edit</button>
+                          
+                          <AlertDialog.Root>
+                            <AlertDialog.Trigger asChild>
+                              <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                <i className="bi bi-trash3"></i>
+                              </button>
+                            </AlertDialog.Trigger>
+                            <AlertDialog.Portal>
+                              <AlertDialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]" />
+                              <AlertDialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md bg-white p-8 rounded-2xl shadow-2xl z-[70]">
+                                <AlertDialog.Title className="text-xl font-bold">Remove Voter</AlertDialog.Title>
+                                <AlertDialog.Description className="mt-4 text-gray-600">
+                                  {`Are you sure you want to remove ${election.userAuthType === 'email' ? voter.email : voter.phoneNo}?`}
+                                </AlertDialog.Description>
+                                <div className="mt-8 flex justify-end gap-4">
+                                  <AlertDialog.Cancel asChild>
+                                    <button className="px-5 py-2.5 font-semibold text-gray-500 hover:bg-gray-100 rounded-xl">Cancel</button>
+                                  </AlertDialog.Cancel>
+                                  <AlertDialog.Action asChild>
+                                    <button className="px-5 py-2.5 font-semibold bg-red-600 text-white rounded-xl hover:bg-red-700" onClick={() => removeVoter(voter)}>Yes, remove</button>
+                                  </AlertDialog.Action>
+                                </div>
+                              </AlertDialog.Content>
+                            </AlertDialog.Portal>
+                          </AlertDialog.Root>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-								<div>
-									<button className='Button violet action-item' onClick={closeAddParticipant}>Close</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				)}
+            <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
+              <button className="w-full py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-100" onClick={closeAddParticipant}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
 
-				{endElectionModalOpen && (
-					<div className="modal-overlay">
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<p><em>Are you sure you want to End this election. This cannot be undone!</em></p>
-							<div className="action-btn-container">
-								<button className='Button red action-item' onClick={endElection}>Yes, End it</button>
-								<button className='Button violet action-item' onClick={() => setEndElectionModalOpen(false)}>No, JK</button>
-							</div>
-						</div>
-					</div>
-				)}
+      {/* Modern Add Position Modal */}
+      {positionModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl">
+            <h3 className="text-xl font-bold mb-2">New Position</h3>
+            <p className="text-sm text-gray-500 mb-6">Enter a new position for <span className="text-violet-600 font-semibold">{election.title}</span></p>
+            <input
+                type='text'
+                placeholder="e.g. Secretary General"
+                value={newPosition}
+                onChange={handlePositionChange}
+                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none mb-6"
+            />
+            <div className="flex gap-4">
+                <button className="flex-1 py-3 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700" onClick={handleAddPosition}>Add Position</button>
+                <button className="flex-1 py-3 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200" onClick={closePositionModal}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
 
-
-
-				{positionModalOpen && (
-					<div className="modal-overlay">
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<span>Enter a new position for <strong>{`${election.title}`}</strong></span>
-							<br />
-							<input
-								type='text'
-								placeholder="Enter new position"
-								id='newposition'
-								value={newPosition}
-								onChange={handlePositionChange}
-								className='w-5/6 p-2 border border-goldenrod rounded-md text-base my-2'
-							/>
-							<div className="action-btn-container">
-								<button className='Button violet action-item' onClick={handleAddPosition}>Add Position</button>
-								<button className='Button red action-item' onClick={closePositionModal}>Cancel</button>
-							</div>
-						</div>
-					</div>
-				)}
-
-				{updateParticipantModal && (
-					<div className="modal-overlay">
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<span>Update participant info: <strong>{`${election.userAuthType == 'email' ? participant.email : participant.phoneNo}`}</strong></span>
-							<br />
-							<input
-								type='text'
-								id='updateparticipant'
-								value={updatedParticipantInfo}
-								onChange={(e) => { setUpdatedParticipantInfo(e.target.value) }}
-								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
-							/>
-							<div className="action-btn-container" >
-								{election.userAuthType == 'email' && <button className='Button violet action-item' onClick={patchVoterEmail}>Save</button>}
-								{election.userAuthType == 'phone' && <button className='Button violet action-item' onClick={patchVoterPhone}>Save</button>}
-								<button className='Button red action-item' onClick={() => setUpdateParticipantModal(false)}>Cancel</button>
-							</div>
-						</div>
-					</div>
-				)}
-
-				{updatePositionModalOpen && (
-					<div className="modal-overlay">
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<span>Edit position for <strong>{`${election.title}`}</strong></span>
-							<br />
-							<input
-								type='text'
-								id='updateposition'
-								value={updatedPosition}
-								onChange={handlePositionUpdate}
-								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
-							/>
-							<div className="action-btn-container">
-								<button className='Button violet action-item' onClick={handleUpdatePosition}>Update Position</button>
-								<button className='Button red action-item' onClick={closeUpdatePositionModal}>Cancel</button>
-							</div>
-						</div>
-					</div>
-				)}
-
-				{addParticipantsModalOpen && (
-					<div className="modal-overlay">
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<span>Enter list of participants for <strong>{`${election.title}`}</strong></span>
-							<br />
-							<textarea
-								placeholder={`Enter/paste ${election.userAuthType == 'email' ? 'emails' : 'phone numbers'}. Seperate with commas`}
-								id='phonenos'
-								value={participantsList}
-								className='block resize-none p-2.5 my-2.5'
-								onChange={(e) => { setParticipantsList(e.target.value) }}
-							/>
-							<div className="action-btn-container">
-								{election.userAuthType == 'email' ? <button className='Button violet action-item' onClick={() => procList('email')}>Add Emails</button>
-									: <button className='Button violet action-item' onClick={() => procList('phone')}>Add Phone #s</button>}
-								<button className='Button red action-item' onClick={() => setAddParticipantsModalOpen(false)}>Cancel</button>
-							</div>
-						</div>
-					</div>
-				)}
-
-				<div className="pos-list-container">
-					<PositionsBox list_of_positions={positionsList}
-						isPending={isPending}
-						editPosition={editPosition}
-						removePosition={removePosition}
-					/>
-				</div>
-
-			</div>
-		</div>
+      {/* Bulk Participant Modal */}
+      {addParticipantsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="w-full max-w-xl bg-white p-8 rounded-2xl shadow-2xl">
+                <h3 className="text-xl font-bold mb-4">Add Participants</h3>
+                <textarea
+                    placeholder={`Paste ${election.userAuthType === 'email' ? 'emails' : 'phone numbers'} separated by commas...`}
+                    value={participantsList}
+                    onChange={(e) => setParticipantsList(e.target.value)}
+                    className="w-full h-48 p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none resize-none mb-6 font-mono text-sm"
+                />
+                <div className="flex gap-4">
+                    <button className="flex-1 py-3 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700" onClick={() => procList(election.userAuthType)}>
+                        Add {election.userAuthType === 'email' ? 'Emails' : 'Phones'}
+                    </button>
+                    <button className="flex-1 py-3 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200" onClick={() => setAddParticipantsModalOpen(false)}>Cancel</button>
+                </div>
+            </div>
+        </div>
+      )}
+    </div>
 	);
 }
 
