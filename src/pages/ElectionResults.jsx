@@ -44,8 +44,6 @@ function ElectionResults() {
 		setVotes(filteredVotes)
 	}
 
-
-
 	return (
 		<>
 			<div className="max-w-4xl mx-auto p-6 space-y-6 bg-slate-50 min-h-screen antialiased text-slate-800">
@@ -109,7 +107,7 @@ function ElectionResults() {
 						<h3 className="text-lg font-bold border-b pb-2 text-slate-700">Current Standing: {selectedPosition}</h3>
 
 						<div className="divide-y divide-slate-100">
-							{data.map((datum) => {
+							{allResults.map((datum) => {
 								const percentage = ((datum.votes / totalVotes) * 100).toFixed(1);
 
 								return (
