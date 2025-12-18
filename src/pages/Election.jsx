@@ -6,7 +6,7 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { AppContext } from "@/App";
 
 import { fetcher, FetchError } from "@/utils/fetcher";
-      
+
 export async function electionLoader({ params }) {
 	const [e, o, p] = await Promise.all([
 		fetcher(`election/${params.id}`),
@@ -15,7 +15,7 @@ export async function electionLoader({ params }) {
 	])
 
 
-	return [ e, o, p ]
+	return [e, o, p]
 }
 
 
@@ -46,10 +46,10 @@ export default function Election() {
 			if (userVotes.ok) {
 				// let availablePositions = positions.map(p => p._id);
 				let currentPosition = positions.filter(p => p._id == candidate.position)
-	
+
 
 				let voteList = userVotes.votes;
-				
+
 				for (let i = 0; i < voteList.length; i++) {
 					if (voteList.includes(currentPosition[0]._id)) {
 						userHasVoted = true;
@@ -60,7 +60,7 @@ export default function Election() {
 
 			if (!userHasVoted) {
 				const v = await fetcher.post(
-					`election/vote`, 
+					`election/vote`,
 					{
 						election: electionData._id,
 						candidate: candidate._id,
@@ -68,18 +68,18 @@ export default function Election() {
 						position: candidate.position
 					})
 
-				if (v.ok ) {
+				if (v.ok) {
 					Toast.success('Your vote was recorded')
 				} else {
 					Toast.warning('Your vote could not be recorded');
 					return;
 				}
-			} else { 
+			} else {
 				Toast.warning('You already voted for this position');
-			 }
+			}
 		} catch (error) {
 			Toast.warning(error)
-		}	
+		}
 	}
 
 	const handleChange = async (e) => {
@@ -99,90 +99,121 @@ export default function Election() {
 		if (!voter) {
 			Toast.warning("You need to register as a voter first")
 			navigate(`/`)
-		} 
+		}
 	}, [])
 
 	return (
-		<>
-			<div className="main">
-				<div className="electioninfo">
-					<div className="electioninfo-content">
-						<p className='my-0 py-1'><strong>{ e.title }</strong></p>
-						<p className='my-0 py-1'><strong>Description:</strong> { electionData.desc ? electionData.desc : '' }</p>
-						<p className='my-0 py-1'><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
-						<p className='my-0 py-1'><strong>Start date:</strong> { electionData.startDate ? moment(electionData.startDate).format('LLL') : ''}</p>
-						<p className='my-0 py-1'><strong>End date:</strong> { electionData?.endDate ? moment(electionData.endDate).format('LLL') : ''}</p>
-						<p><strong>Time left:</strong> {moment(electionData.endDate).endOf('day').fromNow()}</p>
-					</div>
+		<div className="main p-4">
+			{/* Election Header Information */}
+			<header className="electioninfo mb-6 bg-slate-50 p-4 rounded-lg shadow-sm">
+				<div className="electioninfo-content space-y-1">
+					<h1 className="text-xl font-bold">{e.title}</h1>
+
+					<p><strong>Description:</strong> {electionData.desc || 'No description provided'}</p>
+
+					<p><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
+
+					<p><strong>Start date:</strong> {electionData.startDate ? moment(electionData.startDate).format('LLL') : 'N/A'}</p>
+
+					<p><strong>End date:</strong> {electionData?.endDate ? moment(electionData.endDate).format('LLL') : 'N/A'}</p>
+
+					<p className="text-blue-600 font-medium">
+						<strong>Time left:</strong> {moment(electionData.endDate).endOf('day').fromNow()}
+					</p>
 				</div>
-		
-				<hr />
+			</header>
 
-				{/* Select box for when a voter wants to vote a particular position */}
-				<div className="election-container">
-					<div className='mb-3'>
-						<label>
-							<select name="position" 
-								className='form-select form-select-lg mb-3'
-								value={ selectedPosition } 
-								onChange={ handleChange }
-							>
-								<option value="" disabled>Select a position</option>
-								{positions.length > 0 ? 
-									positions.map((position) => (
-										<option key={position.position} value={position.position}>
-											{position.position}
-										</option>
-									))
-								: "no positions.."}
-							</select>
-						</label>
-					</div>
+			<hr className="my-6" />
 
-					<div className="grid">
-						{
-						candidates ? candidates.map(candidate => (
-							<div className="vote-card" key={candidate._id}>
-								<img src={candidate.imgUrl} width="100px" alt="" />
-								<div className="vote-card-content">
-									<div className="vote-card-title">
+			{/* Position Selection */}
+			<section className="election-container">
+				<div className="mb-6">
+					<label htmlFor="position-select" className="block text-sm font-medium mb-2">Select a Position</label>
+					<select
+						id="position-select"
+						name="position"
+						className="form-select form-select-lg w-full max-w-md p-2 border rounded shadow-sm"
+						value={selectedPosition}
+						onChange={handleChange}
+					>
+						<option value="" disabled>Choose a position...</option>
+						{positions.length > 0 ? (
+							positions.map((position) => (
+								<option key={position.position} value={position.position}>
+									{position.position}
+								</option>
+							))
+						) : (
+							<option disabled>No positions available</option>
+						)}
+					</select>
+				</div>
 
-									</div>
-									<div className="vote-card-desc">
-										<h2><strong>{`${candidate.firstname} ${candidate.lastname}`}</strong></h2>
-										<h5>{`${selectedPosition}`}</h5>
+				{/* Candidates Grid */}
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{candidates?.length > 0 ? (
+						candidates.map((candidate) => (
+							<div className="vote-card border rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow" key={candidate._id}>
+								<div className="flex items-center p-4 gap-4">
+									<img
+										src={candidate.imgUrl}
+										className="w-24 h-24 object-cover rounded-full border-2 border-gray-100"
+										alt={`${candidate.firstname} profile`}
+									/>
+
+									<div className="vote-card-desc flex-1">
+										<h2 className="text-lg font-bold text-gray-800">
+											{`${candidate.firstname} ${candidate.lastname}`}
+										</h2>
+										<h5 className="text-gray-500 mb-3">{selectedPosition}</h5>
+
 										<AlertDialog.Root>
 											<AlertDialog.Trigger asChild>
-											<button className="Button violet">Vote</button>
+												<button className="Button violet bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700 transition-colors">
+													Vote
+												</button>
 											</AlertDialog.Trigger>
+
 											<AlertDialog.Portal>
-											<AlertDialog.Overlay className="AlertDialogOverlay" />
-											<AlertDialog.Content className="AlertDialogContent">
-												<AlertDialog.Title className="AlertDialogTitle">Are you sure?</AlertDialog.Title>
-												<AlertDialog.Description className="AlertDialogDescription">
-													{`Vote ${candidate.firstname} ${candidate.lastname} for ${selectedPosition}`}
-												</AlertDialog.Description>
-													<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
-												<AlertDialog.Cancel asChild>
-													<button  className="Button mauve">Cancel</button>
-												</AlertDialog.Cancel>
-												<AlertDialog.Action asChild>
-													<button className="Button red" onClick={() => sendVote(candidate, params.voterId)}>Yes, vote</button>
-												</AlertDialog.Action>
-												</div>
-											</AlertDialog.Content>
+												<AlertDialog.Overlay className="AlertDialogOverlay fixed inset-0 bg-black/40 backdrop-blur-sm" />
+												<AlertDialog.Content className="AlertDialogContent fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl w-[90vw] max-w-md">
+													<AlertDialog.Title className="AlertDialogTitle text-lg font-bold border-b pb-2">
+														Confirm Your Vote
+													</AlertDialog.Title>
+
+													<AlertDialog.Description className="AlertDialogDescription my-4 text-gray-600">
+														{`Are you sure you want to vote for ${candidate.firstname} ${candidate.lastname} as ${selectedPosition}? This action cannot be undone.`}
+													</AlertDialog.Description>
+
+													<div className="flex justify-end gap-3 mt-6">
+														<AlertDialog.Cancel asChild>
+															<button className="Button mauve bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+																Cancel
+															</button>
+														</AlertDialog.Cancel>
+														<AlertDialog.Action asChild>
+															<button
+																className="Button red bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+																onClick={() => sendVote(candidate, params.voterId)}
+															>
+																Yes, cast vote
+															</button>
+														</AlertDialog.Action>
+													</div>
+												</AlertDialog.Content>
 											</AlertDialog.Portal>
-  										</AlertDialog.Root>
+										</AlertDialog.Root>
 									</div>
 								</div>
 							</div>
-						)): "no candidates for this position"}
-					</div>	
-					{/* end div grid */}
+						))
+					) : (
+						<div className="col-span-full py-10 text-center text-gray-400">
+							No candidates found for this position.
+						</div>
+					)}
 				</div>
-				{/* end div election container */}
-			</div>
-			
-		</>
+			</section>
+		</div>
 	);
 }
