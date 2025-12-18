@@ -22,7 +22,7 @@ export async function addCandidateLoader({ params }) {
 		return [positions, election];
 	} catch (error) {
 		console.error("There was a problem fetching positions");
-		return {}
+		return null;
 	}
 }
 
@@ -64,32 +64,40 @@ function AddCandidate() {
 	};
 
 	async function uploadImage() {
-		const fileExt = image ? image.name.split('.').pop() : '';
-		try {
-			let photoUrl = '';
-			const imgRef = ref(
-			    fireman,
-			    `${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${genUUID()}.${fileExt}`
-			);
 		
-			const snapshot = await uploadBytes(imgRef, image);
+		try {
+			let imgRef;
+			let photoUrl = '';
 			
-			// only fetch download url for when admin is adding candidates himself
-			if (user) {
-				photoUrl = await getDownloadURL(snapshot.ref);
+			if (image) {
+				const fileExt = image.name.split('.').pop();
+
+				imgRef = ref(
+					fireman,
+					`${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${genUUID()}.${fileExt}`
+				);
+				const snapshot = await uploadBytes(imgRef, image);
+				
+				// only fetch download url for when admin is adding candidates himself
+				if (user) {
+					photoUrl = await getDownloadURL(snapshot.ref);
+				}
 			}
 
 			const payload = {
-				...formData, photoUrl: user ? photoUrl: imgRef.fullPath, selectedPosition, isApproved: user ? true : false
+				...formData,
+				photoUrl: ((user) ? photoUrl: image ? imgRef.fullPath : ""),
+				selectedPosition,
+				isApproved: user ? true : false
 			}
 
 			await fetcher.post(
-				`election/${params.id}/add-candidate`,	
+				`election/${election._id}/add-candidate`,
 				payload
 			);
 
 			if (user) {
-				navigate(`/user/${params.userId}/election/${params.id}`)
+				navigate(`/user/${user.uid}/election/${election._id}`)
 			} else {
 				Toast.success("You've been registered")
 				navigate('/');

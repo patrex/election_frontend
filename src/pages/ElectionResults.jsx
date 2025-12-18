@@ -4,25 +4,31 @@ import moment from 'moment';
 import { fetcher, FetchError } from '@/utils/fetcher';
 
 export async function resultsLoader({ params }) {
+	try {
+		const [election, results, positions] = await Promise.all([
+			fetcher.get(`election/${ params.id }`),
+			fetcher.get(`results/${ params.id }`),
+			fetcher.get(`election/${ params.id }/positions`)
+		])
 
-	const [election, positions, candidates, votes] = await Promise.all([
-		fetcher.get(`election/${params.id}`),
-		fetcher.get(`election/${params.id}/positions`),
-		fetcher.get(`election/${params.id}/candidates`),
-		fetcher.get(`election/${params.id}/votes`),
-	]);
-
-	return [election, positions, candidates, votes];
+		//results potentially contains: results.data for the total results
+		//and results.winners for the first three winners
+		return [election, results.data, results.winners, positions];
+	} catch (error) {
+		console.error(error);
+		return null
+	}
 }
 
 function ElectionResults() {
-	const [election, positions, candidates, votes] = useLoaderData();
+	const [event, allResults, winners, positions] = useLoaderData();
 
-	const [votesList, setVotesList] = useState([])
-	const [candidatesList, setCandidatesList] = useState([])
+	const [election, setElection] = useState(event || [])
+	const [votes, setVotes] = useState(allResults || []);
+	const [top3, setTop3] = useState(winners || []);
+	const [workingList, setWorkingList] = useState(data || []);
+
 	const [selectedPosition, setSelectedPosition] = useState("");
-
-	const [data, setData] = useState([]);
 
 	const handleChange = (e) => {
 		const selected = e.target.value;
@@ -31,36 +37,14 @@ function ElectionResults() {
 		const position = positions.find(pos => pos.position === selected);
 		if (!position) return;
 
-		const filteredCandidates = candidates.filter(candidate => candidate.position == position._id)
-		const filteredVotes = votes.filter(vote => vote.position === position._id)
+		const filteredCandidates = data.filter(candidate => candidate.position == position._id);
+		const filteredVotes = votes.filter(vote => vote.position === position._id);
 
-		setCandidatesList(filteredCandidates)
-		setVotesList(filteredVotes)
+		setWorkingList(filteredCandidates)
+		setVotes(filteredVotes)
 	}
 
-	useEffect(() => {
-		if (election?.endDate && moment(election.endDate).isAfter(new Date()))
-			setEventException(true)
-	}, [election.endDate])
 
-	useEffect(() => {
-		const updatedData = candidatesList.map(candidate => ({
-			imgUrl: candidate.imgUrl,
-			id: candidate._id,
-			candidateName: `${candidate.firstname} ${candidate.lastname}`,
-			votes: votesList.filter(vote => vote.candidateId === candidate._id).length
-		})).sort((a, b) => b.votes - a.votes)
-
-		// Identify the winner (first in sorted list)
-		const winnerId = updatedData.length > 0 ? updatedData[0].id : null;
-
-		setData(updatedData.map(candidate => ({
-			...candidate,
-			isWinner: candidate.id === winnerId
-		})));
-	}, [selectedPosition, candidatesList, votesList])
-
-	const totalVotes = useMemo(() => votesList.length, [votesList])
 
 	return (
 		<>

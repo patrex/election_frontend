@@ -17,6 +17,7 @@ export async function loader({ params }) {
 		return [election, candidates, params.position]
 	} catch (error) {
 		console.error("Could not fetch resources");
+		return null;
 	}
 }
 
@@ -63,7 +64,7 @@ function PositionDetails() {
 				<hr />
 
 				<Grid container spacing={2}>
-					{candidatesList.map(candidate => (
+					{candidatesList.filter(c => c.isApproved).map(candidate => (
 						<Grid item key={candidate._id} xs={12} sm={6} md={4} lg={3}>
 							<UserCard
 								name={`${candidate.firstname} ${candidate.lastname}`}
