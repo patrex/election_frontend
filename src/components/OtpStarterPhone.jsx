@@ -3,12 +3,11 @@ import { useOTP } from '@/contexts/OTPContext'; // Removed .jsx
 import { cleanNgPhoneNo, validatePhoneNo } from '@/utils/cleanPhoneNo'
 import Toast from '@/utils/ToastMsg';
 import { Loader2, Phone, AlertTriangle } from 'lucide-react';
-import { useEffect } from 'react';
 import { sendPhoneOtp } from '@/utils/phoneOtpService';
 
 import { useLoaderData, useNavigate, Link, useNavigation } from "react-router-dom";
 
-const OTPStarterPhone = ({ electionId }) => {
+const OTPStarterPhone = ({ electionId, redir }) => {
 	const nav = useNavigate()
 
 	const { startVerification, status } = useOTP();
@@ -29,7 +28,7 @@ const OTPStarterPhone = ({ electionId }) => {
 				setTermiiResponse(otpRequest);
 				await startVerification(phoneNo, termiiResponse);
 
-				nav(`election/${electionId}/addcandidate`);
+				nav(redir);
 			} else {
 				Toast.error("Sending OTP failed");
 				throw new Error("Could not send OTP")
