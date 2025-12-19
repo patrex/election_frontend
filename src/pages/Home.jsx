@@ -6,6 +6,7 @@ import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from "@/utils/fetcher";
 import moment from "moment";
 import OTPStarterPhone from "@/components/OtpStarterPhone";
+import PhoneInput from "@/components/CollectPhoneNumber";
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
@@ -15,296 +16,255 @@ export async function homeLoader({ request }) {
 
 function Home() {
 	const navigate = useNavigate();
-	const electionFromQueryParams = useLoaderData();
-	const { setVoter } = useContext(AppContext);
+const electionFromQueryParams = useLoaderData();
+const { setVoter } = useContext(AppContext);
 
-	// State management
-	const [electionId, setElectionId] = useState('');
-	const [election, setElection] = useState(null);
-	const [participant, setParticipant] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
-	const [openOptionsModal, setOpenOptionsModal] = useState(false);
-	const [otpStarterModal, setOtpStarterModal] = useState(false)
+// State management
+const [electionId, setElectionId] = useState('');
+const [election, setElection] = useState(null);
+const [participant, setParticipant] = useState('');
+const [isLoading, setIsLoading] = useState(false);
+const [openOptionsModal, setOpenOptionsModal] = useState(false);
+const [otpStarterModal, setOtpStarterModal] = useState(false);
+const [regVoterModal, setRegVoterModal] = useState(false);
+const [checkVoterModal, setCheckVoterModal] = useState(false);
+const [electionEndedModal, setElectionEndedModal] = useState(false);
 
-	// Process election from query params on mount
-	useEffect(() => {
-		if (electionFromQueryParams) {
-			processElection(electionFromQueryParams);
-		}
-	}, [electionFromQueryParams]);
+// Auto-process if ID comes from URL
+useEffect(() => {
+    if (electionFromQueryParams) processElection(electionFromQueryParams);
+}, [electionFromQueryParams]);
 
-	function getEventStatus(startDate, endDate) {
-		const now = new Date();
-		const isPending = now < startDate;
-		const hasEnded = now > endDate;
-		const isActive = !isPending && !hasEnded;
-		
-		return { isPending, hasEnded, isActive };
-	}
+/**
+ * Determines the current status of the election based on date ranges
+ */
+const getEventStatus = (startDate, endDate) => {
+    const now = new Date();
+    return {
+        isPending: now < startDate,
+        hasEnded: now > endDate,
+        isActive: now >= startDate && now <= endDate
+    };
+};
 
-	// Fetch and validate election
-	const processElection = async (id) => {
-		if (!id || !id.trim()) {
-			Toast.warning("Please enter a valid election ID");
-			return;
-		}
+/**
+ * Main entry point: Fetches election and triggers correct Modal path
+ */
+const processElection = async (id) => {
+    if (!id?.trim()) return Toast.warning("Please enter a valid election ID");
 
-		setIsLoading(true);
+    setIsLoading(true);
+    try {
+        const e = await fetcher.get(`election/${id}`);
+        setElection(e);
 
-		try {
-			const e = await fetcher.get(`election/${id}`);
+        const { isPending, hasEnded } = getEventStatus(new Date(e.startDate), new Date(e.endDate));
 
-			setElection(e);
+        // Logic Branching
+        if (hasEnded) return setElectionEndedModal(true);
+        if (isPending) return setOpenOptionsModal(true);
+        
+        // Default: Election is active
+        setRegVoterModal(true);
+    } catch (error) {
+        Toast.error("There was an error fetching the election");
+    } finally {
+        setIsLoading(false);
+    }
+};
 
-			const { isPending, hasEnded } = getEventStatus(
-				new Date(e.startDate),
-				new Date(e.endDate)
-			);
+/**
+ * Validates the voter against the fetched election's voter list
+ */
+const checkAndProcessVoter = async (participantId) => {
+   setRegVoterModal(false);
+    setIsLoading(true);
+    
+    // Capture the phone/email immediately so addVoterToDatabase can use it later
+    setParticipant(participantId); 
 
-			if (hasEnded) {
-				Toast.warning("This election has been concluded");
-				navigate(`/election/${e._id}/results`);
-			} else if (isPending) {
-				setOpenOptionsModal(true);
-				return;
-			}
+    try {
+        const voterList = await fetcher.get(`election/${election._id}/voterlist`);
+        const isPhoneType = election.userAuthType === 'phone';
+        const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
 
-			setShowAuthModal(true);
-		} catch (error) {
-			Toast.error("There was an error fetching the election");
-		} finally {
-			setIsLoading(false);
-		}
-	}
+        // 1. Path for Existing Voters
+        if (existingVoters.includes(participantId)) {
+            setVoter(participantId);
+            return navigate(`/election/${election._id}/${b64encode(participantId)}`);
+        }
 
-	// Check if voter exists and process accordingly
-	const checkAndProcessVoter = async (participantId) => {
-		setIsLoading(true);
+        // 2. Path for Closed Elections (Unauthorized)
+        if (election.type === 'Closed') {
+            return Toast.warning(
+                `This is a closed election. Your ${isPhoneType ? 'phone' : 'email'} must be pre-registered.`
+            );
+        }
 
-		try {
-			const voterList = await fetcher.get(`election/${election._id}/voterlist`);
+        // 3. Path for New Voters in Open Elections
+        // Trigger the OTP modal to verify the new participant
+        setOtpStarterModal(true);
 
-			const existingVoters = election.userAuthType === 'phone' 
-				? voterList.map(v => v.phoneNo)
-				: voterList.map(v => v.email);
+    } catch (error) {
+        Toast.error('Unable to verify voter status.');
+    } finally {
+        setIsLoading(false);
+    }
+};
 
-			// Existing voter - redirect to ballot
-			if (existingVoters.includes(participantId)) {
-				setVoter(participantId);
-				navigate(`/election/${election._id}/${b64encode(participantId)}`);
-				return;
-			}
+/**
+ * Finalizes registration and navigates to ballot
+ */
+const addVoterToDatabase = async () => {
+    try {
+        await fetcher.post(`election/${election._id}/addvoter/participant`, {
+            participant,
+            electionId: election._id
+        });
 
-			// New voter in closed election - reject
-			if (election.type === 'Closed') {
-				Toast.warning(
-					`This is a closed election. Your ${election.userAuthType === 'email' ? 'email' : 'phone number'} must be pre-registered by the election administrator.`
-				);
-				return;
-			}
+        setVoter(participant);
+        Toast.success('Verification successful!');
 
-			// New voter in open election - send OTP
-			await sendOtp(participantId);
-		} catch (error) {
-			Toast.error('Unable to verify voter status. Please try again');
-			console.error('Error checking voter:', error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-
-	// Add voter to database
-	const addVoterToDatabase = async () => {
-		try {
-			await fetcher.post(`election/${election._id}/addvoter/participant`,	
-			{ 
-				participant, 
-				electionId: election._id 
-			});
-
-			setVoter(participant);
-			Toast.success('Verification successful!');
-			
-			// Small delay to show success message
-			setTimeout(() => {
-				navigate(`/election/${election._id}/${b64encode(participant)}`);
-			}, 500);
-		} catch (error) {
-			Toast.error('Failed to register voter');
-			console.error('Error adding voter:', error);
-		}
-	};
+        setTimeout(() => {
+            navigate(`/election/${election._id}/${b64encode(participant)}`);
+        }, 500);
+    } catch (error) {
+        Toast.error('Failed to register voter');
+    }
+};
 
 	return (
 		<>
-			<div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+			<div className="min-h-screen flex flex-col bg-slate-50 dark:bg-gray-900 transition-colors duration-300">
 				{/* Hero Section */}
-				<div className="flex-grow flex items-center justify-center px-4 py-12">
+				<section className="flex-grow flex items-center justify-center px-4 py-20 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-gray-800/50">
 					<div className="max-w-3xl w-full text-center">
-						{/* Logo/Title */}
-						<div className="mb-8">
-							<h1 className="text-6xl md:text-7xl font-extrabold mb-4">
-								<span className="bg-clip-text text-blue-600">
+						<div className="mb-10">
+							<h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight">
+								<span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
 									Votify
 								</span>
 							</h1>
-							<p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light">
-								Secure, transparent, and accessible voting for everyone
+							<p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 font-medium">
+								Secure, transparent, and accessible voting for everyone.
 							</p>
 						</div>
 
-						{/* Election ID Input - Flatter, cleaner style */}
-						<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-8 max-w-2xl mx-auto">
+						{/* Election ID Input Card */}
+						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-blue-500/5 border border-gray-100 dark:border-gray-700 p-8 md:p-12 max-w-xl mx-auto transform transition hover:scale-[1.01]">
 							<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
 								Find an Election
 							</h2>
-							<p className="text-gray-600 dark:text-gray-400 mb-6">
-								Enter the election ID provided by your election administrator
+							<p className="text-gray-500 dark:text-gray-400 mb-8">
+								Enter the unique ID provided by your administrator.
 							</p>
 
-							<div className="flex flex-col sm:flex-row gap-3">
+							<div className="flex flex-col gap-3">
 								<input
 									type="text"
 									value={electionId}
 									onChange={(e) => setElectionId(e.target.value)}
 									onKeyDown={(e) => e.key === 'Enter' && processElection(electionId)}
-									placeholder="Enter/paste election ID..."
-									className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition"
+									placeholder="Election ID (e.g. ELEC-123)"
+									className="flex-1 px-5 py-4 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white transition-all font-mono"
 									disabled={isLoading}
 									autoFocus
 								/>
 								<button
 									onClick={() => processElection(electionId)}
 									disabled={isLoading || !electionId.trim()}
-									className="Button violet hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+									className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
 								>
 									{isLoading ? (
-										<span className="flex items-center justify-center">
-											<svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+										<>
+											<svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
 												<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
 												<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 											</svg>
-											Loading...
-										</span>
+											Processing...
+										</>
 									) : (
-										'Continue'
+										'Continue to Election'
 									)}
 								</button>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+				</section>
 
-			{otpStarterModal && (
-				<div className="modal-overlay">
-					<>
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<button
-								onClick={ () => setOtpStarterModal(false) }
-								className="absolute top-4 right-4 text-gray-800 hover:text-indigo-200 transition p-1 z-20"
-								aria-label="Close modal"
-							>
-								<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-									<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-								</svg>
+				{/* Unified Modal Logic */}
+				{[
+					{ show: otpStarterModal, setter: setOtpStarterModal, content: <OTPStarterPhone electionId={election?._id} optns={{ action: 'redir', optn: `election/${electionId}/addcandidate` }} /> },
+					{ show: regVoterModal, setter: setRegVoterModal, content: <OTPStarterPhone electionId={election?._id} optns={{ action: 'fn', optn: addVoterToDatabase }} /> },
+					{ show: checkVoterModal, setter: setCheckVoterModal, content: <PhoneInput action={checkAndProcessVoter} /> }
+				].map((modal, idx) => modal.show && (
+					<div key={idx} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
+						<div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl relative p-6 animate-in fade-in zoom-in duration-200">
+							<button onClick={() => modal.setter(false)} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+								<svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
 							</button>
-							<OTPStarterPhone electionId={election._id} redir={`election/${electionId}/addcandidate`}/>
+							<div className="pt-4">{modal.content}</div>
 						</div>
-					</>
-				</div>
-			)}
+					</div>
+				))}
 
-			{regVoterModal && (
-				<div className="modal-overlay">
-					<>
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<button
-								onClick={ () => setOtpStarterModal(false) }
-								className="absolute top-4 right-4 text-gray-800 hover:text-indigo-200 transition p-1 z-20"
-								aria-label="Close modal"
-							>
-								<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-									<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-								</svg>
-							</button>
-							<OTPStarterPhone electionId={election._id} redir={`election/${electionId}/addcandidate`}/>
-						</div>
-					</>
-				</div>
-			)}
-
-			{openOptionsModal && (
-				<div className="modal-overlay">
-					<div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all relative">
-						<button
-							onClick={() => setOpenOptionsModal(false)}
-							className="absolute top-4 right-4 text-white hover:text-indigo-200 transition p-1 z-20"
-							aria-label="Close modal"
-						>
-							<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-								<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						</button>
-    
-
-						<div className="bg-blue-500 p-6 rounded-t-xl"> 
-							<h3 className="text-2xl font-extrabold text-white pr-8">
-								{election.title}
-							</h3>
-							<p className="text-indigo-200 text-sm mt-1 font-light">
-								This election has not started yet. It will start in {`${moment(election.startDate).fromNow()}`}
-							</p>
-						</div>
-
-						{election.addCandidatesBy === "Candidates Will Add Themselves" && (
-							<div className="p-6 max-h-[70vh] overflow-y-auto flex flex-col space-y-6">
-								<div className="text-center bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-400">
-									<p className="text-gray-700 text-md font-medium">
-										Click 
-										<span 
-											onClick={ () => {
-												setOtpStarterModal(true);
-												setOpenOptionsModal(false);
-											}}
-											className="text-indigo-600 font-semibold hover:text-indigo-800 underline mx-1 transition-colors text-undeline"
-										>
-											here
-										</span> 
-										if you want to register as a candidate.
-									</p>
-								</div>
-								<div className="flex items-start p-3 bg-gray-100 rounded-lg text-gray-600 text-xs">
-									<svg 
-										xmlns="http://www.w3.org/2000/svg" 
-										className="h-4 w-4 flex-shrink-0 mr-2 text-indigo-500 mt-0.5" 
-										fill="none" 
-										viewBox="0 0 24 24" 
-										stroke="currentColor" 
-										strokeWidth="2"
-									>
-										<path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-									</svg>
-									
-									<p>
-										<strong className="font-semibold text-gray-800">Important:</strong> Registering here does not imply you will be automatically shortlisted. The administrator still needs to approve your application before you appear on the final ballot.
-									</p>
-								</div>
+				{/* Election State Modals (Ended/Not Started) */}
+				{(electionEndedModal || openOptionsModal) && (
+					<div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
+						<div className="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
+							<div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 relative">
+								<button
+									onClick={() => { setElectionEndedModal(false); setOpenOptionsModal(false); }}
+									className="absolute top-4 right-4 text-white/80 hover:text-white"
+								>
+									<svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+								</button>
+								<h3 className="text-2xl font-bold text-white mb-2">{election.title}</h3>
+								<p className="text-blue-100 text-sm">
+									{electionEndedModal
+										? `Election ended ${moment(election.startDate).calendar()}`
+										: `Starts in ${moment(election.startDate).fromNow()}`}
+								</p>
 							</div>
-						)}
 
-						<div className="p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
-							<button 
-								className='bg-blue-500 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition' 
-								onClick={ ()=> setOpenOptionsModal(false) }
-							>
-								Ok
-							</button>
+							<div className="p-8">
+								{electionEndedModal ? (
+									<div className="text-center">
+										<p className="text-gray-600 dark:text-gray-300 mb-6">Voting is now closed for this election.</p>
+										<Link to={`/election/${election._id}/results`} className="inline-block w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition">
+											View Official Results
+										</Link>
+									</div>
+								) : (
+									<div className="space-y-6">
+										{election.addCandidatesBy === "Candidates Will Add Themselves" && (
+											<div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-800">
+												<p className="text-gray-800 dark:text-gray-200">
+													Want to run?
+													<button
+														onClick={() => { setOtpStarterModal(true); setOpenOptionsModal(false); }}
+														className="text-blue-600 dark:text-blue-400 font-bold hover:underline mx-2"
+													>
+														Register here
+													</button>
+													as a candidate.
+												</p>
+											</div>
+										)}
+										<div className="flex gap-3 text-sm text-gray-500 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+											<svg className="h-5 w-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+											<p><strong>Note:</strong> Candidate applications require administrator approval before appearing on the ballot.</p>
+										</div>
+										<button onClick={() => setOpenOptionsModal(false)} className="w-full py-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+											Close
+										</button>
+									</div>
+								)}
+							</div>
 						</div>
-    					</div>
-				</div>
-			)}
+					</div>
+				)}
+			</div>
 		</>
 	);
 }

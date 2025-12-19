@@ -7,7 +7,7 @@ import { sendPhoneOtp } from '@/utils/phoneOtpService';
 
 import { useLoaderData, useNavigate, Link, useNavigation } from "react-router-dom";
 
-const OTPStarterPhone = ({ electionId, redir }) => {
+const OTPStarterPhone = ({ electionId, optns }) => {
 	const nav = useNavigate()
 
 	const { startVerification, status } = useOTP();
@@ -28,7 +28,7 @@ const OTPStarterPhone = ({ electionId, redir }) => {
 				setTermiiResponse(otpRequest);
 				await startVerification(phoneNo, termiiResponse);
 
-				nav(redir);
+				optns.action === 'redir' ? nav(optns.optn): optns.optn(phoneNo);
 			} else {
 				Toast.error("Sending OTP failed");
 				throw new Error("Could not send OTP")
@@ -83,7 +83,7 @@ const OTPStarterPhone = ({ electionId, redir }) => {
 				</button>
 			</div>
 			<p className="text-xs text-gray-500 text-center">
-				*Standard SMS rates may apply. Use country code without '+'.
+				*Standard SMS rates may apply
 			</p>
 		</>
 	);

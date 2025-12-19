@@ -55,32 +55,48 @@ function PositionDetails() {
 	}
 
 	return (
-		<Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-			<Container maxWidth="lg" sx={{ pt: 4, flex: 1 }}>
-				<Typography variant="h4" component="h1" sx={{ mb: 3 }}>
-					Candidates for {position}
-				</Typography>
+		<div className="min-h-screen flex flex-col bg-slate-50">
+			<main className="container mx-auto px-4 pt-10 flex-1 max-w-7xl">
+				{/* Header Section */}
+				<div className="flex flex-col gap-2 mb-6">
+					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+						Candidates for <span className="text-violet-600">{position}</span>
+					</h1>
+					<p className="text-gray-500">Manage and view all approved candidates for this position.</p>
+				</div>
 
-				<hr />
+				<hr className="border-gray-200 mb-8" />
 
-				<Grid container spacing={2}>
-					{candidatesList.filter(c => c.isApproved).map(candidate => (
-						<Grid item key={candidate._id} xs={12} sm={6} md={4} lg={3}>
-							<UserCard
-								name={`${candidate.firstname} ${candidate.lastname}`}
-								position={position}
-								imageUrl={candidate.imgUrl}
-								onEdit={() =>
-									handleEdit(`/user/${params.userId}/election/candidate/${candidate._id}/update`)
-								}
-								onDelete={() => removeCandidate(candidate)}
-								election={election}
-							/>
-						</Grid>
-					))}
-				</Grid>
-			</Container>
-		</Box>
+				{/* Responsive Grid System */}
+				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+					{candidatesList
+						.filter((c) => c.isApproved)
+						.map((candidate) => (
+							<div key={candidate._id} className="flex justify-center">
+								<UserCard
+									name={`${candidate.firstname} ${candidate.lastname}`}
+									position={position}
+									imageUrl={candidate.imgUrl}
+									onEdit={() =>
+										handleEdit(
+											`/user/${params.userId}/election/candidate/${candidate._id}/update`
+										)
+									}
+									onDelete={() => removeCandidate(candidate)}
+									election={election}
+								/>
+							</div>
+						))}
+				</div>
+
+				{/* Empty State (Optional but helpful) */}
+				{candidatesList.filter((c) => c.isApproved).length === 0 && (
+					<div className="text-center py-20 bg-white rounded-xl border-2 border-dashed">
+						<p className="text-gray-400">No approved candidates found for this position.</p>
+					</div>
+				)}
+			</main>
+		</div>
 	);
 }
 
