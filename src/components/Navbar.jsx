@@ -60,9 +60,6 @@ const Navbar = ({ user, onLogout }) => {
                     
                     {/* Logo Section */}
                     <Link to="/" className="flex items-center gap-2 no-underline group" onClick={closeMenu}>
-                        <div className="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center group-hover:rotate-6 transition-transform">
-                            <span className="text-white font-bold text-lg">V</span>
-                        </div>
                         <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400">
                             Votify
                         </span>
