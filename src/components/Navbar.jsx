@@ -1,273 +1,146 @@
-import { useState, useContext, useEffect, useRef } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Menu, X, LayoutDashboard, PlusCircle, LogOut, LogIn, UserPlus, DoorOpen } from 'lucide-react';
 import { AppContext } from "@/App";
 
-function NavBar({ user, onLogout }) {
-	const [navOpen, setNavOpen] = useState(false);
-	const navigate = useNavigate();
-	const menuRef = useRef(null);
-	const { voter } = useContext(AppContext);
+const Navbar = ({ user, onLogout }) => {
+    const [navOpen, setNavOpen] = useState(false);
+    const navigate = useNavigate();
+    const menuRef = useRef(null);
+    const { voter } = useContext(AppContext);
 
-	const toggleMenu = () => setNavOpen(!navOpen);
-	const closeMenu = () => setNavOpen(false);
+    // --- Logic Handlers ---
+    const toggleMenu = () => setNavOpen(!navOpen);
+    const closeMenu = () => setNavOpen(false);
 
-	// Close menu when clicking outside
-	useEffect(() => {
-		const handleClickOutside = (e) => {
-			if (menuRef.current && !menuRef.current.contains(e.target)) {
-				setNavOpen(false);
-			}
-		};
+    const handleLogout = () => {
+        onLogout();
+        closeMenu();
+    };
 
-		if (navOpen) {
-			document.addEventListener('mousedown', handleClickOutside);
-		}
+    const handleExit = () => {
+        navigate('/');
+        closeMenu();
+    };
 
-		return () => document.removeEventListener('mousedown', handleClickOutside);
-	}, [navOpen]);
+    // --- Side Effects ---
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) closeMenu();
+        };
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') closeMenu();
+        };
 
-	// Close menu on escape key
-	useEffect(() => {
-		const handleEscape = (e) => {
-			if (e.key === 'Escape' && navOpen) {
-				setNavOpen(false);
-			}
-		};
+        if (navOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+            document.addEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'hidden';
+        }
 
-		document.addEventListener('keydown', handleEscape);
-		return () => document.removeEventListener('keydown', handleEscape);
-	}, [navOpen]);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'unset';
+        };
+    }, [navOpen]);
 
-	// Prevent body scroll when mobile menu is open
-	useEffect(() => {
-		if (navOpen) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = 'unset';
-		}
+    // --- Shared Styles ---
+    const linkBase = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all no-underline";
+    const desktopLink = ({ isActive }) => 
+        `${linkBase} ${isActive ? 'bg-violet-600 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-gray-800 hover:text-violet-700'}`;
+    
+    const mobileLink = ({ isActive }) => 
+        `flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-all no-underline ${isActive ? 'bg-violet-600 text-white' : 'text-gray-700 dark:text-gray-200 hover:bg-violet-50 dark:hover:bg-gray-900'}`;
 
-		return () => {
-			document.body.style.overflow = 'unset';
-		};
-	}, [navOpen]);
+    return (
+        <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16">
+                    
+                    {/* Logo Section */}
+                    <Link to="/" className="flex items-center gap-2 no-underline group" onClick={closeMenu}>
+                        <div className="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center group-hover:rotate-6 transition-transform">
+                            <span className="text-white font-bold text-lg">V</span>
+                        </div>
+                        <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400">
+                            Votify
+                        </span>
+                    </Link>
 
-	const handleLogout = () => {
-		onLogout();
-		closeMenu();
-	};
+                    {/* Desktop Menu */}
+                    <div className="hidden md:flex items-center gap-1">
+                        {user && !voter ? (
+                            <>
+                                <NavLink to={`/user/${user.uid}`} end className={desktopLink}>
+                                    <LayoutDashboard size={18} /> Dashboard
+                                </NavLink>
+                                <NavLink to={`/user/${user.uid}/create-election`} className={desktopLink}>
+                                    <PlusCircle size={18} /> Create
+                                </NavLink>
+                                <div className="h-6 w-px bg-gray-200 dark:bg-gray-800 mx-2" />
+                                <div className="flex items-center gap-3 pl-2">
+                                    <span className="text-xs font-medium text-gray-500 max-w-[150px] truncate">{user.email}</span>
+                                    <button onClick={handleLogout} className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors">
+                                        <LogOut size={18} />
+                                    </button>
+                                </div>
+                            </>
+                        ) : voter ? (
+                            <button onClick={handleExit} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+                                <DoorOpen size={18} /> Exit System
+                            </button>
+                        ) : (
+                            <div className="flex items-center gap-3">
+                                <NavLink to="/login" className="text-sm font-medium text-gray-600 hover:text-violet-600 no-underline">Login</NavLink>
+                                <NavLink to="/signup" className="px-5 py-2 bg-violet-600 text-white rounded-full text-sm font-medium hover:bg-violet-700 transition-all no-underline shadow-lg shadow-violet-200 dark:shadow-none">
+                                    Sign Up
+                                </NavLink>
+                            </div>
+                        )}
+                    </div>
 
-	const handleExit = () => {
-		navigate('/');
-		closeMenu();
-	};
+                    {/* Mobile Toggle */}
+                    <button onClick={toggleMenu} className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        {navOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                </div>
 
-	return (
-		<header className="sticky top-0 z-50 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 shadow-sm">
-			<nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="flex items-center justify-between h-16">
-					{/* Logo */}
-					<div className="flex-shrink-0">
-						<Link
-							to="/"
-							className="text-2xl font-bold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors no-underline"
-						>
-							Votify
-						</Link>
-					</div>
+                {/* Mobile Menu Panel */}
+                {navOpen && (
+                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-50 bg-white dark:bg-gray-950">
+                        <div ref={menuRef} className="p-4 space-y-2 h-full flex flex-col">
+                            {user && !voter ? (
+                                <>
+                                    <NavLink to={`/user/${user.uid}`} onClick={closeMenu} className={mobileLink}>
+                                        <LayoutDashboard size={20} /> Dashboard
+                                    </NavLink>
+                                    <NavLink to={`/user/${user.uid}/create-election`} onClick={closeMenu} className={mobileLink}>
+                                        <PlusCircle size={20} /> Create Election
+                                    </NavLink>
+                                    
+                                    <div className="mt-auto pb-8 pt-4 border-t border-gray-100 dark:border-gray-900">
+                                        <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-4">
+                                            <p className="text-xs text-gray-400 mb-1">Signed in as</p>
+                                            <p className="text-sm font-semibold text-gray-900 dark:text-white mb-4 truncate">{user.email}</p>
+                                            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-red-600 rounded-xl font-bold">
+                                                <LogOut size={18} /> Logout
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="space-y-3 pt-4">
+                                    <NavLink to="/login" onClick={closeMenu} className={mobileLink}><LogIn size={20} /> Login</NavLink>
+                                    <NavLink to="/signup" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full py-4 bg-violet-600 text-white rounded-2xl font-bold no-underline"><UserPlus size={20} /> Get Started</NavLink>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+            </nav>
+        </header>
+    );
+};
 
-					{/* Desktop Menu */}
-					<div className="hidden md:flex items-center gap-1">
-						{user && !voter ? (
-							<>
-								<NavLink
-									to={`/user/${user.uid}`}
-									end
-									className={({ isActive }) =>
-										`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
-											isActive
-												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
-												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
-										}`
-									}
-								>
-									Dashboard
-								</NavLink>
-								<NavLink
-									to={`/user/${user.uid}/create-election`}
-									className={({ isActive }) =>
-										`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
-											isActive
-												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
-												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
-										}`
-									}
-								>
-									Create Election
-								</NavLink>
-
-								{/* User Menu */}
-								<div className="flex items-center gap-3 ml-4 pl-4 border-l border-gray-200 dark:border-gray-800">
-									<span className="text-sm text-gray-600 dark:text-gray-400">
-										{user.email}
-									</span>
-									<button
-										onClick={onLogout}
-										className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-									>
-										Logout
-									</button>
-								</div>
-							</>
-						) : voter ? (
-							<button
-								onClick={() => navigate('/')}
-								className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-							>
-								Exit
-							</button>
-						) : (
-							<>
-								<NavLink
-									to="/login"
-									className={({ isActive }) =>
-										`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
-											isActive
-												? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
-												: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
-										}`
-									}
-								>
-									Login
-								</NavLink>
-								<NavLink
-									to="/signup"
-									className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors no-underline"
-								>
-									Sign Up
-								</NavLink>
-							</>
-						)}
-					</div>
-
-					{/* Mobile Menu Toggle */}
-					<button
-						onClick={toggleMenu}
-						className="md:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-						aria-expanded={navOpen}
-						aria-label="Toggle menu"
-					>
-						{navOpen ? (
-							<X className="w-6 h-6" />
-						) : (
-							<Menu className="w-6 h-6" />
-						)}
-					</button>
-				</div>
-
-				{/* Mobile Menu */}
-				{navOpen && (
-					<>
-						{/* Backdrop */}
-						<div
-							className="fixed inset-0 bg-black bg-opacity-50 md:hidden"
-							onClick={closeMenu}
-							aria-hidden="true"
-						/>
-
-						{/* Menu Panel */}
-						<div
-							ref={menuRef}
-							className="fixed top-16 left-0 right-0 bottom-0 bg-white dark:bg-gray-950 md:hidden overflow-y-auto"
-						>
-							<div className="px-4 py-6 space-y-2">
-								{user && !voter ? (
-									<>
-										<NavLink
-											to={`/user/${user.uid}`}
-											end
-											onClick={closeMenu}
-											className={({ isActive }) =>
-												`block px-4 py-3 rounded-lg text-base font-medium transition-colors no-underline ${
-													isActive
-														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
-														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
-												}`
-											}
-										>
-											Dashboard
-										</NavLink>
-										<NavLink
-											to={`/user/${user.uid}/create-election`}
-											onClick={closeMenu}
-											className={({ isActive }) =>
-												`block px-4 py-3 rounded-lg text-base font-medium transition-colors no-underline ${
-													isActive
-														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
-														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
-												}`
-											}
-										>
-											Create Election
-										</NavLink>
-
-										{/* User Info Section */}
-										<div className="pt-4 mt-4 border-t border-gray-200 dark:border-gray-800">
-											<div className="px-4 py-2">
-												<p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-													Signed in as
-												</p>
-												<p className="text-sm font-medium text-gray-900 dark:text-white mb-4">
-													{user.email}
-												</p>
-												<button
-													onClick={handleLogout}
-													className="w-full px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-												>
-													Logout
-												</button>
-											</div>
-										</div>
-									</>
-								) : voter ? (
-									<button
-										onClick={handleExit}
-										className="w-full px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-									>
-										Exit
-									</button>
-								) : (
-									<>
-										<NavLink
-											to="/login"
-											onClick={closeMenu}
-											className={({ isActive }) =>
-												`block px-4 py-3 rounded-lg text-base font-medium transition-colors no-underline ${
-													isActive
-														? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 no-underline'
-														: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 no-underline'
-												}`
-											}
-										>
-											Login
-										</NavLink>
-										<NavLink
-											to="/signup"
-											onClick={closeMenu}
-											className="block px-4 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-base font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors text-center no-underline"
-										>
-											Sign Up
-										</NavLink>
-									</>
-								)}
-							</div>
-						</div>
-					</>
-				)}
-			</nav>
-		</header>
-	);
-}
-
-export default NavBar;
+export default Navbar;
