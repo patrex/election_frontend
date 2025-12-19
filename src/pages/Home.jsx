@@ -152,11 +152,8 @@ const addVoterToDatabase = async () => {
 
 						{/* Election ID Input Card */}
 						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-blue-500/5 border border-gray-100 dark:border-gray-700 p-8 md:p-12 max-w-xl mx-auto transform transition hover:scale-[1.01]">
-							<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-								Find an Election
-							</h2>
 							<p className="text-gray-500 dark:text-gray-400 mb-8">
-								Enter the unique ID provided by your administrator.
+								Enter/Paste-in the unique ID provided by your administrator to continue
 							</p>
 
 							<div className="flex flex-col gap-3">
@@ -255,9 +252,6 @@ const addVoterToDatabase = async () => {
 											<svg className="h-5 w-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
 											<p><strong>Note:</strong> Candidate applications require administrator approval before appearing on the ballot.</p>
 										</div>
-										<button onClick={() => setOpenOptionsModal(false)} className="w-full py-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-											Close
-										</button>
 									</div>
 								)}
 							</div>
