@@ -2,13 +2,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import Toast from "@/utils/ToastMsg";
 import { AppContext } from '@/App';
 import { PulseLoader } from 'react-spinners';
-import {fetcher, FetchError} from "@/utils/fetcher"
+import { fetcher, FetchError } from "@/utils/fetcher"
 import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import { getLocalTimezoneDate }  from "@/utils/setLocalTime";
+import { getLocalTimezoneDate } from "@/utils/setLocalTime";
 
 function CreateElection() {
 	const params = useParams();
@@ -79,10 +79,10 @@ function CreateElection() {
 		path: ["enddate"],
 	});
 
-	const { 
-		register, 
-		handleSubmit, 
-		formState: { errors, isSubmitting } 
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isSubmitting }
 	} = useForm({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -102,14 +102,14 @@ function CreateElection() {
 
 		try {
 			await fetcher.auth.post(
-				'elections', 
+				'elections',
 				{
 					...formData,
 					host_name: window.location.origin
 				},
 				user
 			);
-			
+
 			Toast.success('Election created successfully!');
 			navigate(`/user/${params.userId}`);
 		} catch (error) {
@@ -198,29 +198,40 @@ function CreateElection() {
 
 					{/* Simplified Voter Authentication (The requested simplification) */}
 					<div className="p-4 border border-orange-200 rounded-lg bg-orange-50/30">
-						<span className="block font-semibold mb-3 text-gray-700">Voter Verification Method *</span>
-						<div className="flex gap-6">
-							<label className="flex items-center space-x-2 cursor-pointer">
+						<label className="block font-semibold mb-3 text-gray-700">
+							How will voters be verified? <span className="text-red-500">*</span>
+						</label>
+
+						<div className="flex flex-col sm:flex-row gap-4">
+							{/* Email Option */}
+							<label className="relative flex-1 flex items-center p-3 rounded-md border border-gray-300 bg-white cursor-pointer hover:bg-gray-50 transition-all has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
 								<input
+									{...register('userAuthType')}
 									type="radio"
+									id="auth-email"
 									value="email"
-									{...register('userAuthType')}
-									className="w-4 h-4 text-blue-600"
+									className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
 								/>
-								<span className="text-gray-700">Email Address</span>
+								<span className="ml-3 font-medium text-gray-700">Email Address</span>
 							</label>
-							<label className="flex items-center space-x-2 cursor-pointer">
+
+							{/* Phone Option */}
+							<label className="relative flex-1 flex items-center p-3 rounded-md border border-gray-300 bg-white cursor-pointer hover:bg-gray-50 transition-all has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
 								<input
-									type="radio"
-									value="phone"
 									{...register('userAuthType')}
-									className="w-4 h-4 text-blue-600"
+									type="radio"
+									id="auth-phone"
+									value="phone"
+									className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
 								/>
-								<span className="text-gray-700">Phone Number</span>
+								<span className="ml-3 font-medium text-gray-700">Phone Number</span>
 							</label>
 						</div>
+
 						{errors.userAuthType && (
-							<p className="text-red-500 text-sm mt-2">{errors.userAuthType.message}</p>
+							<p className="text-red-500 text-sm mt-2" role="alert">
+								{errors.userAuthType.message}
+							</p>
 						)}
 					</div>
 
@@ -262,5 +273,5 @@ function CreateElection() {
 	);
 };
 
- 
+
 export default CreateElection;
