@@ -113,17 +113,7 @@ function CreateElection() {
 			Toast.success('Election created successfully!');
 			navigate(`/user/${params.userId}`);
 		} catch (error) {
-			if (error instanceof FetchError) {
-				if (error.status === 500) {
-					Toast.warning("There was an unexpected error");
-				} else if (error.status === 400) {
-					Toast.warning(error.message);
-				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
-					Toast.error('Could not create the election');
-				}
-			} else {
-				Toast.error('An unexpected error occurred');
-			}
+			return Toast.error('Could not create the election');
 		} finally {
 			setLoading(false);
 		}
@@ -133,311 +123,137 @@ function CreateElection() {
 		<div className="container flex justify-center py-10">
 			<div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-md">
 				<h1 className="text-2xl font-bold mb-6 text-gray-800">Create New Election</h1>
-				
-				<form 
-					onSubmit={handleSubmit(onSubmit)} 
-					className="space-y-6"
-					aria-label="Create election form"
-				>
+
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-6" aria-label="Create election form">
+
 					{/* Election Name */}
 					<div className="form-group">
-						<label 
-							htmlFor="electionTitle" 
-							className="block font-medium mb-1 text-gray-700"
-						>
+						<label htmlFor="electionTitle" className="block font-medium mb-1 text-gray-700">
 							Election Name <span className="text-red-500">*</span>
 						</label>
 						<input
 							type="text"
 							id="electionTitle"
-							name="electiontitle"
 							autoFocus
-							aria-describedby="electionTitle-help electionTitle-error"
-							aria-invalid={errors.electiontitle ? "true" : "false"}
 							{...register('electiontitle')}
-							className={` ${
-								errors.electiontitle ? 'border-red-500' : ''
-							}`}
+							className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition ${errors.electiontitle ? 'border-red-500' : 'border-gray-300'
+								}`}
 						/>
 						{errors.electiontitle && (
-							<p 
-								id="electionTitle-error" 
-								className="text-red-500 text-sm mt-1" 
-								role="alert"
-							>
-								{errors.electiontitle.message}
-							</p>
-						)}
-						<p id="electionTitle-help" className="text-gray-500 text-sm mt-1">
-							Enter a descriptive title for this election
-						</p>
-					</div>
-
-					{/* Start Date */}
-					<div className="form-group">
-						<label 
-							htmlFor="startDate" 
-							className="block font-medium mb-1 text-gray-700"
-						>
-							Start Date <span className="text-red-500">*</span>
-						</label>
-						<input
-							type="datetime-local"
-							id="startDate"
-							name="startdate"
-							aria-describedby={errors.startdate ? "startDate-error" : undefined}
-							aria-invalid={errors.startdate ? "true" : "false"}
-							{...register('startdate')}
-							className={`${
-								errors.startdate ? 'border-red-500' : 'border-gray-300'
-							}`}
-						/>
-						{errors.startdate && (
-							<p 
-								id="startDate-error" 
-								className="text-red-500 text-sm mt-1" 
-								role="alert"
-							>
-								{errors.startdate.message}
-							</p>
+							<p className="text-red-500 text-sm mt-1" role="alert">{errors.electiontitle.message}</p>
 						)}
 					</div>
 
-					{/* End Date */}
-					<div className="form-group">
-						<label 
-							htmlFor="endDate" 
-							className="block font-medium mb-1 text-gray-700"
-						>
-							End Date <span className="text-red-500">*</span>
-						</label>
-						<input
-							type="datetime-local"
-							id="endDate"
-							name="enddate"
-							aria-describedby={errors.enddate ? "endDate-error" : undefined}
-							aria-invalid={errors.enddate ? "true" : "false"}
-							{...register('enddate')}
-							className={`${
-								errors.enddate ? 'border-red-500' : 'border-gray-300'
-							}`}
-						/>
-						{errors.enddate && (
-							<p 
-								id="endDate-error" 
-								className="text-red-500 text-sm mt-1" 
-								role="alert"
-							>
-								{errors.enddate.message}
-							</p>
-						)}
-					</div>
-
-					{/* Election Type */}
-					<div className="form-group">
-						<label 
-							htmlFor="type" 
-							className="block font-medium mb-1 text-gray-700"
-						>
-							Election Type <span className="text-red-500">*</span>
-						</label>
-						<select
-							id="type"
-							name="electiontype"
-							aria-describedby={errors.electiontype ? "type-error" : undefined}
-							aria-invalid={errors.electiontype ? "true" : "false"}
-							{...register('electiontype')}
-							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer ${
-								errors.electiontype ? 'border-red-500' : 'border-gray-300'
-							}`}
-						>
-							<option value="" disabled>-- Select type --</option>
-							<option value="Open">Open</option>
-							<option value="Closed">Closed</option>
-						</select>
-						{errors.electiontype && (
-							<p 
-								id="type-error" 
-								className="text-red-500 text-sm mt-1" 
-								role="alert"
-							>
-								{errors.electiontype.message}
-							</p>
-						)}
-					</div>
-
-					{/* Candidate Adding Type */}
-					<div className="form-group">
-						<label 
-							htmlFor="candidateAddType" 
-							className="block font-medium mb-1 text-gray-700"
-						>
-							How will candidates get added? <span className="text-red-500">*</span>
-						</label>
-						<select
-							id="candidateAddType"
-							name="addCandidatesBy"
-							aria-describedby={errors.addCandidatesBy ? "type-error" : undefined}
-							aria-invalid={errors.addCandidatesBy ? "true" : "false"}
-							{...register('addCandidatesBy')}
-							className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer ${
-								errors.addCandidatesBy ? 'border-red-500' : 'border-gray-300'
-							}`}
-						>
-							<option value="" disabled>-- Please select --</option>
-							<option value="I will Add Candidates Myself">I will Add Candidates Myself</option>
-							<option value="Candidates Will Add Themselves">Candidates Will Add Themselves</option>
-						</select>
-						{errors.addCandidatesBy && (
-							<p 
-								id="type-error" 
-								className="text-red-500 text-sm mt-1" 
-								role="alert"
-							>
-								{errors.addCandidatesBy.message}
-							</p>
-						)}
-					</div>
-
-					{/* Voter Authentication Type */}
-					<fieldset className="border border-orange-300 rounded-md p-4">
-						<legend className="font-semibold px-2 text-gray-700">
-							How will voters be verified? <span className="text-red-500">*</span>
-						</legend>
-
-						<div className="space-y-3 mt-3">
-							<label
-								htmlFor="auth-email"
-								className="flex items-center justify-between cursor-pointer p-3 rounded-lg border-2 border-gray-200 hover:bg-gray-50 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50"
-							>
-								<div className="flex items-center">
-									<input
-										{...register('userAuthType')}
-										type="radio"
-										id="auth-email"
-										value="email"
-										className="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500"
-									/>
-									<span className="ml-3 text-gray-700 font-medium">Email</span>
-								</div>
-								<svg
-									className="w-5 h-5 text-blue-600 opacity-0 has-[:checked]:opacity-100 transition-opacity"
-									fill="currentColor"
-									viewBox="0 0 20 20"
-								>
-									<path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-								</svg>
+					{/* Dates Grid */}
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div className="form-group">
+							<label htmlFor="startDate" className="block font-medium mb-1 text-gray-700">
+								Start Date <span className="text-red-500">*</span>
 							</label>
-
-							<label
-								htmlFor="auth-phone"
-								className="flex items-center justify-between cursor-pointer p-3 rounded-lg border-2 border-gray-200 hover:bg-gray-50 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50"
-							>
-								<div className="flex items-center">
-									<input
-										{...register('userAuthType')}
-										type="radio"
-										id="auth-phone"
-										value="phone"
-										className="w-5 h-5 text-blue-600 focus:ring-2 focus:ring-blue-500"
-									/>
-									<span className="ml-3 text-gray-700 font-medium">Phone</span>
-								</div>
-								<svg
-									className="w-5 h-5 text-blue-600 opacity-0 has-[:checked]:opacity-100 transition-opacity"
-									fill="currentColor"
-									viewBox="0 0 20 20"
-								>
-									<path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-								</svg>
-							</label>
+							<input
+								type="datetime-local"
+								id="startDate"
+								{...register('startdate')}
+								className={`w-full px-4 py-2 border rounded-md outline-none focus:ring-2 focus:ring-blue-500 ${errors.startdate ? 'border-red-500' : 'border-gray-300'
+									}`}
+							/>
+							{errors.startdate && <p className="text-red-500 text-sm mt-1">{errors.startdate.message}</p>}
 						</div>
 
-						{errors.userAuthType && (
-							<p className="text-red-500 text-sm mt-2" role="alert">
-								{errors.userAuthType.message}
-							</p>
-						)}
-					</fieldset>
+						<div className="form-group">
+							<label htmlFor="endDate" className="block font-medium mb-1 text-gray-700">
+								End Date <span className="text-red-500">*</span>
+							</label>
+							<input
+								type="datetime-local"
+								id="endDate"
+								{...register('enddate')}
+								className={`w-full px-4 py-2 border rounded-md outline-none focus:ring-2 focus:ring-blue-500 ${errors.enddate ? 'border-red-500' : 'border-gray-300'
+									}`}
+							/>
+							{errors.enddate && <p className="text-red-500 text-sm mt-1">{errors.enddate.message}</p>}
+						</div>
+					</div>
 
-					{/* Description */}
-					<div className="form-group">
-						<label 
-							htmlFor="description" 
-							className="block font-medium mb-1 text-gray-700"
-						>
-							Description (Optional)
-						</label>
-						<textarea
-							id="description"
-							name="description"
-							rows="4"
-							placeholder="Describe this election (optional)"
-							aria-describedby={errors.description ? "description-error" : undefined}
-							aria-invalid={errors.description ? "true" : "false"}
-							{...register('description')}
-							className={` ${
-								errors.description ? 'border-red-500' : ''
-							}`}
-						/>
-						{errors.description && (
-							<p 
-								id="description-error" 
-								className="text-red-500 text-sm mt-1" 
-								role="alert"
-							>
-								{errors.description.message}
-							</p>
+					{/* Selection Options */}
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div className="form-group">
+							<label htmlFor="type" className="block font-medium mb-1 text-gray-700">Election Type</label>
+							<select id="type" {...register('electiontype')} className="w-full px-4 py-2 border border-gray-300 rounded-md">
+								<option value="" disabled>-Select type...</option>
+								<option value="Open">Open</option>
+								<option value="Closed">Closed</option>
+							</select>
+						</div>
+
+						<div className="form-group">
+							<label htmlFor="candidateAddType" className="block font-medium mb-1 text-gray-700">Candidate Entry</label>
+							<select id="candidateAddType" {...register('addCandidatesBy')} className="w-full px-4 py-2 border border-gray-300 rounded-md">
+								<option value="" disabled>Please select...</option>
+								<option value="I will Add Candidates Myself">I will Add Candidates Myself</option>
+								<option value="Candidates Will Add Themselves">Candidates Will Add Themselves</option>
+							</select>
+						</div>
+					</div>
+
+					{/* Simplified Voter Authentication (The requested simplification) */}
+					<div className="p-4 border border-orange-200 rounded-lg bg-orange-50/30">
+						<span className="block font-semibold mb-3 text-gray-700">Voter Verification Method *</span>
+						<div className="flex gap-6">
+							<label className="flex items-center space-x-2 cursor-pointer">
+								<input
+									type="radio"
+									value="email"
+									{...register('userAuthType')}
+									className="w-4 h-4 text-blue-600"
+								/>
+								<span className="text-gray-700">Email Address</span>
+							</label>
+							<label className="flex items-center space-x-2 cursor-pointer">
+								<input
+									type="radio"
+									value="phone"
+									{...register('userAuthType')}
+									className="w-4 h-4 text-blue-600"
+								/>
+								<span className="text-gray-700">Phone Number</span>
+							</label>
+						</div>
+						{errors.userAuthType && (
+							<p className="text-red-500 text-sm mt-2">{errors.userAuthType.message}</p>
 						)}
 					</div>
 
-					{/* Rules */}
-					<div className="form-group">
-						<label 
-							htmlFor="rules" 
-							className="block font-medium mb-1 text-gray-700"
-						>
-							Rules and Guidelines (Optional)
-						</label>
-						<textarea
-							id="rules"
-							name="rules"
-							rows="6"
-							placeholder="State any rules for this election (optional)"
-							aria-describedby={errors.rules ? "rules-error" : undefined}
-							aria-invalid={errors.rules ? "true" : "false"}
-							{...register('rules')}
-							className={`${
-								errors.rules ? 'border-red-500' : ''
-							}`}
-						/>
-						{errors.rules && (
-							<p 
-								id="rules-error" 
-								className="text-red-500 text-sm mt-1" 
-								role="alert"
-							>
-								{errors.rules.message}
-							</p>
-						)}
+					{/* Description & Rules */}
+					<div className="space-y-4">
+						<div className="form-group">
+							<label htmlFor="description" className="block font-medium mb-1 text-gray-700">Description</label>
+							<textarea
+								id="description"
+								rows="3"
+								{...register('description')}
+								className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+							/>
+						</div>
+						<div className="form-group">
+							<label htmlFor="rules" className="block font-medium mb-1 text-gray-700">Rules</label>
+							<textarea
+								id="rules"
+								rows="3"
+								{...register('rules')}
+								className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+							/>
+						</div>
 					</div>
 
 					{/* Submit Button */}
-					<div className="form-actions text-center pt-4">
+					<div className="text-center pt-4">
 						<button
 							type="submit"
 							disabled={loading || isSubmitting}
-							aria-busy={loading}
-							className="Button violet"
+							className="Button violet w-full md:w-auto px-10"
 						>
-							{loading ? (
-								<>
-									<span className="sr-only">Creating election...</span>
-									<PulseLoader color="#fff" size={5} loading={loading} />
-								</>
-							) : (
-								'Create Election'
-							)}
+							{loading ? <PulseLoader color="#fff" size={5} /> : 'Create Election'}
 						</button>
 					</div>
 				</form>
