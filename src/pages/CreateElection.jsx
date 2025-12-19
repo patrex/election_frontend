@@ -180,7 +180,7 @@ function CreateElection() {
 						<div className="form-group">
 							<label htmlFor="type" className="block font-medium mb-1 text-gray-700">Election Type</label>
 							<select id="type" {...register('electiontype')} className="w-full px-4 py-2 border border-gray-300 rounded-md">
-								<option value="" disabled>-Select type...</option>
+								<option value="" disabled>Select type...</option>
 								<option value="Open">Open</option>
 								<option value="Closed">Closed</option>
 							</select>
@@ -216,7 +216,7 @@ function CreateElection() {
 							</label>
 
 							{/* Phone Option */}
-							<label className="relative flex-1 flex items-center p-3 rounded-md border border-gray-300 bg-white cursor-pointer hover:bg-gray-50 transition-all has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
+							<label className="relative flex-1 flex items-center p-3 rounded-md border border-gray-300 bg-white cursor-pointer hover:bg-gray-50 transition-all has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500 has-[:checked]:bg-gray-300">
 								<input
 									{...register('userAuthType')}
 									type="radio"
@@ -238,7 +238,7 @@ function CreateElection() {
 					{/* Description & Rules */}
 					<div className="space-y-4">
 						<div className="form-group">
-							<label htmlFor="description" className="block font-medium mb-1 text-gray-700">Description</label>
+							<label htmlFor="description" className="block font-medium mb-1 text-gray-700">Description (Optional)</label>
 							<textarea
 								id="description"
 								rows="3"
@@ -247,7 +247,7 @@ function CreateElection() {
 							/>
 						</div>
 						<div className="form-group">
-							<label htmlFor="rules" className="block font-medium mb-1 text-gray-700">Rules</label>
+							<label htmlFor="rules" className="block font-medium mb-1 text-gray-700">Rules (Optional)</label>
 							<textarea
 								id="rules"
 								rows="3"
