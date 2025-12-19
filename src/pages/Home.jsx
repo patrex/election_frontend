@@ -162,8 +162,9 @@ const addVoterToDatabase = async () => {
 									value={electionId}
 									onChange={(e) => setElectionId(e.target.value)}
 									onKeyDown={(e) => e.key === 'Enter' && processElection(electionId)}
-									placeholder="Election ID (e.g. ELEC-123)"
-									className="flex-1 px-5 py-4 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white transition-all font-mono"
+									placeholder="Election ID..."
+									className="flex-1 px-5 py-4 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white transition-all font-mono tracking-widest"
+									style={{ fontFamily: "'JetBrains Mono', monospace" }}
 									disabled={isLoading}
 									autoFocus
 								/>
