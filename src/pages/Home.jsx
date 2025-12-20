@@ -65,7 +65,7 @@ const processElection = async (id) => {
         if (isPending) return setOpenOptionsModal(true);
         
         // Default: Election is active
-        setRegVoterModal(true);
+        setCheckVoterModal(true);
     } catch (error) {
         Toast.error("There was an error fetching the election");
     } finally {
@@ -77,7 +77,7 @@ const processElection = async (id) => {
  * Validates the voter against the fetched election's voter list
  */
 const checkAndProcessVoter = async (participantId) => {
-   setRegVoterModal(false);
+   	setRegVoterModal(false);
     setIsLoading(true);
     
     // Capture the phone/email immediately so addVoterToDatabase can use it later
@@ -247,12 +247,12 @@ const addVoterToDatabase = async () => {
 													</button>
 													as a candidate.
 												</p>
+												<div className="flex gap-3 text-sm text-gray-500 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+													<svg className="h-5 w-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+													<p><strong>Note:</strong> Candidate applications require administrator approval before appearing on the ballot.</p>
+												</div>
 											</div>
 										)}
-										<div className="flex gap-3 text-sm text-gray-500 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-											<svg className="h-5 w-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-											<p><strong>Note:</strong> Candidate applications require administrator approval before appearing on the ballot.</p>
-										</div>
 									</div>
 								)}
 							</div>
