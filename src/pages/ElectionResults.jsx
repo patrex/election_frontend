@@ -13,7 +13,7 @@ export async function resultsLoader({ params }) {
 
 		//results potentially contains: results.data for the total results
 		//and results.winners for the first three winners
-		return [election, results.data, results.winners, positions];
+		return [election, results, positions];
 	} catch (error) {
 		console.error(error);
 		return null
@@ -21,7 +21,7 @@ export async function resultsLoader({ params }) {
 }
 
 function ElectionResults() {
-	const [event, allResults, winners, positions] = useLoaderData();
+	const [event, allResults, positions] = useLoaderData();
 
 	const [election, setElection] = useState(event || [])
 	const [votes, setVotes] = useState(allResults || []);
