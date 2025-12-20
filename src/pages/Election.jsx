@@ -25,7 +25,7 @@ export async function electionLoader({ params }) {
 
 export default function Election() {
 	const params = useParams();
-	const [e, p, o] = useLoaderData();
+	const [e, o, p] = useLoaderData();
 	const navigate = useNavigate();
 
 	const [electionData, setElectionData] = useState(e);
