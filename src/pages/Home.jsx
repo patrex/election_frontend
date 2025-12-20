@@ -24,6 +24,8 @@ const [electionId, setElectionId] = useState('');
 const [election, setElection] = useState(null);
 const [participant, setParticipant] = useState('');
 const [isLoading, setIsLoading] = useState(false);
+
+// Modals
 const [openOptionsModal, setOpenOptionsModal] = useState(false);
 const [otpStarterModal, setOtpStarterModal] = useState(false);
 const [regVoterModal, setRegVoterModal] = useState(false);
@@ -79,38 +81,37 @@ const processElection = async (id) => {
 const checkAndProcessVoter = async (participantId) => {
    	setRegVoterModal(false);
 	setCheckVoterModal(false)
-    setIsLoading(true);
-    
-    // Capture the phone/email immediately so addVoterToDatabase can use it later
-    setParticipant(participantId); 
+	setIsLoading(true);
+	
+	// Capture the phone/email immediately so addVoterToDatabase can use it later
+	setParticipant(participantId); 
 
-    try {
-        const voterList = await fetcher.get(`election/${election._id}/voterlist`);
-        const isPhoneType = election.userAuthType === 'phone';
-        const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
+	try {
+		const voterList = await fetcher.get(`election/${election._id}/voterlist`);
+		const isPhoneType = election.userAuthType === 'phone';
+		const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
 
-        // 1. Path for Existing Voters
-        if (existingVoters.includes(participantId)) {
-            setVoter(participantId);
-            return navigate(`/election/${election._id}/${b64encode(participantId)}`);
-        }
+		// 1. Path for Existing Voters
+		if (existingVoters.includes(participantId)) {
+			setVoter(participantId);
+			return navigate(`/election/${election._id}/${b64encode(participantId)}`);
+		}
 
-        // 2. Path for Closed Elections (Unauthorized)
-        if (election.type === 'Closed') {
-            return Toast.warning(
-                `This is a closed election. Your ${isPhoneType ? 'phone' : 'email'} must be pre-registered.`
-            );
-        }
+		// 2. Path for Closed Elections (Unauthorized)
+		if (election.type === 'Closed') {
+		return Toast.warning(
+			`This is a closed election. Your ${isPhoneType ? 'phone' : 'email'} must be pre-registered.`);
+		}
 
-        // 3. Path for New Voters in Open Elections
-        // Trigger the OTP modal to verify the new participant
-        setOtpStarterModal(true);
+		// 3. Path for New Voters in Open Elections
+		// Trigger the OTP modal to verify the new participant
+		setOtpStarterModal(true);
 
-    } catch (error) {
-        Toast.error('Unable to verify voter status.');
-    } finally {
-        setIsLoading(false);
-    }
+	} catch (error) {
+		Toast.error('Unable to verify voter status.');
+	} finally {
+		setIsLoading(false);
+	}
 };
 
 /**
