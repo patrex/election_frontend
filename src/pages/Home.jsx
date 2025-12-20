@@ -78,6 +78,7 @@ const processElection = async (id) => {
  */
 const checkAndProcessVoter = async (participantId) => {
    	setRegVoterModal(false);
+	setCheckVoterModal(false)
     setIsLoading(true);
     
     // Capture the phone/email immediately so addVoterToDatabase can use it later

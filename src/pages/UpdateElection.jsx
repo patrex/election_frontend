@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AppContext } from "@/App";
+import { getLocalTimezoneDate } from "@/utils/setLocalTime";
 import { fetcher } from "@/utils/fetcher";
 
 export async function updateElectionLoader({ params }) {
@@ -14,6 +15,7 @@ export async function updateElectionLoader({ params }) {
 		return await fetcher.get(`election/${params.electionId}`)
 	} catch (error) {
 		console.error("Failed to load election");
+		return null;
 	}
 }
 
@@ -29,32 +31,40 @@ function UpdateElection() {
 	const { user } = useContext(AppContext)
 
 	const schema = z.object({
-		electiontitle: z.string().min(2, { message: "Election title cannot be less than two characters" }),
-		startdate: z.string().datetime({ local: true }),
-		enddate: z.string().datetime({ local: true }),
-		electiontype: z.string(),
-		addCandidatesBy: z.string(),
-		description: z.string().max(200),
-		rules: z.string().max(1000)
-	      }).superRefine((data, ctx) => {
-		const start = new Date(data.startdate);
-		const end = new Date(data.enddate);
-	      
-		if (start > end) {
-		  ctx.addIssue({
-		    code: z.ZodIssueCode.custom,
-		    message: "Start date cannot come after end date",
-		    path: ['startdate']
-		  });
-		}
-	      
-		if (start < new Date()) {
-		  ctx.addIssue({
-		    code: z.ZodIssueCode.custom,
-		    message: "Start date cannot be in the past",
-		    path: ['startdate']
-		  });
-		}
+			electiontitle: z.string().min(2, { message: "Election title cannot be less than two characters" }),
+			startdate: z
+				.preprocess((arg) => {
+					if (typeof arg == "string" || arg instanceof Date) return getLocalTimezoneDate(arg);
+				}, z.date({
+					required_error: "Start date is required",
+					invalid_type_error: "Invalid date format",
+				}))
+				.refine((date) => {
+					return date > new Date();
+				}, {
+					message: "Start date/time cannot be in the past"
+				}),
+			enddate: z
+				.preprocess((arg) => {
+					if (typeof arg == "string" || arg instanceof Date) return getLocalTimezoneDate(arg);
+				}, z.date({
+					required_error: "End date is required",
+					invalid_type_error: "Invalid date format",
+				}))
+				.refine((date) => {
+					return date.getFullYear() <= 3000;
+				}, { message: "End date cannot be later than the year 3000" }),
+			electiontype: z.string(),
+			addCandidatesBy: z.string(),
+			description: z.string().max(200),
+			rules: z.string().max(1000)
+	    }).refine((data) => {
+		// Validate that end date is after start date
+		// This is now clean because both are guaranteed to be valid Date objects
+		return data.enddate > data.startdate;
+	}, {
+		message: "End date must be after start date",
+		path: ["enddate"],
 	});
 
 	function formatDate(date) {
