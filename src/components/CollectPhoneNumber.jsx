@@ -3,6 +3,7 @@ import { Loader2, Phone, AlertTriangle } from 'lucide-react';
 
 const PhoneInput = ({ action }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
 
     return (
         <>
