@@ -74,7 +74,7 @@ export default function Election() {
 					{
 						election: election._id,
 						candidate: candidate._id,
-						voterId,
+						voterId: b64decode(voterId),
 						position: candidate.position
 					})
 
