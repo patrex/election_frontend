@@ -9,13 +9,12 @@ import { fetcher, FetchError } from "@/utils/fetcher";
 
 export async function electionLoader({ params }) {
 	try {
-		const [e, o, p] = await Promise.all([
+		const [election, positions] = await Promise.all([
 			fetcher.get(`election/${params.id}`),
-			fetcher.get(`election/${params.id}/ownerinfo`),
 			fetcher.get(`election/${params.id}/positions`),
 		]);
 
-		return [ e, o, p ]
+		return [ election, positions ]
 	} catch (error) {
 		console.error(error);
 		return null;
@@ -25,19 +24,21 @@ export async function electionLoader({ params }) {
 
 export default function Election() {
 	const params = useParams();
-	const [e, o, p] = useLoaderData();
+	const [e, p] = useLoaderData();
 	const navigate = useNavigate();
 
 	const [election, setElection] = useState(e);
 	const [candidates, setCandidates] = useState([]);
 
-	const [owner, setOwner] = useState(o);
 	const { voter } = useContext(AppContext);
 
 	const [positions, setPositions] = useState(p);
 	const [selectedPosition, setSelectedPosition] = useState("");
+
 	const [infoModal, setInfoModal] = useState(false);
 	const [message, setMessage] = useState('');
+
+	const ownerRef = useRef(election.owner);
 
 	const getEventStatus = (startDate, endDate) => {
 		const now = new Date();
@@ -132,7 +133,7 @@ export default function Election() {
 
 					<p><strong>Description:</strong> {election.desc || 'No description provided'}</p>
 
-					<p><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
+					{/* <p><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p> */}
 
 					<p><strong>Start date:</strong> {election.startDate ? moment(election.startDate).format('LLL') : 'N/A'}</p>
 
