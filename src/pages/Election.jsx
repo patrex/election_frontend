@@ -38,8 +38,6 @@ export default function Election() {
 	const [infoModal, setInfoModal] = useState(false);
 	const [message, setMessage] = useState('');
 
-	const ownerRef = useRef(election.owner);
-
 	const getEventStatus = (startDate, endDate) => {
 		const now = new Date();
 		return {
