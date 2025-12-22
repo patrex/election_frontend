@@ -28,7 +28,7 @@ export default function Election() {
 	const [e, o, p] = useLoaderData();
 	const navigate = useNavigate();
 
-	const [electionData, setElectionData] = useState(e);
+	const [election, setElection] = useState(e);
 	const [candidates, setCandidates] = useState([]);
 
 	const [owner, setOwner] = useState(o);
@@ -36,15 +36,21 @@ export default function Election() {
 
 	const [positions, setPositions] = useState(p);
 	const [selectedPosition, setSelectedPosition] = useState("");
+	const [infoModal, setInfoModal] = useState(false);
+	const [message, setMessage] = useState('');
+
+	const getEventStatus = (startDate, endDate) => {
+		const now = new Date();
+		return {
+			isPending: now < startDate,
+			hasEnded: now > endDate,
+			isActive: now >= startDate && now <= endDate
+		};
+	};
 
 	async function sendVote(candidate, voterId) {
-		if (electionData.startDate > Date.now()) {
-			Toast.warning("The election has not started")
-			return;
-		}
-
 		try {
-			const userVotes = await fetcher.get(`election/${electionData._id}/${voterId}/votes`);
+			const userVotes = await fetcher.get(`election/${election._id}/${voterId}/votes`);
 			let userHasVoted = false;
 
 			if (userVotes.ok) {
@@ -66,7 +72,7 @@ export default function Election() {
 				const v = await fetcher.post(
 					`election/vote`,
 					{
-						election: electionData._id,
+						election: election._id,
 						candidate: candidate._id,
 						voterId,
 						position: candidate.position
@@ -106,6 +112,17 @@ export default function Election() {
 		}
 	}, [])
 
+	useEffect(() => {
+		const { isPending, isActive } = getEventStatus(new Date(election.startDate), new Date(election.endDate));
+		
+		if (isPending || isActive) {
+			isPending && setMessage('Election has not started');
+			isActive && setMessage(`Election has not ended yet. Ends in ${moment(election.endDate).fromNow()}`)
+			
+			return setInfoModal(true);
+		}
+	}, [])
+
 	return (
 		<div className="main p-4">
 			{/* Election Header Information */}
@@ -113,16 +130,16 @@ export default function Election() {
 				<div className="electioninfo-content space-y-1">
 					<h1 className="text-xl font-bold">{e.title}</h1>
 
-					<p><strong>Description:</strong> {electionData.desc || 'No description provided'}</p>
+					<p><strong>Description:</strong> {election.desc || 'No description provided'}</p>
 
 					<p><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p>
 
-					<p><strong>Start date:</strong> {electionData.startDate ? moment(electionData.startDate).format('LLL') : 'N/A'}</p>
+					<p><strong>Start date:</strong> {election.startDate ? moment(election.startDate).format('LLL') : 'N/A'}</p>
 
-					<p><strong>End date:</strong> {electionData?.endDate ? moment(electionData.endDate).format('LLL') : 'N/A'}</p>
+					<p><strong>End date:</strong> {election?.endDate ? moment(election.endDate).format('LLL') : 'N/A'}</p>
 
 					<p className="text-blue-600 font-medium">
-						<strong>Time left:</strong> {moment(electionData.endDate).endOf('day').fromNow()}
+						<strong>Time left:</strong> {moment(election.endDate).calendar()}
 					</p>
 				</div>
 			</header>
@@ -130,94 +147,117 @@ export default function Election() {
 			<hr className="my-6" />
 
 			{/* Position Selection */}
-			<section className="election-container">
-				<div className="mb-6">
-					<label htmlFor="position-select" className="block text-sm font-medium mb-2">Select a Position</label>
-					<select
-						id="position-select"
-						name="position"
-						className="form-select form-select-lg w-full max-w-md p-2 border rounded shadow-sm"
-						value={selectedPosition}
-						onChange={handleChange}
-					>
-						<option value="" disabled>Choose a position...</option>
-						{positions.length > 0 ? (
-							positions.map((position) => (
+			{positions.length ?  (
+				<section className="election-container">
+					<div className="mb-6">
+						<label htmlFor="position-select" className="block text-sm font-medium mb-2">Select a Position</label>
+						<select
+							id="position-select"
+							name="position"
+							className="form-select form-select-lg w-full max-w-md p-2 border rounded shadow-sm"
+							value={selectedPosition}
+							onChange={handleChange}
+						>
+							<option value="" disabled>Choose a position...</option>
+							{positions.map((position) => (
 								<option key={position.position} value={position.position}>
 									{position.position}
 								</option>
-							))
-						) : (
-							<option disabled>No positions available</option>
-						)}
-					</select>
-				</div>
+							))}
+						</select>
+					</div>
 
-				{/* Candidates Grid */}
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{candidates?.length > 0 ? (
-						candidates.map((candidate) => (
-							<div className="vote-card border rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow" key={candidate._id}>
-								<div className="flex items-center p-4 gap-4">
-									<img
-										src={candidate.imgUrl}
-										className="w-24 h-24 object-cover rounded-full border-2 border-gray-100"
-										alt={`${candidate.firstname} profile`}
-									/>
+					{/* Candidates Grid */}
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+						{candidates?.length > 0 ? (
+							candidates.map((candidate) => (
+								<div className="vote-card border rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow" key={candidate._id}>
+									<div className="flex items-center p-4 gap-4">
+										<img
+											src={candidate.imgUrl}
+											className="w-24 h-24 object-cover rounded-full border-2 border-gray-100"
+											alt={`${candidate.firstname} profile`}
+										/>
 
-									<div className="vote-card-desc flex-1">
-										<h2 className="text-lg font-bold text-gray-800">
-											{`${candidate.firstname} ${candidate.lastname}`}
-										</h2>
-										<h5 className="text-gray-500 mb-3">{selectedPosition}</h5>
+										<div className="vote-card-desc flex-1">
+											<h2 className="text-lg font-bold text-gray-800">
+												{`${candidate.firstname} ${candidate.lastname}`}
+											</h2>
+											<h5 className="text-gray-500 mb-3">{selectedPosition}</h5>
 
-										<AlertDialog.Root>
-											<AlertDialog.Trigger asChild>
-												<button className="Button violet bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700 transition-colors">
-													Vote
-												</button>
-											</AlertDialog.Trigger>
+											<AlertDialog.Root>
+												<AlertDialog.Trigger asChild>
+													<button className="Button violet bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700 transition-colors">
+														Vote
+													</button>
+												</AlertDialog.Trigger>
 
-											<AlertDialog.Portal>
-												<AlertDialog.Overlay className="AlertDialogOverlay fixed inset-0 bg-black/40 backdrop-blur-sm" />
-												<AlertDialog.Content className="AlertDialogContent fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl w-[90vw] max-w-md">
-													<AlertDialog.Title className="AlertDialogTitle text-lg font-bold border-b pb-2">
-														Confirm Your Vote
-													</AlertDialog.Title>
+												<AlertDialog.Portal>
+													<AlertDialog.Overlay className="AlertDialogOverlay fixed inset-0 bg-black/40 backdrop-blur-sm" />
+													<AlertDialog.Content className="AlertDialogContent fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl w-[90vw] max-w-md">
+														<AlertDialog.Title className="AlertDialogTitle text-lg font-bold border-b pb-2">
+															Confirm Your Vote
+														</AlertDialog.Title>
 
-													<AlertDialog.Description className="AlertDialogDescription my-4 text-gray-600">
-														{`Are you sure you want to vote for ${candidate.firstname} ${candidate.lastname} as ${selectedPosition}? This action cannot be undone.`}
-													</AlertDialog.Description>
+														<AlertDialog.Description className="AlertDialogDescription my-4 text-gray-600">
+															{`Are you sure you want to vote for ${candidate.firstname} ${candidate.lastname} as ${selectedPosition}? This action cannot be undone.`}
+														</AlertDialog.Description>
 
-													<div className="flex justify-end gap-3 mt-6">
-														<AlertDialog.Cancel asChild>
-															<button className="Button mauve bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-																Cancel
-															</button>
-														</AlertDialog.Cancel>
-														<AlertDialog.Action asChild>
-															<button
-																className="Button red bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-																onClick={() => sendVote(candidate, params.voterId)}
-															>
-																Yes, cast vote
-															</button>
-														</AlertDialog.Action>
-													</div>
-												</AlertDialog.Content>
-											</AlertDialog.Portal>
-										</AlertDialog.Root>
+														<div className="flex justify-end gap-3 mt-6">
+															<AlertDialog.Cancel asChild>
+																<button className="Button mauve bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+																	Cancel
+																</button>
+															</AlertDialog.Cancel>
+															<AlertDialog.Action asChild>
+																<button
+																	className="Button red bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+																	onClick={() => sendVote(candidate, params.voterId)}
+																>
+																	Yes, cast vote
+																</button>
+															</AlertDialog.Action>
+														</div>
+													</AlertDialog.Content>
+												</AlertDialog.Portal>
+											</AlertDialog.Root>
+										</div>
 									</div>
 								</div>
+							))
+						) : (
+							<div className="col-span-full py-10 text-center text-gray-400">
+								No candidates found for this position.
 							</div>
-						))
-					) : (
-						<div className="col-span-full py-10 text-center text-gray-400">
-							No candidates found for this position.
-						</div>
-					)}
+						)}
+					</div>
+				</section>
+			) : (
+				<div className="col-span-full py-10 text-center text-gray-400">
+					No positions found for this election
 				</div>
-			</section>
+			)}
+
+
+			{[
+				{ show: infoModal, setter: setInfoModal, content: 
+					<div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-800">
+						<p className="text-gray-800 dark:text-gray-200">
+							{message}
+						</p>
+					</div>
+				},
+			].map((modal, idx) => modal.show && (
+				<div key={idx} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
+					<div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl relative p-6 animate-in fade-in zoom-in duration-200">
+						<button onClick={() => modal.setter(false)} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+							<svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+						</button>
+						<div className="pt-4">{modal.content}</div>
+					</div>
+				</div>
+			))}
+
 		</div>
 	);
 }

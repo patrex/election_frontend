@@ -25,7 +25,7 @@ function ElectionResults() {
 
 	const [election, setElection] = useState(event || [])
 	const [votes, setVotes] = useState(allResults || []);
-	const [top3, setTop3] = useState(winners || []);
+	// const [top3, setTop3] = useState(winners || []);
 	const [workingList, setWorkingList] = useState(data || []);
 
 	const [selectedPosition, setSelectedPosition] = useState("");

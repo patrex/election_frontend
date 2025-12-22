@@ -16,124 +16,124 @@ export async function homeLoader({ request }) {
 
 function Home() {
 	const navigate = useNavigate();
-const electionFromQueryParams = useLoaderData();
-const { setVoter } = useContext(AppContext);
+	const electionFromQueryParams = useLoaderData();
+	const { setVoter } = useContext(AppContext);
 
-// State management
-const [electionId, setElectionId] = useState('');
-const [election, setElection] = useState(null);
-const [participant, setParticipant] = useState('');
-const [isLoading, setIsLoading] = useState(false);
+	// State management
+	const [electionId, setElectionId] = useState('');
+	const [election, setElection] = useState(null);
+	const [participant, setParticipant] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
-// Modals
-const [openOptionsModal, setOpenOptionsModal] = useState(false);
-const [otpStarterModal, setOtpStarterModal] = useState(false);
-const [regVoterModal, setRegVoterModal] = useState(false);
-const [checkVoterModal, setCheckVoterModal] = useState(false);
-const [electionEndedModal, setElectionEndedModal] = useState(false);
+	// Modals
+	const [openOptionsModal, setOpenOptionsModal] = useState(false);
+	const [otpStarterModal, setOtpStarterModal] = useState(false);
+	const [regVoterModal, setRegVoterModal] = useState(false);
+	const [checkVoterModal, setCheckVoterModal] = useState(false);
+	const [electionEndedModal, setElectionEndedModal] = useState(false);
 
-// Auto-process if ID comes from URL
-useEffect(() => {
-    if (electionFromQueryParams) processElection(electionFromQueryParams);
-}, [electionFromQueryParams]);
+	// Auto-process if ID comes from URL
+	useEffect(() => {
+		if (electionFromQueryParams) processElection(electionFromQueryParams);
+	}, [electionFromQueryParams]);
 
-/**
- * Determines the current status of the election based on date ranges
- */
-const getEventStatus = (startDate, endDate) => {
-    const now = new Date();
-    return {
-        isPending: now < startDate,
-        hasEnded: now > endDate,
-        isActive: now >= startDate && now <= endDate
-    };
-};
+	/**
+	 * Determines the current status of the election based on date ranges
+	 */
+	const getEventStatus = (startDate, endDate) => {
+		const now = new Date();
+		return {
+			isPending: now < startDate,
+			hasEnded: now > endDate,
+			isActive: now >= startDate && now <= endDate
+		};
+	};
 
-/**
- * Main entry point: Fetches election and triggers correct Modal path
- */
-const processElection = async (id) => {
-    if (!id?.trim()) return Toast.warning("Please enter a valid election ID");
+	/**
+	 * Main entry point: Fetches election and triggers correct Modal path
+	 */
+	const processElection = async (id) => {
+		if (!id?.trim()) return Toast.warning("Please enter a valid election ID");
 
-    setIsLoading(true);
-    try {
-        const e = await fetcher.get(`election/${id}`);
-        setElection(e);
+		setIsLoading(true);
+		try {
+			const e = await fetcher.get(`election/${id}`);
+			setElection(e);
 
-        const { isPending, hasEnded } = getEventStatus(new Date(e.startDate), new Date(e.endDate));
+			const { isPending, hasEnded } = getEventStatus(new Date(e.startDate), new Date(e.endDate));
 
-        // Logic Branching
-        if (hasEnded) return setElectionEndedModal(true);
-        if (isPending) return setOpenOptionsModal(true);
-        
-        // Default: Election is active
-        setCheckVoterModal(true);
-    } catch (error) {
-        Toast.error("There was an error fetching the election");
-    } finally {
-        setIsLoading(false);
-    }
-};
+			// Logic Branching
+			if (hasEnded) return setElectionEndedModal(true);
+			if (isPending) return setOpenOptionsModal(true);
 
-/**
- * Validates the voter against the fetched election's voter list
- */
-const checkAndProcessVoter = async (participantId) => {
-   	setRegVoterModal(false);
-	setCheckVoterModal(false)
-	setIsLoading(true);
-	
-	// Capture the phone/email immediately so addVoterToDatabase can use it later
-	setParticipant(participantId); 
-
-	try {
-		const voterList = await fetcher.get(`election/${election._id}/voterlist`);
-		const isPhoneType = election.userAuthType === 'phone';
-		const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
-
-		// 1. Path for Existing Voters
-		if (existingVoters.includes(participantId)) {
-			setVoter(participantId);
-			return navigate(`/election/${election._id}/${b64encode(participantId)}`);
+			// Default: Election is active
+			setCheckVoterModal(true);
+		} catch (error) {
+			Toast.error("There was an error fetching the election");
+		} finally {
+			setIsLoading(false);
 		}
+	};
 
-		// 2. Path for Closed Elections (Unauthorized)
-		if (election.type === 'Closed') {
-		return Toast.warning(
-			`This is a closed election. Your ${isPhoneType ? 'phone' : 'email'} must be pre-registered.`);
+	/**
+	 * Validates the voter against the fetched election's voter list
+	 */
+	const checkAndProcessVoter = async (participantId) => {
+		setRegVoterModal(false);
+		setCheckVoterModal(false)
+		setIsLoading(true);
+
+		// Capture the phone/email immediately so addVoterToDatabase can use it later
+		setParticipant(participantId);
+
+		try {
+			const voterList = await fetcher.get(`election/${election._id}/voterlist`);
+			const isPhoneType = election.userAuthType === 'phone';
+			const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
+
+			// 1. Path for Existing Voters
+			if (existingVoters.includes(participantId)) {
+				setVoter(participantId);
+				return navigate(`/election/${election._id}/${b64encode(participantId)}`);
+			}
+
+			// 2. Path for Closed Elections (Unauthorized)
+			if (election.type === 'Closed') {
+				return Toast.warning(
+					`This is a closed election. Your ${isPhoneType ? 'phone' : 'email'} must be pre-registered.`);
+			}
+
+			// 3. Path for New Voters in Open Elections
+			// Trigger the OTP modal to verify the new participant
+			setOtpStarterModal(true);
+
+		} catch (error) {
+			Toast.error('Unable to verify voter status.');
+		} finally {
+			setIsLoading(false);
 		}
+	};
 
-		// 3. Path for New Voters in Open Elections
-		// Trigger the OTP modal to verify the new participant
-		setOtpStarterModal(true);
+	/**
+	 * Finalizes registration and navigates to ballot
+	 */
+	const addVoterToDatabase = async () => {
+		try {
+			await fetcher.post(`election/${election._id}/addvoter/participant`, {
+				participant,
+				electionId: election._id
+			});
 
-	} catch (error) {
-		Toast.error('Unable to verify voter status.');
-	} finally {
-		setIsLoading(false);
-	}
-};
+			setVoter(participant);
+			Toast.success('Verification successful!');
 
-/**
- * Finalizes registration and navigates to ballot
- */
-const addVoterToDatabase = async () => {
-    try {
-        await fetcher.post(`election/${election._id}/addvoter/participant`, {
-            participant,
-            electionId: election._id
-        });
-
-        setVoter(participant);
-        Toast.success('Verification successful!');
-
-        setTimeout(() => {
-            navigate(`/election/${election._id}/${b64encode(participant)}`);
-        }, 500);
-    } catch (error) {
-        Toast.error('Failed to register voter');
-    }
-};
+			setTimeout(() => {
+				navigate(`/election/${election._id}/${b64encode(participant)}`);
+			}, 500);
+		} catch (error) {
+			Toast.error('Failed to register voter');
+		}
+	};
 
 	return (
 		<>
@@ -240,7 +240,7 @@ const addVoterToDatabase = async () => {
 										{election.addCandidatesBy === "Candidates Will Add Themselves" && (
 											<div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-800">
 												<p className="text-gray-800 dark:text-gray-200">
-													Want to run?
+													Want to run for a position?
 													<button
 														onClick={() => { setOtpStarterModal(true); setOpenOptionsModal(false); }}
 														className="text-blue-600 dark:text-blue-400 font-bold hover:underline mx-2"
