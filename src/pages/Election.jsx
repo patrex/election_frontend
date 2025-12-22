@@ -4,6 +4,7 @@ import moment from "moment";
 import Toast from "@/utils/ToastMsg";
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { AppContext } from "@/App";
+import { b64decode } from "@/utils/obfuscate";
 
 import { fetcher, FetchError } from "@/utils/fetcher";
 
@@ -49,7 +50,7 @@ export default function Election() {
 
 	async function sendVote(candidate, voterId) {
 		try {
-			const userVotes = await fetcher.get(`election/${election._id}/${voterId}/votes`);
+			const userVotes = await fetcher.get(`election/${election._id}/${b64decode(voterId)}/votes`);
 			let userHasVoted = false;
 
 			if (userVotes.ok) {

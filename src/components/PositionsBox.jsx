@@ -4,10 +4,6 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog';
 function PositionsBox({ list_of_positions, isPending, editPosition, removePosition }) {
 	return (<>
 		<div className="positions-container w-full">
-			<div className="flex justify-between font-semibold border-b pb-2 mb-2">
-				<span>Positions</span>
-			</div>
-
 			{list_of_positions.length > 0 ? (
 				list_of_positions.map((position) => (
 					<div
