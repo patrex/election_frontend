@@ -10,12 +10,13 @@ import { fetcher, FetchError } from "@/utils/fetcher";
 
 export async function electionLoader({ params }) {
 	try {
-		const [election, positions] = await Promise.all([
+		const [election, positions, allCandidates] = await Promise.all([
 			fetcher.get(`election/${params.id}`),
 			fetcher.get(`election/${params.id}/positions`),
+			fetcher.get(`election/${params.id}/candidates`)
 		]);
 
-		return [ election, positions ]
+		return [ election, positions, allCandidates]
 	} catch (error) {
 		console.error(error);
 		return null;
@@ -25,19 +26,16 @@ export async function electionLoader({ params }) {
 
 export default function Election() {
 	const params = useParams();
-	const [e, p] = useLoaderData();
+	const [e, p, c] = useLoaderData();
 	const navigate = useNavigate();
 
 	const [election, setElection] = useState(e);
-	const [candidates, setCandidates] = useState([]);
+	const [candidates, setCandidates] = useState(c || []);
 
 	const { voter } = useContext(AppContext);
 
 	const [positions, setPositions] = useState(p);
 	const [selectedPosition, setSelectedPosition] = useState("");
-
-	const [infoModal, setInfoModal] = useState(false);
-	const [message, setMessage] = useState('');
 
 	const getEventStatus = (startDate, endDate) => {
 		const now = new Date();
@@ -96,7 +94,9 @@ export default function Election() {
 		setSelectedPosition(selected);
 		try {
 			// attempt to fetch candidates for selected position
-			const req = await fetcher.get(`election/${params.id}/${selected}/candidates`);
+			// const req = await fetcher.get(`election/${params.id}/${selected}/candidates`);
+			const candidatesFiltered = candidates.filter(c => c.position == selected);
+
 			setCandidates(req)
 		} catch (error) {
 			setCandidates([]);
@@ -169,7 +169,8 @@ export default function Election() {
 					{/* Candidates Grid */}
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{candidates?.length > 0 ? (
-							candidates.map((candidate) => (
+							candidates.filter(c => c.isApproved)
+							.map((candidate) => (
 								<div className="vote-card border rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow" key={candidate._id}>
 									<div className="flex items-center p-4 gap-4">
 										<img
@@ -210,7 +211,7 @@ export default function Election() {
 															</AlertDialog.Cancel>
 															<AlertDialog.Action asChild>
 																<button
-																	className="Button red bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+																	className="Button red px-4 py-2 hover:bg-red-700"
 																	onClick={() => sendVote(candidate, params.voterId)}
 																>
 																	Yes, cast vote
