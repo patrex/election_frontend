@@ -57,7 +57,6 @@ export default function Election() {
 				// let availablePositions = positions.map(p => p._id);
 				let currentPosition = positions.filter(p => p._id == candidate.position)
 
-
 				let voteList = userVotes.votes;
 
 				for (let i = 0; i < voteList.length; i++) {
@@ -116,10 +115,10 @@ export default function Election() {
 		const { isPending, isActive } = getEventStatus(new Date(election.startDate), new Date(election.endDate));
 		
 		if (isPending || isActive) {
-			isPending && setMessage('Election has not started');
-			isActive && setMessage(`Election has not ended yet. Ends in ${moment(election.endDate).fromNow()}`)
-			
-			return setInfoModal(true);
+			if (isPending) Toast.info('Election has not started');
+			else if(isActive) Toast.info(`Election has not ended yet. \nEnds in ${moment(election.endDate).fromNow()}`)
+
+			navigate('/')
 		}
 	}, [])
 
@@ -237,27 +236,6 @@ export default function Election() {
 					No positions found for this election
 				</div>
 			)}
-
-
-			{[
-				{ show: infoModal, setter: setInfoModal, content: 
-					<div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-800">
-						<p className="text-gray-800 dark:text-gray-200">
-							{message}
-						</p>
-					</div>
-				},
-			].map((modal, idx) => modal.show && (
-				<div key={idx} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
-					<div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl relative p-6 animate-in fade-in zoom-in duration-200">
-						<button onClick={() => modal.setter(false)} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
-							<svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-						</button>
-						<div className="pt-4">{modal.content}</div>
-					</div>
-				</div>
-			))}
-
 		</div>
 	);
 }
