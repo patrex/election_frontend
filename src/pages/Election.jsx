@@ -25,7 +25,6 @@ export async function electionLoader({ params }) {
 
 
 export default function Election() {
-	const params = useParams();
 	const [e, p, c] = useLoaderData();
 	const navigate = useNavigate();
 
@@ -46,46 +45,47 @@ export default function Election() {
 		};
 	};
 
-	async function sendVote(candidate, voterId) {
+	async function sendVote(candidate) {
 		try {
-			const userVotes = await fetcher.get(`election/${election._id}/${b64decode(voterId)}/votes`);
+			// fetch votes cast by this voter
+			const userVotes = await fetcher.get(`election/${election._id}/${b64decode(voter)}/votes`);
 			let userHasVoted = false;
 
-			if (userVotes.ok) {
-				// let availablePositions = positions.map(p => p._id);
-				let currentPosition = positions.filter(p => p._id == candidate.position)
+			
+			// let availablePositions = positions.map(p => p._id);
+			const currentPosition = candidate.position; // positions.filter(p => p.position == candidate.position)  // ???
 
-				let voteList = userVotes.votes;
+			let voteList = userVotes.votes || [];
+			userHasVoted = voteList.includes(currentPosition);
 
-				for (let i = 0; i < voteList.length; i++) {
-					if (voteList.includes(currentPosition[0]._id)) {
-						userHasVoted = true;
-						break;
-					}
-				}
-			}
+			// attempt to determine user has voted for this position
+			// for (let i = 0; i < voteList.length; i++) {
+			// 	if (voteList.includes(currentPosition[0]._id)) {
+			// 		userHasVoted = true;
+			// 		break;
+			// 	}
+			// }
 
-			if (!userHasVoted) {
-				const v = await fetcher.post(
-					`election/vote`,
-					{
-						election: election._id,
-						candidate: candidate._id,
-						voterId: b64decode(voterId),
-						position: candidate.position
-					})
+			if (userHasVoted) return Toast.warning('You already voted for this position');
+			
+			const v = await fetcher.post(
+				`election/vote`,
+				{
+					election: election._id,
+					candidate: candidate._id,
+					voterId: b64decode(voter),
+					position: candidate.position
+				})
 
-				if (v.ok) {
-					Toast.success('Your vote was recorded')
-				} else {
-					Toast.warning('Your vote could not be recorded');
-					return;
-				}
+			if (v.ok) {
+				return Toast.success('Your vote was recorded')
 			} else {
-				Toast.warning('You already voted for this position');
+				throw new Error("Your vote could not be recorded");
 			}
+			
 		} catch (error) {
-			Toast.warning(error)
+			console.error(error);
+			return Toast.warning(error);
 		}
 	}
 
@@ -105,12 +105,20 @@ export default function Election() {
 		}
 	}, [])
 
+	// preset candidates to display to candidates in the first loaded positions
+	// user overrides with their selection
+	useEffect(() => {
+		if (candidates) {
+			setCandidates(candidates.filter(c => c.position == positions[0]))
+		}
+	}, [])
+
 	useEffect(() => {
 		const { isPending, isActive, hasEnded } = getEventStatus(new Date(election.startDate), new Date(election.endDate));
 		
 		if (isPending || hasEnded) {
-			if (isPending) Toast.info('Election has not started');
-			else if(hasEnded) Toast.info(`Election has ended`)
+			if (isPending) Toast.info('Voting has not started');
+			else if(hasEnded) Toast.info(`Voting has ended`)
 
 			navigate('/')
 		}
@@ -206,7 +214,7 @@ export default function Election() {
 															<AlertDialog.Action asChild>
 																<button
 																	className="Button red px-4 py-2 hover:bg-red-700"
-																	onClick={() => sendVote(candidate, params.voterId)}
+																	onClick={() => sendVote(candidate)}
 																>
 																	Yes, cast vote
 																</button>
