@@ -35,7 +35,6 @@ function AddCandidate() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [preview, setPreview] = useState(null);
 
-	const params = useParams();
 	const navigate = useNavigate();
 
 	const { user } = useContext(AppContext);
@@ -177,16 +176,15 @@ function AddCandidate() {
 										className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition'
 									>
 										<option value="" disabled>Select a position</option>
-										{positions.length > 0 && (
-											positions.map((position) => (
-												<option
-													key={position._id || position.position}
-													value={position.position}
-												>
-													{position.position}
-												</option>
+										{positions.map((position) => (
+											<option
+												key={position._id}
+												value={position.position}
+											>
+												{position.position}
+											</option>
 											))
-										)}
+										}
 									</select>
 								</label>
 							</div>
