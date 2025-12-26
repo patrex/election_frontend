@@ -50,7 +50,7 @@ export default function Election() {
 	async function sendVote(candidate) {
 		try {
 			// fetch votes cast by this voter
-			const userVotes = await fetcher.get(`election/${election._id}/${b64decode(voter)}/votes`);
+			const userVotes = await fetcher.get(`election/${election._id}/${voter}/votes`);
 			let userHasVoted = false;
 
 			
@@ -75,7 +75,7 @@ export default function Election() {
 				{
 					election: election._id,
 					candidate: candidate._id,
-					voterId: b64decode(voter),
+					voterId: voter,
 					position: candidate.position
 				})
 
