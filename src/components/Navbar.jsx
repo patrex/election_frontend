@@ -7,7 +7,7 @@ const Navbar = ({ user, onLogout }) => {
     const [navOpen, setNavOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
-    const { voter } = useContext(AppContext);
+    const { voter, setVoter } = useContext(AppContext);
 
     // --- Logic Handlers ---
     const toggleMenu = () => setNavOpen(!navOpen);
@@ -19,6 +19,7 @@ const Navbar = ({ user, onLogout }) => {
     };
 
     const handleExit = () => {
+	setVoter(null);
         navigate('/');
         closeMenu();
     };
