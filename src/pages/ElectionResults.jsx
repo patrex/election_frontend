@@ -25,8 +25,7 @@ function ElectionResults() {
 
 	const [election, setElection] = useState(event || [])
 	const [votes, setVotes] = useState(allResults || []);
-	// const [top3, setTop3] = useState(winners || []);
-	const [workingList, setWorkingList] = useState(data || []);
+	const [workingList, setWorkingList] = useState(votes || []);
 
 	const [selectedPosition, setSelectedPosition] = useState("");
 
@@ -34,14 +33,7 @@ function ElectionResults() {
 		const selected = e.target.value;
 		setSelectedPosition(selected)
 
-		const position = positions.find(pos => pos.position === selected);
-		if (!position) return;
-
-		const filteredCandidates = data.filter(candidate => candidate.position == position._id);
-		const filteredVotes = votes.filter(vote => vote.position === position._id);
-
 		setWorkingList(filteredCandidates)
-		setVotes(filteredVotes)
 	}
 
 	return (
