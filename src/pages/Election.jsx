@@ -53,24 +53,15 @@ export default function Election() {
 			const userVotes = await fetcher.get(`election/${election._id}/${voter}/votes`);
 			let userHasVoted = false;
 
-			
 			// let availablePositions = positions.map(p => p._id);
-			const currentPosition = candidate.position; // positions.filter(p => p.position == candidate.position)  // ???
+			const currentPosition = candidate.position; 
 
 			let voteList = userVotes.votes || [];
 			userHasVoted = voteList.includes(currentPosition);
 
-			// attempt to determine user has voted for this position
-			// for (let i = 0; i < voteList.length; i++) {
-			// 	if (voteList.includes(currentPosition[0]._id)) {
-			// 		userHasVoted = true;
-			// 		break;
-			// 	}
-			// }
-
 			if (userHasVoted) return Toast.warning('You already voted for this position');
 			
-			const v = await fetcher.post(
+			await fetcher.post(
 				`election/vote`,
 				{
 					election: election._id,
@@ -78,13 +69,8 @@ export default function Election() {
 					voterId: voter,
 					position: candidate.position
 				})
-
-			if (v.ok) {
-				return Toast.success('Your vote was recorded')
-			} else {
-				throw new Error("Your vote could not be recorded");
-			}
 			
+			return Toast.success('Your vote has been recorded')
 		} catch (error) {
 			console.error(error);
 			return Toast.warning(error);
@@ -96,8 +82,6 @@ export default function Election() {
 		setSelectedPosition(selected);
 		// attempt to fetch candidates for selected position
 		const candidatesFiltered = candidates.filter(c => c.position == selected);
-		console.log(candidatesFiltered);
-		
 
 		setWorkingSet(candidatesFiltered)
 	}
