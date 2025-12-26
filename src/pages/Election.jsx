@@ -47,9 +47,6 @@ export default function Election() {
 		};
 	};
 
-	console.log(voter);
-	
-
 	async function sendVote(candidate) {
 		try {
 			// fetch votes cast by this voter
