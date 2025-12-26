@@ -30,6 +30,8 @@ export default function Election() {
 
 	const [election, setElection] = useState(e);
 	const [candidates, setCandidates] = useState(c || []);
+	const [candidatesWorkingSet, setWorkingSet] = useState(candidates);
+
 
 	const { voter } = useContext(AppContext);
 
@@ -97,7 +99,7 @@ export default function Election() {
 		console.log(candidatesFiltered);
 		
 
-		setCandidates(candidatesFiltered)
+		setWorkingSet(candidatesFiltered)
 	}
 
 	useEffect(() => {
@@ -167,8 +169,8 @@ export default function Election() {
 
 					{/* Candidates Grid */}
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-						{candidates?.length > 0 ? (
-							candidates.filter(c => c.isApproved)
+						{candidatesWorkingSet?.length > 0 ? (
+							candidatesWorkingSet.filter(c => c.isApproved)
 							.map((candidate) => (
 								<div className="vote-card border rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow" key={candidate._id}>
 									<div className="flex items-center p-4 gap-4">
