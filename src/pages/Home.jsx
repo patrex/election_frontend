@@ -222,7 +222,7 @@ function Home() {
 								<h3 className="text-2xl font-bold text-white mb-2">{election.title}</h3>
 								<p className="text-blue-100 text-sm">
 									{electionEndedModal
-										? `Election ended ${moment(election.startDate).calendar()}`
+										? `Election ended ${moment(election.endDate).calendar()}`
 										: `Starts in ${moment(election.startDate).fromNow()}`}
 								</p>
 							</div>
@@ -251,7 +251,7 @@ function Home() {
 												</p>
 												<div className="flex gap-3 text-sm text-gray-500 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
 													<svg className="h-5 w-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-													<p><strong>Note:</strong> Candidate applications require administrator approval before appearing on the ballot.</p>
+													<p><strong>Note:</strong> Registering here does not automatically guarantee you on the ballot. Your election administrator has to approve your application</p>
 												</div>
 											</div>
 										)}

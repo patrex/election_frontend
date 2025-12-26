@@ -92,16 +92,10 @@ export default function Election() {
 	const handleChange = async (e) => {
 		const selected = e.target.value;
 		setSelectedPosition(selected);
-		try {
-			// attempt to fetch candidates for selected position
-			// const req = await fetcher.get(`election/${params.id}/${selected}/candidates`);
-			const candidatesFiltered = candidates.filter(c => c.position == selected);
+		// attempt to fetch candidates for selected position
+		const candidatesFiltered = candidates.filter(c => c.position == selected);
 
-			setCandidates(req)
-		} catch (error) {
-			setCandidates([]);
-			Toast.warning(error);
-		}
+		setCandidates(candidatesFiltered)
 	}
 
 	useEffect(() => {
@@ -112,11 +106,11 @@ export default function Election() {
 	}, [])
 
 	useEffect(() => {
-		const { isPending, isActive } = getEventStatus(new Date(election.startDate), new Date(election.endDate));
+		const { isPending, isActive, hasEnded } = getEventStatus(new Date(election.startDate), new Date(election.endDate));
 		
-		if (isPending || isActive) {
+		if (isPending || hasEnded) {
 			if (isPending) Toast.info('Election has not started');
-			else if(isActive) Toast.info(`Election has not ended yet. \nEnds in ${moment(election.endDate).fromNow()}`)
+			else if(hasEnded) Toast.info(`Election has ended`)
 
 			navigate('/')
 		}
