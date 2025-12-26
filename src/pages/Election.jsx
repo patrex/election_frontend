@@ -94,6 +94,8 @@ export default function Election() {
 		setSelectedPosition(selected);
 		// attempt to fetch candidates for selected position
 		const candidatesFiltered = candidates.filter(c => c.position == selected);
+		console.log(candidatesFiltered);
+		
 
 		setCandidates(candidatesFiltered)
 	}
@@ -109,7 +111,7 @@ export default function Election() {
 	// user overrides with their selection
 	useEffect(() => {
 		if (candidates) {
-			setCandidates(candidates.filter(c => c.position == positions[0]))
+			setCandidates(candidates.filter(c => c.position === positions[0].position))
 		}
 	}, [])
 
