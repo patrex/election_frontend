@@ -109,12 +109,7 @@ export default function Election() {
 
 	// preset candidates to display to candidates in the first loaded positions
 	// user overrides with their selection
-	useEffect(() => {
-		if (candidates) {
-			setCandidates(candidates.filter(c => c.position === positions[0].position))
-		}
-	}, [])
-
+	
 	useEffect(() => {
 		const { isPending, isActive, hasEnded } = getEventStatus(new Date(election.startDate), new Date(election.endDate));
 		
@@ -163,7 +158,7 @@ export default function Election() {
 						>
 							<option value="" disabled>Choose a position...</option>
 							{positions.map((position) => (
-								<option key={position.position} value={position.position}>
+								<option key={position._id} value={position.position}>
 									{position.position}
 								</option>
 							))}
