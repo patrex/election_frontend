@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
 import { fetcher, FetchError } from '@/utils/fetcher';
-import { Trophy, Medal, Users, ChevronRight, CheckCircle, Share2, Printer, Copy, Check, Info, BarChart3, Filter } from 'lucide-react';
+import { Trophy, Medal, Users, ChevronRight, CheckCircle, Share2, Printer, Copy, Check, Info, BarChart3, Filter, ChevronDown } from 'lucide-react';
 
 export async function resultsLoader({ params }) {
 	try {
