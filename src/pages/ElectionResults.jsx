@@ -173,3 +173,5 @@ const ElectionResults = () => {
         </div>
     );
 };
+
+export default ElectionResults;
