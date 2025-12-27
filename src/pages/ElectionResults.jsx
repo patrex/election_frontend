@@ -9,12 +9,12 @@ export async function resultsLoader({ params }) {
 		const [election, results, positions] = await Promise.all([
 			fetcher.get(`election/${ params.id }`),
 			fetcher.get(`results/${ params.id }`),
-			fetcher.get(`election/${ params.id }/positions`)
+			// fetcher.get(`election/${ params.id }/positions`)
 		])
 
 		//results potentially contains: results.data for the total results
 		//and results.winners for the first three winners
-		return { election, results, positions };
+		return { election, results };
 	} catch (error) {
 		console.error(error);
 		return null
@@ -24,7 +24,6 @@ export async function resultsLoader({ params }) {
 const ElectionResults = () => {
     // Destructuring based on your loader's return value
     const { election, results } = useLoaderData();
-    
 
     
     const [copied, setCopied] = useState(false);
