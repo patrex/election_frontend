@@ -21,8 +21,6 @@ export async function resultsLoader({ params }) {
 	}
 }
 
-import { Trophy, Users, BarChart3, Award, ChevronRight } from 'lucide-react';
-
 export default function ElectionResults() {
   const [election, resultsData, positions] = useLoaderData();
   
