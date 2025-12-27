@@ -6,7 +6,7 @@ import { Trophy, Medal, Users, ChevronRight, CheckCircle, Share2, Printer, Copy,
 
 export async function resultsLoader({ params }) {
 	try {
-		const [election, results, positions] = await Promise.all([
+		const [election, results] = await Promise.all([
 			fetcher.get(`election/${ params.id }`),
 			fetcher.get(`results/${ params.id }`),
 			// fetcher.get(`election/${ params.id }/positions`)
