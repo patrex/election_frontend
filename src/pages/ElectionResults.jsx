@@ -37,7 +37,7 @@ const ElectionResults = () => {
     
     const winner = podium[0];
     const runnersUp = podium.slice(1, 3);
-    const totalVotes = currentCandidates.reduce((acc, curr) => acc + curr.votes, 0);
+//     const totalVotes = currentCandidates.reduce((acc, curr) => acc + curr.votes, 0);
 
     const handleCopyLink = () => {
         navigator.clipboard.writeText(window.location.href);
@@ -94,7 +94,7 @@ const ElectionResults = () => {
                         <div className="flex justify-between items-center mb-4 px-1">
                             <h3 className="text-xs font-black uppercase text-gray-400">All Candidates</h3>
                             <span className="text-[10px] font-bold text-violet-600 bg-violet-50 dark:bg-violet-900/20 px-2 py-0.5 rounded-md">
-                                {totalVotes} Votes
+                                {/* {totalVotes} Votes */}
                             </span>
                         </div>
                         <div className="space-y-1">
