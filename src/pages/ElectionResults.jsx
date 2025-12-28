@@ -31,9 +31,9 @@ export default function ElectionResults() {
 
 
 	return (
-		<div>
+		<div className='container'>
 			{positions.length > 0 ? (
-				<select name="" id="">
+				<select name="positions" id="trusteefox">
 					{positions.map((p) => {
 						<option key={p._id} value={p.position}>{p.position}</option>
 					})}
