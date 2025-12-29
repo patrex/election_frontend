@@ -33,7 +33,7 @@ export default function ElectionResults() {
 	useEffect(() => {
 		const filtered = allResults.filter(v => v.position == selectedPosition);
 		setResulstsWorkingSet(filtered);
-		
+
 		const top3Filtered = filtered.slice(0, 3);
 		setTopThreeWorkingSet(top3Filtered);
 	}, [selectedPosition])
@@ -73,7 +73,7 @@ export default function ElectionResults() {
 				{/* Top Winners Podium Area */}
 				<section className="winners-votes">
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end">
-						{topThree.map((v, index) => (
+						{topThreeWorkingSet.map((v, index) => (
 							<div
 								key={v._id || index}
 								className={`relative group bg-white p-6 rounded-2xl shadow-sm border-t-4 transition-all hover:shadow-md
@@ -116,8 +116,8 @@ export default function ElectionResults() {
 					</div>
 
 					<div className="divide-y divide-gray-100">
-						{allResults.length > 0 ? (
-							allResults.map((v) => (
+						{resultsWorkingSet.length > 0 ? (
+							resultsWorkingSet.map((v) => (
 								<div key={v._id} className="flex items-center p-4 hover:bg-gray-50 transition-colors group">
 									<img
 										src={v.imgUrl}
