@@ -26,8 +26,7 @@ export default function ElectionResults() {
 
 	const [selectedPosition, setSelectedPosition] = useState('');
 	const allResults = resultsData.data || [];	// Extracting data from your API response structure
-	const topThree = resultsData.winners || [];
-	const [resultsWorkingSet, setResulstsWorkingSet] = useState([]);
+	const [resultsWorkingSet, setResulstsWorkingSet] = useState(allResults || []);
 	const [topThreeWorkingSet, setTopThreeWorkingSet] = useState([]);
 
 	useEffect(() => {
@@ -38,15 +37,13 @@ export default function ElectionResults() {
 		setTopThreeWorkingSet(top3Filtered);
 	}, [selectedPosition])
 
-
-
 	return (
 		<div className="max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen font-sans">
 
 			{/* Header & Filter Section */}
 			<header className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
 				<div>
-					<h1 className="text-3xl font-bold text-gray-900">Election Results</h1>
+					<h1 className="text-3xl font-bold text-gray-900">{election.title} - Election Results</h1>
 					<p className="text-gray-500">Live updates on current standings</p>
 				</div>
 
