@@ -24,7 +24,7 @@ export async function resultsLoader({ params }) {
 export default function ElectionResults() {
 	const [election, resultsData, positions] = useLoaderData();
 
-	const [selectedPosition, setSelectedPosition] = useState('');
+	const [selectedPosition, setSelectedPosition] = useState(positions[0].position || "None");
 	const allResults = resultsData.data || [];	// Extracting data from your API response structure
 	const [resultsWorkingSet, setResulstsWorkingSet] = useState(allResults || []);
 	const [topThreeWorkingSet, setTopThreeWorkingSet] = useState([]);
