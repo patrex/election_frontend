@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
 import { fetcher } from '@/utils/fetcher';
-import { Trophy, Medal, Users, ChevronRight, CheckCircle, Share2, Printer, Copy, Check, Info, BarChart3, Filter, ChevronDown } from 'lucide-react';
+import { Trophy, Medal } from 'lucide-react';
 
 export async function resultsLoader({ params }) {
 	try {
@@ -17,14 +17,14 @@ export async function resultsLoader({ params }) {
 		return [election, results, positions];
 	} catch (error) {
 		console.error(error);
-		return null
+		return []
 	}
 }
 
 export default function ElectionResults() {
 	const [election, resultsData, positions] = useLoaderData();
 
-	const [selectedPosition, setSelectedPosition] = useState(positions[0].position || "None");
+	const [selectedPosition, setSelectedPosition] = useState(positions[Math.floor(Math.random() * positions.length)].position || []);
 	const allResults = resultsData.data || [];	// Extracting data from your API response structure
 	const [resultsWorkingSet, setResulstsWorkingSet] = useState(allResults || []);
 	const [topThreeWorkingSet, setTopThreeWorkingSet] = useState([]);

@@ -399,7 +399,7 @@ function ElectionDetail() {
 				...prev,
 				endDate: new Date(endEvent?.new_date ?? prev.endDate)
 			}));
-			Toast.success("Election was ended successfully");
+			return Toast.success("Election was ended successfully");
 		} catch (error) {
 			Toast.error("Could not end the election");
 		}
