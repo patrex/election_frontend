@@ -3,6 +3,7 @@ import { createContext, useEffect, useState, useContext } from 'react';
 import './App.css';
 import './dashboard_styles.css'
 import './no_data.css'
+import './results_styles.css'
 
 import Home, { homeLoader } from './pages/Home';
 import Login from './pages/Login';

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
-import { fetcher, FetchError } from '@/utils/fetcher';
+import { fetcher } from '@/utils/fetcher';
 import { Trophy, Medal, Users, ChevronRight, CheckCircle, Share2, Printer, Copy, Check, Info, BarChart3, Filter, ChevronDown } from 'lucide-react';
 
 export async function resultsLoader({ params }) {
@@ -32,15 +32,65 @@ export default function ElectionResults() {
 
 	return (
 		<div className='container'>
-			{positions.length > 0 ? (
-				<select name="positions" id="trusteefox">
-					{positions.map( (p) => (
-						<option key={p._id} value={p.position}>{p.position}</option>
-					))}
-				</select>
-			) : (
-				<div>No positions found</div>
-			)}
+			<div className="select-ctrl">
+				{positions.length > 0 ? (
+					<select name="positions" id="trusteefox">
+						{positions.map( (p) => (
+							<option key={p._id} value={p.position}>{p.position}</option>
+						))}
+					</select>
+				) : (
+					<div>No positions found</div>
+				)}
+
+			</div>
+			<div className="sub-container">
+				<div className="all-votes">
+					{allResults.length > 0 ? (
+						allResults.map((v) => (
+							<div key={v._id}>
+								<div className="user-card">
+									<div className="user-card-image">
+										<img src={v.imgUrl} alt={`${v.candidateName}'s photo`} />
+									</div>
+									
+									<div className="user-card-content">
+										<h2 className="user-name">{v.candidateName}</h2>
+										<div className="user-details">
+										<span className="detail-item">{v.position}</span>
+										<span className="detail-item">{v.votes}</span>
+										</div>
+									</div>
+									</div>
+							</div>
+						))
+					) : (
+						<div>No positions</div>
+					)}
+				</div>
+
+				<div className="winners-votes">
+					<div className="winners-row">
+						{topThree.map((v, index) => (
+							<div key={v._id || index} className="winner-card">
+								<div className="winner-avatar-wrapper">
+									<img src={v.imgrUrl} alt={v.candidateName} className="winner-avatar" />
+									{/* Optional Rank Badge */}
+									<span className="rank-badge">{index + 1}</span>
+								</div>
+
+								<div className="winner-info">
+									<h3 className="winner-name">{v.candidateName}</h3>
+									<div className="winner-meta">
+										<p>{v.position}</p>
+										<p>{v.votes}</p>
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }
