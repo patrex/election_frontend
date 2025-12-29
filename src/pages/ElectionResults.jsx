@@ -24,12 +24,13 @@ export async function resultsLoader({ params }) {
 export default function ElectionResults() {
 	const [election, resultsData, positions] = useLoaderData();
 
-	const [selectedPosition, setSelectedPosition] = useState(positions[Math.floor(Math.random() * positions.length)].position || []);
+	const [selectedPosition, setSelectedPosition] = useState('');
 	const allResults = resultsData.data || [];	// Extracting data from your API response structure
 	const [resultsWorkingSet, setResulstsWorkingSet] = useState(allResults || []);
 	const [topThreeWorkingSet, setTopThreeWorkingSet] = useState([]);
 
 	useEffect(() => {
+		setSelectedPosition(positions[Math.floor(Math.random() * positions.length)].position)
 		const filtered = allResults.filter(v => v.position == selectedPosition);
 		setResulstsWorkingSet(filtered);
 
