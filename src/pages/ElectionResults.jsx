@@ -30,7 +30,6 @@ export default function ElectionResults() {
 	const [topThreeWorkingSet, setTopThreeWorkingSet] = useState([]);
 
 	useEffect(() => {
-		setSelectedPosition(positions[Math.floor(Math.random() * positions.length)].position)
 		const filtered = allResults.filter(v => v.position == selectedPosition);
 		setResulstsWorkingSet(filtered);
 
