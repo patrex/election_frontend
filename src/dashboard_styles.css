@@ -87,9 +87,8 @@
 }
 
 .side-list-item:hover {
-	cursor: pointer;
-	background-color: #f9f9f9;
-	transition: background-color 0.1s ease-in;
+	color: green;
+	transition: color 0.1s ease-in;
 }
 
 .side-menu-icon {
