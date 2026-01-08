@@ -267,7 +267,6 @@ function ElectionDetail() {
 			sendListToDB(emailVoterList);
 
 		} else if (participantsAuthType === 'phone') {
-			// Use a single, simplified regex to check for the correct length (10 digits after prefix)
 			const NIGERIAN_PHONE_REGEX = /^(?:\+?234|0)?(\d{10})$/;
 
 			let phoneList = voters
@@ -282,11 +281,10 @@ function ElectionDetail() {
 						return `234${tenDigits}`;
 					}
 
-					// If no match, it's invalid
 					invalidContactFound = true;
-					return null; // Return null or some marker for invalid
+					return null;
 				})
-				.filter(phone => phone !== null); // Remove the nulls from the list
+				.filter(phone => phone !== null);
 
 			if (invalidContactFound) {
 				Toast.warning("One or more phone numbers not properly formatted");

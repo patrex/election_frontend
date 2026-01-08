@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PulseLoader } from 'react-spinners';
 import Toast from '@/utils/ToastMsg';
-import VotelyLogo from '@/components/votelyLogo';
+
 
 import {
     signInWithEmailAndPassword,
@@ -83,7 +83,7 @@ function Login() {
             {/* Left: Branding & Illustration */}
             <div className="hidden lg:flex lg:w-1/2 bg-gray-50 dark:bg-gray-900/50 items-center justify-center p-12 relative overflow-hidden">
                 <div className="absolute top-12 left-12">
-                    <VotelyLogo size="120px" color="#6366f1" />
+                    {/* image here */}
                 </div>
                 <div className="max-w-md text-center">
                     <img src={loginImg} alt="Login" className="w-full mb-8 animate-in fade-in zoom-in duration-700" />
@@ -97,7 +97,7 @@ function Login() {
                 <div className="w-full max-w-sm">
                     <div className="mb-10 text-center lg:text-left">
                         <div className="lg:hidden flex justify-center mb-6">
-                            <VotelyLogo size="100px" color="#6366f1" />
+                            {/* add image here */}
                         </div>
                         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                             Sign In
