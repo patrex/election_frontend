@@ -578,6 +578,62 @@ function ElectionDetail() {
 				</div>
 			)}
 
+			{endElectionModalOpen && (
+					<div className="modal-overlay">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
+							<p><em>Are you sure you want to End this election. This cannot be undone!</em></p>
+							<div className="action-btn-container">
+								<button className='Button red action-item' onClick={endElection}>Yes, End it</button>
+								<button className='Button violet action-item' onClick={() => setEndElectionModalOpen(false)}>No, Cancel</button>
+							</div>
+						</div>
+					</div>
+			)}
+
+			{updateParticipantModal && (
+					<div className="modal-overlay">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
+							<span>Update participant info: <strong>{`${election.userAuthType == 'email' ? participant.email : participant.phoneNo}`}</strong></span>
+							<br />
+							<input
+								type='text'
+								id='updateparticipant'
+								value={updatedParticipantInfo}
+								onChange={(e) => { setUpdatedParticipantInfo(e.target.value) }}
+								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+							/>
+							<div className="action-btn-container" >
+								{election.userAuthType == 'email' && <button className='Button violet action-item' onClick={patchVoterEmail}>Save</button>}
+								{election.userAuthType == 'phone' && <button className='Button violet action-item' onClick={patchVoterPhone}>Save</button>}
+								<button className='Button red action-item' onClick={() => setUpdateParticipantModal(false)}>Cancel</button>
+							</div>
+						</div>
+					</div>
+			)}
+
+
+			{updatePositionModalOpen && (
+					<div className="modal-overlay">
+						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
+							<span>Edit position for <strong>{`${election.title}`}</strong></span>
+							<br />
+							<input
+								type='text'
+								id='updateposition'
+								value={updatedPosition}
+								onChange={handlePositionUpdate}
+								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+							/>
+							<div className="action-btn-container">
+								<button className='Button violet action-item' onClick={handleUpdatePosition}>Update Position</button>
+								<button className='Button red action-item' onClick={closeUpdatePositionModal}>Cancel</button>
+							</div>
+						</div>
+					</div>
+			)}
+
+
+
 			{/* Bulk Participant Modal */}
 			{addParticipantsModalOpen && (
 				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
