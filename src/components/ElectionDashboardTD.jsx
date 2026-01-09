@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { useEventStatus } from '@/hooks/useEventStatus';
-import * as AlertDialog from '@radix-ui/react-alert-dialog';
-
 
 function ElectionDashboardTD({ election, navigate, copyLink, removeElection, params }) {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);

@@ -118,17 +118,7 @@ function ElectionDetail() {
 			Toast.success('Position was added');
 
 		} catch (error) {
-			if (error instanceof FetchError) {
-				if (error.status === 409) {
-					Toast.warning('Position already exists');
-				} else if (error.status === 400) {
-					Toast.warning(error.message);
-				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
-					Toast.error('Could not add the position');
-				}
-			} else {
-				Toast.error('An unexpected error occurred');
-			}
+			
 		}
 	}
 
@@ -157,17 +147,7 @@ function ElectionDetail() {
 			);
 			Toast.success('Position was updated');
 		} catch (error) {
-			if (error instanceof FetchError) {
-				if (error.status === 409) {
-					Toast.warning('Position already exists');
-				} else if (error.status === 400) {
-					Toast.warning(error.message);
-				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
-					Toast.error('Could not add the position');
-				}
-			} else {
-				Toast.error('An unexpected error occurred');
-			}
+
 		}
 	}
 
@@ -187,17 +167,8 @@ function ElectionDetail() {
 			setPositionsList(positionsList.filter(p => p._id !== position._id));
 			Toast.success("The position was removed");
 		} catch (error) {
-			if (error instanceof FetchError) {
-				if (error.status === 500) {
-					Toast.warning("There was an unexpected error");
-				} else if (error.status === 400) {
-					Toast.warning(error.message);
-				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
-					Toast.error('You need to be logged in');
-				}
-			} else {
-				Toast.error('An unexpected error occurred');
-			}
+			console.log(error);
+			return Toast.error('An unexpected error occurred');
 		}
 	}
 
@@ -212,7 +183,6 @@ function ElectionDetail() {
 				user
 			);
 
-
 			const updatedList = [...votersList, ...votersToDb.voters];
 			setVotersList(updatedList);
 			setVotersFiltered(updatedList);
@@ -220,7 +190,7 @@ function ElectionDetail() {
 			setParticipantsList('');
 		} catch (error) {
 			console.error(error);
-			Toast.error("An error occurred. Try again")
+			return Toast.error("An error occurred. Try again")
 		}
 	}
 
@@ -236,7 +206,7 @@ function ElectionDetail() {
 			setVotersList(updatedList);
 			Toast.success('The participant was removed successfully');
 		} catch (error) {
-			Toast.error("There was an error removing the participant");
+			return Toast.error("There was an error removing the participant");
 		}
 	}
 
@@ -388,6 +358,7 @@ function ElectionDetail() {
 		try {
 			const endEvent = await fetcher.auth.put(
 				`elections/${election._id}/end`,
+				{},
 				user
 			)
 
@@ -406,7 +377,7 @@ function ElectionDetail() {
 	function checkPositionExists(e) {
 		if (positionsList.length < 1) {
 			e.preventDefault();
-			Toast.warning("You need to add a position first");
+			return Toast.warning("You need to add a position first");
 		}
 	}
 
@@ -516,7 +487,7 @@ function ElectionDetail() {
 											</span>
 											{isPending && (
 												<div className="flex gap-2">
-													<button onClick={() => editParticipant(voter)} className="Button violet rounded-lg hover:bg-violet-200 font-semibold">Edit</button>
+													<button onClick={() => {editParticipant(voter); setViewUsersModal(false)}} className="Button violet rounded-lg hover:bg-violet-200 font-semibold">Edit</button>
 
 													<AlertDialog.Root>
 														<AlertDialog.Trigger asChild>
@@ -579,57 +550,57 @@ function ElectionDetail() {
 			)}
 
 			{endElectionModalOpen && (
-					<div className="modal-overlay">
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<p><em>Are you sure you want to End this election. This cannot be undone!</em></p>
-							<div className="action-btn-container">
-								<button className='Button red action-item' onClick={endElection}>Yes, End it</button>
-								<button className='Button violet action-item' onClick={() => setEndElectionModalOpen(false)}>No, Cancel</button>
-							</div>
+				<div className="modal-overlay">
+					<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
+						<p>Are you sure you want to End this election. This cannot be undone!</p>
+						<div className="action-btn-container">
+							<button className='Button red action-item' onClick={endElection}>Yes, End it</button>
+							<button className='Button violet action-item' onClick={() => setEndElectionModalOpen(false)}>No, Cancel</button>
 						</div>
 					</div>
+				</div>
 			)}
 
 			{updateParticipantModal && (
-					<div className="modal-overlay">
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<span>Update participant info: <strong>{`${election.userAuthType == 'email' ? participant.email : participant.phoneNo}`}</strong></span>
-							<br />
-							<input
-								type='text'
-								id='updateparticipant'
-								value={updatedParticipantInfo}
-								onChange={(e) => { setUpdatedParticipantInfo(e.target.value) }}
-								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
-							/>
-							<div className="action-btn-container" >
-								{election.userAuthType == 'email' && <button className='Button violet action-item' onClick={patchVoterEmail}>Save</button>}
-								{election.userAuthType == 'phone' && <button className='Button violet action-item' onClick={patchVoterPhone}>Save</button>}
-								<button className='Button red action-item' onClick={() => setUpdateParticipantModal(false)}>Cancel</button>
-							</div>
+				<div className="modal-overlay">
+					<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
+						<span>Update participant info: <strong>{`${election.userAuthType == 'email' ? participant.email : participant.phoneNo}`}</strong></span>
+						<br />
+						<input
+							type='text'
+							id='updateparticipant'
+							value={updatedParticipantInfo}
+							onChange={(e) => { setUpdatedParticipantInfo(e.target.value) }}
+							className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+						/>
+						<div className="action-btn-container" >
+							{election.userAuthType == 'email' && <button className='Button violet action-item' onClick={patchVoterEmail}>Save</button>}
+							{election.userAuthType == 'phone' && <button className='Button violet action-item' onClick={patchVoterPhone}>Save</button>}
+							<button className='Button red action-item' onClick={() => setUpdateParticipantModal(false)}>Cancel</button>
 						</div>
 					</div>
+				</div>
 			)}
 
 
 			{updatePositionModalOpen && (
-					<div className="modal-overlay">
-						<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
-							<span>Edit position for <strong>{`${election.title}`}</strong></span>
-							<br />
-							<input
-								type='text'
-								id='updateposition'
-								value={updatedPosition}
-								onChange={handlePositionUpdate}
-								className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
-							/>
-							<div className="action-btn-container">
-								<button className='Button violet action-item' onClick={handleUpdatePosition}>Update Position</button>
-								<button className='Button red action-item' onClick={closeUpdatePositionModal}>Cancel</button>
-							</div>
+				<div className="modal-overlay">
+					<div className="w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-4 rounded-lg shadow-md relative bg-white z-100">
+						<span>Edit position for <strong>{`${election.title}`}</strong></span>
+						<br />
+						<input
+							type='text'
+							id='updateposition'
+							value={updatedPosition}
+							onChange={handlePositionUpdate}
+							className='w-95 p-2 border border-goldenrod rounded-md text-base my-2'
+						/>
+						<div className="action-btn-container">
+							<button className='Button violet action-item' onClick={handleUpdatePosition}>Update Position</button>
+							<button className='Button red action-item' onClick={closeUpdatePositionModal}>Cancel</button>
 						</div>
 					</div>
+				</div>
 			)}
 
 
