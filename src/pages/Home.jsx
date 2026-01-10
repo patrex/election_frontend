@@ -144,7 +144,7 @@ function Home() {
 						<div className="mb-10">
 							<h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight">
 								<span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-									Votify
+									Voteng
 								</span>
 							</h1>
 							<p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 font-medium">
