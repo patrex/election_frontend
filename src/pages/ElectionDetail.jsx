@@ -210,36 +210,30 @@ function ElectionDetail() {
 		}
 	}
 
-	function procList(participantsAuthType) {
+	function procList() {
 		if (!participantsList) {
 			Toast.warning("You did not enter any participants");
 			return;
 		}
 
+		const participantsAuthType = election.userAuthType
+
 		const voters = participantsList.split(',').map(v => v.trim());
-		let invalidContactFound = false;
+		const workingList = [...new Set(voters)];
+		let listToDb = []
+		const invalidContacts = []
+
 
 		if (participantsAuthType === 'email') {
-			let emailList = voters
+			listToDb = workingList
 				.map(email => {
 					if (isValidEmail(email)) return email;
-					invalidContactFound = true
-					return
+					invalidContacts.push(email)
 				});
-
-			if (invalidContactFound) {
-				Toast.warning("One or more emails not properly formatted");
-				return;
-			}
-
-			setAddParticipantsModalOpen(false);
-			const emailVoterList = [...new Set(emailList)];
-			sendListToDB(emailVoterList);
-
 		} else if (participantsAuthType === 'phone') {
 			const NIGERIAN_PHONE_REGEX = /^(?:\+?234|0)?(\d{10})$/;
 
-			let phoneList = voters
+			listToDb = workingList
 				.map(phoneno => {
 					const match = phoneno.match(NIGERIAN_PHONE_REGEX);
 
@@ -250,21 +244,19 @@ function ElectionDetail() {
 						// Reformat to standard 234xxxxxxxxxx (13 digits total)
 						return `234${tenDigits}`;
 					}
-
-					invalidContactFound = true;
-					return null;
+					invalidContacts.push(phoneno);
 				})
-				.filter(phone => phone !== null);
-
-			if (invalidContactFound) {
-				Toast.warning("One or more phone numbers not properly formatted");
-				return;
-			}
-
-			setAddParticipantsModalOpen(false);
-			const phoneVoterList = [...new Set(phoneList)];
-			sendListToDB(phoneVoterList);
 		}
+
+		if (invalidContacts.length) {
+			Toast.warning("One or more contacts were not properly formatted");
+			console.log(invalidContacts);
+			
+			return;
+		}
+
+		setAddParticipantsModalOpen(false);
+		sendListToDB(listToDb);
 	}
 
 	function editParticipant(participant) {
@@ -617,7 +609,7 @@ function ElectionDetail() {
 							className="w-full h-48 p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none resize-none mb-6 font-mono text-sm"
 						/>
 						<div className="flex gap-4">
-							<button className="Button violet bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700" onClick={() => procList(election.userAuthType)}>
+							<button className="Button violet bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700" onClick={procList}>
 								Add {election.userAuthType === 'email' ? 'Emails' : 'Phones'}
 							</button>
 							<button className="Button violet text-gray-600 font-bold rounded-xl hover:bg-gray-200" onClick={() => setAddParticipantsModalOpen(false)}>Cancel</button>
