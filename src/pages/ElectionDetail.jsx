@@ -173,6 +173,8 @@ function ElectionDetail() {
 	}
 
 	async function sendListToDB(voterlist) {
+		console.log(voterlist);
+		
 		try {
 			const votersToDb = await fetcher.auth.post(
 				`election/${election._id}/closed_event/addvoters`,
@@ -186,7 +188,7 @@ function ElectionDetail() {
 			const updatedList = [...votersList, ...votersToDb.voters];
 			setVotersList(updatedList);
 			setVotersFiltered(updatedList);
-			Toast.success(`List was updated`);
+			Toast.success(`${votersToDb.voters.length} contacts were added`);
 			setParticipantsList('');
 		} catch (error) {
 			console.error(error);
@@ -223,7 +225,6 @@ function ElectionDetail() {
 		let listToDb = []
 		const invalidContacts = []
 
-
 		if (participantsAuthType === 'email') {
 			listToDb = workingList
 				.map(email => {
@@ -249,10 +250,8 @@ function ElectionDetail() {
 		}
 
 		if (invalidContacts.length) {
-			Toast.warning("One or more contacts were not properly formatted");
+			Toast.warning(`${invalidContacts.length} contacts were not properly formatted`);
 			console.log(invalidContacts);
-			
-			return;
 		}
 
 		setAddParticipantsModalOpen(false);
@@ -471,9 +470,9 @@ function ElectionDetail() {
 							{votersFiltered.length < 1 ? (
 								<div className="text-center py-10 text-gray-400">No voters found</div>
 							) : (
-								<ul className="space-y-3">
+								<ul className="space-y-2">
 									{votersFiltered.map(voter => (
-										<li key={voter._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+										<li key={voter._id} className="flex items-center justify-between p-2 bg-gray-50 rounded-xl border border-gray-100">
 											<span className="font-medium text-gray-700">
 												{election.userAuthType === 'email' ? voter.email : voter.phoneNo}
 											</span>
@@ -594,7 +593,6 @@ function ElectionDetail() {
 					</div>
 				</div>
 			)}
-
 
 
 			{/* Bulk Participant Modal */}
