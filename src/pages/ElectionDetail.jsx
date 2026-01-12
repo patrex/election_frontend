@@ -252,12 +252,9 @@ function ElectionDetail() {
 						// The 10-digit number part is captured in match[1]
 						const tenDigits = match[1];
 
-						// Reformat to standard 234xxxxxxxxxx (13 digits total)
-						console.log('Adding: ' + phoneno);
-						
+						// Reformat to standard 234xxxxxxxxxx (13 digits total)						
 						return `234${tenDigits}`;
 					}
-					console.log(phoneno, ' is invalid. adding to invalid list');
 					
 					invalidContacts.push(phoneno);
 				})
@@ -493,7 +490,7 @@ function ElectionDetail() {
 												</span>
 												{isPending && (
 													<div className="flex gap-2">
-														<button onClick={() => {editParticipant(voter); setViewUsersModal(false)}} className="Button violet rounded-lg hover:bg-violet-200 font-semibold">Edit</button>
+														<button onClick={() => {editParticipant(voter); setViewUsersModal(false)}} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i class="bi bi-pencil"></i></button>
 														<button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={() => triggerRemoveVoter(voter)}>
 															<i className="bi bi-trash3"></i>
 														</button>
