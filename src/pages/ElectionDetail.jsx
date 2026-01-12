@@ -507,9 +507,9 @@ function ElectionDetail() {
 							)}
 						</div>
 
-						<div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex items-center gap-4">
+						<div className="p-3 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex items-center gap-4">
 							<button 
-								className="Button violet border border-gray-200 text-gray-700 font-bold rounded-xl px-6 py-2 hover:bg-gray-100 transition-colors" 
+								className="Button violet border border-gray-200 text-gray-700 font-bold rounded-xl px-3 py-2 hover:bg-gray-100 transition-colors" 
 								onClick={closeAddParticipant}
 							>
 							Close
