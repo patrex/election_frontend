@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useEventStatus } from '@/hooks/useEventStatus';
+import DeleteDialog from './DeleteDialog';
 
 function ElectionDashboardTD({ election, navigate, copyLink, removeElection, params }) {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
-	const [alertOpen, setAlertOpen] = useState(false);
+	// const [alertOpen, setAlertOpen] = useState(false);
 	const menuRef = useRef(null);
+
+	const [modalConfig, setModalConfig] = useState({ open: false, action: null })
+
 	const { isPending } = useEventStatus(new Date(election.startDate), new Date(election.endDate))
 
 	useEffect(() => {
@@ -18,7 +22,14 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 		};
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => document.removeEventListener("mousedown", handleClickOutside);
-	}, [alertOpen]);
+	}, [modalConfig.open]);
+
+	const triggerDeleteElection = (election) => {
+		setModalConfig({
+			open: true,
+			action: () => removeElection(election) // Pass the pre-wrapped async function
+		});
+	}
 
 	return (
 		<>
@@ -53,7 +64,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 							>
 								<button onClick={() => {
 									setSideMenuOpen(false)
-									setAlertOpen(true);
+									triggerDeleteElection(election);
 								}}><i className="bi bi-trash3-fill side-menu-icon"></i>Delete</button>
 							</li>
 

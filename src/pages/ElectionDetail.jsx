@@ -10,7 +10,7 @@ import isValidEmail from '@/utils/validateEmail';
 import Toast from '@/utils/ToastMsg';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
-import { fetcher, FetchError } from '@/utils/fetcher';
+import { fetcher } from '@/utils/fetcher';
 
 export async function electionDetailLoader({ params }) {
 	try {
@@ -516,7 +516,7 @@ function ElectionDetail() {
 							</button>
 
 							<span className="text-sm font-medium text-gray-500">
-								{votersFiltered.length} users registered
+								{votersFiltered.length} voters registered
 							</span>
 						</div>
 					</div>

@@ -219,6 +219,10 @@ header {
 	border-radius: 10px;
 }
 
+.side-list-item:hover {
+	cursor: pointer;
+}
+
 .nav-container .menu-toggle {
 	position: absolute;
 	top: 20px;
