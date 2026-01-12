@@ -236,7 +236,9 @@ function ElectionDetail() {
 		if (participantsAuthType === 'email') {
 			listToDb = workingList
 				.map(email => {
-					if (isValidEmail(email)) return email;
+					if (isValidEmail(email)) {
+						return email;
+					}
 					invalidContacts.push(email)
 				});
 		} else if (participantsAuthType === 'phone') {
@@ -251,8 +253,12 @@ function ElectionDetail() {
 						const tenDigits = match[1];
 
 						// Reformat to standard 234xxxxxxxxxx (13 digits total)
+						console.log('Adding: ' + phoneno);
+						
 						return `234${tenDigits}`;
 					}
+					console.log(phoneno, ' is invalid. adding to invalid list');
+					
 					invalidContacts.push(phoneno);
 				})
 		}
