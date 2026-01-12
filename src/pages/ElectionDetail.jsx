@@ -478,32 +478,35 @@ function ElectionDetail() {
 							{votersFiltered.length < 1 ? (
 								<div className="text-center py-10 text-gray-400">No voters found</div>
 							) : (
-								<ul className="space-y-2">
-									{votersFiltered.map(voter => (
-										<li key={voter._id} className="flex items-center justify-between p-2 bg-gray-50 rounded-xl border border-gray-100">
-											<span className="font-medium text-gray-700">
-												{election.userAuthType === 'email' ? voter.email : voter.phoneNo}
-											</span>
-											{isPending && (
-												<div className="flex gap-2">
-													<button onClick={() => {editParticipant(voter); setViewUsersModal(false)}} className="Button violet rounded-lg hover:bg-violet-200 font-semibold">Edit</button>
-													<button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={() => triggerRemoveVoter(voter)}>
-														<i className="bi bi-trash3"></i>
-													</button>
+								<>
+									<ul className="space-y-2">
+										{votersFiltered.map(voter => (
+											<li key={voter._id} className="flex items-center justify-between p-2 bg-gray-50 rounded-xl border border-gray-100">
+												<span className="font-medium text-gray-700">
+													{election.userAuthType === 'email' ? voter.email : voter.phoneNo}
+												</span>
+												{isPending && (
+													<div className="flex gap-2">
+														<button onClick={() => {editParticipant(voter); setViewUsersModal(false)}} className="Button violet rounded-lg hover:bg-violet-200 font-semibold">Edit</button>
+														<button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={() => triggerRemoveVoter(voter)}>
+															<i className="bi bi-trash3"></i>
+														</button>
 
-													<DeleteDialog
-														isOpen={modalConfig.open}
-														onClose={() => setModalConfig({ ...modalConfig, open: false })}
-														onConfirm={modalConfig.action}
-														title="Remove voter"
-														description="This will permanently remove the voter and their contact info"
-														confirmText={'Yes, remove'}
-													/>		
-												</div>
-											)}
-										</li>
-									))}
-								</ul>
+															
+													</div>
+												)}
+											</li>
+										))}
+									</ul>
+									<DeleteDialog
+										isOpen={modalConfig.open}
+										onClose={() => setModalConfig({ ...modalConfig, open: false })}
+										onConfirm={modalConfig.action}
+										title="Remove voter"
+										description="This will permanently remove the voter and their contact info"
+										confirmText={'Yes, remove'}
+									/>	
+								</>
 							)}
 						</div>
 

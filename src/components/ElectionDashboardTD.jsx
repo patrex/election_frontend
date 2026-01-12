@@ -66,20 +66,21 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 									setSideMenuOpen(false)
 									triggerDeleteElection(election);
 								}}><i className="bi bi-trash3-fill side-menu-icon"></i>Delete</button>
-								<DeleteDialog
-									isOpen={modalConfig.open}
-									onClose={() => setModalConfig({ ...modalConfig, open: false })}
-									onConfirm={modalConfig.action}
-									title="Delete Election"
-									description="This will permanently delete this election along with all its data"
-									confirmText="Yes, delete"
-								/>	
+
 							</li>
 
 						</ul>
 					</div>
 				)}
 			</td>
+			<DeleteDialog
+				isOpen={modalConfig.open}
+				onClose={() => setModalConfig({ ...modalConfig, open: false })}
+				onConfirm={modalConfig.action}
+				title="Delete Election"
+				description="This will permanently delete this election along with all its data"
+				confirmText="Yes, delete"
+			/>	
 
 			{/* {alertOpen && (
 				<div className="modal-overlay">
