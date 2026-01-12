@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useState, useContext, useEffect } from 'react';
 import { AppContext } from '@/App';
 import ElectionActions from '@/components/ElectionActions';
-import * as AlertDialog from '@radix-ui/react-alert-dialog';
+import DeleteDialog from '@/components/DeleteDialog';
 import StatusBadge from '@/components/StatusBadge';
 import isValidEmail from '@/utils/validateEmail';
 
@@ -42,6 +42,7 @@ function ElectionDetail() {
 	const [votersFiltered, setVotersFiltered] = useState([]);
 
 	const { user } = useContext(AppContext);
+	const [modalConfig, setModalConfig] = useState({ open: false, action: null })
 
 	const [newPosition, setNewPosition] = useState("");
 	const [updatedPosition, setUpdatedPosition] = useState("");
@@ -208,6 +209,13 @@ function ElectionDetail() {
 		} catch (error) {
 			return Toast.error("There was an error removing the participant");
 		}
+	}
+
+	const triggerRemoveVoter = (voter) => {
+		setModalConfig({
+			open: true,
+			action: () => removeVoter(voter) // Pass the pre-wrapped async function
+		});
 	}
 
 	function procList() {
@@ -480,31 +488,19 @@ function ElectionDetail() {
 											{isPending && (
 												<div className="flex gap-2">
 													<button onClick={() => {editParticipant(voter); setViewUsersModal(false)}} className="Button violet rounded-lg hover:bg-violet-200 font-semibold">Edit</button>
+													<button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={() => triggerRemoveVoter(voter)}>
+														<i className="bi bi-trash3"></i>
+													</button>
 
-													<AlertDialog.Root>
-														<AlertDialog.Trigger asChild>
-															<button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-																<i className="bi bi-trash3"></i>
-															</button>
-														</AlertDialog.Trigger>
-														<AlertDialog.Portal>
-															<AlertDialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]" />
-															<AlertDialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md bg-white p-8 rounded-2xl shadow-2xl z-[70]">
-																<AlertDialog.Title className="text-xl font-bold">Remove Voter</AlertDialog.Title>
-																<AlertDialog.Description className="mt-4 text-gray-600">
-																	{`Are you sure you want to remove ${election.userAuthType === 'email' ? voter.email : voter.phoneNo}?`}
-																</AlertDialog.Description>
-																<div className="mt-8 flex justify-end gap-4">
-																	<AlertDialog.Cancel asChild>
-																		<button className="Button violet text-gray-500 hover:bg-gray-100 rounded-xl">Cancel</button>
-																	</AlertDialog.Cancel>
-																	<AlertDialog.Action asChild>
-																		<button className="px-5 py-2.5 font-semibold bg-red-600 text-white text-center rounded-xl hover:bg-red-700" onClick={() => removeVoter(voter)}>Yes, remove</button>
-																	</AlertDialog.Action>
-																</div>
-															</AlertDialog.Content>
-														</AlertDialog.Portal>
-													</AlertDialog.Root>
+													<DeleteDialog
+														isOpen={modalConfig.open}
+														onClose={() => setModalConfig({ ...modalConfig, open: false })}
+														onConfirm={modalConfig.action}
+														title="Remove voter"
+														description="This will permanently remove the voter and their contact info"
+														confirmText={'Yes, remove'}
+														
+													/>		
 												</div>
 											)}
 										</li>
