@@ -14,7 +14,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 	useEffect(() => {
 		const handleClickOutside = (e) => {
 			// Don't close menu if alert dialog is open or if clicking on alert dialog elements
-			if (alertOpen) return;
+			if (modalConfig.open) return;
 			
 			if (menuRef.current && !menuRef.current.contains(e.target)) {
 				setSideMenuOpen(false);
