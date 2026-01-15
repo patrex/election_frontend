@@ -77,10 +77,13 @@ function Dashboard() {
 									</thead>
 									<tbody>
 										{
-											elections.map(election => (
+											elections.map((election, index) => (
 												<tr
 													key={election._id}
 												>
+													<td>
+														{index + 1}
+													</td>
 													<td>
 														<Link
 															to={`/user/${params.userId}/election/${election._id}`}
