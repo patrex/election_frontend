@@ -57,74 +57,67 @@ function Dashboard() {
 	}
 
 	return (
-		<div className="p-4 md:p-6 lg:p-8 bg-gray-50 min-h-[50vh]">
-			<div className="max-w-7xl mx-auto">
-				<div className="dashboard-table-container overflow-x-auto rounded-xl shadow-lg border border-gray-200 bg-white">
+		<div >
+			<div>
+				<div className="dashboard-table-container">
 					{elections.length ? (
-						<table id='dashboard-table' className="min-w-full divide-y divide-gray-200">
-							<thead>
-								<tr className="bg-gray-100">
-									<th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-										Name
-									</th>
-									<th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 hidden sm:table-cell">
-										Start Date
-									</th>
-									<th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 hidden md:table-cell">
-										End Date
-									</th>
-									<th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-										Type
-									</th>
-									<th scope="col" className="px-6 py-3">
-										<span className="sr-only">Actions</span>
-									</th>
-								</tr>
-							</thead>
-
-							<tbody className="divide-y divide-gray-200">
-								{
-									elections.map((election, index) => (
-										<tr
-											key={election._id}
-											className={`
-												${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} 
-												hover:bg-indigo-50 transition-colors
-											`} // Alternating Row Colors + Hover Effect
-										>
-											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-												<Link
-													to={`/user/${params.userId}/election/${election._id}`}
-													className="text-indigo-600 hover:text-indigo-800 font-semibold"
-												>
-													{election.title}
-												</Link>
-											</td>
-
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
-												{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
-												{moment(election.endDate).format("ddd, MMM D, YYYY h:mm A")}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-												<span className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-medium text-indigo-800">
-													{election.type}
-												</span>
-											</td>
-
-											<ElectionDashboardTD
-												election={election}
-												navigate={navigate}
-												copyLink={copyLink}
-												removeElection={removeElection}
-												params={params}
-											/>
+						<main className="table">
+							<section className='table-header'>Your events</section>
+							<section className='table-body'>
+								<table>
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Election</th>
+											<th>Start Date</th>
+											<th>End Date</th>
+											<th>Election Type</th>
+											<th>Actions</th>
 										</tr>
-									))
-								}
-							</tbody>
-						</table>
+									</thead>
+									<tbody>
+										{
+											elections.map(election => (
+												<tr
+													key={election._id}
+												>
+													<td>
+														<Link
+															to={`/user/${params.userId}/election/${election._id}`}
+															
+														>
+															{election.title}
+														</Link>
+													</td>
+
+													<td >
+														{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}
+													</td>
+													<td >
+														{moment(election.endDate).format("ddd, MMM D, YYYY h:mm A")}
+													</td>
+													<td>
+														<span className="status">
+															{election.type}
+														</span>
+													</td>
+
+													<ElectionDashboardTD
+														election={election}
+														navigate={navigate}
+														copyLink={copyLink}
+														removeElection={removeElection}
+														params={params}
+													/>
+												</tr>
+											))
+										}
+
+									</tbody>
+								</table>
+							</section>
+						</main>
+						
 					) : (
 						<NoData
 							image={noDataGraphic}
