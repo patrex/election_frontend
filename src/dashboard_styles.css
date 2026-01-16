@@ -98,7 +98,7 @@ tbody tr:hover {
 	top: 30%;
 	right: 5px;
 	z-index: 1000;
-	width: fit-content;
+	min-width: 100px;
 }
 
 .side-list-item {
