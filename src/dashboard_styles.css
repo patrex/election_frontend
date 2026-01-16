@@ -125,7 +125,7 @@ tbody tr:hover {
 	height: 100%;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 740px) {
 	td:not(:first-of-type) {
 		min-width: 12.1rem;
 	}

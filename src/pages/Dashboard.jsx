@@ -57,7 +57,7 @@ function Dashboard() {
 	}
 
 	return (
-		<div className="dashboard-container">
+		<div className="container">
 			{elections.length ? (
 				<main className="table">
 						<section className='table-header'>Your events</section>
