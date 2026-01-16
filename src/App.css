@@ -474,18 +474,13 @@ input[type="number"] {
 
 .election-container h2 {
 	font-size: 24px;
-	/* Heading size */
 	margin-bottom: 10px;
-	/* Bottom margin */
 }
 
 .election-container p {
 	font-size: 16px;
-	/* Paragraph font size */
 	line-height: 1.6;
-	/* Line height */
 	margin-bottom: 20px;
-	/* Bottom margin */
 }
 
 .electioninfo {
