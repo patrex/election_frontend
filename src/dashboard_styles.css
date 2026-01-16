@@ -25,6 +25,7 @@ main.dashboard-container {
 
 .table-body {
 	width: 98%;
+	height: 100%;
 	max-height: calc(89% - 1.6rem);
 	background-color: #fffb;
 	margin: .8rem auto;
@@ -78,7 +79,7 @@ tbody tr:hover {
 }
 
 .status {
-	padding: .2rem .1rem;
+	padding: .2rem .5rem;
 	border-radius: 4px;
 	text-align: center;
 }
