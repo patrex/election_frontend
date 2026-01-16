@@ -4,6 +4,7 @@
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
+	position: relative;
 }
 
 
@@ -83,7 +84,6 @@ tbody tr:hover {
 .status.Open {
 	background-color: #ccc;
 }
-
 
 .side-menu-div {
 	background-color: #f3f5f7;
