@@ -4,7 +4,6 @@
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
-	overflow: visible;
 }
 
 
@@ -31,7 +30,6 @@ main.table {
 	background-color: #fffb;
 	margin: .8rem auto;
 	border-radius: .6rem;
-	overflow: visible !important;
 }
 
 .table-body td:last-child {
