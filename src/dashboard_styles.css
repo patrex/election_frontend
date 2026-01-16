@@ -31,6 +31,7 @@ main.table {
 	margin: .8rem auto;
 	border-radius: .6rem;
 	overflow: auto;
+	height: 100%;
 }
 
 .table-body td:last-child {
@@ -61,7 +62,6 @@ table, th, td {
 
 table {
 	width: 100%;
-	height: 95%;
 }
 
 thead th {
@@ -101,7 +101,6 @@ tbody tr:hover {
 	top: 30%;
 	right: 5px;
 	z-index: 1000;
-	min-width: 100px;
 }
 
 .side-list-item {
