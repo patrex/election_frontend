@@ -1,20 +1,19 @@
-.dashboard-container {
-	height: 100%;
+main.dashboard-container {
 	min-width: 100vw;
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
+	overflow: hidden;
 }
 
 
 /* Dashboard table styles */
-main.table {
-	width: 82vw;
-	height: 92vh;
+.table-container {
+	width: 82%;
+	height: 92%;
 	box-shadow: 0 .4rem .8rem #0005;
 	border-radius: .8rem;
 	overflow: auto;
-	-webkit-overflow-scrolling: touch;
 }
 
 .table-header {
@@ -125,7 +124,7 @@ tbody tr:hover {
 	height: 100%;
 }
 
-@media (max-width: 740px) {
+@media (max-width: 768px) {
 	td:not(:first-of-type) {
 		min-width: 12.1rem;
 	}

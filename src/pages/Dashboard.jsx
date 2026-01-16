@@ -57,67 +57,68 @@ function Dashboard() {
 	}
 
 	return (
-		<div className="container">
+		<main className="dashboard-container">
 			{elections.length ? (
-				<main className="table">
-						<section className='table-header'>Your events</section>
-						<section className='table-body'>
-							<table>
-								<thead>
-									<tr>
-										<th>#</th>
-										<th>Election</th>
-										<th>Start Date</th>
-										<th>End Date</th>
-										<th>Election Type</th>
-										<th>Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-									{
-										elections.map((election, index) => (
-											<tr
-												key={election._id}
-											>
-												<td>
-													{index + 1}
-												</td>
-												<td>
-													<Link
-														to={`/user/${params.userId}/election/${election._id}`}
-														
-													>
-														{election.title}
-													</Link>
-												</td>
+				<div className="table-container">
+					<section className='table-header'>Your events</section>
+					<section className='table-body'>
+						<table>
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Election</th>
+									<th>Start Date</th>
+									<th>End Date</th>
+									<th>Election Type</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{
+									elections.map((election, index) => (
+										<tr
+											key={election._id}
+										>
+											<td>
+												{index + 1}
+											</td>
 
-												<td >
-													{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}
-												</td>
-												<td >
-													{moment(election.endDate).format("ddd, MMM D, YYYY h:mm A")}
-												</td>
-												<td>
-													<span className={`status ${election.type}`}>
-														{election.type}
-													</span>
-												</td>
+											<td>
+												<Link
+													to={`/user/${params.userId}/election/${election._id}`}
+													
+												>
+													{election.title}
+												</Link>
+											</td>
 
-												<ElectionDashboardTD
-													election={election}
-													navigate={navigate}
-													copyLink={copyLink}
-													removeElection={removeElection}
-													params={params}
-												/>
-											</tr>
-										))
-									}
+											<td >
+												{moment(election.startDate).format("ddd, MMM D, YYYY h:mm A")}
+											</td>
+											<td >
+												{moment(election.endDate).format("ddd, MMM D, YYYY h:mm A")}
+											</td>
+											<td>
+												<span className={`status ${election.type}`}>
+													{election.type}
+												</span>
+											</td>
 
-								</tbody>
-							</table>
-						</section>
-				</main>
+											<ElectionDashboardTD
+												election={election}
+												navigate={navigate}
+												copyLink={copyLink}
+												removeElection={removeElection}
+												params={params}
+											/>
+										</tr>
+									))
+								}
+
+							</tbody>
+						</table>
+					</section>
+				</div>
 						
 			) : (
 					<NoData
@@ -125,7 +126,7 @@ function Dashboard() {
 						message={<>You've not created any elections. <Link to={`/user/${user.uid}/create-election`} className="text-indigo-600 hover:text-indigo-800 font-medium">Create one</Link> to continue</>}
 					/>
 			)}
-		</div>
+		</main>
 	);
 }
  
