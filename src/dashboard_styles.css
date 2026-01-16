@@ -100,6 +100,8 @@ tbody tr:hover {
 	top: 30%;
 	right: 5px;
 	z-index: 1000;
+	white-space: nowrap;
+	min-width: 168px;
 }
 
 .side-list-item {
