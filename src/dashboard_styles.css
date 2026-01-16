@@ -4,17 +4,6 @@
 	min-height: 100vh;
 }
 
-.dashboard-table-container {
-	width: 90%;
-	height: 100vh;
-	min-height: 600px;
-	max-width: 100%;
-	padding: 0.2em;
-	margin: 0 auto;
-	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
-}
-
 
 /* Dashboard table styles */
 main.table {
@@ -23,6 +12,7 @@ main.table {
 	box-shadow: 0 .4rem .8rem #0005;
 	border-radius: .8rem;
 	overflow: hidden;
+	-webkit-overflow-scrolling: touch;
 }
 
 .table-header {
@@ -75,7 +65,7 @@ thead th {
 }
 
 tbody tr:nth-child(even) {
-	background-color: #00000b;
+	background-color: #fff9;
 }
 
 tbody tr:hover {
@@ -93,11 +83,11 @@ tbody tr:hover {
 	border-radius: 2rem;
 }
 
-.status.closed {
+.status.Closed {
 	background-color: cornflowerblue;
 }
 
-.status.open {
+.status.Open {
 	background-color: #ccc;
 }
 
@@ -118,7 +108,8 @@ tbody tr:hover {
 }
 
 .side-list-item:hover {
-	color: green;
+	color: gray;
+	transform: scale(1.05);
 	transition: color 0.1s ease-in;
 }
 
