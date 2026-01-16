@@ -33,6 +33,11 @@ main.table {
 	border-radius: .6rem;
 }
 
+.table-body td:last-child {
+	position: relative;
+	overflow: visible;
+}
+
 .table-body::-webkit-scrollbar {
 	width: 0.5rem;
 	height: 0.5rem;
@@ -93,6 +98,7 @@ tbody tr:hover {
 	top: 30%;
 	right: 5px;
 	z-index: 1000;
+	width: fit-content;
 }
 
 .side-list-item {
