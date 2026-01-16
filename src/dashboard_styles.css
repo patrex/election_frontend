@@ -35,6 +35,7 @@ main.table {
 
 .table-body td:last-child {
 	position: relative;
+	overflow: visible;
 }
 
 .table-body::-webkit-scrollbar {
