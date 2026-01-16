@@ -121,10 +121,10 @@ function Dashboard() {
 				</div>
 						
 			) : (
-					<NoData
-						image={noDataGraphic}
-						message={<>You've not created any elections. <Link to={`/user/${user.uid}/create-election`} className="text-indigo-600 hover:text-indigo-800 font-medium">Create one</Link> to continue</>}
-					/>
+				<NoData
+					image={noDataGraphic}
+					message={<>You've not created any elections. <Link to={`/user/${user.uid}/create-election`} className="text-indigo-600 hover:text-indigo-800 font-medium">Create one</Link> to continue</>}
+				/>
 			)}
 		</main>
 	);

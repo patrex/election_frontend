@@ -74,7 +74,7 @@ const Navbar = ({ user, onLogout }) => {
                                     <LayoutDashboard size={18} /> Dashboard
                                 </NavLink>
                                 <NavLink to={`/user/${user.uid}/create-election`} className={desktopLink}>
-                                    <PlusCircle size={18} /> Create
+                                    <PlusCircle size={18} /> Create New Election
                                 </NavLink>
                                 <div className="h-6 w-px bg-gray-200 dark:bg-gray-800 mx-2" />
                                 <div className="flex items-center gap-3 pl-2">
@@ -114,7 +114,7 @@ const Navbar = ({ user, onLogout }) => {
                                         <LayoutDashboard size={20} /> Dashboard
                                     </NavLink>
                                     <NavLink to={`/user/${user.uid}/create-election`} onClick={closeMenu} className={mobileLink}>
-                                        <PlusCircle size={20} /> Create Election
+                                        <PlusCircle size={20} /> Create New Election
                                     </NavLink>
                                     
                                     <div className="mt-auto pb-8 pt-4 border-t border-gray-100 dark:border-gray-900">
