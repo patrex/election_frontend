@@ -4,7 +4,6 @@
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
-	position: relative;
 }
 
 
@@ -27,15 +26,15 @@ main.table {
 
 .table-body {
 	width: 95%;
-	max-height: calc(89% - .8rem);
+	max-height: calc(89% - 1.6rem);
 	background-color: #fffb;
 	margin: .8rem auto;
 	border-radius: .6rem;
+	overflow: auto;
 }
 
 .table-body td:last-child {
 	position: relative;
-	overflow: visible;
 }
 
 .table-body::-webkit-scrollbar {
@@ -56,6 +55,7 @@ main.table {
 table, th, td {
 	padding: 1rem;
 	border-collapse: collapse;
+	text-align: left;
 }
 
 table {
@@ -70,7 +70,7 @@ thead th {
 }
 
 tbody tr:nth-child(even) {
-	background-color: #fff9;
+	background-color: #0000000b;
 }
 
 tbody tr:hover {
@@ -80,6 +80,7 @@ tbody tr:hover {
 .status {
 	padding: .2rem .1rem;
 	border-radius: 4px;
+	text-align: center;
 }
 
 .status.Closed {
@@ -121,4 +122,10 @@ tbody tr:hover {
 	padding: 0;
 	margin: 0;
 	height: 100%;
+}
+
+@media (max-width: 1000px) {
+	td:not(:first-of-type) {
+		min-width: 12.1rem;
+	}
 }
