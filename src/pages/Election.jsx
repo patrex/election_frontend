@@ -4,7 +4,7 @@ import moment from "moment";
 import Toast from "@/utils/ToastMsg";
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { AppContext } from "@/App";
-import { b64decode } from "@/utils/obfuscate";
+import Countdown from "@/components/Countdown";
 
 import { fetcher, FetchError } from "@/utils/fetcher";
 
@@ -97,7 +97,7 @@ export default function Election() {
 	// user overrides with their selection
 	
 	useEffect(() => {
-		const { isPending, isActive, hasEnded } = getEventStatus(new Date(election.startDate), new Date(election.endDate));
+		const { isPending, hasEnded } = getEventStatus(new Date(election.startDate), new Date(election.endDate));
 		
 		if (isPending || hasEnded) {
 			if (isPending) Toast.info('Voting has not started');
@@ -110,23 +110,34 @@ export default function Election() {
 	return (
 		<div className="main p-4">
 			{/* Election Header Information */}
-			<header className="electioninfo mb-6 bg-slate-50 p-4 rounded-lg shadow-sm">
-				<div className="electioninfo-content space-y-1">
-					<h1 className="text-xl font-bold">{e.title}</h1>
+			<div className="max-w-6xl mx-auto p-4 lg:p-8 bg-gray-50 min-h-screen">
+				{/* Header Section */}
+				<div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+					<div className="bg-gradient-to-r from-violet-600 to-indigo-700 p-6 flex justify-between items-center text-white">
+						<h1 className="text-2xl font-bold">{election.title}</h1>
+						<StatusBadge election={election} />
+					</div>
 
-					<p><strong>Description:</strong> {election.desc || 'No description provided'}</p>
-
-					{/* <p><strong>Created by:</strong> {`${owner.firstname} ${owner.lastname}`}</p> */}
-
-					<p><strong>Start date:</strong> {election.startDate ? moment(election.startDate).format('LLL') : 'N/A'}</p>
-
-					<p><strong>End date:</strong> {election?.endDate ? moment(election.endDate).format('LLL') : 'N/A'}</p>
-
-					<p className="text-blue-600 font-medium">
-						<strong>Time left:</strong> {moment(election.endDate).calendar()}
-					</p>
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+						<div className="space-y-1">
+							<p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Created On</p>
+							<p className="text-gray-700 font-medium">{moment(election.dateCreated).format('LLL')}</p>
+						</div>
+						<div className="space-y-1">
+							<p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Starting On</p>
+							<p className="text-gray-700 font-medium">{moment(election.startDate).format('LLL')}</p>
+						</div>
+						<div className="space-y-1">
+							<p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Ending On</p>
+							<p className="text-gray-700 font-medium">{moment(election.endDate).format('LLL')}</p>
+						</div>
+						<div className="space-y-1">
+							<p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Time left</p>
+							<p className="text-gray-700 font-medium"><Countdown timeRef={election.endDate}/></p>
+						</div>
+					</div>
 				</div>
-			</header>
+			</div>
 
 			<hr className="my-6" />
 
