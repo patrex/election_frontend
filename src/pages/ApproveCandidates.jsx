@@ -161,8 +161,8 @@ const ApproveCandidates = () => {
 
 						{candidates.length > 0 && (
 							<ul className="mt-6 space-y-4">
-								{candidates.some(candidate => candidate.position === p._id) ? (
-									candidates.filter(candidate => candidate.position === p._id)
+								{candidates.some(candidate => candidate.position === p.position) ? (
+									candidates.filter(candidate => candidate.position === p.position)
 										.map((candidate) => (
 											<li
 												key={candidate._id}
