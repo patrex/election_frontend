@@ -62,7 +62,7 @@ const Navbar = ({ user, onLogout }) => {
                     {/* Logo Section */}
                     <Link to="/" className="flex items-center gap-2 no-underline group" onClick={closeMenu}>
                         <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400">
-                            Votify
+                            Voteng
                         </span>
                     </Link>
 

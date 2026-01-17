@@ -194,7 +194,7 @@ function Home() {
 
 				{/* Unified Modal Logic */}
 				{[
-					{ show: otpStarterModal, setter: setOtpStarterModal, content: <OTPStarterPhone electionId={election?._id} optns={{ action: 'redir', optn: `election/${electionId}/addcandidate` }} /> },
+					{ show: otpStarterModal, setter: setOtpStarterModal, content: <OTPStarterPhone electionId={election?._id} optns={{ action: 'redir', optn: `election/${election?._id}/addcandidate` }} /> },
 					{ show: regVoterModal, setter: setRegVoterModal, content: <OTPStarterPhone electionId={election?._id} optns={{ action: 'fn', optn: addVoterToDatabase }} /> },
 					{ show: checkVoterModal, setter: setCheckVoterModal, content: <PhoneInput action={checkAndProcessVoter} /> }
 				].map((modal, idx) => modal.show && (
