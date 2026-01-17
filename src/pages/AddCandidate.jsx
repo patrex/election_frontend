@@ -265,7 +265,7 @@ function AddCandidate() {
 					</div>
 				</div> ) 
 				: 
-				<NoData message='No positions have been added' image={noDataGraphic}/> 
+				<NoData message={election.addCandidatesBy == "I Will Add Candidates Myself" ? "You have not added any positions" :'No positions have been added. Please contact your election administrator'} image={noDataGraphic}/> 
 			}
 		</>
 	);
