@@ -78,7 +78,7 @@ function ElectionDashboardTD({ election, navigate, copyLink, removeElection, par
 				onClose={() => setModalConfig({ ...modalConfig, open: false })}
 				onConfirm={modalConfig.action}
 				title="Delete Election"
-				description="This will permanently delete this election along with all its data"
+				description={`Delete ${election.title}? This will permanently delete all its data`}
 				confirmText="Yes, delete"
 			/>	
 
