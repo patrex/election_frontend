@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { moment,  duration } from 'moment'
+import moment from 'moment'
 
 function Countdown({ timeRef }) {
 
 	function setCountdown() {
 		const endDate = moment(timeRef);
-		const clockDuration = duration(endDate.diff(moment()))
+		const clockDuration = moment.duration(endDate.diff(moment()))
 
 		const days = Math.floor(clockDuration.asDays());
 		const hours = clockDuration.hours();
