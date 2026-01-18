@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import moment, { duration } from 'moment'
+import { moment,  duration } from 'moment'
 
 function Countdown({ timeRef }) {
 
