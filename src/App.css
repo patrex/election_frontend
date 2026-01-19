@@ -446,7 +446,6 @@ input[type="number"] {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	padding: 20px;
 	margin: 20px auto;
-	max-width: 900px;
 	overflow: hidden;
 	position: relative;
 	width: 90vw;
