@@ -134,7 +134,7 @@ export default function Election() {
 						</div>
 						<div className="space-y-1">
 							<p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Time left</p>
-							<p className="text-gray-700 font-medium"><Countdown timeRef={election.endDate}/></p>
+							<p className="text-gray-700 font-medium"><Countdown targetDate={election.endDate}/></p>
 						</div>
 					</div>
 				</div>

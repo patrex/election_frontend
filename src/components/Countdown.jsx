@@ -1,39 +1,50 @@
-import { useState, useEffect, useRef } from "react";
-import moment from 'moment'
+import React, { useState, useEffect } from 'react';
 
-function Countdown({ timeRef }) {
+const Countdown = ({ targetDate }) => {
+  const calculateTimeLeft = () => {
+    const difference = +new Date(targetDate) - +new Date();
+    let timeLeft = {};
 
-	function setCountdown() {
-		const endDate = moment(timeRef);
-		const clockDuration = moment.duration(endDate.diff(moment()))
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    }
 
-		const days = Math.floor(clockDuration.asDays());
-		const hours = clockDuration.hours();
-		const minutes = clockDuration.minutes();
-		const secs = clockDuration.seconds();
+    return timeLeft;
+  };
 
-		formatTime({ days, hours, minutes, secs })
-	}
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCountdown()
-		}, 1000)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
 
-		return clearInterval(interval)
-	}, [])
+    // Clean up the interval on unmount
+    return () => clearInterval(timer);
+  }, [targetDate]);
 
-	function formatTime({ days, hours, minutes, secs }) {
-		return `${days ? days: 0} days : ${hours} : ${minutes} : ${secs}`
-	}
+  const timerComponents = Object.keys(timeLeft).map((interval) => {
+    if (!timeLeft[interval] && interval !== 'seconds') {
+      return null;
+    }
 
-	return (
-		<div className="stopwatch">
-			<div className="display">
-				{formatTime()}
-			</div>
-		</div>
-	);
-}
+    return (
+      <span key={interval} style={{ margin: '0 5px' }}>
+        {timeLeft[interval]} {interval}{" "}
+      </span>
+    );
+  });
+
+  return (
+    <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+      {timerComponents.length ? timerComponents : <span>Time's up!</span>}
+    </div>
+  );
+};
 
 export default Countdown;
