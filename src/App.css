@@ -111,49 +111,11 @@ body {
 	border-radius: 8px;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	margin-bottom: 20px;
+	background-color: lightcyan;
 }
 
 .vote-card:hover {
-	background-color: #007bff;
-	color: #ccc;
-}
-
-.vote-card img {
-	width: 100px;
-	height: auto;
-	/* Maintain aspect ratio */
-	margin-right: 20px;
-	border-radius: 8px;
-}
-
-.vote-card content {
-	flex-grow: 1;
-}
-
-.vote-card-title {
-	font-size: 18px;
-	font-weight: bold;
-	margin-bottom: 10px;
-}
-
-.vote-card-desc {
-	font-size: 14px;
-	margin-bottom: 10px;
-}
-
-.vote-card-button {
-	background-color: #007bff;
-	color: #fff;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 4px;
-	font-size: 16px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-}
-
-.voter-card-button:hover {
-	background-color: #0056b3;
+	background-color: #ccc;
 }
 
 .subnav {
@@ -449,6 +411,7 @@ input[type="number"] {
 	overflow: hidden;
 	position: relative;
 	width: 90vw;
+	background-color: lightgrey;
 }
 
 .election-container:before {
