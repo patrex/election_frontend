@@ -151,7 +151,7 @@ export default function Election() {
 							<select
 								id="position-select"
 								name="position"
-								className="form-select form-select-lg w-full max-w-md p-2 border rounded shadow-sm"
+								className="form-select form-select-lg w-full max-w-md p-2 border rounded shadow-sm bg-gray-100 border border-gray-300 text-gray-900"
 								value={selectedPosition}
 								onChange={handleChange}
 							>
