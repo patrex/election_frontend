@@ -101,22 +101,7 @@ body {
 	justify-content: center;
 }
 
-/* Voter Box styles */
-.vote-card {
-	display: flex;
-	align-items: center;
-	width: 300px;
-	padding: 20px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	margin-bottom: 20px;
-	background-color: lightcyan;
-}
 
-.vote-card:hover {
-	background-color: #ccc;
-}
 
 .subnav {
 	height: 2em;
@@ -440,6 +425,22 @@ input[type="number"] {
 	font-size: 16px;
 	line-height: 1.6;
 	margin-bottom: 20px;
+}
+
+/* Voter Box styles */
+.vote-card {
+	display: flex;
+	align-items: center;
+	width: 300px;
+	padding: 20px;
+	border: 1px solid #E0E0E0;
+	border-radius: 8px;
+	/* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+	background-color: #F8F9FA;
+}
+
+.vote-card:hover {
+	background-color: #ccc;
 }
 
 .electioninfo {
