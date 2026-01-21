@@ -151,7 +151,7 @@ export default function Election() {
 							<select
 								id="position-select"
 								name="position"
-								className="form-select form-select-lg w-full max-w-md p-2 border rounded shadow-sm"
+								className="form-select form-select-lg w-full max-w-md p-2 border rounded shadow-sm bg-gray-100 border border-gray-300 text-gray-900"
 								value={selectedPosition}
 								onChange={handleChange}
 							>
@@ -170,7 +170,7 @@ export default function Election() {
 							{candidatesWorkingSet?.length > 0 ? (
 								candidatesWorkingSet.filter(c => c.isApproved)
 								.map((candidate) => (
-									<div className="vote-card border rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow" key={candidate._id}>
+									<div className="vote-card border rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-md transition-shadow" key={candidate._id}>
 										<div className="flex items-center p-4 gap-4">
 											<img
 												src={candidate.imgUrl}
@@ -182,11 +182,11 @@ export default function Election() {
 												<h2 className="text-lg font-bold text-gray-800">
 													{`${candidate.firstname} ${candidate.lastname}`}
 												</h2>
-												<h5 className="text-gray-500 mb-3">{selectedPosition}</h5>
+												<h5 className="text-slate-500 mb-3">{selectedPosition}</h5>
 
 												<AlertDialog.Root>
 													<AlertDialog.Trigger asChild>
-														<button className="Button violet bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700 transition-colors">
+														<button className="bg-violet-600 shadow-md text-white px-4 py-2 rounded hover:bg-violet-700 transition-colors">
 															Vote
 														</button>
 													</AlertDialog.Trigger>

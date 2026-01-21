@@ -114,9 +114,6 @@ body {
 	background-color: rgb(218, 218, 218);
 }
 
-.vote-card:hover {
-	background-color: #ccc;
-}
 
 .subnav {
 	height: 2em;
@@ -411,7 +408,7 @@ input[type="number"] {
 	overflow: hidden;
 	position: relative;
 	width: 90vw;
-	background-color: lightgrey;
+	background-color: #F8FAFC;
 }
 
 .election-container:before {
@@ -440,6 +437,22 @@ input[type="number"] {
 	font-size: 16px;
 	line-height: 1.6;
 	margin-bottom: 20px;
+}
+
+/* Voter Box styles */
+.vote-card {
+	display: flex;
+	align-items: center;
+	width: 300px;
+	padding: 20px;
+	border: 1px solid #E0E0E0;
+	border-radius: 8px;
+	/* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+	background-color: #F8F9FA;
+}
+
+.vote-card:hover {
+	background-color: #ccc;
 }
 
 .electioninfo {
