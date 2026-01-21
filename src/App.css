@@ -107,11 +107,11 @@ body {
 	align-items: center;
 	width: 300px;
 	padding: 20px;
-	border: 1px solid #ccc;
+	border: 2px solid rgba(139, 92, 246, 0.4);
 	border-radius: 8px;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	margin-bottom: 20px;
-	background-color: lightcyan;
+	background-color: rgb(218, 218, 218);
 }
 
 .vote-card:hover {
