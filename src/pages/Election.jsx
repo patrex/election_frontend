@@ -113,7 +113,7 @@ export default function Election() {
 			{/* Election Header Information */}
 			<div className="max-w-6xl mx-auto p-4 lg:p-8 bg-gray-50 h-auto">
 				{/* Header Section */}
-				<div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+				<div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
 					<div className="bg-gradient-to-r from-violet-600 to-indigo-700 p-6 flex justify-between items-center text-white">
 						<h1 className="text-2xl font-bold">{election.title}</h1>
 						<StatusBadge election={election} />
