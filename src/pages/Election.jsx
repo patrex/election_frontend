@@ -183,43 +183,44 @@ export default function Election() {
 													{`${candidate.firstname} ${candidate.lastname}`}
 												</h2>
 												<h5 className="text-slate-500 mb-3">{selectedPosition}</h5>
+												{selectedPosition && (
+													<AlertDialog.Root>
+														<AlertDialog.Trigger asChild>
+															<button className="bg-violet-600 shadow-md text-white px-4 py-2 rounded hover:bg-violet-700 transition-colors">
+																Vote
+															</button>
+														</AlertDialog.Trigger>
 
-												<AlertDialog.Root>
-													<AlertDialog.Trigger asChild>
-														<button className="bg-violet-600 shadow-md text-white px-4 py-2 rounded hover:bg-violet-700 transition-colors">
-															Vote
-														</button>
-													</AlertDialog.Trigger>
+														<AlertDialog.Portal>
+															<AlertDialog.Overlay className="AlertDialogOverlay fixed inset-0 bg-black/40 backdrop-blur-sm" />
+															<AlertDialog.Content className="AlertDialogContent fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl w-[90vw] max-w-md">
+																<AlertDialog.Title className="AlertDialogTitle text-lg font-bold border-b pb-2">
+																	Confirm Your Vote
+																</AlertDialog.Title>
 
-													<AlertDialog.Portal>
-														<AlertDialog.Overlay className="AlertDialogOverlay fixed inset-0 bg-black/40 backdrop-blur-sm" />
-														<AlertDialog.Content className="AlertDialogContent fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl w-[90vw] max-w-md">
-															<AlertDialog.Title className="AlertDialogTitle text-lg font-bold border-b pb-2">
-																Confirm Your Vote
-															</AlertDialog.Title>
+																<AlertDialog.Description className="AlertDialogDescription my-4 text-gray-600">
+																	{`Are you sure you want to vote for ${candidate.firstname} ${candidate.lastname} for ${selectedPosition}? This action cannot be undone.`}
+																</AlertDialog.Description>
 
-															<AlertDialog.Description className="AlertDialogDescription my-4 text-gray-600">
-																{`Are you sure you want to vote for ${candidate.firstname} ${candidate.lastname} for ${selectedPosition}? This action cannot be undone.`}
-															</AlertDialog.Description>
-
-															<div className="flex justify-end gap-3 mt-6">
-																<AlertDialog.Cancel asChild>
-																	<button className="Button mauve bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-																		Cancel
-																	</button>
-																</AlertDialog.Cancel>
-																<AlertDialog.Action asChild>
-																	<button
-																		className="Button red px-4 py-2 hover:bg-red-700"
-																		onClick={() => sendVote(candidate)}
-																	>
-																		Yes, cast vote
-																	</button>
-																</AlertDialog.Action>
-															</div>
-														</AlertDialog.Content>
-													</AlertDialog.Portal>
-												</AlertDialog.Root>
+																<div className="flex justify-end gap-3 mt-6">
+																	<AlertDialog.Cancel asChild>
+																		<button className="Button mauve bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+																			Cancel
+																		</button>
+																	</AlertDialog.Cancel>
+																	<AlertDialog.Action asChild>
+																		<button
+																			className="Button red px-4 py-2 hover:bg-red-700"
+																			onClick={() => sendVote(candidate)}
+																		>
+																			Yes, cast vote
+																		</button>
+																	</AlertDialog.Action>
+																</div>
+															</AlertDialog.Content>
+														</AlertDialog.Portal>
+													</AlertDialog.Root>
+												)}
 											</div>
 										</div>
 									</div>
