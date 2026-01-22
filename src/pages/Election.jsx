@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import moment from "moment";
 import Toast from "@/utils/ToastMsg";
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
@@ -7,7 +7,7 @@ import { AppContext } from "@/App";
 import Countdown from "@/components/Countdown";
 import StatusBadge from "@/components/StatusBadge";
 
-import { fetcher, FetchError } from "@/utils/fetcher";
+import { fetcher } from "@/utils/fetcher";
 
 export async function electionLoader({ params }) {
 	try {
@@ -111,7 +111,7 @@ export default function Election() {
 	return (
 		<div className="main p-4">
 			{/* Election Header Information */}
-			<div className="max-w-6xl mx-auto p-4 lg:p-8 bg-gray-50 min-h-screen">
+			<div className="max-w-6xl mx-auto p-4 lg:p-8 bg-gray-50 h-auto">
 				{/* Header Section */}
 				<div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
 					<div className="bg-gradient-to-r from-violet-600 to-indigo-700 p-6 flex justify-between items-center text-white">
