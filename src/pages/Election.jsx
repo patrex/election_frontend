@@ -199,7 +199,7 @@ export default function Election() {
 															</AlertDialog.Title>
 
 															<AlertDialog.Description className="AlertDialogDescription my-4 text-gray-600">
-																{`Are you sure you want to vote for ${candidate.firstname} ${candidate.lastname} as ${selectedPosition}? This action cannot be undone.`}
+																{`Are you sure you want to vote for ${candidate.firstname} ${candidate.lastname} for ${selectedPosition}? This action cannot be undone.`}
 															</AlertDialog.Description>
 
 															<div className="flex justify-end gap-3 mt-6">
