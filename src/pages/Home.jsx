@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigate, Link } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { AppContext } from "@/App";
 import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
@@ -22,8 +22,10 @@ function Home() {
 	// State management
 	const [electionId, setElectionId] = useState('');
 	const [election, setElection] = useState(null);
-	const [participant, setParticipant] = useState('');
+
 	const [isLoading, setIsLoading] = useState(false);
+	
+	const participant = useRef(null);
 
 	// Modals
 	const [openOptionsModal, setOpenOptionsModal] = useState(false);
@@ -58,6 +60,8 @@ function Home() {
 		setIsLoading(true);
 		try {
 			const e = await fetcher.get(`election/${id}`);
+			if (!e) throw new Error("No election was found with that ID!");
+			
 			setElection(e);
 
 			const { isPending, hasEnded } = getEventStatus(new Date(e.startDate), new Date(e.endDate));
@@ -69,7 +73,7 @@ function Home() {
 			// Default: Election is active
 			setCheckVoterModal(true);
 		} catch (error) {
-			Toast.error("There was an error fetching the election");
+			Toast.error(error.message);
 		} finally {
 			setIsLoading(false);
 		}
@@ -84,23 +88,25 @@ function Home() {
 		setIsLoading(true);
 
 		// Capture the phone/email immediately so addVoterToDatabase can use it later
-		setParticipant(participantId);
+		participant.current = participantId;
 
 		try {
 			const voterList = await fetcher.get(`election/${election._id}/voterlist`);
 			const isPhoneType = election.userAuthType === 'phone';
 			const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
 
+			if (!voterList) throw new Error("There was a problem fetching the list of voters");
+
 			// 1. Path for Existing Voters
-			if (existingVoters.includes(participantId)) {
-				setVoter(participantId);
-				return navigate(`/election/${election._id}/${b64encode(participantId)}`);
+			if (existingVoters.includes(participant.current)) {
+				setVoter(participant.current);
+				return navigate(`/election/${election._id}/${b64encode(participant.current)}`);
 			}
 
 			// 2. Path for Closed Elections (Unauthorized)
 			if (election.type === 'Closed') {
 				return Toast.warning(
-					`This is a closed election. Your ${isPhoneType ? 'phone' : 'email'} must be pre-registered.`);
+					`This is a closed election. Your ${isPhoneType ? 'phone' : 'email'} was not found in the pre-registered list`);
 			}
 
 			// 3. Path for New Voters in Open Elections
@@ -120,15 +126,15 @@ function Home() {
 	const addVoterToDatabase = async () => {
 		try {
 			await fetcher.post(`election/${election._id}/addvoter/participant`, {
-				participant,
+				participant: participant.current,
 				electionId: election._id
 			});
 
-			setVoter(participant);
+			setVoter(participant.current);
 			Toast.success('Verification successful!');
 
 			setTimeout(() => {
-				navigate(`/election/${election._id}/${b64encode(participant)}`);
+				navigate(`/election/${election._id}/${b64encode(participant.current)}`);
 			}, 500);
 		} catch (error) {
 			Toast.error('Failed to register voter');
