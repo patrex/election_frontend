@@ -7,6 +7,8 @@ import { fetcher, FetchError } from "@/utils/fetcher";
 import moment from "moment";
 import OTPStarterPhone from "@/components/OtpStarterPhone";
 import PhoneInput from "@/components/CollectPhoneNumber";
+import { cleanNgPhoneNo } from "@/utils/cleanPhoneNo";
+import isValidEmail from "@/utils/validateEmail";
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
@@ -127,7 +129,7 @@ function Home() {
 	const addVoterToDatabase = async () => {
 		try {
 			await fetcher.post(`election/${election._id}/addvoter/participant`, {
-				participant: participant.current,
+				participant: election.userAuthType === 'phone' ? cleanNgPhoneNo(participant.current) : isValidEmail(participant.current) ? participant.current : '',
 				electionId: election._id
 			});
 
