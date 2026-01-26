@@ -11,7 +11,7 @@ const OTPStarterPhone = ({ electionId, optns }) => {
 	const nav = useNavigate()
 
 	const { startVerification, status } = useOTP();
-	const [phoneNumber, setPhoneNumber] = useState('');
+	const [phoneNumber, setPhoneNumber] = useState(optns.voter);
 	const [resultMessage, setResultMessage] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('')

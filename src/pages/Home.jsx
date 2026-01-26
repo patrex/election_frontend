@@ -84,7 +84,7 @@ function Home() {
 	 */
 	const checkAndProcessVoter = async (participantId) => {
 		setRegVoterModal(false);
-		setCheckVoterModal(false)
+		setCheckVoterModal(false);
 		setIsLoading(true);
 
 		// Capture the phone/email immediately so addVoterToDatabase can use it later
@@ -99,6 +99,7 @@ function Home() {
 
 			// 1. Path for Existing Voters
 			if (existingVoters.includes(participant.current)) {
+				// TODO: do otp verification here...
 				setVoter(participant.current);
 				return navigate(`/election/${election._id}/${b64encode(participant.current)}`);
 			}
@@ -111,7 +112,7 @@ function Home() {
 
 			// 3. Path for New Voters in Open Elections
 			// Trigger the OTP modal to verify the new participant
-			setCheckVoterModal(true);
+			setRegVoterModal(true);
 
 		} catch (error) {
 			Toast.error('Unable to verify voter status.');
@@ -201,7 +202,7 @@ function Home() {
 				{/* Unified Modal Logic */}
 				{[
 					{ show: otpStarterModal, setter: setOtpStarterModal, content: <OTPStarterPhone electionId={election?._id} optns={{ action: 'redir', optn: `election/${election?._id}/addcandidate` }} /> },
-					{ show: regVoterModal, setter: setRegVoterModal, content: <OTPStarterPhone electionId={election?._id} optns={{ action: 'fn', optn: addVoterToDatabase }} /> },
+					{ show: regVoterModal, setter: setRegVoterModal, content: <OTPStarterPhone electionId={election?._id} optns={{ action: 'fn', optn: addVoterToDatabase, voter: participant.current }} /> },
 					{ show: checkVoterModal, setter: setCheckVoterModal, content: <PhoneInput action={checkAndProcessVoter} /> }
 				].map((modal, idx) => modal.show && (
 					<div key={idx} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
