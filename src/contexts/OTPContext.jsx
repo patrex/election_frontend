@@ -289,7 +289,7 @@ export const OTPProvider = ({ children }) => {
 			setDestination(finalDestination);
 			setOtpOject(otpObject)
 			setIsModalOpen(true);
-			setStatus(`Verification started for: ${finalDestination}`);
+			setStatus(`Verification started for ${finalDestination}`);
 			resolveRef.current = resolve;
 			rejectRef.current = reject;
 		});
@@ -306,9 +306,9 @@ export const OTPProvider = ({ children }) => {
 	// Called by the Modal upon cancellation
 	const handleCancel = () => {
 		setIsModalOpen(false);
-		setStatus('Verification cancelled by user.');
+		setStatus('Verification cancelled by user');
 		if (rejectRef.current) {
-			rejectRef.current(new Error('Verification cancelled by user.'));
+			rejectRef.current(new Error('Verification cancelled by user'));
 		}
 	};
 

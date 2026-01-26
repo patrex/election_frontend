@@ -111,7 +111,7 @@ function Home() {
 
 			// 3. Path for New Voters in Open Elections
 			// Trigger the OTP modal to verify the new participant
-			setOtpStarterModal(true);
+			setCheckVoterModal(true);
 
 		} catch (error) {
 			Toast.error('Unable to verify voter status.');

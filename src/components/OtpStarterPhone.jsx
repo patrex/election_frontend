@@ -25,16 +25,19 @@ const OTPStarterPhone = ({ electionId, optns }) => {
 			const otpRequest = await sendPhoneOtp(phoneNo, electionId)
 
 			if (otpRequest.success) {
+
 				setTermiiResponse(otpRequest);
 				await startVerification(phoneNo, termiiResponse);
 
-				optns.action === 'redir' ? nav(optns.optn): optns.optn(phoneNo);
+				optns.action === 'redir' ? nav(optns.optn) : optns.optn(phoneNo);
+				setIsLoading(false)
 			} else {
 				Toast.error("Sending OTP failed");
 				throw new Error("Could not send OTP")
 			}
 			
 		} catch (error) {
+			setIsLoading(false)
 			setResultMessage(`Verification failed: ${error.message}`);
 		}
 	};
