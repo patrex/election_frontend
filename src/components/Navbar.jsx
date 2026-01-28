@@ -86,9 +86,6 @@ const Navbar = ({ user, onLogout }) => {
                             </>
                         ) : voter ? (
                             <>
-                                <button onClick={navigate(`/election/${election._id}/${b64encode(voter)}`)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
-                                    <Vote size={18} /> Back to Election
-                                </button>
                                 <button onClick={handleExit} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
                                     <DoorOpen size={18} /> Logout
                                 </button>
