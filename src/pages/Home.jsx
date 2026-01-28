@@ -7,7 +7,7 @@ import { fetcher, FetchError } from "@/utils/fetcher";
 import moment from "moment";
 import OTPStarterPhone from "@/components/OtpStarterPhone";
 import PhoneInput from "@/components/CollectPhoneNumber";
-import { cleanNgPhoneNo } from "@/utils/cleanPhoneNo";
+import { cleanNgPhoneNo, validatePhoneNo } from "@/utils/cleanPhoneNo";
 import isValidEmail from "@/utils/validateEmail";
 
 export async function homeLoader({ request }) {
@@ -127,13 +127,37 @@ function Home() {
 	 * Finalizes registration and navigates to ballot
 	 */
 	const addVoterToDatabase = async () => {
+		let electionAuth = election.userAuthType;
+		let currentVoter = participant.current;
+		let newVoter = '';
+
+		if (!currentVoter) 
+			return Toast.error(`You need to enter ${electionAuth === 'phone' ? 'a phone number' : 'an email'} to continue`);
+
+		if (electionAuth === 'phone') {
+			let temp = cleanNgPhoneNo(currentVoter);
+
+			if (!validatePhoneNo(temp)) 
+				return Toast.error("Phone number not valid")
+			
+			console.log(temp);
+			
+			newVoter = temp;
+		} else if (electionAuth === 'email') {
+			if(!isValidEmail(currentVoter)) 
+				return Toast.error("Email not properly formatted");
+
+			newVoter =  currentVoter;
+		}
+		
+
 		try {
 			await fetcher.post(`election/${election._id}/addvoter/participant`, {
-				participant: election.userAuthType === 'phone' ? cleanNgPhoneNo(participant.current) : isValidEmail(participant.current) ? participant.current : '',
+				participant: newVoter,
 				electionId: election._id
 			});
 
-			setVoter(participant.current);
+			setVoter(newVoter);
 			Toast.success('Verification successful!');
 
 			setTimeout(() => {
