@@ -140,8 +140,6 @@ function Home() {
 			if (!validatePhoneNo(temp)) 
 				return Toast.error("Phone number not valid")
 			
-			console.log(temp);
-			
 			newVoter = temp;
 		} else if (electionAuth === 'email') {
 			if(!isValidEmail(currentVoter)) 
@@ -149,7 +147,6 @@ function Home() {
 
 			newVoter =  currentVoter;
 		}
-		
 
 		try {
 			await fetcher.post(`election/${election._id}/addvoter/participant`, {
