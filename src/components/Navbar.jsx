@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X, LayoutDashboard, PlusCircle, LogOut, LogIn, UserPlus, DoorOpen } from 'lucide-react';
+import { Menu, X, LayoutDashboard, PlusCircle, LogOut, LogIn, UserPlus, DoorOpen, Vote } from 'lucide-react';
 import { AppContext } from "@/App";
 
 const Navbar = ({ user, onLogout }) => {
@@ -85,9 +85,14 @@ const Navbar = ({ user, onLogout }) => {
                                 </div>
                             </>
                         ) : voter ? (
-                            <button onClick={handleExit} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
-                                <DoorOpen size={18} /> Exit System
-                            </button>
+                            <>
+                                <button onClick={navigate(`/election/${election._id}/${b64encode(voter)}`)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+                                    <Vote size={18} /> Back to Election
+                                </button>
+                                <button onClick={handleExit} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+                                    <DoorOpen size={18} /> Logout
+                                </button>
+                            </>
                         ) : (
                             <div className="flex items-center gap-3">
                                 <NavLink to="/login" className="text-sm font-medium text-gray-600 hover:text-violet-600 no-underline">Login</NavLink>
