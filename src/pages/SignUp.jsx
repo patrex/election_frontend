@@ -42,7 +42,7 @@ function SignUp() {
 			),
 		confirmPassword: z
 			.string()
-			.min(1, { message: 'Please confirm your password' }),
+			.min(8, { message: 'Please confirm your password' }),
 	}).refine((data) => data.password === data.confirmPassword, {
 		message: "Passwords don't match",
 		path: ["confirmPassword"],
@@ -225,7 +225,7 @@ function SignUp() {
 								aria-describedby={errors.password ? 'password-error' : undefined}
 								placeholder="••••••••"
 								disabled={loading}
-								register={ register("password") }
+								{...register("password")}
 							/>
 							{errors.password && (
 								<p
@@ -255,7 +255,7 @@ function SignUp() {
 								autoComplete="new-password"
 								aria-invalid={errors.confirmPassword ? 'true' : 'false'}
 								aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-								register={register("confirmPassword", {
+								{...register("confirmPassword", {
 									required: "Please confirm your password",
 									validate: (value) => value === password || "Passwords do not match",
 								})}
