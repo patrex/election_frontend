@@ -7,12 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PulseLoader } from "react-spinners";
 import Toast from "@/utils/ToastMsg";
 import signUpGraphic from '@/assets/sign_up_graphic.png';
+import axios from "axios";
+import backendurl from "@/utils/backendurl";
 
 import {
 	createUserWithEmailAndPassword,
 	signInWithRedirect,
-	sendEmailVerification,
-	signOut,
 	GoogleAuthProvider,
 	updateProfile
 } from 'firebase/auth';
@@ -35,7 +35,7 @@ function SignUp() {
 			.min(1, { message: 'Email is required' }),
 		password: z
 			.string()
-			.min(6, { message: 'Password must be at least 6 characters' })
+			.min(8, { message: 'Password must be at least 8 characters' })
 			.regex(
 				/^(?=.*[0-9])(?=.*[!@#$%^&*])/,
 				{ message: 'Password must contain at least one number and one special character' }
@@ -51,15 +51,18 @@ function SignUp() {
 	const {
 		register,
 		handleSubmit,
+		watch,
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(schema),
 		defaultValues: {
 			firstname: '',
+			lastname: '',
 			email: '',
 			password: '',
 			confirmPassword: '',
 		},
+		mode: 'onBlur'
 	});
 
 	// Google Sign Up
@@ -78,38 +81,12 @@ function SignUp() {
 
 		try {
 			// Create user
-			const result = await createUserWithEmailAndPassword(
-				authman,
-				formData.email,
-				formData.password
-			);
+			const { data } = await axios.post(`${backendurl}/user/auth/register`, formData);
 
-			// Update profile with name
-			await updateProfile(result.user, {
-				displayName: formData.firstname,
-			});
-
-			// Send verification email
-			await sendEmailVerification(authman.currentUser);
-
-			// Sign out (require email verification)
-			await signOut(authman);
-
-			Toast.success(`Verification email sent to ${formData.email}`);
+			Toast.success(`Account created. Verify your email to proceed`);
 			navigate('/login');
 		} catch (error) {
-			console.error('Sign-up error:', error);
-
-			const errorMessages = {
-				'auth/email-already-in-use': 'This email is already registered',
-				'auth/invalid-email': 'Invalid email address',
-				'auth/weak-password': 'Password is too weak',
-				'auth/network-request-failed': 'Network error. Check your connection',
-			};
-
-			Toast.error(
-				errorMessages[error.code] || 'Failed to create account. Please try again'
-			);
+			Toast.error('Failed to create account');
 		} finally {
 			setLoading(false);
 		}
@@ -173,6 +150,34 @@ function SignUp() {
 							)}
 						</div>
 
+						<div>
+							<label
+								htmlFor="lastname"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+							>
+								Last name
+							</label>
+							<input
+								type="text"
+								id="lastname"
+								autoComplete="lastname"
+								aria-invalid={errors.lastname ? 'true' : 'false'}
+								aria-describedby={errors.lastname ? 'lastname-error' : undefined}
+								{...register('lastname')}
+								placeholder="Smith"
+								disabled={loading}
+							/>
+							{errors.lastname && (
+								<p
+									id="lastname-error"
+									className="mt-2 text-sm text-red-600 dark:text-red-400"
+									role="alert"
+								>
+									{errors.lastname.message}
+								</p>
+							)}
+						</div>
+
 						{/* Email */}
 						<div>
 							<label
@@ -216,9 +221,9 @@ function SignUp() {
 								autoComplete="new-password"
 								aria-invalid={errors.password ? 'true' : 'false'}
 								aria-describedby={errors.password ? 'password-error' : undefined}
-								{...register('password')}
 								placeholder="••••••••"
 								disabled={loading}
+								register={ register("password") }
 							/>
 							{errors.password && (
 								<p
@@ -230,7 +235,7 @@ function SignUp() {
 								</p>
 							)}
 							<p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-								Must be at least 6 characters with a number and special character
+								Must be at least 8 characters with a number and special character
 							</p>
 						</div>
 
@@ -248,7 +253,10 @@ function SignUp() {
 								autoComplete="new-password"
 								aria-invalid={errors.confirmPassword ? 'true' : 'false'}
 								aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-								{...register('confirmPassword')}
+								register={register("confirmPassword", {
+									required: "Please confirm your password",
+									validate: (value) => value === password || "Passwords do not match",
+								})}
 								placeholder="••••••••"
 								disabled={loading}
 							/>
