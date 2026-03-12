@@ -29,6 +29,10 @@ function SignUp() {
 			.string()
 			.min(2, { message: 'First name must be at least 2 characters' })
 			.max(50, { message: 'First name is too long' }),
+		lastname: z
+			.string()
+			.min(2, { message: 'Last name must be at least 2 characters' })
+			.max(50, { message: 'Last name is too long' }),
 		email: z
 			.string()
 			.email({ message: 'Please enter a valid email address' })
@@ -83,6 +87,8 @@ function SignUp() {
 
 		try {
 			// Create user
+			delete formData.confirmPassword;
+			
 			const { data } = await axios.post(`${backendurl}user/auth/register`, formData);
 
 			Toast.success(`Account created. Verify your email to proceed`);
