@@ -83,7 +83,7 @@ function SignUp() {
 
 		try {
 			// Create user
-			const { data } = await axios.post(`${backendurl}/user/auth/register`, formData);
+			const { data } = await axios.post(`${backendurl}user/auth/register`, formData);
 
 			Toast.success(`Account created. Verify your email to proceed`);
 			navigate('/login');
