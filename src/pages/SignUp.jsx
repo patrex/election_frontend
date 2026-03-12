@@ -65,6 +65,8 @@ function SignUp() {
 		mode: 'onBlur'
 	});
 
+	const password = watch("password");
+
 	// Google Sign Up
 	const signUpWithGoogle = async () => {
 		try {
