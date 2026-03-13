@@ -65,6 +65,9 @@ function Login() {
         try {
             const { user } = await axios.post(`${backendurl}user/auth/login`, formData);
 
+			console.log(user);
+			
+
             if (user.verified) {
                 setUser(user);
                 Toast.success('Welcome back!');
