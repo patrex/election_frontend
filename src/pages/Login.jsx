@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PulseLoader } from 'react-spinners';
 import Toast from '@/utils/ToastMsg';
+import axios from 'axios';
+import backendurl from '@/utils/backendurl';
 
 
 import {
@@ -61,11 +63,12 @@ function Login() {
         setLoading(true);
         setError('');
         try {
-            const res = await signInWithEmailAndPassword(authman, formData.email, formData.password);
-            if (res.user.emailVerified) {
-                setUser(res.user);
+            const { user } = await axios.post(`${backendurl}user/auth/login`, formData);
+			
+            if (user.isVerified) {
+                setUser(user);
                 Toast.success('Welcome back!');
-                navigate(`/user/${res.user.uid}`);
+                navigate(`/user/${user.id}`);
             } else {
                 Toast.warning('Please verify your email');
                 await signOut(authman);
