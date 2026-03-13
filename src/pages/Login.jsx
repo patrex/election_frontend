@@ -64,7 +64,9 @@ function Login() {
         setError('');
         try {
             const { user } = await axios.post(`${backendurl}user/auth/login`, formData);
-			
+
+			if (!user) return Toast.warning('No such user');
+
             if (user.isVerified) {
                 setUser(user);
                 Toast.success('Welcome back!');
