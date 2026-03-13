@@ -65,15 +65,12 @@ function Login() {
         try {
             const { user } = await axios.post(`${backendurl}user/auth/login`, formData);
 
-			if (!user) return Toast.warning('No such user');
-
-            if (user.isVerified) {
+            if (user.verified) {
                 setUser(user);
                 Toast.success('Welcome back!');
                 navigate(`/user/${user.id}`);
             } else {
-                Toast.warning('Please verify your email');
-                await signOut(authman);
+                return Toast.warning('Please verify your email to continue');
             }
         } catch (err) {
             const msg = err.code === 'auth/invalid-credential' ? 'Invalid email or password' : 'Login failed';
