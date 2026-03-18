@@ -11,6 +11,8 @@ import Toast from '@/utils/ToastMsg';
 import axios from 'axios';
 import backendurl from '@/utils/backendurl';
 
+import EmailVerificationLanding from './EmailVerificationLanding';
+
 
 import {
     signInWithEmailAndPassword,
@@ -71,7 +73,7 @@ function Login() {
                 Toast.success('Welcome back!');
                 navigate(`/user/${user.id}`);
             } else {
-                return Toast.warning('Please verify your email to continue');
+                return <EmailVerificationLanding userEmail={user.email}/>
             }
         } catch (err) {
             const msg = err.code === 'auth/invalid-credential' ? 'Invalid email or password' : 'Login failed';
