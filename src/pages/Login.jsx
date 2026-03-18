@@ -64,7 +64,6 @@ function Login() {
         setError('');
         try {
             const req = await axios.post(`${backendurl}user/auth/login`, formData);
-			
 			const user = req.data;
 			
             if (user.verified) {
