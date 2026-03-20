@@ -24,7 +24,9 @@ import UpdateCandidate, { updateloader } from './pages/UpdateCandidate';
 import UpdateElection, { updateElectionLoader } from './pages/UpdateElection';
 import ApproveCandidates, { approveCandidatesLoader } from './pages/ApproveCandidates';
 import VerifyEmail from './pages/VerifyEmail';
-import EmailVerificationLanding from './pages/EmailVerificationLanding';
+
+import { ProtectedRoute } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 import Error from './pages/Error';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -33,71 +35,6 @@ import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { authman } from './utils/fireloader';
 
-export const AppContext = createContext();
-
-function AuthProvider ({ children }) {
-  const [user, setUser] = useState(null);
-  const [voter, setVoter] = useState(null);
-  const [electionId, setElectionId] = useState(null);
-  
-  const [loading, setLoading] = useState(true);
-
-  // Check if user is logged in on initial load
-  useEffect(() => {
-	const checkAuth = async () => {
-	  try {
-		// Assume your backend has a /me endpoint that returns user data from a cookie/token
-		const { data } = await axios.get(`${backendurl}user/auth/me`);
-		setUser(data.user);
-	  } catch (err) {
-		setUser(null);
-	  } finally {
-		setLoading(false);
-	  }
-	};
-	checkAuth();
-  }, []);
-
-  const login = async (credentials) => {
-	const { data } = await axios.post(`${backendurl}user/auth/login`, credentials);
-	setUser(data.user);
-  };
-
-  const logout = async () => {
-	await axios.post(`${backendurl}user/auth/logout`);
-	setUser(null);
-  };
-
-  // Function to refresh user data (useful after email verification)
-  const refreshUser = async () => {
-	const { data } = await axios.get('/api/auth/me');
-	setUser(data.user);
-  };
-
-  return (
-	<AppContext.Provider value={{ user, loading, login, logout, voter, setVoter }}>
-	  {children}
-	</AppContext.Provider>
-  );
-};
-
-function ProtectedRoute() {
-	const { user, loading } = useAuth();
-
-	if (loading) return <div>Loading...</div>;
-
-	if (!user) {
-		return <Navigate to="/login" replace />;
-	}
-
-	// If logged in but not verified, show the landing page we created
-	if (!user.verified) {
-		return <EmailVerificationLanding userEmail={user.email} />;
-	}
-
-	// If verified, render the child routes (Dashboard, Profile, etc.)
-	return <Outlet />;
-}
 
 const router = createBrowserRouter(
 	createRoutesFromElements(

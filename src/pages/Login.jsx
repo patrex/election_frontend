@@ -1,6 +1,5 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '@/App';
 import loginImg from '../assets/login_banner.svg';
 import { authman } from '@/utils/fireloader';
 import { z } from 'zod';
@@ -11,7 +10,8 @@ import Toast from '@/utils/ToastMsg';
 import axios from 'axios';
 import backendurl from '@/utils/backendurl';
 
-import EmailVerificationLanding from './EmailVerificationLanding';
+import { useAuth } from '@/contexts/AuthContext';
+
 
 
 import {
@@ -33,7 +33,7 @@ const inputClasses = `
 
 function Login() {
     const navigate = useNavigate();
-    const { setUser, user } = useContext(AppContext);
+    const { login } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -64,23 +64,8 @@ function Login() {
     const onSubmit = async (formData) => {
         setLoading(true);
         setError('');
-        try {
-            const req = await axios.post(`${backendurl}user/auth/login`, formData);
-			const user = req.data;
-			
-            if (user.verified) {
-                setUser(user);
-                Toast.success('Welcome back!');
-                navigate(`/user/${user.id}`);
-            } else {
-                return <EmailVerificationLanding userEmail={user.email}/>
-            }
-        } catch (err) {
-            const msg = err.code === 'auth/invalid-credential' ? 'Invalid email or password' : 'Login failed';
-            setError(msg);
-        } finally {
-            setLoading(false);
-        }
+        
+        login(formData);
     };
 
     return (
