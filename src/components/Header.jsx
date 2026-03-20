@@ -9,7 +9,7 @@ import { authman } from "@/utils/fireloader";
 function Header() {
 	const { logout } = useAuth();
 
-	async function logout(){
+	async function logOut(){
 		try {
 			await logout();
 		} catch (error) {
@@ -20,7 +20,7 @@ function Header() {
 	return ( 
 		<>	
 			<header>
-				<Navbar user={user} onLogout={ logout } />
+				<Navbar user={user} onLogout={ logOut } />
 			</header>
 		</>
 		
