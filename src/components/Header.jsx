@@ -7,7 +7,7 @@ import { signOut } from "firebase/auth";
 import { authman } from "@/utils/fireloader";
 
 function Header() {
-	const { logout } = useAuth();
+	const { logout, user } = useAuth();
 
 	async function logOut(){
 		try {
