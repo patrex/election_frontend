@@ -6,7 +6,7 @@ import Toast from "@/utils/ToastMsg";
 import { fetcher } from "@/utils/fetcher";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
-import { AppContext } from "@/App";
+import { useAuth } from "@/contexts/AuthContext";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,7 +29,7 @@ export async function updateloader({ params }) {
 
 function UpdateCandidate() {
 	const [candidate, positions, position, election] = useLoaderData();
-	const { user } = useContext(AppContext);
+	const { user } = useAuth()
 
 	// Separated state variables
 	const [loading, setLoading] = useState(false);

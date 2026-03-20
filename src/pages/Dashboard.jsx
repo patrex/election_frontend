@@ -2,7 +2,7 @@ import  { useState, useContext } from 'react';
 import { Link, useLoaderData, useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Toast from '@/utils/ToastMsg';
-import { AppContext } from '@/App';
+import { useAuth } from '@/contexts/AuthContext';
 import ElectionDashboardTD from '@/components/ElectionDashboardTD';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 import NoData from '@/components/NoData';
@@ -26,7 +26,7 @@ function Dashboard() {
 	const [elections, setElections] = useState(data || []);
 	const navigate = useNavigate()
 
-	const { user } = useContext(AppContext);
+	const { user } = useAuth();
 
 	async function removeElection (election) {
 		try {

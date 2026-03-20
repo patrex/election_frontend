@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Toast from "@/utils/ToastMsg";
-import { AppContext } from '@/App';
+import { useAuth } from "@/contexts/AuthContext";
 import { PulseLoader } from 'react-spinners';
 import { fetcher, FetchError } from "@/utils/fetcher"
 import { useState, useContext } from 'react';
@@ -13,7 +13,7 @@ import { getLocalTimezoneDate } from "@/utils/setLocalTime";
 function CreateElection() {
 	const params = useParams();
 	const navigate = useNavigate();
-	const { user } = useContext(AppContext);
+	const { user } = useAuth();
 	const [loading, setLoading] = useState(false);
 
 	// Zod Schema

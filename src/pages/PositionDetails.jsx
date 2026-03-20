@@ -4,7 +4,7 @@ import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
 import { Grid, Container, Typography, Box } from '@mui/material';
 
-import { AppContext } from "@/App";
+import { useAuth } from "@/contexts/AuthContext";
 import { fetcher, FetchError } from "@/utils/fetcher";
 
 export async function loader({ params }) {
@@ -26,7 +26,7 @@ function PositionDetails() {
 	const [candidatesList, setCandidatesList] = useState(candidates || []);
 	const params = useParams();
 
-	const { user } = useContext(AppContext);
+	const { user } = useAuth();
 
 	const navigate = useNavigate();
 

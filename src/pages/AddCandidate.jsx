@@ -2,7 +2,7 @@ import { useState, useCallback, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
 import { useLoaderData } from 'react-router-dom';
-import { AppContext } from '@/App';
+import { useAuth } from '@/contexts/AuthContext';
 
 import { genUUID } from '@/utils/getUUID';
 import { fireman } from '../utils/fireloader';
@@ -37,7 +37,7 @@ function AddCandidate() {
 
 	const navigate = useNavigate();
 
-	const { user } = useContext(AppContext);
+	const { user } = useAuth();
 
 	const [formData, setFormData] = useState({
 		firstname: '',
