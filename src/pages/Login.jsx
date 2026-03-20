@@ -12,8 +12,6 @@ import backendurl from '@/utils/backendurl';
 
 import { useAuth } from '@/contexts/AuthContext';
 
-
-
 import {
     signInWithEmailAndPassword,
     GoogleAuthProvider,
@@ -33,7 +31,7 @@ const inputClasses = `
 
 function Login() {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, user } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
