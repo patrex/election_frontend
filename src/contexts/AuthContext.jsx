@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
 
     if (user.verified){
       setUser(user);
-      navigate(`/user/${user.id}`);
     } else return <EmailVerificationLanding userEmail={user.email} />
   };
 

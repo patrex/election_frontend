@@ -64,8 +64,12 @@ function Login() {
     const onSubmit = async (formData) => {
         setLoading(true);
         setError('');
-        
-        login(formData);
+        try {
+            await login(formData);
+            navigate(`/user/${user.id}`);
+        } catch (error) {
+            
+        }
     };
 
     return (
