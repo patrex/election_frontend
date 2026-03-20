@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
     if (user.verified){
       setUser(user);
-    } else return <EmailVerificationLanding userEmail={user.email} />
+    }
   };
 
   const logout = async () => {

@@ -18,6 +18,7 @@ import {
     signInWithRedirect,
     signOut,
 } from 'firebase/auth';
+import EmailVerificationLanding from './EmailVerificationLanding';
 
 // Refined Input Style for reuse
 const inputClasses = `
@@ -64,9 +65,13 @@ function Login() {
         setError('');
         try {
             await login(formData);
-            navigate(`/user/${user.id}`);
+            if (user)
+                navigate(`/user/${user.id}`);
+            else return <EmailVerificationLanding userEmail={user.email} />
         } catch (error) {
             
+        } finally {
+            setLoading(false)
         }
     };
 
