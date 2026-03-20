@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X, LayoutDashboard, PlusCircle, LogOut, LogIn, UserPlus, DoorOpen, Vote } from 'lucide-react';
-import { AppContext } from "@/App";
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = ({ user, onLogout }) => {
     const [navOpen, setNavOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
-    const { voter, setVoter } = useContext(AppContext);
+    const { voter, setVoter } = useAuth();
 
     // --- Logic Handlers ---
     const toggleMenu = () => setNavOpen(!navOpen);
