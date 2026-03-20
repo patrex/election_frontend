@@ -66,6 +66,9 @@ function Login() {
         try {
             await login(formData);
 
+            console.log(user);
+            
+
             if (!user) return navigate('login')
             
             if (user.verified)
