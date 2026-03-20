@@ -25,7 +25,6 @@ import UpdateElection, { updateElectionLoader } from './pages/UpdateElection';
 import ApproveCandidates, { approveCandidatesLoader } from './pages/ApproveCandidates';
 import VerifyEmail from './pages/VerifyEmail';
 import EmailVerificationLanding from './pages/EmailVerificationLanding';
-import { AuthProvider } from './contexts/AuthContext';
 
 import Error from './pages/Error';
 import { onAuthStateChanged } from 'firebase/auth';
