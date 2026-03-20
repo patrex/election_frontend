@@ -28,11 +28,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    const req  = await axios.post(`${backendurl}user/auth/login`, credentials);
-    const user = req.data;
-
-    if (user.verified){
+    try {
+      const req  = await axios.post(`${backendurl}user/auth/login`, credentials);
+      const user = req.data;
       setUser(user);
+      
+    } catch (error) {
+      
     }
   };
 

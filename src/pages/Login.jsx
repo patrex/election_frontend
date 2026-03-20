@@ -65,9 +65,12 @@ function Login() {
         setError('');
         try {
             await login(formData);
-            if (user)
+
+            if (!user) return navigate('login')
+            
+            if (user.verified)
                 navigate(`/user/${user.id}`);
-            else return <EmailVerificationLanding userEmail={user.email} />
+            else return navigate('verifymail')
         } catch (error) {
             
         } finally {

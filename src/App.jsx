@@ -23,7 +23,7 @@ import NotFound from './pages/NotFound';
 import UpdateCandidate, { updateloader } from './pages/UpdateCandidate';
 import UpdateElection, { updateElectionLoader } from './pages/UpdateElection';
 import ApproveCandidates, { approveCandidatesLoader } from './pages/ApproveCandidates';
-import VerifyEmail from './pages/VerifyEmail';
+import EmailVerificationLanding from './pages/EmailVerificationLanding';
 
 import { ProtectedRoute } from './contexts/AuthContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -71,7 +71,11 @@ const router = createBrowserRouter(
 					/>
 
 					<Route path="create-election" 
-						element={<CreateElection />} 
+						element={<CreateElection />}
+					/>
+
+					<Route path="verifyemail" 
+						element={<EmailVerificationLanding />}
 					/>
 
 					<Route path="election/:id/approveCandidates"

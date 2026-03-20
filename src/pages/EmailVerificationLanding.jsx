@@ -2,17 +2,23 @@ import React, { useState } from 'react';
 import { MailOpen, ArrowRight, RefreshCcw, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
 
-const EmailVerificationLanding = ({ userEmail }) => {
+import { useAuth } from '@/contexts/AuthContext';
+import backendurl from '@/utils/backendurl';
+
+const EmailVerificationLanding = () => {
   const [loading, setLoading] = useState(false);
   const [resent, setResent] = useState(false);
   const [error, setError] = useState('');
+
+  const { user } = useAuth();
+  const userMail = user?.email;
 
   const handleResend = async () => {
     setLoading(true);
     setError('');
     try {
       // Replace with your actual API endpoint
-      await axios.post('/api/auth/resend-verification', { email: userEmail });
+      await axios.post(`${backendurl}user/auth/resend-verification`, { email: userMail });
       setResent(true);
     } catch (err) {
       setError('Could not resend email. Please try again later.');
@@ -37,7 +43,7 @@ const EmailVerificationLanding = ({ userEmail }) => {
           Verify your email
         </h1>
         <p className="text-slate-600 mb-8">
-          We've sent a verification link to <span className="font-semibold text-slate-800">{userEmail}</span>. 
+          We've sent a verification link to <span className="font-semibold text-slate-800">{userMail}</span>. 
           Please check your inbox to activate your account.
         </p>
 
