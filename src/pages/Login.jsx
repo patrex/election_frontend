@@ -69,7 +69,7 @@ function Login() {
             console.log(user);
             
 
-            if (!user) return navigate('login')
+            if (!user) return;
             
             if (user.verified)
                 navigate(`/user/${user.id}`);
