@@ -64,14 +64,11 @@ function Login() {
         setLoading(true);
         setError('');
         try {
-            await login(formData);
+            const loggedInUser = await login(formData);
 
-            console.log(user);
+            if (!loggedInUser) return;
             
-
-            if (!user) return;
-            
-            if (user.verified)
+            if (loggedInUser.verified)
                 navigate(`/user/${user.id}`);
             else return navigate('verifymail')
         } catch (error) {
