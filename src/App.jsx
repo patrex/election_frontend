@@ -63,6 +63,10 @@ const router = createBrowserRouter(
 
 			{/* Protected User Routes */}
 			<Route element={<ProtectedRoute />}>
+				<Route path="user/verifymail" 
+						element={<EmailVerificationLanding />}
+				/>
+				
 				<Route path="user/:userId" element={<UserLayout />}>
 					<Route index 
 						element={<Dashboard />} 
@@ -72,10 +76,6 @@ const router = createBrowserRouter(
 
 					<Route path="create-election" 
 						element={<CreateElection />}
-					/>
-
-					<Route path="verifyemail" 
-						element={<EmailVerificationLanding />}
 					/>
 
 					<Route path="election/:id/approveCandidates"
