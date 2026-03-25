@@ -66,7 +66,6 @@ const EmailVerificationLanding = () => {
           <button
             onClick={handleResend}
             disabled={loading || resent}
-            {/* Removed w-full, added w-fit or just let padding handle it */}
             className="w-fit py-3 px-6 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
