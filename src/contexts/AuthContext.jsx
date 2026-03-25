@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import backendurl from '@/utils/backendurl';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate, Outlet } from 'react-router-dom';
 
 
 const AuthContext = createContext(null);
@@ -71,15 +71,21 @@ export function ProtectedRoute() {
 	const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-	if (loading) return <div>Loading...</div>;
+	if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
 	if (!user) {
-		return navigate ("/login", {replace: true});
+		return <Navigate to="/login" replace />;
 	}
 
 	// If logged in but not verified, show the landing page we created
 	if (!user.verified) {
-		return navigate('/user/verifymail');
+		return <Navigate to="/user/verifymail" replace />;
 	}
 
 	// If verified, render the child routes (Dashboard, Profile, etc.)
