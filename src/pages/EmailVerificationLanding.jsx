@@ -30,7 +30,7 @@ const EmailVerificationLanding = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center border border-slate-100">
-        
+
         {/* Icon Header */}
         <div className="mb-6 flex justify-center">
           <div className="p-4 bg-blue-50 rounded-full">
@@ -40,10 +40,10 @@ const EmailVerificationLanding = () => {
 
         {/* Messaging */}
         <h1 className="text-2xl font-bold text-slate-900 mb-2">
-          Verify your email
+          Verify your email to continue...
         </h1>
         <p className="text-slate-600 mb-8">
-          We've sent a verification link to <span className="font-semibold text-slate-800">{userMail}</span>. 
+          You have not verified your email yet <span className="font-semibold text-slate-800">{userMail}</span>.
           Please check your inbox to activate your account.
         </p>
 
@@ -62,18 +62,12 @@ const EmailVerificationLanding = () => {
         )}
 
         {/* Action Buttons */}
-        <div className="space-y-3">
-          <button 
-            onClick={() => window.open('https://mail.google.com', '_blank')}
-            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all flex items-center justify-center gap-2"
-          >
-            Open Mail App <ArrowRight className="w-4 h-4" />
-          </button>
-
-          <button 
+        <div className="space-y-3 flex flex-col items-center">
+          <button
             onClick={handleResend}
             disabled={loading || resent}
-            className="w-full py-3 px-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            {/* Removed w-full, added w-fit or just let padding handle it */}
+            className="w-fit py-3 px-6 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             {loading ? 'Sending...' : 'Resend Verification Email'}
