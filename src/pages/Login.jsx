@@ -69,8 +69,8 @@ function Login() {
             if (!loggedInUser) return;
             
             if (loggedInUser.verified)
-                navigate(`/user/${user.id}`);
-            else return navigate('user/verifymail')
+                return navigate(`/user/${loggedInUser.id}`);
+            else return navigate('/user/verifymail')
         } catch (error) {
             
         } finally {

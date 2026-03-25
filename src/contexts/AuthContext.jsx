@@ -17,8 +17,9 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         // Assume your backend has a /me endpoint that returns user data from a cookie/token
-        const { data } = await axios.get(`${backendurl}user/auth/me`);
-        setUser(data.user);
+        const req = await axios.get(`${backendurl}user/auth/me`);
+        const user = req.data;
+        setUser(user);
       } catch (err) {
         setUser(null);
       } finally {
