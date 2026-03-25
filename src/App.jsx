@@ -64,10 +64,9 @@ const router = createBrowserRouter(
 			<Route path="user/verifymail" 
 				element={<EmailVerificationLanding />}
 			/>
-			
+
 			{/* Protected User Routes */}
 			<Route element={<ProtectedRoute />}>
-				
 				<Route path="user/:userId" element={<UserLayout />}>
 					<Route index 
 						element={<Dashboard />} 
