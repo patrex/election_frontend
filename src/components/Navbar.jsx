@@ -7,7 +7,7 @@ const Navbar = ({ user, onLogout }) => {
     const [navOpen, setNavOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
-    const { voter, setVoter, user } = useAuth();
+    const { voter, setVoter } = useAuth();
 
     // --- Logic Handlers ---
     const toggleMenu = () => setNavOpen(!navOpen);
