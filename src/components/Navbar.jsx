@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X, LayoutDashboard, PlusCircle, LogOut, LogIn, UserPlus, DoorOpen, Vote } from 'lucide-react';
-import { AppContext } from "@/App";
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = ({ user, onLogout }) => {
     const [navOpen, setNavOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
-    const { voter, setVoter } = useContext(AppContext);
+    const { voter, setVoter } = useAuth();
 
     // --- Logic Handlers ---
     const toggleMenu = () => setNavOpen(!navOpen);
@@ -70,10 +70,10 @@ const Navbar = ({ user, onLogout }) => {
                     <div className="hidden md:flex items-center gap-1">
                         {user && !voter ? (
                             <>
-                                <NavLink to={`/user/${user.uid}`} end className={desktopLink}>
+                                <NavLink to={`/user/${user.id}`} end className={desktopLink}>
                                     <LayoutDashboard size={18} /> Dashboard
                                 </NavLink>
-                                <NavLink to={`/user/${user.uid}/create-election`} className={desktopLink}>
+                                <NavLink to={`/user/${user.id}/create-election`} className={desktopLink}>
                                     <PlusCircle size={18} /> Create New Election
                                 </NavLink>
                                 <div className="h-6 w-px bg-gray-200 dark:bg-gray-800 mx-2" />
@@ -112,10 +112,10 @@ const Navbar = ({ user, onLogout }) => {
                         <div ref={menuRef} className="p-4 space-y-2 h-full flex flex-col">
                             {user && !voter ? (
                                 <>
-                                    <NavLink to={`/user/${user.uid}`} onClick={closeMenu} className={mobileLink}>
+                                    <NavLink to={`/user/${user.id}`} onClick={closeMenu} className={mobileLink}>
                                         <LayoutDashboard size={20} /> Dashboard
                                     </NavLink>
-                                    <NavLink to={`/user/${user.uid}/create-election`} onClick={closeMenu} className={mobileLink}>
+                                    <NavLink to={`/user/${user.id}/create-election`} onClick={closeMenu} className={mobileLink}>
                                         <PlusCircle size={20} /> Create New Election
                                     </NavLink>
                                     

@@ -1,6 +1,5 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '@/App';
 import loginImg from '../assets/login_banner.svg';
 import { authman } from '@/utils/fireloader';
 import { z } from 'zod';
@@ -11,6 +10,7 @@ import Toast from '@/utils/ToastMsg';
 import axios from 'axios';
 import backendurl from '@/utils/backendurl';
 
+import { useAuth } from '@/contexts/AuthContext';
 
 import {
     signInWithEmailAndPassword,
@@ -18,6 +18,7 @@ import {
     signInWithRedirect,
     signOut,
 } from 'firebase/auth';
+import EmailVerificationLanding from './EmailVerificationLanding';
 
 // Refined Input Style for reuse
 const inputClasses = `
@@ -31,7 +32,7 @@ const inputClasses = `
 
 function Login() {
     const navigate = useNavigate();
-    const { setUser, user } = useContext(AppContext);
+    const { login, user } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -63,21 +64,17 @@ function Login() {
         setLoading(true);
         setError('');
         try {
-            const req = await axios.post(`${backendurl}user/auth/login`, formData);
-			const user = req.data;
-			
-            if (user.verified) {
-                setUser(user);
-                Toast.success('Welcome back!');
-                navigate(`/user/${user.id}`);
-            } else {
-                return Toast.warning('Please verify your email to continue');
-            }
-        } catch (err) {
-            const msg = err.code === 'auth/invalid-credential' ? 'Invalid email or password' : 'Login failed';
-            setError(msg);
+            const loggedInUser = await login(formData);
+
+            if (!loggedInUser) return;
+            
+            if (loggedInUser.verified)
+                return navigate(`/user/${loggedInUser.id}`);
+            else return navigate('/user/verifymail')
+        } catch (error) {
+            
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
     };
 

@@ -1,17 +1,17 @@
-import { AppContext } from "@/App";
-import { useContext } from "react";
 import Navbar from "./Navbar";
 import Toast from "@/utils/ToastMsg";
+
+import { useAuth } from "@/contexts/AuthContext";
 
 import { signOut } from "firebase/auth";
 import { authman } from "@/utils/fireloader";
 
 function Header() {
-	const { user } = useContext(AppContext);
+	const { logout, user } = useAuth();
 
-	async function logout(){
+	async function logOut(){
 		try {
-			await signOut(authman);
+			await logout();
 		} catch (error) {
 			Toast.error("There was an error logging you out");
 		}
@@ -20,7 +20,7 @@ function Header() {
 	return ( 
 		<>	
 			<header>
-				<Navbar user={user} onLogout={ logout } />
+				<Navbar user={user} onLogout={ logOut } />
 			</header>
 		</>
 		

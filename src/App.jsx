@@ -1,5 +1,7 @@
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements, Navigate, Outlet } from 'react-router-dom';
 import { createContext, useEffect, useState, useContext } from 'react';
+import backendurl from './utils/backendurl';
+
 import './App.css';
 import './dashboard_styles.css'
 import './no_data.css'
@@ -21,6 +23,10 @@ import NotFound from './pages/NotFound';
 import UpdateCandidate, { updateloader } from './pages/UpdateCandidate';
 import UpdateElection, { updateElectionLoader } from './pages/UpdateElection';
 import ApproveCandidates, { approveCandidatesLoader } from './pages/ApproveCandidates';
+import EmailVerificationLanding from './pages/EmailVerificationLanding';
+
+import { ProtectedRoute } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 import Error from './pages/Error';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -29,30 +35,6 @@ import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { authman } from './utils/fireloader';
 
-export const AppContext = createContext();
-
-function AuthProvider({ children }) {
-	const [user, setUser] = useState(null);
-	const [voter, setVoter] = useState(null);
-
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(authman, (authUser) => {
-			setUser(authUser);
-		});
-		return () => unsubscribe();
-	}, []);
-
-	return (
-		<AppContext.Provider value={{ user, setUser, voter, setVoter }}>
-			{children}
-		</AppContext.Provider>
-	);
-}
-
-function ProtectedRoute() {
-	const { user } = useContext(AppContext);
-	return user ? <Outlet /> : <Navigate to="/login" replace />;
-}
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -79,6 +61,10 @@ const router = createBrowserRouter(
 				errorElement={<Error />}
 			/>
 
+			<Route path="user/verifymail" 
+				element={<EmailVerificationLanding />}
+			/>
+
 			{/* Protected User Routes */}
 			<Route element={<ProtectedRoute />}>
 				<Route path="user/:userId" element={<UserLayout />}>
@@ -89,7 +75,7 @@ const router = createBrowserRouter(
 					/>
 
 					<Route path="create-election" 
-						element={<CreateElection />} 
+						element={<CreateElection />}
 					/>
 
 					<Route path="election/:id/approveCandidates"

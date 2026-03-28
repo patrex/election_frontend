@@ -6,7 +6,7 @@ import { PulseLoader } from "react-spinners";
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AppContext } from "@/App";
+import { useAuth } from "@/contexts/AuthContext";
 import { getLocalTimezoneDate } from "@/utils/setLocalTime";
 import { fetcher } from "@/utils/fetcher";
 
@@ -28,7 +28,7 @@ function UpdateElection() {
 	const [loading, setLoading] = useState(false);
 
 
-	const { user } = useContext(AppContext)
+	const { user } = useAuth();
 
 	const schema = z.object({
 			electiontitle: z.string().min(2, { message: "Election title cannot be less than two characters" }),

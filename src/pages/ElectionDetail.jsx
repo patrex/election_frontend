@@ -1,7 +1,7 @@
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
 import { useState, useContext, useEffect } from 'react';
-import { AppContext } from '@/App';
+import { useAuth } from '@/contexts/AuthContext';
 import ElectionActions from '@/components/ElectionActions';
 import DeleteDialog from '@/components/DeleteDialog';
 import StatusBadge from '@/components/StatusBadge';
@@ -41,7 +41,7 @@ function ElectionDetail() {
 	const [votersList, setVotersList] = useState(voters || []);
 	const [votersFiltered, setVotersFiltered] = useState([]);
 
-	const { user } = useContext(AppContext);
+	const { user } = useAuth();
 	const [modalConfig, setModalConfig] = useState({ open: false, action: null })
 
 	const [newPosition, setNewPosition] = useState("");

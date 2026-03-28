@@ -1,6 +1,6 @@
 import { useState, useContext} from 'react';
 import { useLoaderData } from 'react-router-dom';
-import { AppContext } from '@/App';
+import { useAuth } from '@/contexts/AuthContext';
 import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from '@/utils/fetcher';
 import NoData from '@/components/NoData';
@@ -99,7 +99,7 @@ const ApproveCandidates = () => {
 		setModalAction(null);
 	};
 
-	const { user } = useContext(AppContext);
+	const { user } = useAuth();
 
 	async function approveCandidate() {
 		try {

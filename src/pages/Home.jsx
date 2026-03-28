@@ -1,6 +1,6 @@
 import { useLoaderData, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState, useContext, useRef } from "react";
-import { AppContext } from "@/App";
+import { useAuth } from "@/contexts/AuthContext";
 import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from "@/utils/fetcher";
@@ -19,7 +19,7 @@ export async function homeLoader({ request }) {
 function Home() {
 	const navigate = useNavigate();
 	const electionFromQueryParams = useLoaderData();
-	const { setVoter } = useContext(AppContext);
+	const { setVoter } = useAuth();
 
 	// State management
 	const [electionId, setElectionId] = useState('');

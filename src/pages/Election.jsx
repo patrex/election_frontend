@@ -3,7 +3,7 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import moment from "moment";
 import Toast from "@/utils/ToastMsg";
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import { AppContext } from "@/App";
+import { useAuth } from "@/contexts/AuthContext";
 import Countdown from "@/components/Countdown";
 import StatusBadge from "@/components/StatusBadge";
 
@@ -34,7 +34,7 @@ export default function Election() {
 	const [candidatesWorkingSet, setWorkingSet] = useState(candidates);
 
 
-	const { voter } = useContext(AppContext);
+	const { voter } = useAuth();
 
 	const [positions, setPositions] = useState(p);
 	const [selectedPosition, setSelectedPosition] = useState("");
