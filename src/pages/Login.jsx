@@ -152,7 +152,7 @@ function Login() {
                         </div>
 
                         {/* Password field with visibility toggle */}
-                        <div>
+                        <div style={{ marginBottom: '8px' }}>
                             {/* FIX: added items-center so "Forgot?" link is vertically
                                 centred against the label instead of sitting at the top */}
                             <div className="flex items-center justify-between mb-1.5 ml-1">
