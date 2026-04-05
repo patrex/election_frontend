@@ -131,7 +131,7 @@ function Login() {
                         <div>
                             <label
                                 htmlFor="email"
-                                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 ml-1"
+                                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5"
                             >
                                 Email
                             </label>
@@ -145,7 +145,7 @@ function Login() {
                                 disabled={loading}
                             />
                             {errors.email && (
-                                <span className="text-xs text-red-500 ml-1 mt-1 block">
+                                <span className="text-xs text-red-500 mt-1 block">
                                     {errors.email.message}
                                 </span>
                             )}
