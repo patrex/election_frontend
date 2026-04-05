@@ -114,185 +114,186 @@ function SignUp() {
 			</div>
 
 			{/* Right Section - Signup Form */}
-			<div className="container mt-5">
-				<div className="card shadow-sm">
+			<div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
+				<div className="w-full max-w-md">
 					{/* Header */}
-					<div className="card-header bg-primary text-white">
-						<h4 className="mb-0">
+					<div className="mb-8">
+						<h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
 							Create an account
-						</h4>
+						</h1>
+						<p className="text-gray-600 dark:text-gray-400">
+							Get started with your free account
+						</p>
 					</div>
-					<div className="card-body">
-						{/* Signup Form */}
-						<form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-							{/* First Name */}
-							<div>
-								<label
-									htmlFor="firstname"
-									className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-								>
-									First name
-								</label>
-								<input
-									type="text"
-									id="firstname"
-									autoComplete="given-name"
-									autoFocus
-									aria-invalid={errors.firstname ? 'true' : 'false'}
-									aria-describedby={errors.firstname ? 'firstname-error' : undefined}
-									{...register('firstname')}
-									placeholder="John"
-									disabled={loading}
-								/>
-								{errors.firstname && (
-									<p
-										id="firstname-error"
-										className="mt-2 text-sm text-red-600 dark:text-red-400"
-										role="alert"
-									>
-										{errors.firstname.message}
-									</p>
-								)}
-							</div>
 
-							<div>
-								<label
-									htmlFor="lastname"
-									className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-								>
-									Last name
-								</label>
-								<input
-									type="text"
-									id="lastname"
-									autoComplete="lastname"
-									aria-invalid={errors.lastname ? 'true' : 'false'}
-									aria-describedby={errors.lastname ? 'lastname-error' : undefined}
-									{...register('lastname')}
-									placeholder="Smith"
-									disabled={loading}
-								/>
-								{errors.lastname && (
-									<p
-										id="lastname-error"
-										className="mt-2 text-sm text-red-600 dark:text-red-400"
-										role="alert"
-									>
-										{errors.lastname.message}
-									</p>
-								)}
-							</div>
-
-							{/* Email */}
-							<div>
-								<label
-									htmlFor="email"
-									className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-								>
-									Email address
-								</label>
-								<input
-									type="email"
-									id="email"
-									autoComplete="email"
-									aria-invalid={errors.email ? 'true' : 'false'}
-									aria-describedby={errors.email ? 'email-error' : undefined}
-									{...register('email')}
-									placeholder="you@example.com"
-									disabled={loading}
-								/>
-								{errors.email && (
-									<p
-										id="email-error"
-										className="mt-2 text-sm text-red-600 dark:text-red-400"
-										role="alert"
-									>
-										{errors.email.message}
-									</p>
-								)}
-							</div>
-
-							{/* Password */}
-							<div>
-								<label
-									htmlFor="password"
-									className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-								>
-									Password
-								</label>
-								<input
-									type="password"
-									id="password"
-									autoComplete="new-password"
-									aria-invalid={errors.password ? 'true' : 'false'}
-									aria-describedby={errors.password ? 'password-error' : undefined}
-									placeholder="••••••••"
-									disabled={loading}
-									{...register("password")}
-								/>
-								{errors.password && (
-									<p
-										id="password-error"
-										className="mt-2 text-sm text-red-600 dark:text-red-400"
-										role="alert"
-									>
-										{errors.password.message}
-									</p>
-								)}
-								<p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-									Must be at least 8 characters with a number and special character
-								</p>
-							</div>
-
-							{/* Confirm Password */}
-							<div>
-								<label
-									htmlFor="confirmPassword"
-									className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-								>
-									Confirm password
-								</label>
-								<input
-									type="password"
-									id="confirmPassword"
-									autoComplete="new-password"
-									aria-invalid={errors.confirmPassword ? 'true' : 'false'}
-									aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-									{...register("confirmPassword", {
-										required: "Please confirm your password",
-										validate: (value) => value === password || "Passwords do not match",
-									})}
-									placeholder="••••••••"
-									disabled={loading}
-								/>
-								{errors.confirmPassword && (
-									<p
-										id="confirmPassword-error"
-										className="mt-2 text-sm text-red-600 dark:text-red-400"
-										role="alert"
-									>
-										{errors.confirmPassword.message}
-									</p>
-								)}
-							</div>
-
-							{/* Submit Button */}
-							<button
-								type="submit"
-								disabled={loading}
-								className="Button violet text-center"
+					{/* Signup Form */}
+					<form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+						{/* First Name */}
+						<div>
+							<label
+								htmlFor="firstname"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
 							>
-								{loading ? (
-									<span className="flex items-center justify-center">
-										<PulseLoader color="currentColor" size={8} />
-									</span>
-								) : (
-									'Create account'
-								)}
-							</button>
-						</form>
+								First name
+							</label>
+							<input
+								type="text"
+								id="firstname"
+								autoComplete="given-name"
+								autoFocus
+								aria-invalid={errors.firstname ? 'true' : 'false'}
+								aria-describedby={errors.firstname ? 'firstname-error' : undefined}
+								{...register('firstname')}
+								placeholder="John"
+								disabled={loading}
+							/>
+							{errors.firstname && (
+								<p
+									id="firstname-error"
+									className="mt-2 text-sm text-red-600 dark:text-red-400"
+									role="alert"
+								>
+									{errors.firstname.message}
+								</p>
+							)}
+						</div>
 
-					</div>
+						<div>
+							<label
+								htmlFor="lastname"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+							>
+								Last name
+							</label>
+							<input
+								type="text"
+								id="lastname"
+								autoComplete="lastname"
+								aria-invalid={errors.lastname ? 'true' : 'false'}
+								aria-describedby={errors.lastname ? 'lastname-error' : undefined}
+								{...register('lastname')}
+								placeholder="Smith"
+								disabled={loading}
+							/>
+							{errors.lastname && (
+								<p
+									id="lastname-error"
+									className="mt-2 text-sm text-red-600 dark:text-red-400"
+									role="alert"
+								>
+									{errors.lastname.message}
+								</p>
+							)}
+						</div>
+
+						{/* Email */}
+						<div>
+							<label
+								htmlFor="email"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+							>
+								Email address
+							</label>
+							<input
+								type="email"
+								id="email"
+								autoComplete="email"
+								aria-invalid={errors.email ? 'true' : 'false'}
+								aria-describedby={errors.email ? 'email-error' : undefined}
+								{...register('email')}
+								placeholder="you@example.com"
+								disabled={loading}
+							/>
+							{errors.email && (
+								<p
+									id="email-error"
+									className="mt-2 text-sm text-red-600 dark:text-red-400"
+									role="alert"
+								>
+									{errors.email.message}
+								</p>
+							)}
+						</div>
+
+						{/* Password */}
+						<div>
+							<label
+								htmlFor="password"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+							>
+								Password
+							</label>
+							<input
+								type="password"
+								id="password"
+								autoComplete="new-password"
+								aria-invalid={errors.password ? 'true' : 'false'}
+								aria-describedby={errors.password ? 'password-error' : undefined}
+								placeholder="••••••••"
+								disabled={loading}
+								{...register("password")}
+							/>
+							{errors.password && (
+								<p
+									id="password-error"
+									className="mt-2 text-sm text-red-600 dark:text-red-400"
+									role="alert"
+								>
+									{errors.password.message}
+								</p>
+							)}
+							<p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+								Must be at least 8 characters with a number and special character
+							</p>
+						</div>
+
+						{/* Confirm Password */}
+						<div>
+							<label
+								htmlFor="confirmPassword"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+							>
+								Confirm password
+							</label>
+							<input
+								type="password"
+								id="confirmPassword"
+								autoComplete="new-password"
+								aria-invalid={errors.confirmPassword ? 'true' : 'false'}
+								aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
+								{...register("confirmPassword", {
+									required: "Please confirm your password",
+									validate: (value) => value === password || "Passwords do not match",
+								})}
+								placeholder="••••••••"
+								disabled={loading}
+							/>
+							{errors.confirmPassword && (
+								<p
+									id="confirmPassword-error"
+									className="mt-2 text-sm text-red-600 dark:text-red-400"
+									role="alert"
+								>
+									{errors.confirmPassword.message}
+								</p>
+							)}
+						</div>
+
+						{/* Submit Button */}
+						<button
+							type="submit"
+							disabled={loading}
+							className="Button violet text-center"
+						>
+							{loading ? (
+								<span className="flex items-center justify-center">
+									<PulseLoader color="currentColor" size={8} />
+								</span>
+							) : (
+								'Create account'
+							)}
+						</button>
+					</form>
 
 					{/* Divider */}
 					<div className="flex items-center my-8">
