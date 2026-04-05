@@ -211,22 +211,20 @@ function Login() {
 
                         {/* FIX: unified button height with the Google button below via
                             the same py-3 / rounded-xl / font-bold pattern */}
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="
-                                w-full py-3 px-4
-                                bg-violet-600 hover:bg-violet-700 active:bg-violet-800
-                                text-white font-bold rounded-xl
-                                shadow-lg shadow-violet-500/20
-                                transition-all duration-150 active:scale-[0.98]
-                                flex items-center justify-center min-h-[48px]
-                                disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100
-                            "
-                        >
-                            {/* Nice-to-have: spinner stays centred inside a fixed-height button */}
-                            {loading ? <PulseLoader color="#fff" size={6} /> : 'Sign In'}
-                        </button>
+                        {/* Submit Button */}
+						<button
+							type="submit"
+							disabled={loading}
+							className="Button violet text-center"
+						>
+							{loading ? (
+								<span className="flex items-center justify-center">
+									<PulseLoader color="currentColor" size={8} />
+								</span>
+							) : (
+								'Sign in'
+							)}
+						</button>
                     </form>
 
                     {/* Divider */}
