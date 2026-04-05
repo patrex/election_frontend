@@ -125,7 +125,7 @@ function Login() {
                     </div>
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                    <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
                         {/* Email field */}
                         <div>
