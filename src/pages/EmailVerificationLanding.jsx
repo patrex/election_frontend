@@ -43,7 +43,7 @@ const EmailVerificationLanding = () => {
           Verify your email to continue...
         </h1>
         <p className="text-slate-600 mb-8">
-          You have not verified your email yet <span className="font-semibold text-slate-800">{userMail}</span>.
+          You need to verify your email to do that! <span className="font-semibold text-slate-800">{userMail}</span>.
           Please check your inbox to activate your account.
         </p>
 
