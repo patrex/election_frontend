@@ -10,7 +10,7 @@ const VerifyEmail = () => {
   useEffect(() => {
     const token = searchParams.get('token');
     axios.get(`${backendurl}/user/auth/verify-email?token=${token}`)
-      .then(() => setStatus('Success! You can now log in.'))
+      .then(() => setStatus('Success! You can access your full profile'))
       .catch(() => setStatus('Verification failed or link expired.'));
   }, [searchParams]);
 

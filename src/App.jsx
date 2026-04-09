@@ -24,6 +24,7 @@ import UpdateCandidate, { updateloader } from './pages/UpdateCandidate';
 import UpdateElection, { updateElectionLoader } from './pages/UpdateElection';
 import ApproveCandidates, { approveCandidatesLoader } from './pages/ApproveCandidates';
 import EmailVerificationLanding from './pages/EmailVerificationLanding';
+import VerifyEmail from './pages/VerifyEmail';
 
 import { ProtectedRoute } from './contexts/AuthContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
 			<Route path="/" element={<Home />} loader={homeLoader} />
 			<Route path="login" element={<Login />} />
 			<Route path="signup" element={<SignUp />} />
+			<Route path="verify-email" element={<VerifyEmail />} />
 			
 			<Route path="/election/:id/results"
 				element={<ElectionResults />}
