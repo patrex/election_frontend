@@ -6,6 +6,7 @@ import './App.css';
 import './dashboard_styles.css'
 import './no_data.css'
 import './results_styles.css'
+import './verifyemail.css'
 
 import Home, { homeLoader } from './pages/Home';
 import Login from './pages/Login';
