@@ -22,7 +22,7 @@ const VerifyEmail = () => {
     }
 
     axios
-      .get(`${backendurl}/user/auth/verify-email`, { params: { token } })
+      .get(`${backendurl}user/auth/verify-email`, { params: { token } })
       .then(() => setStatus(STATUS.SUCCESS))
       .catch(() => setStatus(STATUS.ERROR));
   }, [searchParams]);
