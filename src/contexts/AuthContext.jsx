@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await axios.post(`${backendurl}user/auth/logout`);
+    await axios.post(`${backendurl}user/auth/logout`, {}, { withCredentials: true });
     setUser(null);
   };
 
