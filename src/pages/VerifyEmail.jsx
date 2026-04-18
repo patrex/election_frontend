@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import backendurl from '@/utils/backendurl';
 
@@ -107,8 +107,8 @@ const VerifyEmail = () => {
 
           {status === STATUS.SUCCESS && (
             <div className="ve-actions">
-              <a href="/dashboard" className="ve-btn ve-btn-primary">
-                Go to Dashboard
+              <a href="/login" className="ve-btn ve-btn-primary">
+                Login to continue...
               </a>
             </div>
           )}
