@@ -114,7 +114,7 @@ const Navbar = () => {
 
                 {/* Mobile Menu Panel */}
                 {navOpen && (
-                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-50 bg-white dark:bg-gray-950">
+                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-50 min-h-screen bg-stone-50 dark:bg-gray-950">
                         <div ref={menuRef} className="p-4 space-y-2 h-full flex flex-col">
                             {user && !voter ? (
                                 <>
