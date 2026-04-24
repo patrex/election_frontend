@@ -1223,11 +1223,11 @@ footer {
 	top: 4rem;    /* top-16 (16 * 0.25rem) */
 	bottom: 0;
 	z-index: 1000;
-	height: 200px;
+	min-height: 100%;
 	width: 100%;
 
 	/* Background Colors */
-	background-color: wheat; /* bg-white */
+	background-color: #f8fafc; /* bg-white */
 }
 
 /* Desktop Responsiveness (md:hidden) */

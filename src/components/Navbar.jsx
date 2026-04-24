@@ -54,7 +54,7 @@ const Navbar = () => {
         `${linkBase} ${isActive ? 'bg-violet-600 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-gray-800 hover:text-violet-700'}`;
     
     const mobileLink = ({ isActive }) => 
-       `flex items-center gap-3 w-full px-4 py-4 transition-colors no-underline text-base font-normal
+       `flex items-center gap-3 w-full px-4 py-2 transition-colors no-underline text-base font-normal
         ${isActive 
         ? 'bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-300' 
         : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-900'
