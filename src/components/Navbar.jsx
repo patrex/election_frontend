@@ -54,7 +54,11 @@ const Navbar = () => {
         `${linkBase} ${isActive ? 'bg-violet-600 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-gray-800 hover:text-violet-700'}`;
     
     const mobileLink = ({ isActive }) => 
-        `flex items-center gap-5 w-full py-2 transition-colors ${isActive ? 'bg-violet-300 text-white' : ''}`;
+       `flex items-center gap-3 w-full px-4 py-4 transition-colors no-underline text-base font-normal
+        ${isActive 
+        ? 'bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-300' 
+        : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-900'
+        }`;
 
     return (
         <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
@@ -132,7 +136,7 @@ const Navbar = () => {
                                     </div>
                                 </>
                             ) : (
-                                <div className="my-class">
+                                <div className="my-class flex-col divide-y divide-gray-100 dark:divide-gray-800">
                                     <NavLink to="/login" onClick={closeMenu} className={mobileLink}><LogIn size={20} /> Login</NavLink>
                                     <NavLink to="/signup" onClick={closeMenu} className={mobileLink}><UserPlus size={20} /> Get Started</NavLink>
                                 </div>
