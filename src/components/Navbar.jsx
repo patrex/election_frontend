@@ -109,49 +109,37 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Menu Panel */}
-                {/* Mobile Menu Panel */}
-{navOpen && (
-    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-white dark:bg-gray-950">
-        <div ref={menuRef} className="p-4 space-y-2 h-full flex flex-col">
-            {user && !voter ? (
-                <>
-                    <NavLink to={`/user/${user.id}`} onClick={closeMenu} className={mobileLink}>
-                        <LayoutDashboard size={20} /> Dashboard
-                    </NavLink>
-                    <NavLink to={`/user/${user.id}/create-election`} onClick={closeMenu} className={mobileLink}>
-                        <PlusCircle size={20} /> Create New Election
-                    </NavLink>
-
-                    <div className="mt-auto pb-8 pt-4 border-t border-gray-200 dark:border-gray-800">
-                        <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl p-4">
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Signed in as</p>
-                            <p className="text-sm font-semibold text-gray-900 dark:text-white mb-4 truncate">{user.email}</p>
-                            <button
-                                onClick={handleLogout}
-                                className="w-full flex items-center justify-center gap-2 py-3 bg-red-600 text-white rounded-xl font-bold"
-                            >
-                                <LogOut size={18} /> Logout
-                            </button>
+                {navOpen && (
+                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-1000 bg-gray-300 dark:bg-gray-950">
+                        <div ref={menuRef} className="p-4 space-y-2 h-full flex flex-col">
+                            {user && !voter ? (
+                                <>
+                                    <NavLink to={`/user/${user.id}`} onClick={closeMenu} className={mobileLink}>
+                                        <LayoutDashboard size={20} /> Dashboard
+                                    </NavLink>
+                                    <NavLink to={`/user/${user.id}/create-election`} onClick={closeMenu} className={mobileLink}>
+                                        <PlusCircle size={20} /> Create New Election
+                                    </NavLink>
+                                    
+                                    <div className="mt-auto pb-8 pt-4 border-t border-gray-100 dark:border-gray-900">
+                                        <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-4">
+                                            <p className="text-xs text-gray-400 mb-1">Signed in as</p>
+                                            <p className="text-sm font-semibold text-gray-900 dark:text-white mb-4 truncate">{user.email}</p>
+                                            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-red-600 rounded-xl font-bold">
+                                                <LogOut size={18} /> Logout
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="space-y-3 pt-4">
+                                    <NavLink to="/login" onClick={closeMenu} className={mobileLink}><LogIn size={20} /> Login</NavLink>
+                                    <NavLink to="/signup" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full py-4 bg-violet-600 text-white rounded-2xl font-bold no-underline"><UserPlus size={20} /> Sign Up</NavLink>
+                                </div>
+                            )}
                         </div>
                     </div>
-                </>
-            ) : (
-                <div className="space-y-3 pt-4">
-                    <NavLink to="/login" onClick={closeMenu} className={mobileLink}>
-                        <LogIn size={20} /> Login
-                    </NavLink>
-                    <NavLink
-                        to="/signup"
-                        onClick={closeMenu}
-                        className="flex items-center justify-center gap-2 w-full py-4 bg-violet-600 text-white rounded-2xl font-bold no-underline"
-                    >
-                        <UserPlus size={20} /> Sign Up
-                    </NavLink>
-                </div>
-            )}
-        </div>
-    </div>
-)}
+                )}
             </nav>
         </header>
     );
