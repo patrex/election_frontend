@@ -111,7 +111,7 @@ function CreateElection() {
 			);
 
 			Toast.success('Election created successfully!');
-			navigate(`/user/${params.userId}`);
+			navigate(`/user/${user.id}`);
 		} catch (error) {
 			return Toast.error('Could not create the election');
 		} finally {

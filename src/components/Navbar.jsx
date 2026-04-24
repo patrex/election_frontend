@@ -3,18 +3,19 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X, LayoutDashboard, PlusCircle, LogOut, LogIn, UserPlus, DoorOpen, Vote } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
-const Navbar = ({ user, onLogout }) => {
+const Navbar = () => {
     const [navOpen, setNavOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
     const { voter, setVoter } = useAuth();
+    const { logout, user } = useAuth();
 
     // --- Logic Handlers ---
     const toggleMenu = () => setNavOpen(!navOpen);
     const closeMenu = () => setNavOpen(false);
 
     const handleLogout = () => {
-        onLogout();
+        logout();
         closeMenu();
     };
 
@@ -29,6 +30,7 @@ const Navbar = ({ user, onLogout }) => {
         const handleClickOutside = (e) => {
             if (menuRef.current && !menuRef.current.contains(e.target)) closeMenu();
         };
+        
         const handleEscape = (e) => {
             if (e.key === 'Escape') closeMenu();
         };
@@ -108,7 +110,7 @@ const Navbar = ({ user, onLogout }) => {
 
                 {/* Mobile Menu Panel */}
                 {navOpen && (
-                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-50 bg-white dark:bg-gray-950">
+                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-50 bg-gray-900">
                         <div ref={menuRef} className="p-4 space-y-2 h-full flex flex-col">
                             {user && !voter ? (
                                 <>
@@ -132,7 +134,7 @@ const Navbar = ({ user, onLogout }) => {
                             ) : (
                                 <div className="space-y-3 pt-4">
                                     <NavLink to="/login" onClick={closeMenu} className={mobileLink}><LogIn size={20} /> Login</NavLink>
-                                    <NavLink to="/signup" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full py-4 bg-violet-600 text-white rounded-2xl font-bold no-underline"><UserPlus size={20} /> Get Started</NavLink>
+                                    <NavLink to="/signup" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full py-4 bg-violet-600 text-white rounded-2xl font-bold no-underline"><UserPlus size={20} /> Sign Up</NavLink>
                                 </div>
                             )}
                         </div>
