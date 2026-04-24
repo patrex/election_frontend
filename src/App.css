@@ -1230,12 +1230,6 @@ footer {
 	background-color: #587cc5; /* bg-white */
 }
 
-@media (prefers-color-scheme: dark) {
-  .my-class {
-    background-color: #030712; /* Tailwind's Gray 950 */
-  }
-}
-
 /* Desktop Responsiveness (md:hidden) */
 @media (min-width: 768px) {
   .my-class {
