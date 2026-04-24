@@ -54,7 +54,7 @@ const Navbar = () => {
         `${linkBase} ${isActive ? 'bg-violet-600 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-gray-800 hover:text-violet-700'}`;
     
     const mobileLink = ({ isActive }) => 
-        `flex items-center gap-5 w-full py-4 text-lg font-medium transition-colors ${isActive ? 'bg-violet-600 text-white' : 'text-gray-700 dark:text-gray-200 hover:bg-violet-50 dark:hover:bg-gray-900'}`;
+        `flex items-center gap-5 w-full py-2 transition-colors ${isActive ? 'bg-violet-300 text-white' : ''}`;
 
     return (
         <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
