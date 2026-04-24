@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-import Toast from "@/utils/ToastMsg";
+import NavBar1 from "./NavBar1";
 
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -11,9 +11,7 @@ function Header() {
 
 	return ( 
 		<>	
-			<header>
-				<Navbar />
-			</header>
+			<NavBar1 />
 		</>
 		
 	);

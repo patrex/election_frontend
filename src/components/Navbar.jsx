@@ -110,7 +110,7 @@ const Navbar = () => {
 
                 {/* Mobile Menu Panel */}
                 {navOpen && (
-                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-1000 bg-gray-300 dark:bg-gray-950">
+                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-50 bg-white dark:bg-gray-950">
                         <div ref={menuRef} className="p-4 space-y-2 h-full flex flex-col">
                             {user && !voter ? (
                                 <>
@@ -134,7 +134,7 @@ const Navbar = () => {
                             ) : (
                                 <div className="space-y-3 pt-4">
                                     <NavLink to="/login" onClick={closeMenu} className={mobileLink}><LogIn size={20} /> Login</NavLink>
-                                    <NavLink to="/signup" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full py-4 bg-violet-600 text-white rounded-2xl font-bold no-underline"><UserPlus size={20} /> Sign Up</NavLink>
+                                    <NavLink to="/signup" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full py-4 bg-violet-600 text-white rounded-2xl font-bold no-underline"><UserPlus size={20} /> Get Started</NavLink>
                                 </div>
                             )}
                         </div>
