@@ -1222,7 +1222,7 @@ footer {
 	right: 0;
 	top: 4rem;    /* top-16 (16 * 0.25rem) */
 	bottom: 0;
-	z-index: 50;
+	z-index: 1000;
 
 	/* Background Colors */
 	background-color: #6b7280; /* bg-white */
