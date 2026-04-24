@@ -1223,7 +1223,7 @@ footer {
 	top: 4rem;    /* top-16 (16 * 0.25rem) */
 	bottom: 0;
 	z-index: 1000;
-	min-height: 200px;
+	min-height: 100px;
 	width: 100%;
 
 	/* Background Colors */
