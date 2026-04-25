@@ -8,6 +8,9 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { configureFetcher } from './utils/fetcher';
 import backendUrl from './utils/backendurl.js'
 import Toast from './utils/ToastMsg.js'
+import axios from 'axios'
+
+axios.defaults.withCredentials=true;
 
 import { OTPProvider } from './contexts/OTPContext.jsx'
 
