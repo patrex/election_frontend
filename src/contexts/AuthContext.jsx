@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         // Assume your backend has a /me endpoint that returns user data from a cookie/token
-        const req = await axios.get(`${backendurl}user/auth/me`);
+        const req = await axios.get(`${backendurl}user/auth/me`, { withCredentials: true });
         const user = req.data;
         setUser(user);
       } catch (err) {
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await axios.post(`${backendurl}user/auth/logout`);
+    await axios.post(`${backendurl}user/auth/logout`, {}, { withCredentials: true });
     setUser(null);
   };
 
@@ -69,7 +69,6 @@ export const useAuth = () => {
 
 export function ProtectedRoute() {
 	const { user, loading } = useAuth();
-  const navigate = useNavigate();
 
 	if (loading) {
     return (

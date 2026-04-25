@@ -3,18 +3,19 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X, LayoutDashboard, PlusCircle, LogOut, LogIn, UserPlus, DoorOpen, Vote } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
-const Navbar = ({ user, onLogout }) => {
+const Navbar = () => {
     const [navOpen, setNavOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
     const { voter, setVoter } = useAuth();
+    const { logout, user } = useAuth();
 
     // --- Logic Handlers ---
     const toggleMenu = () => setNavOpen(!navOpen);
     const closeMenu = () => setNavOpen(false);
 
     const handleLogout = () => {
-        onLogout();
+        logout();
         closeMenu();
     };
 
@@ -29,6 +30,7 @@ const Navbar = ({ user, onLogout }) => {
         const handleClickOutside = (e) => {
             if (menuRef.current && !menuRef.current.contains(e.target)) closeMenu();
         };
+        
         const handleEscape = (e) => {
             if (e.key === 'Escape') closeMenu();
         };
@@ -52,10 +54,14 @@ const Navbar = ({ user, onLogout }) => {
         `${linkBase} ${isActive ? 'bg-violet-600 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-gray-800 hover:text-violet-700'}`;
     
     const mobileLink = ({ isActive }) => 
-        `flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-all no-underline ${isActive ? 'bg-violet-600 text-white' : 'text-gray-700 dark:text-gray-200 hover:bg-violet-50 dark:hover:bg-gray-900'}`;
+       `flex items-center gap-3 w-full px-4 py-4 transition-colors no-underline text-base font-normal
+        ${isActive 
+            ? 'bg-violet-50/80 text-violet-900 backdrop-blur-md' // Active state with blur
+            : 'text-stone-600 hover:bg-stone-200/40 backdrop-blur-sm' // Subtle blur for inactive
+        }`;
 
     return (
-        <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 divide-y">
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     
@@ -108,7 +114,7 @@ const Navbar = ({ user, onLogout }) => {
 
                 {/* Mobile Menu Panel */}
                 {navOpen && (
-                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-50 bg-white dark:bg-gray-950">
+                    <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-50 min-h-screen bg-stone-50 dark:bg-gray-950">
                         <div ref={menuRef} className="p-4 space-y-2 h-full flex flex-col">
                             {user && !voter ? (
                                 <>
@@ -130,9 +136,9 @@ const Navbar = ({ user, onLogout }) => {
                                     </div>
                                 </>
                             ) : (
-                                <div className="space-y-3 pt-4">
+                                <div className="flex-col divide-y divide-gray-100 dark:divide-gray-800">
                                     <NavLink to="/login" onClick={closeMenu} className={mobileLink}><LogIn size={20} /> Login</NavLink>
-                                    <NavLink to="/signup" onClick={closeMenu} className="flex items-center justify-center gap-2 w-full py-4 bg-violet-600 text-white rounded-2xl font-bold no-underline"><UserPlus size={20} /> Get Started</NavLink>
+                                    <NavLink to="/signup" onClick={closeMenu} className={mobileLink}><UserPlus size={20} /> Get Started</NavLink>
                                 </div>
                             )}
                         </div>

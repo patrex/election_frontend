@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+.ve-root {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f0f11;
+    font-family: 'DM Sans', sans-serif;
+    padding: 1rem;
+}
+
+.ve-card {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .03), 0 24px 64px rgba(0, 0, 0, .5);
+    animation: ve-rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes ve-rise {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ve-icon-wrap {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .04);
+}
+
+.ve-icon-wrap svg {
+    width: 48px;
+    height: 48px;
+}
+
+/* Spinner */
+.ve-spinner {
+    stroke: #6366f1;
+    animation: ve-rotate 1s linear infinite;
+}
+
+@keyframes ve-rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.ve-spinner circle {
+    stroke-dasharray: 80 100;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+    animation: ve-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes ve-dash {
+    0% {
+        stroke-dasharray: 1 100;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 70 100;
+        stroke-dashoffset: -25;
+    }
+
+    100% {
+        stroke-dasharray: 1 100;
+        stroke-dashoffset: -100;
+    }
+}
+
+/* Check draw */
+.ve-check {
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: ve-draw .4s .15s ease forwards;
+}
+
+@keyframes ve-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Cross draw */
+.ve-cross {
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: ve-draw .4s .15s ease forwards;
+}
+
+.ve-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fafafa;
+    margin: 0 0 .625rem;
+    letter-spacing: -.01em;
+}
+
+.ve-message {
+    font-size: .9375rem;
+    line-height: 1.6;
+    color: #71717a;
+    margin: 0 0 1.75rem;
+}
+
+.ve-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: ve-pulse 1.2s ease-in-out infinite;
+}
+
+.ve-dot:nth-child(2) {
+    animation-delay: .2s;
+}
+
+.ve-dot:nth-child(3) {
+    animation-delay: .4s;
+}
+
+@keyframes ve-pulse {
+
+    0%,
+    100% {
+        opacity: .3;
+        transform: scale(.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+.ve-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: .625rem 1.375rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: .9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+    text-decoration: none;
+    border: none;
+}
+
+.ve-btn:active {
+    transform: scale(.97);
+}
+
+.ve-btn-primary {
+    background: #6366f1;
+    color: #fff;
+}
+
+.ve-btn-primary:hover {
+    opacity: .88;
+}
+
+.ve-btn-ghost {
+    background: transparent;
+    border: 1px solid #3f3f46;
+    color: #a1a1aa;
+}
+
+.ve-btn-ghost:hover {
+    border-color: #52525b;
+    color: #d4d4d8;
+}
+
+.ve-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.ve-rule {
+    border: none;
+    border-top: 1px solid #27272a;
+    margin: 1.5rem 0 1.25rem;
+}
+
+.ve-footer {
+    font-size: .8125rem;
+    color: #52525b;
+}
+
+.ve-footer a {
+    color: #71717a;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.ve-footer a:hover {
+    color: #a1a1aa;
+}

@@ -54,7 +54,7 @@ function Login() {
 
     // Redirect already-authenticated users immediately
     useEffect(() => {
-        if (user) navigate(`/user/${user.uid}`);
+        if (user) navigate(`/user/${user.id}`);
     }, [user, navigate]);
 
     const handleGoogleSignIn = async () => {

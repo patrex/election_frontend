@@ -1216,6 +1216,27 @@ footer {
 	margin-top: auto;
 }
 
+.my-class {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 4rem;    /* top-16 (16 * 0.25rem) */
+	bottom: 0;
+	z-index: 1000;
+	min-height: 100%;
+	width: 100%;
+
+	/* Background Colors */
+	background-color: #f8fafc; /* bg-white */
+}
+
+/* Desktop Responsiveness (md:hidden) */
+@media (min-width: 768px) {
+  .my-class {
+    display: none;
+  }
+}
+
 @keyframes overlayShow {
 	from {
 		opacity: 0;
