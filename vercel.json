@@ -1,7 +1,7 @@
 {
 	"rewrites": [
 		{"source": "/(.*)", "destination": "/index.html"},
-		{"source": "/:path*", "destination": "https://election-backend-kduj.onrender.com/:path*"},
+		{"source": "/:path*", "destination": "https://election-backend-kduj.onrender.com/:path*"}
 	]
 }
       
