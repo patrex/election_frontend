@@ -11,6 +11,7 @@ import Toast from './utils/ToastMsg.js'
 import axios from 'axios'
 
 axios.defaults.withCredentials=true;
+axios.defaults.baseURL='/';
 
 import { OTPProvider } from './contexts/OTPContext.jsx'
 

@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const req  = await axios.post(`${backendurl}user/auth/login`, credentials);
+      const req  = await axios.post(`/user/auth/login`, credentials);
       const user = req.data;
       setUser(user);
       return user;
