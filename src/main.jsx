@@ -17,7 +17,7 @@ import { OTPProvider } from './contexts/OTPContext.jsx'
 
 // Configure once at app startup
 configureFetcher({
-	baseURL: '/', // or process.env.REACT_APP_BACKEND_URL
+	baseURL: '/api', // or process.env.REACT_APP_BACKEND_URL
 	onAuthError: (error) => {
 	    if (error.code === 'AUTH_REQUIRED') {
 		Toast.error('Please log in to continue');
