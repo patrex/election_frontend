@@ -9,9 +9,9 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 export async function approveCandidatesLoader({ params }) {
 	try {
 		const [p, c, e] = await Promise.all([
-			fetcher.get(`election/${params.id}/positions`),
-			fetcher.get(`election/${params.id}/candidates/addedself`),
-			fetcher.get(`election/${params.id}`)
+			fetcher.get(`api/election/${params.id}/positions`),
+			fetcher.get(`api/election/${params.id}/candidates/addedself`),
+			fetcher.get(`api/election/${params.id}`)
 		])
 
 		return { p, c, e}
@@ -104,7 +104,7 @@ const ApproveCandidates = () => {
 	async function approveCandidate() {
 		try {
 			const approved = await fetcher.auth.patch(
-				`election/${election._id}/${selectedCandidate._id}/approve`,
+				`api/election/${election._id}/${selectedCandidate._id}/approve`,
 				{},
 				user
 			)
@@ -121,7 +121,7 @@ const ApproveCandidates = () => {
 
 	async function removeCandidate() {
 		try {
-			await fetcher.auth.delete(`election/${election._id}/candidate/${selectedCandidate._id}/delete`, user)
+			await fetcher.auth.delete(`api/election/${election._id}/candidate/${selectedCandidate._id}/delete`, user)
 			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
 		} catch (error) {
 			if (error instanceof FetchError) {

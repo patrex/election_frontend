@@ -57,10 +57,6 @@ function Login() {
         if (user) navigate(`/user/${user.id}`);
     }, [user, navigate]);
 
-	useEffect(() => {
-		refreshUser();
-	})
-
     const handleGoogleSignIn = async () => {
         try {
             await signInWithRedirect(authman, provider);
