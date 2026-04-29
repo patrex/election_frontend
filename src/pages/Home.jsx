@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigate, Link } from "react-router-dom";
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
@@ -9,12 +9,25 @@ import OTPStarterPhone from "@/components/OtpStarterPhone";
 import PhoneInput from "@/components/CollectPhoneNumber";
 import { cleanNgPhoneNo, validatePhoneNo } from "@/utils/cleanPhoneNo";
 import isValidEmail from "@/utils/validateEmail";
+import axios_api from "@/utils/axios";
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
 	const electionid = url.searchParams.get("event_id");
 	return electionid;
 }
+
+/**
+ * Determines the current status of the election based on date ranges
+ */
+const getEventStatus = (startDate, endDate) => {
+	const now = new Date();
+	return {
+		isPending: now < startDate,
+		hasEnded: now > endDate,
+		isActive: now >= startDate && now <= endDate
+	};
+};
 
 function Home() {
 	const navigate = useNavigate();
@@ -42,28 +55,16 @@ function Home() {
 	}, [electionFromQueryParams]);
 
 	/**
-	 * Determines the current status of the election based on date ranges
-	 */
-	const getEventStatus = (startDate, endDate) => {
-		const now = new Date();
-		return {
-			isPending: now < startDate,
-			hasEnded: now > endDate,
-			isActive: now >= startDate && now <= endDate
-		};
-	};
-
-	/**
 	 * Main entry point: Fetches election and triggers correct Modal path
 	 */
-	const processElection = async (id) => {
+	const processElection = useCallback(async () => {
 		if (!id?.trim()) return Toast.warning("Please enter a valid election ID");
 
 		setIsLoading(true);
 		try {
-			const e = await fetcher.get(`election/${id}`);
+			const e = await axios_api.get(`election/${id}`);
 			if (!e) throw new Error("No election was found with that ID!");
-			
+
 			setElection(e);
 
 			const { isPending, hasEnded } = getEventStatus(new Date(e.startDate), new Date(e.endDate));
@@ -79,12 +80,12 @@ function Home() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [electionFromQueryParams])
 
 	/**
 	 * Validates the voter against the fetched election's voter list
 	 */
-	const checkAndProcessVoter = async (participantId) => {
+	const checkAndProcessVoter = useCallback(async (participantId) => {
 		setRegVoterModal(false);
 		setCheckVoterModal(false);
 		setIsLoading(true);
@@ -93,11 +94,12 @@ function Home() {
 		participant.current = participantId;
 
 		try {
-			const voterList = await fetcher.get(`election/${election._id}/voterlist`);
+			const voterList = await axios_api.get(`election/${election._id}/voterlist`);
 			const isPhoneType = election.userAuthType === 'phone';
-			const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
 
 			if (!voterList) throw new Error("There was a problem fetching the list of voters");
+			
+			const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
 
 			// 1. Path for Existing Voters
 			if (existingVoters.includes(participant.current)) {
@@ -121,22 +123,22 @@ function Home() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [participant, election])
 
 	/**
 	 * Finalizes registration and navigates to ballot
 	 */
-	const addVoterToDatabase = async () => {
-		let electionAuth = election.userAuthType;
-		let currentVoter = participant.current;
+	const addVoterToDatabase = useCallback(async () => {
+		const electionAuth = election.userAuthType;
+		const currentVoter = participant.current;
 		let newVoter = '';
-
+	
 		if (!currentVoter) 
 			return Toast.error(`You need to enter ${electionAuth === 'phone' ? 'a phone number' : 'an email'} to continue`);
-
+	
 		if (electionAuth === 'phone') {
 			let temp = cleanNgPhoneNo(currentVoter);
-
+	
 			if (!validatePhoneNo(temp)) 
 				return Toast.error("Phone number not valid")
 			
@@ -144,26 +146,27 @@ function Home() {
 		} else if (electionAuth === 'email') {
 			if(!isValidEmail(currentVoter)) 
 				return Toast.error("Email not properly formatted");
-
-			newVoter =  currentVoter;
+	
+			newVoter = currentVoter;
 		}
-
+	
 		try {
-			await fetcher.post(`election/${election._id}/addvoter/participant`, {
+			await axios_api.post(`election/${election._id}/addvoter/participant`, {
 				participant: newVoter,
 				electionId: election._id
 			});
-
+	
 			setVoter(newVoter);
 			Toast.success('Verification successful!');
-
+	
 			setTimeout(() => {
-				navigate(`/election/${election._id}/${b64encode(participant.current)}`);
+				navigate(`/election/${election._id}/${b64encode(newVoter)}`);
 			}, 500);
 		} catch (error) {
 			Toast.error('Failed to register voter');
 		}
-	};
+
+	}, [election, participant])
 
 	return (
 		<>
