@@ -11,21 +11,21 @@ export default defineConfig({
 		alias: {
 	  		"@": path.resolve(__dirname, "./src"),
 		},
-      	},
-  	server: {
-		proxy: {
-			'/elections': {
-				target: `${backendUrl}`,
-				secure: false,
-			},
-			'/election': {
-				target: `${backendUrl}`,
-				secure: false,
-			},
-			'/user': {
-				target: `${backendUrl}`,
-				secure: false,
-			},
-		}
-  	},
+    },
+  	// server: {
+	// 	proxy: {
+	// 		'/elections': {
+	// 			target: `${backendUrl}`,
+	// 			secure: false,
+	// 		},
+	// 		'/election': {
+	// 			target: `${backendUrl}`,
+	// 			secure: false,
+	// 		},
+	// 		'/user': {
+	// 			target: `${backendUrl}`,
+	// 			secure: false,
+	// 		},
+	// 	}
+  	// },
 })

@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://election-backend-kduj.onrender.com/:path*"
+      "destination": "https://election-backend-kduj.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
