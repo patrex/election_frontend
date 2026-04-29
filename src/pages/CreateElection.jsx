@@ -8,10 +8,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
+import axios_api from "@/utils/axios";
+
 import { getLocalTimezoneDate } from "@/utils/setLocalTime";
 
 function CreateElection() {
-	const params = useParams();
 	const navigate = useNavigate();
 	const { user } = useAuth();
 	const [loading, setLoading] = useState(false);
@@ -101,13 +102,10 @@ function CreateElection() {
 		setLoading(true);
 
 		try {
-			await fetcher.auth.post(
-				'elections',
-				{
+			await axios_api.post('elections', {
 					...formData,
 					host_name: window.location.origin
 				},
-				user
 			);
 
 			Toast.success('Election created successfully!');

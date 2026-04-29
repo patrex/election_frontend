@@ -7,18 +7,23 @@ import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
 export async function approveCandidatesLoader({ params }) {
-	try {
-		const [p, c, e] = await Promise.all([
-			fetcher.get(`/election/${params.id}/positions`),
-			fetcher.get(`api/election/${params.id}/candidates/addedself`),
-			fetcher.get(`api/election/${params.id}`)
-		])
+    try {
+        const [positionsRes, candidatesRes, electionRes] = await Promise.all([
+            axios_api.get(`election/${params.id}/positions`), 
+            axios_api.get(`election/${params.id}/candidates/addedself`),
+            axios_api.get(`election/${params.id}`)
+        ]);
 
-		return { p, c, e}
-	} catch (error) {
-		console.error("There was a problem fetching positions");
-		return null;
-	}
+        // Destructure data from the Axios response objects
+        return { 
+            p: positionsRes.data, 
+            c: candidatesRes.data, 
+            e: electionRes.data 
+        };
+    } catch (error) {
+        console.error("There was a problem fetching data for candidate approval:", error.message);
+        return null;
+    }
 }
 
 
@@ -66,7 +71,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, action, candidate }) =>
 };
 
 const ApproveCandidates = () => {
-	const { p, c, e } = useLoaderData();
+	const { positionsRes, candidatesRes, electionRes } = useLoaderData();
 
 	const [positions] = useState(p || {});
 	const [candidates, setCandidates] = useState(c || {});

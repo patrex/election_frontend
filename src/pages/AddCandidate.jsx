@@ -12,19 +12,20 @@ import { PulseLoader } from 'react-spinners';
 import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
+import axios_api from '@/utils/axios';
 
 export async function addCandidateLoader({ params }) {
-	try {
-		const [positions, election] = await Promise.all([
-			fetcher.get(`api/election/${params.id}/positions`),
-			fetcher.get(`api/election/${params.id}`)
-		])
+    try {
+        const [positionsRes, electionRes] = await Promise.all([
+            axios_api.get(`election/${params.id}/positions`),
+            axios_api.get(`election/${params.id}`)
+        ]);
 
-		return [positions, election];
-	} catch (error) {
-		console.error("There was a problem fetching positions");
-		return null;
-	}
+        return [positionsRes.data, electionRes.data];
+    } catch (error) {
+        console.error("Fetch error:", error.response?.data || error.message);
+        return null;
+    }
 }
 
 function AddCandidate() {
