@@ -6,14 +6,17 @@ import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import { configureFetcher } from './utils/fetcher';
-import backendUrl from './utils/backendurl.js'
 import Toast from './utils/ToastMsg.js'
+import axios from 'axios'
+
+axios.defaults.withCredentials=true;
+axios.defaults.baseURL='/api';
 
 import { OTPProvider } from './contexts/OTPContext.jsx'
 
 // Configure once at app startup
 configureFetcher({
-	baseURL: backendUrl, // or process.env.REACT_APP_BACKEND_URL
+	baseURL: '/api', // or process.env.REACT_APP_BACKEND_URL
 	onAuthError: (error) => {
 	    if (error.code === 'AUTH_REQUIRED') {
 		Toast.error('Please log in to continue');

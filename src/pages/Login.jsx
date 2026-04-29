@@ -36,7 +36,7 @@ const schema = z.object({
 
 function Login() {
     const navigate = useNavigate();
-    const { login, user } = useAuth();
+    const { login, user, refreshUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
