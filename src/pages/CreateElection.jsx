@@ -2,7 +2,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Toast from "@/utils/ToastMsg";
 import { useAuth } from "@/contexts/AuthContext";
 import { PulseLoader } from 'react-spinners';
-import { fetcher, FetchError } from "@/utils/fetcher"
 import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -94,7 +93,7 @@ function CreateElection() {
 			userAuthType: '',
 			description: '',
 			rules: '',
-			addCandidatesBy: ''
+			addCandidatesBy: '',
 		}
 	});
 
@@ -104,15 +103,14 @@ function CreateElection() {
 		try {
 			await axios_api.post('elections', {
 					...formData,
-					host_name: window.location.origin
+					host_name: window.location.origin,
+					owner: user?.id
 				},
 			);
 
 			Toast.success('Election created successfully!');
 			navigate(`/user/${user.id}`);
 		} catch (error) {
-			console.log(error);
-			
 			return Toast.error('Could not create the election');
 		} finally {
 			setLoading(false);
