@@ -1,6 +1,4 @@
-import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements, Navigate, Outlet } from 'react-router-dom';
-import { createContext, useEffect, useState, useContext } from 'react';
-import backendurl from './utils/backendurl';
+import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements } from 'react-router-dom';
 
 import './App.css';
 import './dashboard_styles.css'
@@ -31,12 +29,9 @@ import { ProtectedRoute } from './contexts/AuthContext';
 import { AuthProvider } from './contexts/AuthContext';
 
 import Error from './pages/Error';
-import { onAuthStateChanged } from 'firebase/auth';
 
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { authman } from './utils/fireloader';
-
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
