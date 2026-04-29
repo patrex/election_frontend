@@ -12,6 +12,7 @@ import { PulseLoader } from 'react-spinners';
 import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 
+
 export async function addCandidateLoader({ params }) {
 	try {
 		const [positions, election] = await Promise.all([

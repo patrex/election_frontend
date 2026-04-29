@@ -18,7 +18,7 @@ class FetchError extends Error {
 const defaultConfig = {
 	baseURL: '/api',
 	cors: 'cors', // 'cors', 'no-cors', 'same-origin'
-	credentials: 'same-origin', // 'omit', 'same-origin', 'include'
+	credentials: 'include', // 'omit', 'same-origin', 'include'
 	onAuthError: null,
 	onNetworkError: null,
 };

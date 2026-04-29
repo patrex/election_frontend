@@ -6,7 +6,6 @@ import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import { configureFetcher } from './utils/fetcher';
-import backendUrl from './utils/backendurl.js'
 import Toast from './utils/ToastMsg.js'
 import axios from 'axios'
 

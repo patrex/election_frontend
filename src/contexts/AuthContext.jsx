@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, Navigate, Outlet } from 'react-router-dom';
+import axios_api from '@/utils/axios';
 
 
 const AuthContext = createContext(null);
@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         // Assume your backend has a /me endpoint that returns user data from a cookie/token
-        const req = await axios.get(`/user/auth/me`, { withCredentials: true });
+        const req = await axios_api.get(`user/auth/me`);
         const user = req.data;
         setUser(user);
       } catch (err) {
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const req  = await axios.post(`/user/auth/login`, credentials);
+      const req  = await axios_api.post(`user/auth/login`, credentials);
       const user = req.data;
       setUser(user);
       return user;
@@ -40,13 +40,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await axios.post(`/user/auth/logout`, {}, { withCredentials: true });
+    await axios_api.post(`user/auth/logout`);
     setUser(null);
   };
 
   // Function to refresh user data (useful after email verification)
   const refreshUser = async () => {
-    const { data } = await axios.get(`/user/auth/me`);
+    const { data } = await axios_api.get(`user/auth/me`);
     setUser(data.user);
   };
 
