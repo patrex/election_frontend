@@ -10,6 +10,7 @@ import PhoneInput from "@/components/CollectPhoneNumber";
 import { cleanNgPhoneNo, validatePhoneNo } from "@/utils/cleanPhoneNo";
 import isValidEmail from "@/utils/validateEmail";
 import axios_api from "@/utils/axios";
+import ElectionOptions from "@/components/ElectionOptionsForUsers";
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
@@ -242,7 +243,7 @@ function Home() {
 				))}
 
 				{/* Election State Modals (Ended/Not Started) */}
-				{(electionEndedModal || openOptionsModal) && (
+				{(electionEndedModal || openOptionsModal) && <ElectionOptions election={election} /> (
 					<div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
 						<div className="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
 							<div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 relative">
