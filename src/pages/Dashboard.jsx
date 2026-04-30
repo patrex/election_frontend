@@ -8,11 +8,13 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 import NoData from '@/components/NoData';
 
 import { fetcher } from '@/utils/fetcher';
+import axios_api from '@/utils/axios';
 
 export async function dashboardLoader({ params }) {
 	try {
 		// load elections for this user from database
-		return await fetcher.get(`elections/${params.userId}`)	
+		const elections = await axios_api.get(`elections/${params.userId}`)
+		return elections.data;
 	} catch (error) {
 		return null;
 	}
