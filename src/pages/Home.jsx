@@ -57,7 +57,7 @@ function Home() {
 	/**
 	 * Main entry point: Fetches election and triggers correct Modal path
 	 */
-	const processElection = useCallback(async () => {
+	const processElection = useCallback(async (id) => {
 		if (!id?.trim()) return Toast.warning("Please enter a valid election ID");
 
 		setIsLoading(true);
