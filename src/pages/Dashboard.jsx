@@ -14,7 +14,6 @@ export async function dashboardLoader({ params }) {
 		// load elections for this user from database
 		return await fetcher.get(`elections/${params.userId}`)	
 	} catch (error) {
-		console.error('There was an error', error);
 		return null;
 	}
 }
