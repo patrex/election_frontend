@@ -38,3 +38,5 @@ const ElectionInfo = () => {
 
     </div>
 }
+
+export default ElectionInfo;
