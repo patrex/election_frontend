@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 
 /**
  * Determines the current status of the election based on date ranges
