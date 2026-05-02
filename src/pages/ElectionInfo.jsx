@@ -16,18 +16,17 @@ const getEventStatus = (startDate, endDate) => {
 const ElectionInfo = () => {
     const { state } = useLocation();
 
-    const { title, 
-        startDate,
-        endDate,
-        type,
-        desc,
-        rules,
-        userAuthType,
-        _id
+    
+    const { title, startDate, endDate,
+        type, desc, rules,
+        userAuthType, addCandidatesBy,
+        _id,
     } = state.election;
 
+    const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate)
+
     return <div>
-        <h2>We found your election!</h2>
+        <h2>We found your election!</h2> 
 
         <h3>{title}</h3>
         <h4>Starting at: <span>{startDate}</span></h4>
