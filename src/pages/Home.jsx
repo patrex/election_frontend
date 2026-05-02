@@ -62,7 +62,7 @@ function Home() {
 			const { isPending, hasEnded } = getEventStatus(new Date(electionFetched.startDate), new Date(electionFetched.endDate));
 
 			// Logic Branching
-			if (hasEnded) return setElectionEndedModal(true);
+			if (hasEnded) return;
 
 			return navigate(`/election/${electionFetched._id}/info`, { state: { election: electionFetched } });
 			// if (isPending) return setOpenOptionsModal(true);
