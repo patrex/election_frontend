@@ -14,7 +14,8 @@ const getEventStatus = (startDate, endDate) => {
 };
 
 const ElectionInfo = () => {
-    const { election } = useLocation();
+    const { state } = useLocation();
+
     const { title, 
         startDate,
         endDate,
@@ -23,7 +24,7 @@ const ElectionInfo = () => {
         rules,
         userAuthType,
         _id
-    } = election;
+    } = state.election;
 
     return <div>
         <h2>We found your election!</h2>
