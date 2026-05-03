@@ -6,6 +6,7 @@ import Toast from '@/utils/ToastMsg';
 import { cleanNgPhoneNo, validatePhoneNo } from "@/utils/cleanPhoneNo";
 import isValidEmail from "@/utils/validateEmail";
 import axios_api from "@/utils/axios";
+import ElectionEndedModal from "@/components/ElectionEndedModal";
 
 
 export async function homeLoader({ request }) {
@@ -62,13 +63,9 @@ function Home() {
 			const { isPending, hasEnded } = getEventStatus(new Date(electionFetched.startDate), new Date(electionFetched.endDate));
 
 			// Logic Branching
-			if (hasEnded) return;
+			if (hasEnded) return <ElectionEndedModal />
 
-			return navigate(`/election/${electionFetched._id}/info`, { state: { election: electionFetched } });
-			// if (isPending) return setOpenOptionsModal(true);
-
-			// // Default: Election is active
-			// setCheckVoterModal(true);
+			navigate(`/election/${electionFetched._id}/info`, { state: { election: electionFetched } });
 		} catch (error) {
 			Toast.error(error.message);
 		} finally {
