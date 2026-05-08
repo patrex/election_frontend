@@ -157,7 +157,7 @@ function Home() {
 			Toast.error('Failed to register voter');
 		}
 
-	}, [election, participant])
+	}, [election, participant]);
 
 	return (
 		<>

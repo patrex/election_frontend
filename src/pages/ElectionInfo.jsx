@@ -17,51 +17,77 @@ const getEventStatus = (startDate, endDate) => {
 };
 
 const ElectionInfo = () => {
-    const { state } = useLocation();
-    
-    const { title, startDate, endDate,
-        type, desc, rules,
-        userAuthType, addCandidatesBy,
-        _id,
-    } = state.election;
+	const { state } = useLocation();
 
-    const [showSelfAdd, setShowSelfAdd] = useState(false)
-    const [showEmailModal, setShowEmailModal] = useState(false)
+	const { title, startDate, endDate,
+		type, desc, rules,
+		userAuthType, addCandidatesBy,
+		_id,
+	} = state.election;
 
-    const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate)
-    const _0 = isPending && addCandidatesBy === 'Candidates Will Add Themselves';
+	const [showSelfAdd, setShowSelfAdd] = useState(false);
+	const [showEmailModal, setShowEmailModal] = useState(false);
+	const [showPhoneModal, setShowPhoneModal] = useState(false);
 
-    return <div>
-        <h2>We found your election!</h2> 
+	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate)
+	const _0 = isPending && addCandidatesBy === 'Candidates Will Add Themselves';
 
-        <h3>{title}</h3>
-        <h4>Starting at: <span>{startDate}</span></h4>
-        <h4>Ending at: <span>{endDate}</span></h4>
-        <h4>This is <span>{type === 'Open'? 'an' : 'a'} {type} election:</span></h4>
-        <h4>Description: </h4>
-        <p>{desc}</p>
-        <h4>Rules:</h4>
-        <p>{rules}</p>
+	return <div>
+		<h2>We found your election!</h2>
 
-        {/* Actions for users */}
-        <div>
-            { isPending &&  
-                <button className="Button violet hover:bg-indigo-700" 
-                onClick={userAuthType == 'phone' ? <PhoneInput /> : <CollectEmailModal 
-                    isOpen={showEmailModal} 
-                    onClose={setShowEmailModal(false)}
-                    onSubmit={} />}>Register to Vote
-                </button> 
-            }
+		<h3>{title}</h3>
+		<h4>Starting at: <span>{startDate}</span></h4>
+		<h4>Ending at: <span>{endDate}</span></h4>
+		<h4>This is <span>{type === 'Open' ? 'an' : 'a'} {type} election:</span></h4>
+		<h4>Description: </h4>
+		<p>{desc}</p>
+		<h4>Rules:</h4>
+		<p>{rules}</p>
 
-            { _0 && 
-                <button className="Button violet hover:bg-indigo-700" 
-                onClick={<CandidatesSelfAdd election={state.election} onClose={setShowSelfAdd(false)}/>}>Become a Candidate</button> 
-            }
-        </div>								
-        
+		{/* Actions for users */}
+		<div>
+			{isPending && (
+				<>
+					<button
+						className="Button violet hover:bg-indigo-700"
+						onClick={() => userAuthType === 'phone' ? setShowPhoneModal(true) : setShowEmailModal(true)}
+					>
+						Register to Vote
+					</button>
 
-    </div>
+					{showPhoneModal && (
+						<PhoneInput onClose={() => setShowPhoneModal(false)} />
+					)}
+
+					{showEmailModal && (
+						<CollectEmailModal
+							isOpen={showEmailModal}
+							onClose={() => setShowEmailModal(false)}
+							onSubmit={handleVoterRegistration}
+						/>
+					)}
+				</>
+			)}
+
+			{_0 &&
+				<>
+					<button
+						className="Button violet hover:bg-indigo-700"
+						onClick={() => setShowSelfAdd(true)}
+					>
+						Become a Candidate
+					</button>
+
+					{showSelfAdd && (
+						<CandidatesSelfAdd
+							election={state.election}
+							onClose={() => setShowSelfAdd(false)}
+						/>
+					)}
+				</>
+			}
+		</div>
+	</div>
 }
 
 export default ElectionInfo;
