@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import CandidatesSelfAdd from "@/components/CandidatesSelfAdd";
 import CollectEmailModal from "@/components/CollectEmailModal";
 import PhoneInput from "@/components/CollectPhoneNumber";
+import axios_api from "@/utils/axios";
+import procVoter from "@/utils/procVoter";
 
 /**
  * Determines the current status of the election based on date ranges
@@ -26,11 +28,13 @@ const ElectionInfo = () => {
 	} = state.election;
 
 	const [showSelfAdd, setShowSelfAdd] = useState(false);
-	const [showEmailModal, setShowEmailModal] = useState(false);
-	const [showPhoneModal, setShowPhoneModal] = useState(false);
+	
 
 	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate)
 	const _0 = isPending && addCandidatesBy === 'Candidates Will Add Themselves';
+
+	// *********************************************
+	
 
 	return <div>
 		<h2>We found your election!</h2>
@@ -48,24 +52,12 @@ const ElectionInfo = () => {
 		<div>
 			{isPending && (
 				<>
-					<button
+					<Link
+						to='/election/regVoter'
 						className="Button violet hover:bg-indigo-700"
-						onClick={() => userAuthType === 'phone' ? setShowPhoneModal(true) : setShowEmailModal(true)}
 					>
 						Register to Vote
-					</button>
-
-					{showPhoneModal && (
-						<PhoneInput onClose={() => setShowPhoneModal(false)} />
-					)}
-
-					{showEmailModal && (
-						<CollectEmailModal
-							isOpen={showEmailModal}
-							onClose={() => setShowEmailModal(false)}
-							onSubmit={handleVoterRegistration}
-						/>
-					)}
+					</Link>
 				</>
 			)}
 

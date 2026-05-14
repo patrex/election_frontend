@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Loader2, Phone, AlertTriangle } from 'lucide-react';
 
-const PhoneInput = ({ action }) => {
+const PhoneInput = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('')
@@ -32,7 +32,6 @@ const PhoneInput = ({ action }) => {
             <div className="w-full flex items-center justify-center">
                 <button
                     onClick={() => {
-                        action(phoneNumber)
                         setIsLoading(true)
                     }}
                     disabled={isLoading || phoneNumber.length < 11}
