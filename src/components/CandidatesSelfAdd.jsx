@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+
 const CandidatesSelfAdd = ({ election, onClose }) => {
     return (
         <div className="space-y-6">
