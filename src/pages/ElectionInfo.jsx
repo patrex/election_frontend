@@ -1,125 +1,216 @@
-import { useState, useEffect } from "react";
-import { useLocation, Link } from 'react-router-dom';
-
-import checkReggedVoter from "@/utils/procVoter";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote } from "lucide-react";
 
 import CandidatesSelfAdd from "@/components/CandidatesSelfAdd";
-
 import PhoneInputModal from "@/components/CollectPhoneNumber";
 import CollectEmailModal from "@/components/CollectEmailModal";
 
-
 /**
- * Determines the current status of the election based on date ranges
+ * Uses local date/time for comparison — new Date() is always local,
+ * and the startDate/endDate strings are parsed into local Date objects.
  */
 const getEventStatus = (startDate, endDate) => {
 	const now = new Date();
+	const start = new Date(startDate);
+	const end = new Date(endDate);
 	return {
-		isPending: now < startDate,
-		hasEnded: now > endDate,
-		isActive: now >= startDate && now <= endDate
+		isPending: now < start,
+		hasEnded: now > end,
+		isActive: now >= start && now <= end,
 	};
 };
 
+const formatDate = (dateStr) =>
+	new Date(dateStr).toLocaleString(undefined, {
+		weekday: "short",
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+	});
+
+const StatusBadge = ({ isPending, isActive, hasEnded }) => {
+	if (isActive) return (
+		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+			<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+			Live Now
+		</span>
+	);
+	if (isPending) return (
+		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+			<span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+			Upcoming
+		</span>
+	);
+	return (
+		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+			<span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
+			Ended
+		</span>
+	);
+};
+
+const InfoRow = ({ icon: Icon, label, value }) => (
+	<div className="flex items-start gap-3 py-3 border-b border-gray-100 dark:border-gray-800 last:border-0">
+		<span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex-shrink-0">
+			<Icon className="h-3.5 w-3.5 text-indigo-500" />
+		</span>
+		<div className="min-w-0">
+			<p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-0.5">{label}</p>
+			<p className="text-sm text-gray-800 dark:text-gray-200">{value}</p>
+		</div>
+	</div>
+);
+
 const ElectionInfo = () => {
 	const { state } = useLocation();
+	const navigate = useNavigate();
 
-	const { title, startDate, endDate,
+	const {
+		title, startDate, endDate,
 		type, desc, rules,
 		userAuthType, addCandidatesBy,
 		_id,
 	} = state.election;
 
-	const [showSelfAdd, setShowSelfAdd] = useState(false); 
+	const [showSelfAdd, setShowSelfAdd] = useState(false);
 	const [showEmailModal, setShowEmailModal] = useState(false);
 	const [showPhoneModal, setShowPhoneModal] = useState(false);
 
-	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate)
-	const _0 = isPending && addCandidatesBy === 'Candidates Will Add Themselves';
+	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate);
+	const canSelfAddCandidates = isPending && addCandidatesBy === "Candidates Will Add Themselves";
 
-	// *********************************************
+	const handleRegisterClick = () => {
+		userAuthType === "phone" ? setShowPhoneModal(true) : setShowEmailModal(true);
+	};
+
 	async function checkReggedVoter(voter) {
-		let flag = false;
+		const voterList = await axios_api.get(`election/${_id}/voterlist`);
+		const listOfVoters = voterList.data;
 
-		try {
-			const voterList = await axios_api.get(`election/${_id}/voterlist`);
-			const listOfVoters = voterList.data;
+		const existingVoters = userAuthType === "phone"
+			? listOfVoters.map((v) => v.phoneNo)
+			: listOfVoters.map((v) => v.email);
 
-			const existingVoters = election.userAuthType === 'phone'
-				? listOfVoters.map(v => v.phoneNo)
-				: listOfVoters.map(v => v.email);
-
-			// Existing voter - redirect to ballot
-			if (existingVoters.includes(voter)) 
-				navigate(`/election/${election._id}/${voter}`);
-
-			// New/Unadded voter in closed election - reject
-			if (election.type === 'Closed') {
-				Toast.warning(
-					`This is a closed election. Your ${election.userAuthType === 'email' ? 'email' : 'phone number'} 
-					must be pre-registered by the election administrator.`
-				);
-				return;
-			}
-
-			return flag
-		} catch (error) {
-			console.error('Error checking voter:', error);
-		} finally {
-
+		if (existingVoters.includes(voter)) {
+			navigate(`/election/${_id}/${voter}`);
+			return;
 		}
-}
 
-	return <div>
-		<h2>We found your election!</h2>
+		if (type === "Closed") {
+			throw new Error(
+				`This is a closed election. Your ${userAuthType === "email" ? "email" : "phone number"} must be pre-registered by the election administrator.`
+			);
+		}
+	}
 
-		<h3>{title}</h3>
-		<h4>Starting at: <span>{startDate}</span></h4>
-		<h4>Ending at: <span>{endDate}</span></h4>
-		<h4>This is <span>{type === 'Open' ? 'an' : 'a'} {type} election:</span></h4>
-		<h4>Description: </h4>
-		<p>{desc}</p>
-		<h4>Rules:</h4>
-		<p>{rules}</p>
+	return (
+		<div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
+			<div className="max-w-2xl mx-auto space-y-5">
 
-		{/* Actions for users */}
-		<div>
-			{isPending && (
-					<button
-						onClick={userAuthType == "phone" ? <PhoneInputModal 
-							isOpen={showPhoneModal}
-							onClose={() => setShowPhoneModal(false)} 
-							onSubmit={checkReggedVoter}/> 
-						: <CollectEmailModal 
-							isOpen={showEmailModal}	
-							onClose={() => setShowEmailModal(false)}
-							onSubmit={checkReggedVoter}/> 
-						}
-						className="Button violet hover:bg-indigo-700"
-					>
-						Register to Vote
-					</button>
+				{/* Header card */}
+				<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+					<div className="bg-gradient-to-br from-indigo-600 to-indigo-700 px-6 pt-6 pb-10">
+						<p className="text-indigo-200 text-xs font-semibold uppercase tracking-widest mb-2">
+							We found your election
+						</p>
+						<h1 className="text-2xl font-bold text-white leading-snug">{title}</h1>
+						<div className="mt-3 flex items-center gap-2 flex-wrap">
+							<StatusBadge isPending={isPending} isActive={isActive} hasEnded={hasEnded} />
+							<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white">
+								<Shield className="h-3 w-3" />
+								{type}
+							</span>
+						</div>
+					</div>
+
+					{/* Dates strip */}
+					<div className="grid grid-cols-2 divide-x divide-gray-100 dark:divide-gray-800 -mt-4 mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800">
+						<div className="px-4 py-3">
+							<p className="text-xs text-gray-400 flex items-center gap-1 mb-1">
+								<Calendar className="h-3 w-3" /> Starts
+							</p>
+							<p className="text-sm font-medium text-gray-800 dark:text-gray-200">{formatDate(startDate)}</p>
+						</div>
+						<div className="px-4 py-3">
+							<p className="text-xs text-gray-400 flex items-center gap-1 mb-1">
+								<Clock className="h-3 w-3" /> Ends
+							</p>
+							<p className="text-sm font-medium text-gray-800 dark:text-gray-200">{formatDate(endDate)}</p>
+						</div>
+					</div>
+
+					<div className="px-6 py-5 mt-1">
+						<InfoRow icon={FileText} label="Description" value={desc} />
+						<InfoRow icon={ScrollText} label="Rules" value={rules} />
+						<InfoRow
+							icon={Users}
+							label="Authentication"
+							value={userAuthType === "phone" ? "Phone number required" : "Email address required"}
+						/>
+					</div>
+				</div>
+
+				{/* Action card */}
+				{(isPending || canSelfAddCandidates) && (
+					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+						<h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
+							Actions
+						</h2>
+						<div className="space-y-3">
+							{isPending && (
+								<button
+									onClick={handleRegisterClick}
+									className="w-full flex items-center justify-between px-5 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold transition"
+								>
+									<div className="flex items-center gap-3">
+										<Vote className="h-5 w-5" />
+										Register to Vote
+									</div>
+									<ChevronRight className="h-4 w-4 opacity-70" />
+								</button>
+							)}
+
+							{canSelfAddCandidates && (
+								<button
+									onClick={() => setShowSelfAdd(true)}
+									className="w-full flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
+								>
+									<div className="flex items-center gap-3">
+										<Users className="h-5 w-5 text-indigo-500" />
+										Become a Candidate
+									</div>
+									<ChevronRight className="h-4 w-4 opacity-40" />
+								</button>
+							)}
+						</div>
+					</div>
+				)}
+			</div>
+
+			{/* Modals */}
+			{showSelfAdd && (
+				<CandidatesSelfAdd
+					election={state.election}
+					onClose={() => setShowSelfAdd(false)}
+				/>
 			)}
 
-			{_0 &&
-				<>
-					<button
-						className="Button violet hover:bg-indigo-700"
-						onClick={() => setShowSelfAdd(true)}
-					>
-						Become a Candidate
-					</button>
+			<PhoneInputModal
+				isOpen={showPhoneModal}
+				onClose={() => setShowPhoneModal(false)}
+				onSubmit={checkReggedVoter}
+			/>
 
-					{showSelfAdd && (
-						<CandidatesSelfAdd
-							election={state.election}
-							onClose={() => setShowSelfAdd(false)}
-						/>
-					)}
-				</>
-			}
+			<CollectEmailModal
+				isOpen={showEmailModal}
+				onClose={() => setShowEmailModal(false)}
+				onSubmit={checkReggedVoter}
+			/>
 		</div>
-	</div>
-}
+	);
+};
 
 export default ElectionInfo;
