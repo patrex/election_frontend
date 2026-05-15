@@ -147,7 +147,7 @@ const ElectionInfo = () => {
 						<InfoRow icon={ScrollText} label="Rules" value={rules} />
 						<InfoRow
 							icon={Users}
-							label="Authentication"
+							label="How do I register"
 							value={userAuthType === "phone" ? "Phone number required" : "Email address required"}
 						/>
 					</div>
@@ -155,21 +155,21 @@ const ElectionInfo = () => {
 
 				{/* Action card */}
 				{(isPending || canSelfAddCandidates) && (
-					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 w-full">
 						<h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
 							Actions
 						</h2>
-						<div className="space-y-3">
+						<div className="flex flex-col gap-3 w-full">
 							{isPending && (
 								<button
 									onClick={handleRegisterClick}
 									className="w-full flex items-center justify-between px-5 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold transition"
 								>
 									<div className="flex items-center gap-3">
-										<Vote className="h-5 w-5" />
-										Register to Vote
+										<Vote className="h-5 w-5 flex-shrink-0" />
+										<span>Register to Vote</span>
 									</div>
-									<ChevronRight className="h-4 w-4 opacity-70" />
+									<ChevronRight className="h-4 w-4 opacity-70 flex-shrink-0" />
 								</button>
 							)}
 
@@ -179,10 +179,10 @@ const ElectionInfo = () => {
 									className="w-full flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
 								>
 									<div className="flex items-center gap-3">
-										<Users className="h-5 w-5 text-indigo-500" />
-										Become a Candidate
+										<Users className="h-5 w-5 text-indigo-500 flex-shrink-0" />
+										<span>Become a Candidate</span>
 									</div>
-									<ChevronRight className="h-4 w-4 opacity-40" />
+									<ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
 								</button>
 							)}
 						</div>

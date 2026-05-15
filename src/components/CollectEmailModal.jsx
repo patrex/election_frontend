@@ -143,7 +143,7 @@ export default function CollectEmailModal({
                             disabled={loading}
                             className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition hover:opacity-80 disabled:opacity-40"
                         >
-                            {loading ? "Submitting…" : "Subscribe"}
+                            {loading ? "Submitting…" : "Go"}
                         </button>
                     </div>
 
