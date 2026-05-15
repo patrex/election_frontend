@@ -205,7 +205,7 @@ const ElectionInfo = () => {
 					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
 						<Link
 							to={`/election/${_id}/results`}
-							className="w-full no-underline flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
+							className="w-full no-underline text-green-600 bg-green-100 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
 						>
 							<div className="flex items-center gap-3">
 								<Users className="h-5 w-5 text-indigo-500 flex-shrink-0" />
