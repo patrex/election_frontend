@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote } from "lucide-react";
 
 import CandidatesSelfAdd from "@/components/CandidatesSelfAdd";
@@ -174,7 +174,7 @@ const ElectionInfo = () => {
 							)}
 
 							{canSelfAddCandidates && (
-								<Link
+								<Link to={`/election/${_id}/addcandidate`}
 									className="w-1/2 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
 								>
 									<div className="flex items-center gap-3">
