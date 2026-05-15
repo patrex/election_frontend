@@ -60,11 +60,6 @@ function Home() {
 
 			setElection(electionFetched);
 
-			const { isPending, hasEnded } = getEventStatus(new Date(electionFetched.startDate), new Date(electionFetched.endDate));
-
-			// Logic Branching
-			if (hasEnded) return <ElectionEndedModal />
-
 			navigate(`/election/${electionFetched._id}/info`, { state: { election: electionFetched } });
 		} catch (error) {
 			Toast.error(error.message);
