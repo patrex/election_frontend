@@ -189,9 +189,7 @@ const ElectionInfo = () => {
 
 				{hasEnded && (
 					<div className="w-full flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition">
-						<Link to={`/election/${_id}/results`}
-							className="w-1/2 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
-						>
+						<Link to={`/election/${_id}/results`}>
 							<div className="flex items-center gap-3">
 								<Users className="h-5 w-5 text-indigo-500 flex-shrink-0" />
 								<span className="text-red-800">Election has Ended. View Results</span>
@@ -204,9 +202,7 @@ const ElectionInfo = () => {
 
 				{isActive && (
 					<div className="w-1/2 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition">
-						<Link to={`/election/${_id}/results`}
-							className="w-1/2 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
-						>
+						<Link to={`/election/${_id}/results`}>
 							<div className="flex items-center gap-3">
 								<Users className="h-5 w-5 text-indigo-500 flex-shrink-0" />
 								<span>Go to Vote</span>
