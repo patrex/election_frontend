@@ -74,49 +74,6 @@ function Home() {
 	}, [electionFromQueryParams])
 
 	/**
-	 * Validates the voter against the fetched election's voter list
-	 */
-	const checkAndProcessVoter = useCallback(async (participantId) => {
-		setRegVoterModal(false);
-		setCheckVoterModal(false);
-		setIsLoading(true);
-
-		// Capture the phone/email immediately so addVoterToDatabase can use it later
-		participant.current = participantId;
-
-		try {
-			const voterList = await axios_api.get(`election/${election._id}/voterlist`);
-			const isPhoneType = election.userAuthType === 'phone';
-
-			if (!voterList) throw new Error("There was a problem fetching the list of voters");
-			
-			const existingVoters = voterList.map(v => isPhoneType ? v.phoneNo : v.email);
-
-			// 1. Path for Existing Voters
-			if (existingVoters.includes(participant.current)) {
-				// TODO: do otp verification here...
-				setVoter(participant.current);
-				return navigate(`/election/${election._id}/${b64encode(participant.current)}`);
-			}
-
-			// 2. Path for Closed Elections (Unauthorized)
-			if (election.type === 'Closed') {
-				return Toast.warning(
-					`This is a closed election. Your ${isPhoneType ? 'phone' : 'email'} was not found in the pre-registered list`);
-			}
-
-			// 3. Path for New Voters in Open Elections
-			// Trigger the OTP modal to verify the new participant
-			setRegVoterModal(true);
-
-		} catch (error) {
-			Toast.error('Unable to verify voter status.');
-		} finally {
-			setIsLoading(false);
-		}
-	}, [participant, election])
-
-	/**
 	 * Finalizes registration and navigates to ballot
 	 */
 	const addVoterToDatabase = useCallback(async () => {

@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from 'react-router-dom';
+
+import checkReggedVoter from "@/utils/procVoter";
+
 import CandidatesSelfAdd from "@/components/CandidatesSelfAdd";
+
+import PhoneInputModal from "@/components/CollectPhoneNumber";
 import CollectEmailModal from "@/components/CollectEmailModal";
-import PhoneInput from "@/components/CollectPhoneNumber";
-import axios_api from "@/utils/axios";
-import procVoter from "@/utils/procVoter";
+
 
 /**
  * Determines the current status of the election based on date ranges
@@ -27,14 +30,45 @@ const ElectionInfo = () => {
 		_id,
 	} = state.election;
 
-	const [showSelfAdd, setShowSelfAdd] = useState(false);
-	
+	const [showSelfAdd, setShowSelfAdd] = useState(false); 
+	const [showEmailModal, setShowEmailModal] = useState(false);
+	const [showPhoneModal, setShowPhoneModal] = useState(false);
 
 	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate)
 	const _0 = isPending && addCandidatesBy === 'Candidates Will Add Themselves';
 
 	// *********************************************
-	
+	async function checkReggedVoter(voter) {
+		let flag = false;
+
+		try {
+			const voterList = await axios_api.get(`election/${_id}/voterlist`);
+			const listOfVoters = voterList.data;
+
+			const existingVoters = election.userAuthType === 'phone'
+				? listOfVoters.map(v => v.phoneNo)
+				: listOfVoters.map(v => v.email);
+
+			// Existing voter - redirect to ballot
+			if (existingVoters.includes(voter)) 
+				navigate(`/election/${election._id}/${voter}`);
+
+			// New/Unadded voter in closed election - reject
+			if (election.type === 'Closed') {
+				Toast.warning(
+					`This is a closed election. Your ${election.userAuthType === 'email' ? 'email' : 'phone number'} 
+					must be pre-registered by the election administrator.`
+				);
+				return;
+			}
+
+			return flag
+		} catch (error) {
+			console.error('Error checking voter:', error);
+		} finally {
+
+		}
+}
 
 	return <div>
 		<h2>We found your election!</h2>
@@ -51,14 +85,20 @@ const ElectionInfo = () => {
 		{/* Actions for users */}
 		<div>
 			{isPending && (
-				<>
-					<Link
-						to='/election/regVoter'
+					<button
+						onClick={userAuthType == "phone" ? <PhoneInputModal 
+							isOpen={showPhoneModal}
+							onClose={() => setShowPhoneModal(false)} 
+							onSubmit={checkReggedVoter}/> 
+						: <CollectEmailModal 
+							isOpen={showEmailModal}	
+							onClose={() => setShowEmailModal(false)}
+							onSubmit={checkReggedVoter}/> 
+						}
 						className="Button violet hover:bg-indigo-700"
 					>
 						Register to Vote
-					</Link>
-				</>
+					</button>
 			)}
 
 			{_0 &&

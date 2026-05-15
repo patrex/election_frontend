@@ -4,7 +4,9 @@ import axios_api from "./axios";
 // all side effects to be handled in the component that uses the function
 // this via return values from this function
 
-export default async function procVoter (voter) {
+export default async function checkReggedVoter (voter) {
+    let flag = false;
+
     try {
         const voterList = await axios_api.get(`election/${election._id}/voterlist`);
         const listOfVoters = voterList.data;
@@ -14,10 +16,7 @@ export default async function procVoter (voter) {
             : listOfVoters.map(v => v.email);
 
         // Existing voter - redirect to ballot
-        if (existingVoters.includes(voter)) {
-            navigate(`/election/${election._id}/${b64encode(voter)}`);
-            return;
-        }
+        if (existingVoters.includes(voter)) flag = true;
 
         // New/Unadded voter in closed election - reject
         if (election.type === 'Closed') {
@@ -28,12 +27,10 @@ export default async function procVoter (voter) {
             return;
         }
 
-        // New voter in open election - send OTP
-        // TO-DO
+        return flag
     } catch (error) {
-        Toast.error('Unable to verify voter status. Please try again');
         console.error('Error checking voter:', error);
     } finally {
-        setIsLoading(false);
+
     }
 }
