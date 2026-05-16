@@ -8,10 +8,12 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg';
 import { fetcher } from '@/utils/fetcher';
 import axios_api from '@/utils/axios';
 import { IconEye, IconCopy, IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
+import { useEventStatus } from '@/hooks/useEventStatus';
 
 // Usage — size and stroke are props, no CSS needed:
 
 import DeleteDialog from '@/components/DeleteDialog';
+import { get } from 'react-hook-form';
 
 
 export async function dashboardLoader({ params }) {
@@ -22,6 +24,17 @@ export async function dashboardLoader({ params }) {
 		return null;
 	}
 }
+
+const getEventStatus = (startDate, endDate) => {
+	const now = new Date();
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+	return {
+		isPending: now < start,
+		hasEnded: now > end,
+		isActive: now >= start && now <= end,
+	};
+};
 
 function Dashboard() {
 	const params = useParams();
@@ -70,6 +83,7 @@ function Dashboard() {
 
 	/* ── Shared action buttons ───────────────────────────── */
 	function ActionButtons({ election }) {
+		const {isActive, isPending, hasEnded} = getEventStatus(election.startDate, election.endDate)
 		return (
 			<>
 				<button
@@ -86,15 +100,17 @@ function Dashboard() {
 				>
 					<IconCopy size={15} stroke={1.75} />
 				</button>
-				<button
-					className="icon-btn"
-					title="Edit election"
-					onClick={() =>
-						navigate(`/user/${params.userId}/election/${election._id}/update`)
-					}
-				>
+				{isPending && (
+					<button
+						className="icon-btn"
+						title="Edit election"
+						onClick={() =>
+							navigate(`/user/${params.userId}/election/${election._id}/update`)
+						}
+					>
 					<IconEdit size={15} stroke={1.75} />
 				</button>
+				)}
 				<button
 					className="icon-btn danger"
 					title="Delete election"

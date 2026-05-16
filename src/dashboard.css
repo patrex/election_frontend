@@ -121,9 +121,9 @@
   flex-shrink: 0;
 }
 
-.badge.public     { background: #D1FAE5; color: #065F46; }
+.badge.Open     { background: #D1FAE5; color: #065F46; }
 .badge.private    { background: #EDE9FE; color: #4C1D95; }
-.badge.restricted { background: #FEF3C7; color: #92400E; }
+.badge.Closed { background: #FEF3C7; color: #92400E; }
 
 /* ─── Shared: action buttons ────────────────────────────── */
 .actions {
