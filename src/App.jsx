@@ -1,7 +1,7 @@
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements } from 'react-router-dom';
 
 import './App.css';
-import './dashboard_styles.css'
+import './dashboard.css'
 import './no_data.css'
 import './results_styles.css'
 import './verifyemail.css'
