@@ -57,7 +57,7 @@ function Dashboard() {
 	}
 
 	function doCopy(text) {
-		navigator.clipboard.writeText(text).then(() => Toast.success('Link copied'));
+		navigator.clipboard.writeText(text).then(() => Toast.success('Copied'));
 	}
 
 	const active = elections.filter(

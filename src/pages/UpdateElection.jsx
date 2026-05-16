@@ -9,10 +9,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from "@/contexts/AuthContext";
 import { getLocalTimezoneDate } from "@/utils/setLocalTime";
 import { fetcher } from "@/utils/fetcher";
+import axios_api from "@/utils/axios";
 
 export async function updateElectionLoader({ params }) {
 	try {
-		return await fetcher.get(`election/${params.electionId}`)
+		const election = await axios_api.get(`election/${params.electionId}`)
+		return election.data;
 	} catch (error) {
 		console.error("Failed to load election");
 		return null;
@@ -112,11 +114,9 @@ function UpdateElection() {
 		}
 
 		try {
-			await fetcher.auth.patch(
-				`elections/${election._id}`, {
+			await axios_api.patch(`elections/${election._id}`, {
 					...formData
-				},
-				user
+				}
 			)
 			Toast.success("Event was updated")
 			navigate(`/user/${params.userId}`)
