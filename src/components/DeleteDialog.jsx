@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const DeleteDialog = ({
+	election,
 	isOpen,
 	onClose,
 	onConfirm,

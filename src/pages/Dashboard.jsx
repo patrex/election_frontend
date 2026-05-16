@@ -11,6 +11,8 @@ import { IconEye, IconCopy, IconEdit, IconTrash, IconPlus } from '@tabler/icons-
 
 // Usage — size and stroke are props, no CSS needed:
 
+import DeleteDialog from '@/components/DeleteDialog';
+
 
 export async function dashboardLoader({ params }) {
 	try {
@@ -28,6 +30,12 @@ function Dashboard() {
 	const navigate = useNavigate();
 	const { user } = useAuth();
 
+	const [modalConfig, setModalConfig] = useState({ open: false, action: null });
+
+	useState(() => {
+		if (modalConfig.open) return;
+	})
+
 	async function removeElection(election) {
 		try {
 			await fetcher.auth.delete(`election/${election._id}/delete`, user);
@@ -41,9 +49,15 @@ function Dashboard() {
 		}
 	}
 
-	function copyLink(election) {
-		const link = `${window.location.origin}/vote/${election._id}`;
-		navigator.clipboard.writeText(link).then(() => Toast.success('Link copied'));
+	const triggerDeleteElection = (election) => {
+		setModalConfig({
+			open: true,
+			action: () => removeElection(election) // Pass the pre-wrapped async function
+		});
+	}
+
+	function doCopy(text) {
+		navigator.clipboard.writeText(text).then(() => Toast.success('Link copied'));
 	}
 
 	const active = elections.filter(
@@ -61,16 +75,14 @@ function Dashboard() {
 				<button
 					className="icon-btn"
 					title="View election"
-					onClick={() =>
-						navigate(`/user/${params.userId}/election/${election._id}`)
-					}
+					onClick={() => doCopy(election._id)}
 				>
 					<IconEye size={15} stroke={1.75} />
 				</button>
 				<button
 					className="icon-btn"
 					title="Copy voting link"
-					onClick={() => copyLink(election)}
+					onClick={() => doCopy(election.shareLink)}
 				>
 					<IconCopy size={15} stroke={1.75} />
 				</button>
@@ -78,7 +90,7 @@ function Dashboard() {
 					className="icon-btn"
 					title="Edit election"
 					onClick={() =>
-						navigate(`/user/${params.userId}/election/${election._id}/edit`)
+						navigate(`/user/${params.userId}/election/${election._id}/update`)
 					}
 				>
 					<IconEdit size={15} stroke={1.75} />
@@ -86,7 +98,7 @@ function Dashboard() {
 				<button
 					className="icon-btn danger"
 					title="Delete election"
-					onClick={() => removeElection(election)}
+					onClick={() => triggerDeleteElection(election)}
 				>
 					<IconTrash size={15} stroke={1.75} />
 				</button>
@@ -234,6 +246,15 @@ function Dashboard() {
 					</div>
 				))}
 			</div>
+
+			<DeleteDialog
+				isOpen={modalConfig.open}
+				onClose={() => setModalConfig({ ...modalConfig, open: false })}
+				onConfirm={modalConfig.action}
+				title="Delete Election"
+				description={`This will permanently delete all data for this election`}
+				confirmText="Yes, delete"
+			/>	
 		</main>
 	);
 }
