@@ -5,6 +5,7 @@ import Toast from '@/utils/ToastMsg';
 import { fetcher, FetchError } from '@/utils/fetcher';
 import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
+import axios_api from '@/utils/axios';
 
 export async function approveCandidatesLoader({ params }) {
     try {
@@ -126,7 +127,7 @@ const ApproveCandidates = () => {
 
 	async function removeCandidate() {
 		try {
-			await fetcher.auth.delete(`api/election/${election._id}/candidate/${selectedCandidate._id}/delete`, user)
+			await axios_api.delete(`api/election/${election._id}/candidate/${selectedCandidate._id}/delete`)
 			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
 		} catch (error) {
 			if (error instanceof FetchError) {

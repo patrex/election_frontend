@@ -6,6 +6,8 @@ import Toast from "@/utils/ToastMsg";
 import { fetcher } from "@/utils/fetcher";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
+import axios_api from "@/utils/axios";
+
 import { useAuth } from "@/contexts/AuthContext";
 
 import { useForm } from "react-hook-form";
@@ -15,13 +17,13 @@ import { PulseLoader } from "react-spinners";
 
 export async function updateloader({ params }) {
 	try {
-		const candidate = await fetcher.get(`election/candidate/${params.candidateId}`);
+		const candidate = await axios_api.get(`election/candidate/${params.candidateId}`);
 		const [positions, position, election] = await Promise.all([
-			fetcher.get(`election/${candidate.electionId}/positions`),
-			fetcher.get(`election/positions/${candidate.position}`),
-			fetcher.get(`election/${candidate.electionId}`)
+			axios_api.get(`election/${candidate.electionId}/positions`),
+			axios_api.get(`election/positions/${candidate.position}`),
+			axios_api.get(`election/${candidate.electionId}`)
 		]);
-		return [ candidate, positions, position, election ]
+		return [candidate.data, positions.data, position.data, election.data]
 	} catch (error) { 
 		console.error("Could not finish loading resources");
 	}
@@ -139,15 +141,14 @@ function UpdateCandidate() {
 	// Helper function to update candidate in database
 	const patchCandidate = async (formdata, photoUrl) => {
 		try {
-			await fetcher.auth.patch(
+			await axios_api.patch(
 				`election/updatecandidate`,
 				{
 					electionId: election._id,
 					candidate_id: candidate._id,
 					...formdata,
 					photoUrl,
-				},
-				user
+				}
 			);
 			Toast.success("Candidate updated successfully!");
 			return { success: true };

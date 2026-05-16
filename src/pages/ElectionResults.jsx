@@ -2,19 +2,20 @@ import { useState, useEffect, useMemo } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
 import { fetcher } from '@/utils/fetcher';
+import axios_api from '@/utils/axios';
 import { Trophy, Medal } from 'lucide-react';
 
 export async function resultsLoader({ params }) {
 	try {
 		const [election, results, positions] = await Promise.all([
-			fetcher.get(`election/${params.id}`),
-			fetcher.get(`results/${params.id}`),
-			fetcher.get(`election/${params.id}/positions`)
+			axios_api.get(`election/${params.id}`),
+			axios_api.get(`results/${params.id}`),
+			axios_api.get(`election/${params.id}/positions`)
 		])
 
 		//results potentially contains: results.data for the total results
 		//and results.winners for the first three winners
-		return [election, results, positions];
+		return [election.data, results.data, positions.data];
 	} catch (error) {
 		console.error(error);
 		return []

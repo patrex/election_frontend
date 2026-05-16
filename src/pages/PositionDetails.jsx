@@ -2,19 +2,19 @@ import { useLoaderData, useParams, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
-import { Grid, Container, Typography, Box } from '@mui/material';
 
 import { useAuth } from "@/contexts/AuthContext";
 import { fetcher, FetchError } from "@/utils/fetcher";
+import axios_api from "@/utils/axios";
 
 export async function loader({ params }) {
 	try {
 		const [election, candidates] = await Promise.all([
-			fetcher.get(`election/${params.id}`),
-			fetcher.get(`election/${params.id}/${params.position}/candidates`)
+			axios_api.get(`election/${params.id}`),
+			axios_api.get(`election/${params.id}/${params.position}/candidates`)
 		])
 
-		return [election, candidates, params.position]
+		return [election.data, candidates.data, params.position]
 	} catch (error) {
 		console.error("Could not fetch resources");
 		return null;
@@ -36,21 +36,11 @@ function PositionDetails() {
 
 	async function removeCandidate(candidate) {
 		try {
-			await fetcher.auth.delete(`election/${election._id}/candidate/${candidate._id}/delete`, user)
+			await axios_api.delete(`election/${election._id}/candidate/${candidate._id}/delete`)
 			setCandidatesList(prev => prev.filter(c => c._id !== candidate._id));
 			Toast.success('Candidate was removed');
 		} catch (error) {
-			if (error instanceof FetchError) {
-				if (error.status === 500) {
-					Toast.warning("There was an unexpected error");
-				} else if (error.status === 400) {
-					Toast.warning(error.message);
-				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
-					Toast.error('There was an error removing the candidate');
-				}
-			} else {
-				Toast.error('An unexpected error occurred');
-			}
+			Toast.warning("There was an unexpected error");
 		}
 	}
 

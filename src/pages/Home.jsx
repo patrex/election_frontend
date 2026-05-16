@@ -6,8 +6,6 @@ import Toast from '@/utils/ToastMsg';
 import { cleanNgPhoneNo, validatePhoneNo } from "@/utils/cleanPhoneNo";
 import isValidEmail from "@/utils/validateEmail";
 import axios_api from "@/utils/axios";
-import ElectionEndedModal from "@/components/ElectionEndedModal";
-
 
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);

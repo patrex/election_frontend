@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote } from "lucide-react";
 
-import CandidatesSelfAdd from "@/components/CandidatesSelfAdd";
 import PhoneInputModal from "@/components/CollectPhoneNumber";
 import CollectEmailModal from "@/components/CollectEmailModal";
 

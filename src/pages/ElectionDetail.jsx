@@ -11,22 +11,24 @@ import Toast from '@/utils/ToastMsg';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
 import { fetcher } from '@/utils/fetcher';
+import axios_api from '@/utils/axios';
 
 export async function electionDetailLoader({ params }) {
 	try {
 		// Fetch election and positions in parallel
 		const [election, positions] = await Promise.all([
-			fetcher.get(`election/${params.id}`),
-			fetcher.get(`election/${params.id}/positions`)
+			axios_api.get(`election/${params.id}`),
+			axios_api.get(`election/${params.id}/positions`)
 		]);
 
 		// Fetch voters only for closed elections
-		let voters = null;
+		let _v0 = null;
 		if (election.type === 'Closed') {
-			voters = await fetcher.get(`election/${params.id}/voterlist`);
+			_v0 = await axios_api.get(`election/${params.id}/voterlist`);
+			const voters = _v0.data;
 		}
 
-		return [election, positions, voters];
+		return [election.data, positions.data, voters];
 	} catch (error) {
 		console.error('Error loading election details:', error);
 		return null;
@@ -106,16 +108,15 @@ function ElectionDetail() {
 		closePositionModal();
 
 		try {
-			const response = await fetcher.auth.post(
+			const response = await axios_api.post(
 				`election/${election._id}/position`,
 				{
 					position: String(newPosition).trim(),
 					electionId: election._id
-				},
-				user,
+				}
 			);
 
-			setPositionsList(prev => [...prev, response]);
+			setPositionsList(prev => [...prev, response.data]);
 			Toast.success('Position was added');
 
 		} catch (error) {
@@ -132,18 +133,17 @@ function ElectionDetail() {
 		closeUpdatePositionModal();
 
 		try {
-			const response = await fetcher.auth.patch(
+			const response = await axios_api.patch(
 				`election/${election._id}/position/update`,
 				{
 					position: currentlySelectedPosition,
 					electionId: election._id,
 					new_position: String(updatedPosition).trim()
-				},
-				user
+				}
 			);
 			setPositionsList((prev) =>
 				prev.map((position) =>
-					position._id === response._id ? response : position
+					position._id === response.data._id ? response.data : position
 				)
 			);
 			Toast.success('Position was updated');
@@ -160,10 +160,7 @@ function ElectionDetail() {
 
 	async function removePosition(position) {
 		try {
-			fetcher.auth.delete(
-				`election/${election._id}/${position._id}/delete`,
-				user
-			);
+			await axios_api.delete(`election/${election._id}/${position._id}/delete`);
 
 			setPositionsList(positionsList.filter(p => p._id !== position._id));
 			Toast.success("The position was removed");
@@ -177,16 +174,15 @@ function ElectionDetail() {
 		console.log(voterlist);
 		
 		try {
-			const votersToDb = await fetcher.auth.post(
+			const votersToDb = await axios_api.post(
 				`election/${election._id}/closed_event/addvoters`,
 				{
 					election: election._id,
 					voterList: voterlist
-				},
-				user
+				}
 			);
 
-			const updatedList = [...votersList, ...votersToDb.voters];
+			const updatedList = [...votersList, ...votersToDb.data.voters];
 			setVotersList(updatedList);
 			setVotersFiltered(updatedList);
 			Toast.success(`${votersToDb.voters.length} contacts were added`);
@@ -199,10 +195,9 @@ function ElectionDetail() {
 
 	async function removeVoter(voter) {
 		try {
-			await fetcher.auth.post(
+			await axios_api.post(
 				`election/voter/${voter._id}/delete`,
-				{},
-				user
+				{}	
 			);
 
 			const updatedList = votersList.filter(e => e._id !== voter._id);
@@ -290,18 +285,17 @@ function ElectionDetail() {
 		setUpdateParticipantModal(false);
 
 		try {
-			const response = await fetcher.auth.patch(
+			const response = await axios_api.patch(
 				`election/voter/update`,
 				{
 					emailAddr: emailForUpdate,
 					participantId: participant._id,
 					electionId: election._id
-				},
-				user
+				}
 			);
 
 			setVotersList((prev) =>
-				prev.map((v) => v._id === response._id ? response : v)
+				prev.map((v) => v._id === response.data._id ? response.data : v)
 			);
 			Toast.success("Participant was updated");
 		} catch (error) {
@@ -331,19 +325,18 @@ function ElectionDetail() {
 		}
 
 		try {
-			const response = await fetcher.auth.patch(
+			const response = await axios_api.patch(
 				`election/voter/update`,
 				{
 					phoneNo: validatedPhoneNo,
 					participantId: participant._id,
 					electionId: election._id
-				},
-				user
+				}
 			);
 
 			setUpdateParticipantModal(false);
 			setVotersList((prev) =>
-				prev.map((v) => v._id === response._id ? response : v)
+				prev.map((v) => v._id === response.data._id ? response.data : v)
 			);
 			Toast.success("Participant was updated");
 		} catch (error) {
@@ -358,17 +351,16 @@ function ElectionDetail() {
 		}
 
 		try {
-			const endEvent = await fetcher.auth.put(
+			const endEvent = await axios_api.put(
 				`elections/${election._id}/end`,
-				{},
-				user
+				{}
 			)
 
 			setEndElectionModalOpen(false);
 
 			setElection(prev => ({
 				...prev,
-				endDate: new Date(endEvent?.new_date ?? prev.endDate)
+				endDate: new Date(endEvent.data?.new_date ?? prev.endDate)
 			}));
 			return Toast.success("Election was ended successfully");
 		} catch (error) {
