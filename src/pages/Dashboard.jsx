@@ -7,6 +7,10 @@ import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg';
 import { fetcher } from '@/utils/fetcher';
 import axios_api from '@/utils/axios';
+import { IconEye, IconCopy, IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
+
+// Usage — size and stroke are props, no CSS needed:
+
 
 export async function dashboardLoader({ params }) {
 	try {
