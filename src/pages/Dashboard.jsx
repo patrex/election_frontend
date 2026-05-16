@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLoaderData, useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Toast from '@/utils/ToastMsg';
@@ -32,9 +32,9 @@ function Dashboard() {
 
 	const [modalConfig, setModalConfig] = useState({ open: false, action: null });
 
-	useState(() => {
+	useEffect(() => {
 		if (modalConfig.open) return;
-	})
+	}, [modalConfig.open])
 
 	async function removeElection(election) {
 		try {
