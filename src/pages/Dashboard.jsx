@@ -65,14 +65,14 @@ function Dashboard() {
 						navigate(`/user/${params.userId}/election/${election._id}`)
 					}
 				>
-					<i className="ti ti-eye" aria-hidden="true" />
+					<IconEye size={15} stroke={1.75} />
 				</button>
 				<button
 					className="icon-btn"
 					title="Copy voting link"
 					onClick={() => copyLink(election)}
 				>
-					<i className="ti ti-copy" aria-hidden="true" />
+					<IconCopy size={15} stroke={1.75} />
 				</button>
 				<button
 					className="icon-btn"
@@ -81,14 +81,14 @@ function Dashboard() {
 						navigate(`/user/${params.userId}/election/${election._id}/edit`)
 					}
 				>
-					<i className="ti ti-edit" aria-hidden="true" />
+					<IconEdit size={15} stroke={1.75} />
 				</button>
 				<button
 					className="icon-btn danger"
 					title="Delete election"
 					onClick={() => removeElection(election)}
 				>
-					<i className="ti ti-trash" aria-hidden="true" />
+					<IconTrash size={15} stroke={1.75} />
 				</button>
 			</>
 		);
@@ -125,7 +125,7 @@ function Dashboard() {
 					to={`/user/${user.id}/create-election`}
 					className="btn-create"
 				>
-					<i className="ti ti-plus" aria-hidden="true" />
+					<IconPlus size={15} stroke={1.75} />
 					New election
 				</Link>
 			</div>
