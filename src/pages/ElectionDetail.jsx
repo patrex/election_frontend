@@ -24,11 +24,11 @@ export async function electionDetailLoader({ params }) {
 		// Fetch voters only for closed elections
 		let _v0 = null;
 		if (election.type === 'Closed') {
-			_v0 = await axios_api.get(`election/${params.id}/voterlist`);
-			const voters = _v0.data;
+			const voters = await axios_api.get(`election/${params.id}/voterlist`);
+			_v0 = voters.data;
 		}
 
-		return [election.data, positions.data, voters];
+		return [election.data, positions.data, _v0];
 	} catch (error) {
 		console.error('Error loading election details:', error);
 		return null;
