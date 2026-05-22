@@ -218,7 +218,7 @@ const ElectionInfo = () => {
 							)}
 
 							{isPending && type == 'Closed' && (
-								<div className="flex flex-col sm:flex-row gap-2">
+								<div className="flex flex-col sm:flex-row gap-2 w-full">
 									<div className="flex flex-1 items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl transition-all focus-within:border-indigo-400 focus-within:ring-3 focus-within:ring-indigo-500/10">
 										<span className="flex items-center justify-center pl-4 pr-3 text-gray-400 focus-within:text-indigo-500 pointer-events-none shrink-0">
 											{userAuthType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
@@ -232,7 +232,7 @@ const ElectionInfo = () => {
 											onChange={(e) => setQuery(e.target.value)}
 											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
 											placeholder={userAuthType === "email" ? "Enter your email" : "Enter your phone number"}
-											className="w-full pl-8 pr-4 py-4 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+											className="w-full min-w-0 pl-8 px-3 pr-4 py-4 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
 										/>
 									</div>
 
