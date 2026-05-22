@@ -88,6 +88,9 @@ const ElectionInfo = () => {
 
 	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate);
 	const canSelfAddCandidates = isPending && addCandidatesBy === "Candidates Will Add Themselves";
+	const lbl = isPending
+		? userAuthType === "phone" ? "Phone number required" : "Email address required"
+		: "Registration has ended";
 
 	const handleRegisterClick = () => {
 		userAuthType === "phone" ? setShowPhoneModal(true) : setShowEmailModal(true);
@@ -188,7 +191,7 @@ const ElectionInfo = () => {
 						<InfoRow
 							icon={Users}
 							label="How do I register"
-							value={isPending ? userAuthType === "phone" ? "Phone number required" : "Email address required" : "Registration has ended"}
+							value={lbl}
 							valueStyles={!isPending && 'text-red-100'}
 						/>
 					</div>
@@ -235,7 +238,7 @@ const ElectionInfo = () => {
 										className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold text-sm transition flex-shrink-0"
 									>
 										<Vote className="h-4 w-4" />
-										<span>Check my {type === 'email' ? 'email' : 'phone'}</span>
+										<span>Check my {userAuthType === 'email' ? 'email' : 'phone'}</span>
 									</button>
 								</div>
 							)}
