@@ -201,7 +201,7 @@ const ElectionInfo = () => {
 							Actions
 						</h2>
 						<div className="flex flex-col gap-3 w-full">
-							{isPending && type == 'Open' (
+							{isPending && type == 'Open' &&  (
 								<button
 									onClick={handleRegisterClick}
 									className="w-1/2 flex items-center justify-between px-5 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold transition"
@@ -214,7 +214,7 @@ const ElectionInfo = () => {
 								</button>
 							)}
 
-							{isPending && type == 'Closed'(
+							{isPending && type == 'Closed' && (
 								<div className="w-1/2 flex items-center gap-2">
 									<div className="relative flex-1">
 										{/* Icon changes based on election.searchField — "email" or "phone" */}
