@@ -224,7 +224,7 @@ const ElectionInfo = () => {
 											{userAuthType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
 										</div>
 										<input
-											type={type === "email" ? "email" : "tel"}
+											type={userAuthType === "email" ? "email" : "tel"}
 											value={query}
 											onChange={(e) => setQuery(e.target.value)}
 											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
