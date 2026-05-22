@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote } from "lucide-react";
+import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Phone, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 import PhoneInputModal from "@/components/CollectPhoneNumber";
