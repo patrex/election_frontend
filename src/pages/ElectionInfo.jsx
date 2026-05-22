@@ -215,7 +215,7 @@ const ElectionInfo = () => {
 							)}
 
 							{isPending && type == 'Closed' && (
-								<div className="w-1/2 flex items-center gap-2">
+								<div className="w-full flex items-center gap-2">
 									<div className="relative flex-1">
 										{/* Icon changes based on election.searchField — "email" or "phone" */}
 										<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
