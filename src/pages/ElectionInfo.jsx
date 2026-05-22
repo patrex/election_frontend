@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 import PhoneInputModal from "@/components/CollectPhoneNumber";
 import CollectEmailModal from "@/components/CollectEmailModal";
+import ShowAlert from "@/components/ShowAlert";
+import axios_api from "@/utils/axios";
 
 /**
  * Uses local date/time for comparison — new Date() is always local,
@@ -51,14 +54,14 @@ const StatusBadge = ({ isPending, isActive, hasEnded }) => {
 	);
 };
 
-const InfoRow = ({ icon: Icon, label, value }) => (
+const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 	<div className="flex items-start gap-3 py-3 border-b border-gray-100 dark:border-gray-800 last:border-0">
 		<span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex-shrink-0">
 			<Icon className="h-3.5 w-3.5 text-indigo-500" />
 		</span>
 		<div className="min-w-0">
 			<p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-0.5">{label}</p>
-			<p className="text-sm text-gray-800 dark:text-gray-200">{value}</p>
+			<p className={`text-sm ${valueStyles ? valueStyles : text-gray-800} dark:text-gray-200`}>{value}</p>
 		</div>
 	</div>
 );
@@ -74,8 +77,14 @@ const ElectionInfo = () => {
 		_id,
 	} = state.election;
 
+	const { voter, setVoter} = useAuth();
+
 	const [showEmailModal, setShowEmailModal] = useState(false);
 	const [showPhoneModal, setShowPhoneModal] = useState(false);
+	const [voters, setVoters] = useState([]);
+	const [query, setQuery] = useState('');
+
+	const [statusModal, setStatusModal] = useState({ show: false, status: 'success', title: '', message: '' });
 
 	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate);
 	const canSelfAddCandidates = isPending && addCandidatesBy === "Candidates Will Add Themselves";
@@ -103,6 +112,39 @@ const ElectionInfo = () => {
 			);
 		}
 	}
+
+	// find voters for a closed election
+	async function cfetchVoters() {
+		if (type == "Closed") {
+			try {
+				const _cv = await axios_api.get(`election/${_id}/voterlist`);
+				setVoters(_cv.data);
+			} catch (error) {
+				throw new Error("Could not fetch voters for this closed election")
+			}
+		}
+	}
+
+	function checkVoterExists() {
+		const _0 = voters.includes(query)
+		if (_0) {
+			setStatusModal({
+				show: true,
+				status: 'success',
+				title: 'Verified',
+				message: `Your ${type == 'email' ? 'email' : 'phone number'} is registered`,
+			})
+		} else {
+			setStatusModal({
+				show: true,
+				status: 'error',
+				title: 'Verification failed',
+				message:`Your ${type == 'email' ? 'email' : 'phone number'} is not registered`,
+			})
+		}
+	}
+
+	useEffect(() => { cfetchVoters() }, [_id])
 
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
@@ -146,7 +188,8 @@ const ElectionInfo = () => {
 						<InfoRow
 							icon={Users}
 							label="How do I register"
-							value={isPending ? userAuthType === "phone" ? "Phone number required" : "Email address required" : "Registration has closed"}
+							value={isPending ? userAuthType === "phone" ? "Phone number required" : "Email address required" : "Registration has ended"}
+							valueStyles={!isPending && 'text-red-100'}
 						/>
 					</div>
 				</div>
@@ -158,7 +201,7 @@ const ElectionInfo = () => {
 							Actions
 						</h2>
 						<div className="flex flex-col gap-3 w-full">
-							{isPending && (
+							{isPending && type == 'Open' (
 								<button
 									onClick={handleRegisterClick}
 									className="w-1/2 flex items-center justify-between px-5 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold transition"
@@ -169,6 +212,37 @@ const ElectionInfo = () => {
 									</div>
 									<ChevronRight className="h-4 w-4 opacity-70 flex-shrink-0" />
 								</button>
+							)}
+
+							{isPending && type == 'Closed'(
+								<div className="w-1/2 flex items-center gap-2">
+									<div className="relative flex-1">
+										{/* Icon changes based on election.searchField — "email" or "phone" */}
+										<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+											{type === "email"
+												? <Mail className="h-4 w-4" />
+												: <Phone className="h-4 w-4" />
+											}
+										</div>
+										<input
+											type={type === "email" ? "email" : "tel"}
+											value={query}
+											onChange={(e) => setQuery(e.target.value)}
+											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
+											placeholder={type === "email" ? "Enter your email" : "Enter your phone number"}
+											className="w-full pl-9 pr-4 py-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+										/>
+
+									</div>
+
+									<button
+										onClick={() => checkVoterExists()}
+										className="flex items-center gap-2 px-5 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold text-sm transition flex-shrink-0"
+									>
+										<Vote className="h-4 w-4" />
+										<span>Check my {type === 'email' ? 'email' : 'phone'}</span>
+									</button>
+								</div>
 							)}
 
 							{canSelfAddCandidates && (
@@ -215,6 +289,11 @@ const ElectionInfo = () => {
 					</div>
 				)}
 			</div>
+
+			<ShowAlert
+    			{...statusModal}
+    			onClose={() => setStatusModal(s => ({ ...s, show: false }))}
+			/>
 
 			<PhoneInputModal
 				isOpen={showPhoneModal}

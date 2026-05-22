@@ -43,7 +43,6 @@ function ElectionDetail() {
 	const [votersList, setVotersList] = useState(voters || []);
 	const [votersFiltered, setVotersFiltered] = useState([]);
 
-	const { user } = useAuth();
 	const [modalConfig, setModalConfig] = useState({ open: false, action: null })
 
 	const [newPosition, setNewPosition] = useState("");
