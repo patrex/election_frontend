@@ -166,6 +166,30 @@ const ElectionInfo = () => {
 								<Shield className="h-3 w-3" />
 								{type}
 							</span>
+							{/*  */}
+							{isPending && type == 'Closed' && (
+								<div className="flex flex-col sm:flex-row gap-2 w-full">
+									<div className="flex flex-1 items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl transition-all focus-within:border-indigo-400 focus-within:ring-3 focus-within:ring-indigo-500/10">
+
+										<input
+											type={userAuthType === "email" ? "email" : "tel"}
+											value={query}
+											onChange={(e) => setQuery(e.target.value)}
+											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
+											placeholder={userAuthType === "email" ? "Enter your email" : "Enter your phone number"}
+											className="flex-1 min-w-0 px-3 py-4 text-sm bg-transparent outline-none border-none text-gray-900 dark:text-white placeholder-gray-400"
+										/>
+									</div>
+
+									<button
+										onClick={() => checkVoterExists()}
+										className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+									>
+										<Vote className="h-4 w-4" />
+										<span>Check my {userAuthType === 'email' ? 'email' : 'phone'}</span>
+									</button>
+								</div>
+							)}
 						</div>
 					</div>
 
@@ -217,29 +241,7 @@ const ElectionInfo = () => {
 								</button>
 							)}
 
-							{isPending && type == 'Closed' && (
-								<div className="flex flex-col sm:flex-row gap-2 w-full">
-									<div className="flex flex-1 items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl transition-all focus-within:border-indigo-400 focus-within:ring-3 focus-within:ring-indigo-500/10">
-
-										<input
-											type={userAuthType === "email" ? "email" : "tel"}
-											value={query}
-											onChange={(e) => setQuery(e.target.value)}
-											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
-											placeholder={userAuthType === "email" ? "Enter your email" : "Enter your phone number"}
-											className="flex-1 min-w-0 px-3 py-4 text-sm bg-transparent outline-none border-none text-gray-900 dark:text-white placeholder-gray-400"
-										/>
-									</div>
-
-									<button
-										onClick={() => checkVoterExists()}
-										className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
-									>
-										<Vote className="h-4 w-4" />
-										<span>Check my {userAuthType === 'email' ? 'email' : 'phone'}</span>
-									</button>
-								</div>
-							)}
+							
 
 							{canSelfAddCandidates && (
 								<Link to={`/election/${_id}/addcandidate`}
