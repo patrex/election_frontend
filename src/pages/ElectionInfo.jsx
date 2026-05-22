@@ -220,6 +220,11 @@ const ElectionInfo = () => {
 							{isPending && type == 'Closed' && (
 								<div className="flex flex-col sm:flex-row gap-2 w-full">
 									<div className="flex flex-1 items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl transition-all focus-within:border-indigo-400 focus-within:ring-3 focus-within:ring-indigo-500/10">
+										<span className="flex items-center justify-center pl-4 pr-3 text-gray-400 focus-within:text-indigo-500 pointer-events-none shrink-0">
+											{userAuthType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
+										</span>
+
+										<div className="self-stretch px-2 my-2.5 w-px bg-gray-200 dark:bg-gray-600 shrink-0" />
 
 										<input
 											type={userAuthType === "email" ? "email" : "tel"}
