@@ -61,7 +61,7 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 		</span>
 		<div className="min-w-0">
 			<p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-0.5">{label}</p>
-			<p className={`text-sm ${valueStyles ? valueStyles : text-gray-800} dark:text-gray-200`}>{value}</p>
+			<p className={`text-sm ${valueStyles ? valueStyles : 'text-gray-800'} dark:text-gray-200`}>{value}</p>
 		</div>
 	</div>
 );
