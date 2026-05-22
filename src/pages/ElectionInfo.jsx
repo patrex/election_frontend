@@ -232,7 +232,7 @@ const ElectionInfo = () => {
 												onChange={(e) => setQuery(e.target.value)}
 												onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
 												placeholder={userAuthType === "email" ? "Enter your email" : "Enter your phone number"}
-												className="w-full pl-11 pr-4 py-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+												className="w-full pl-8 pr-4 py-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
 											/>
 										</div>
 
