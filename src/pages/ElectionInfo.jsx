@@ -220,17 +220,26 @@ const ElectionInfo = () => {
 							{isPending && type == 'Closed' && (
 								<div className="w-full flex flex-col sm:flex-row items-center gap-2">
 									<div className="relative w-full flex-1">
-										<div className="absolute top-1/2 -translate-y-1/2 left-3 pointer-events-none text-gray-400">
-											{userAuthType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
-										</div>
-										<input
-											type={userAuthType === "email" ? "email" : "tel"}
-											value={query}
-											onChange={(e) => setQuery(e.target.value)}
-											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
-											placeholder={userAuthType === "email" ? "Enter your email" : "Enter your phone number"}
-											className="w-full pl-11 pr-4 py-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-										/>
+										<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+		{userAuthType === "email" ? (
+			<Mail className="h-4 w-4" />
+		) : (
+			<Phone className="h-4 w-4" />
+		)}
+	</div>
+
+	<input
+		type={userAuthType === "email" ? "email" : "tel"}
+		value={query}
+		onChange={(e) => setQuery(e.target.value)}
+		onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
+		placeholder={
+			userAuthType === "email"
+				? "Enter your email"
+				: "Enter your phone number"
+		}
+		className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+	/>
 									</div>
 
 									<button
