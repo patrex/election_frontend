@@ -235,7 +235,7 @@ const ElectionInfo = () => {
 
 									<button
 										onClick={() => checkVoterExists()}
-										className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold text-sm transition flex-shrink-0"
+										className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
 									>
 										<Vote className="h-4 w-4" />
 										<span>Check my {userAuthType === 'email' ? 'email' : 'phone'}</span>
