@@ -1,3 +1,5 @@
+import { CheckCircle, AlertTriangle, XCircle } from "lucide-react";
+
 function ShowAlert({ show, onClose, status, title, message, actionLabel, onAction }) {
     if (!show) return null;
 
