@@ -167,29 +167,31 @@ const ElectionInfo = () => {
 								{type}
 							</span>
 							{/*  */}
-							{isPending && type == 'Closed' && (
-								<div className="flex flex-col sm:flex-row gap-2 w-full">
-									<div className="flex flex-1 items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl transition-all focus-within:border-indigo-400 focus-within:ring-3 focus-within:ring-indigo-500/10">
-
-										<input
-											type={userAuthType === "email" ? "email" : "tel"}
-											value={query}
-											onChange={(e) => setQuery(e.target.value)}
-											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
-											placeholder={userAuthType === "email" ? "Enter your email" : "Enter your phone number"}
-											className="flex-1 min-w-0 px-3 py-4 text-sm bg-transparent outline-none border-none text-gray-900 dark:text-white placeholder-gray-400"
-										/>
-									</div>
-
-									<button
-										onClick={() => checkVoterExists()}
-										className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
-									>
-										<Vote className="h-4 w-4" />
-										<span>Check my {userAuthType === 'email' ? 'email' : 'phone'}</span>
-									</button>
-								</div>
-							)}
+							    {isPending && type === 'Closed' && (
+        <div className="w-full sm:w-auto sm:ml-auto flex gap-2">
+            <div className="flex flex-1 sm:w-64 items-center bg-white rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-white/50 transition-all">
+                <span className="flex items-center justify-center pl-3 pr-2 text-gray-400 pointer-events-none shrink-0">
+                    {userAuthType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
+                </span>
+                <div className="self-stretch my-2 w-px bg-gray-200 shrink-0" />
+                <input
+                    type={userAuthType === "email" ? "email" : "tel"}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
+                    placeholder={userAuthType === "email" ? "Enter email" : "Enter phone"}
+                    className="flex-1 min-w-0 px-2 py-2 text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400"
+                />
+            </div>
+            <button
+                onClick={checkVoterExists}
+                className="shrink-0 flex items-center gap-1.5 px-4 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
+            >
+                <Vote className="h-4 w-4" />
+                Check
+            </button>
+        </div>
+    )}
 						</div>
 					</div>
 
