@@ -178,7 +178,7 @@ const ElectionInfo = () => {
 											type={userAuthType === "email" ? "email" : "tel"}
 											value={query}
 											onChange={(e) => setQuery(e.target.value)}
-											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
+											onKeyDown={(e) => e.key === "Enter" && checkVoterExists()}
 											placeholder={userAuthType === "email" ? "Enter email" : "Enter phone"}
 											className="flex-1 min-w-0 text-sm bg-transparent !border-none !outline-none !shadow-none text-gray-900 placeholder-gray-400"
 										/>
@@ -189,6 +189,17 @@ const ElectionInfo = () => {
 									>
 										<Vote className="h-4 w-4" />
 										Check
+									</button>
+								</div>
+							)}
+							{isPending && type === 'Open' && (
+								<div className="w-full sm:w-auto sm:ml-auto flex gap-2">
+									<button
+										onClick={handleRegisterClick}
+										className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
+									>
+										<Vote className="h-4 w-4" />
+										Register to vote
 									</button>
 								</div>
 							)}
@@ -242,8 +253,6 @@ const ElectionInfo = () => {
 									<ChevronRight className="h-4 w-4 opacity-70 flex-shrink-0" />
 								</button>
 							)}
-
-
 
 							{canSelfAddCandidates && (
 								<Link to={`/election/${_id}/addcandidate`}
