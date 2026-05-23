@@ -173,7 +173,7 @@ const ElectionInfo = () => {
                 <span className="flex items-center justify-center pl-3 pr-2 text-gray-400 pointer-events-none shrink-0">
                     {userAuthType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
                 </span>
-                <div className="self-stretch my-2 w-px bg-gray-200 shrink-0" />
+                
                 <input
                     type={userAuthType === "email" ? "email" : "tel"}
                     value={query}
