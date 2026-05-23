@@ -152,7 +152,6 @@ const ElectionInfo = () => {
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
 			<div className="max-w-2xl mx-auto space-y-5">
-
 				{/* Header card */}
 				<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
 					<div className="bg-gradient-to-br from-indigo-600 to-indigo-700 px-6 pt-6 pb-10">
@@ -166,7 +165,7 @@ const ElectionInfo = () => {
 								<Shield className="h-3 w-3" />
 								{type}
 							</span>
-							{/*  */}
+							{/* for closed ballots for people to check if they're pre-registered to vote */}
 							{isPending && type === 'Closed' && (
 								<div className="w-full sm:w-auto sm:ml-auto flex gap-2">
 									<div className="flex flex-1 sm:w-64 items-center bg-white rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-white/50 transition-all">
@@ -229,7 +228,7 @@ const ElectionInfo = () => {
 							icon={Users}
 							label="How do I register"
 							value={lbl}
-							valueStyles={!isPending && 'text-red-100'}
+							valueStyles={!isPending && 'text-red-700'}
 						/>
 					</div>
 				</div>
