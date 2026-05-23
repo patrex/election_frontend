@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Phone, Mail, Speech } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -96,28 +96,9 @@ const ElectionInfo = () => {
 		userAuthType === "phone" ? setShowPhoneModal(true) : setShowEmailModal(true);
 	};
 
-	async function checkReggedVoter(voter) {
-		const voterList = await axios_api.get(`election/${_id}/voterlist`);
-		const listOfVoters = voterList.data;
-
-		const existingVoters = userAuthType === "phone"
-			? listOfVoters.map((v) => v.phoneNo)
-			: listOfVoters.map((v) => v.email);
-
-		if (existingVoters.includes(voter)) {
-			navigate(`/election/${_id}/${voter}`);
-			return;
-		}
-
-		if (type === "Closed") {
-			throw new Error(
-				`This is a closed election. Your ${userAuthType === "email" ? "email" : "phone number"} must be pre-registered by the election administrator.`
-			);
-		}
-	}
-
 	// find voters for a closed election
-	async function cfetchVoters() {
+
+	const  cfetchVoters = useCallback( async () => {
 		if (type == "Closed") {
 			try {
 				const _cv = await axios_api.get(`election/${_id}/voterlist`);
@@ -126,7 +107,7 @@ const ElectionInfo = () => {
 				throw new Error("Could not fetch voters for this closed election")
 			}
 		}
-	}
+	}, [type, _id]);
 
 	function checkVoterExists() {
 		const _0 = voters.includes(query)
@@ -147,7 +128,8 @@ const ElectionInfo = () => {
 		}
 	}
 
-	useEffect(() => { cfetchVoters() }, [_id])
+	// fetch pre-registered voters for closed elections
+	useEffect(() => { cfetchVoters() }, [_id, type])
 
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
@@ -235,10 +217,7 @@ const ElectionInfo = () => {
 
 				{/* Action card */}
 				{(isPending && canSelfAddCandidates) && (
-					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 w-full">
-						<h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
-							Actions
-						</h2>
+					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 w-full">	
 						<div className="flex flex-col gap-3 w-full">
 							<Link to={`/election/${_id}/addcandidate`}
 								className="w-full no-underline flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
@@ -274,7 +253,7 @@ const ElectionInfo = () => {
 							className="w-full no-underline text-green-600 bg-green-100 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
 						>
 							<div className="flex items-center gap-3">
-								<Users className="h-5 w-5 text-indigo-500 flex-shrink-0" />
+								<Vote className="h-5 w-5 text-indigo-500 flex-shrink-0" />
 								<span className="text-red dark:text-red-400">Go to Ballot</span>
 							</div>
 							<ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />

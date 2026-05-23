@@ -93,7 +93,7 @@ const PhoneInputModal = ({ isOpen, onClose, onSubmit }) => {
                     </label>
 
                     <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-indigo-400" />
+                        <Phone className="absolute pr-10 left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-indigo-400" />
                         <input
                             id="modal-phone"
                             type="tel"
