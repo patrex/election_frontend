@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Phone, Mail } from "lucide-react";
+import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Phone, Mail, Speech } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 import PhoneInputModal from "@/components/CollectPhoneNumber";
@@ -235,36 +235,21 @@ const ElectionInfo = () => {
 				</div>
 
 				{/* Action card */}
-				{(isPending || canSelfAddCandidates) && (
+				{(isPending && canSelfAddCandidates) && (
 					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 w-full">
 						<h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
 							Actions
 						</h2>
 						<div className="flex flex-col gap-3 w-full">
-							{isPending && type == 'Open' && (
-								<button
-									onClick={handleRegisterClick}
-									className="w-1/2 flex items-center justify-between px-5 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold transition"
-								>
-									<div className="flex items-center gap-3">
-										<Vote className="h-5 w-5 flex-shrink-0" />
-										<span>Register to Vote</span>
-									</div>
-									<ChevronRight className="h-4 w-4 opacity-70 flex-shrink-0" />
-								</button>
-							)}
-
-							{canSelfAddCandidates && (
-								<Link to={`/election/${_id}/addcandidate`}
-									className="w-full no-underline flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
-								>
-									<div className="flex items-center gap-3">
-										<Users className="h-5 w-5 text-indigo-500 flex-shrink-0" />
-										<span>Become a Candidate</span>
-									</div>
-									<ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
-								</Link>
-							)}
+							<Link to={`/election/${_id}/addcandidate`}
+								className="w-full no-underline flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
+							>
+								<div className="flex items-center gap-3">
+									<Speech className="h-5 w-5 text-indigo-500 flex-shrink-0" />
+									<span>Become a Candidate</span>
+								</div>
+								<ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
+							</Link>
 						</div>
 					</div>
 				)}
