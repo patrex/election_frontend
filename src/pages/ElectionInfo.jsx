@@ -170,13 +170,17 @@ const ElectionInfo = () => {
 							    {isPending && type === 'Closed' && (
         <div className="w-full sm:w-auto sm:ml-auto flex gap-2">
             <div className="flex flex-1 sm:w-64 items-center bg-white rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-white/50 transition-all">
+                <span className="flex items-center justify-center pl-3 pr-2 text-gray-400 pointer-events-none shrink-0">
+                    {userAuthType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
+                </span>
+                <div className="self-stretch my-2 w-px bg-gray-200 shrink-0" />
                 <input
                     type={userAuthType === "email" ? "email" : "tel"}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
                     placeholder={userAuthType === "email" ? "Enter email" : "Enter phone"}
-                    className="flex-1 min-w-0 px-2 py-2 text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400"
+                    className="flex-1 min-w-0 px-2 py-2 text-sm bg-transparent border-none outline-none text-gray-900 placeholder-gray-400"
                 />
             </div>
             <button
