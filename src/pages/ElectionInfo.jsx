@@ -180,7 +180,7 @@ const ElectionInfo = () => {
 											onChange={(e) => setQuery(e.target.value)}
 											onKeyDown={(e) => e.key === "Enter" && handleRegisterClick()}
 											placeholder={userAuthType === "email" ? "Enter email" : "Enter phone"}
-											className="flex-1 min-w-0 px-2 py-2 text-sm bg-transparent !border-none !outline-none !shadow-none text-gray-900 placeholder-gray-400"
+											className="flex-1 min-w-0 px-2 text-sm bg-transparent !border-none !outline-none !shadow-none text-gray-900 placeholder-gray-400"
 										/>
 									</div>
 									<button
