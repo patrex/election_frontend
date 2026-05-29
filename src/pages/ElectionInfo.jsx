@@ -79,7 +79,8 @@ const ElectionInfo = () => {
 		_id,
 	} = state.election;
 
-	const { voter } = useAuth();
+	const { voter, setVoter } = useAuth();
+	const navigate = useNavigate();
 
 	const [showEmailModal, setShowEmailModal] = useState(false);
 	const [showPhoneModal, setShowPhoneModal] = useState(false);
@@ -105,10 +106,13 @@ const ElectionInfo = () => {
 				electionId: _id
 			});
 
+            setVoter(participant);
+
+            navigate(`/election/${_id}/${participant}`);
 		} catch (error) {
 			throw new Error('Failed to register voter');
 		}
-	}, [_id])
+	}, [_id]);
 
 	// find voters for a closed election
 	const  cfetchVoters = useCallback( async () => {

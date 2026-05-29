@@ -67,9 +67,7 @@ export default function CollectEmailModal({
         setLoading(true);
         setError(null);
         try {
-            await onSubmit(_id, email);
-            setVoter(email)
-            navigate(`/election/${_id}/${email}`);
+            await onSubmit(email);
 
             onClose(); // parent closes modal on success
         } catch (e) {
