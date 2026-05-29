@@ -1,10 +1,6 @@
 import { useLoaderData, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { b64encode } from "@/utils/obfuscate";
 import Toast from '@/utils/ToastMsg';
-import { cleanNgPhoneNo, validatePhoneNo } from "@/utils/cleanPhoneNo";
-import isValidEmail from "@/utils/validateEmail";
 import axios_api from "@/utils/axios";
 
 export async function homeLoader({ request }) {
@@ -13,34 +9,19 @@ export async function homeLoader({ request }) {
 	return electionid;
 }
 
-/**
- * Determines the current status of the election based on date ranges
- */
-const getEventStatus = (startDate, endDate) => {
-	const now = new Date();
-	return {
-		isPending: now < startDate,
-		hasEnded: now > endDate,
-		isActive: now >= startDate && now <= endDate
-	};
-};
-
 function Home() {
 	const navigate = useNavigate();
 	const electionFromQueryParams = useLoaderData();
-	const { setVoter } = useAuth();
 
 	// State management
 	const [electionId, setElectionId] = useState('');
-	const [election, setElection] = useState(null);
-
 	const [isLoading, setIsLoading] = useState(false);
-	
-	const participant = useRef(null);
 
 	// Auto-process if ID comes from URL
 	useEffect(() => {
-		if (electionFromQueryParams) processElection(electionFromQueryParams);
+		if (electionFromQueryParams){
+			processElection(electionFromQueryParams);
+		}
 	}, [electionFromQueryParams]);
 
 	/**
@@ -56,8 +37,6 @@ function Home() {
 
 			const electionFetched = e.data;
 
-			setElection(electionFetched);
-
 			navigate(`/election/${electionFetched._id}/info`, { state: { election: electionFetched } });
 		} catch (error) {
 			Toast.error(error.message);
@@ -65,49 +44,6 @@ function Home() {
 			setIsLoading(false);
 		}
 	}, [electionFromQueryParams])
-
-	/**
-	 * Finalizes registration and navigates to ballot
-	 */
-	const addVoterToDatabase = useCallback(async () => {
-		const electionAuth = election.userAuthType;
-		const currentVoter = participant.current;
-		let newVoter = '';
-	
-		if (!currentVoter) 
-			return Toast.error(`You need to enter ${electionAuth === 'phone' ? 'a phone number' : 'an email'} to continue`);
-	
-		if (electionAuth === 'phone') {
-			let temp = cleanNgPhoneNo(currentVoter);
-	
-			if (!validatePhoneNo(temp)) 
-				return Toast.error("Phone number not valid")
-			
-			newVoter = temp;
-		} else if (electionAuth === 'email') {
-			if(!isValidEmail(currentVoter)) 
-				return Toast.error("Email not properly formatted");
-	
-			newVoter = currentVoter;
-		}
-	
-		try {
-			await axios_api.post(`election/${election._id}/addvoter/participant`, {
-				participant: newVoter,
-				electionId: election._id
-			});
-	
-			setVoter(newVoter);
-			Toast.success('Verification successful!');
-	
-			setTimeout(() => {
-				navigate(`/election/${election._id}/${b64encode(newVoter)}`);
-			}, 500);
-		} catch (error) {
-			Toast.error('Failed to register voter');
-		}
-
-	}, [election, participant]);
 
 	return (
 		<>
@@ -138,7 +74,7 @@ function Home() {
 									value={electionId}
 									onChange={(e) => setElectionId(e.target.value)}
 									onKeyDown={(e) => e.key === 'Enter' && processElection(electionId)}
-									placeholder="Election ID..."
+									placeholder="Election ID"
 									className="flex-1 px-5 py-4 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white transition-all font-mono tracking-widest"
 									style={{ fontFamily: "'JetBrains Mono', monospace" }}
 									disabled={isLoading}

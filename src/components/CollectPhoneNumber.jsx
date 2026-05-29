@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Loader2, Phone, AlertTriangle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+
 
 const PHONE_REGEX = /^[0-9]{11,15}$/;
 
@@ -13,6 +15,8 @@ const PhoneInputModal = ({ isOpen, onClose, onSubmit }) => {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const { setVoter } = useAuth();
 
     useEffect(() => {
         if (isOpen) {
@@ -47,6 +51,9 @@ const PhoneInputModal = ({ isOpen, onClose, onSubmit }) => {
         setError(null);
         try {
             await onSubmit(phoneNumber);
+            setVoter(phoneNumber);
+            navigate(`/election/${_id}/${phoneNumber}`);
+
             onClose();
         } catch (e) {
             setError(e?.message || "Something went wrong. Please try again.");
@@ -106,7 +113,7 @@ const PhoneInputModal = ({ isOpen, onClose, onSubmit }) => {
                             className={`w-full pl-10 pr-4 py-2 text-sm rounded-lg border outline-none transition focus:ring-2 disabled:opacity-50 ${error
                                     ? "border-red-400 focus:ring-red-300"
                                     : "border-gray-300 focus:ring-indigo-500"
-                                }`}
+                            }`}
                         />
                     </div>
 

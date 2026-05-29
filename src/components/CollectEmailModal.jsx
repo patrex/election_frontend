@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -28,6 +29,8 @@ export default function CollectEmailModal({
     const [email, setEmail] = useState("");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const { setVoter } = useAuth()
 
     // Reset form state whenever modal opens
     useEffect(() => {
@@ -65,6 +68,9 @@ export default function CollectEmailModal({
         setError(null);
         try {
             await onSubmit(email);
+            setVoter(email)
+            navigate(`/election/${_id}/${email}`);
+
             onClose(); // parent closes modal on success
         } catch (e) {
             setError(e?.message || "Something went wrong. Please try again.");

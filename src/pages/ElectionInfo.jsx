@@ -1,12 +1,15 @@
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Phone, Mail, Speech } from "lucide-react";
+
 import { useAuth } from "@/contexts/AuthContext";
 
 import PhoneInputModal from "@/components/CollectPhoneNumber";
 import CollectEmailModal from "@/components/CollectEmailModal";
 import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
+
+import addVoterToDb from "@/utils/addVoterToDb";
 
 /**
  * Uses local date/time for comparison — new Date() is always local,
@@ -77,7 +80,7 @@ const ElectionInfo = () => {
 		_id,
 	} = state.election;
 
-	const { voter, setVoter } = useAuth();
+	const { voter } = useAuth();
 
 	const [showEmailModal, setShowEmailModal] = useState(false);
 	const [showPhoneModal, setShowPhoneModal] = useState(false);
@@ -97,7 +100,6 @@ const ElectionInfo = () => {
 	};
 
 	// find voters for a closed election
-
 	const  cfetchVoters = useCallback( async () => {
 		if (type == "Closed") {
 			try {
@@ -109,8 +111,8 @@ const ElectionInfo = () => {
 		}
 	}, [type, _id]);
 
-	function checkVoterExists() {
-		const _0 = voters.includes(query)
+	const checkVoterExists = useCallback(() => {
+		const _0 = voters.includes(query);
 		if (_0) {
 			setStatusModal({
 				show: true,
@@ -126,7 +128,7 @@ const ElectionInfo = () => {
 				message: `Your ${type == 'email' ? 'email' : 'phone number'} is not registered`,
 			})
 		}
-	}
+	}, [_id])
 
 	// fetch pre-registered voters for closed elections
 	useEffect(() => { cfetchVoters() }, [_id, type])
@@ -173,7 +175,7 @@ const ElectionInfo = () => {
 									</button>
 								</div>
 							)}
-							{isPending && type === 'Open' && (
+							{isPending && type === 'Open' && !voter && (
 								<div className="w-full sm:w-auto sm:ml-auto flex gap-2">
 									<button
 										onClick={handleRegisterClick}
@@ -246,7 +248,7 @@ const ElectionInfo = () => {
 					</div>
 				)}
 
-				{isActive && (
+				{(isActive && voter) && (
 					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
 						<Link
 							to={`/election/${_id}/results`}
@@ -270,13 +272,13 @@ const ElectionInfo = () => {
 			<PhoneInputModal
 				isOpen={showPhoneModal}
 				onClose={() => setShowPhoneModal(false)}
-				onSubmit={checkReggedVoter}
+				onSubmit={addVoterToDb}
 			/>
 
 			<CollectEmailModal
 				isOpen={showEmailModal}
 				onClose={() => setShowEmailModal(false)}
-				onSubmit={checkReggedVoter}
+				onSubmit={addVoterToDb}
 			/>
 		</div>
 	);
