@@ -212,9 +212,9 @@ const ElectionInfo = () => {
 						<InfoRow icon={ScrollText} label="Rules" value={rules} />
 						<InfoRow
 							icon={Users}
-							label="How do I register"
+							label={`How do I ${type === 'Closed'? 'verify': 'register'}`}
 							value={lbl}
-							valueStyles={!isPending && 'text-red-700'}
+							valueStyles={!isPending && 'text-red-500'}
 						/>
 					</div>
 				</div>
