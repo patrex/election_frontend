@@ -9,8 +9,6 @@ import CollectEmailModal from "@/components/CollectEmailModal";
 import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
 
-import addVoterToDb from "@/utils/addVoterToDb";
-
 /**
  * Uses local date/time for comparison — new Date() is always local,
  * and the startDate/endDate strings are parsed into local Date objects.
@@ -73,7 +71,6 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 
 const ElectionInfo = () => {
 	const { state } = useLocation();
-	const navigate = useNavigate();
 
 	const {
 		title, startDate, endDate,
@@ -100,6 +97,18 @@ const ElectionInfo = () => {
 	const handleRegisterClick = () => {
 		userAuthType === "phone" ? setShowPhoneModal(true) : setShowEmailModal(true);
 	};
+
+	const addVoterToDb = useCallback( async(participant) => {
+		try {
+			await axios_api.post(`election/${_id}/addvoter/participant`, {
+				participant: participant,
+				electionId: _id
+			});
+
+		} catch (error) {
+			throw new Error('Failed to register voter');
+		}
+	}, [_id])
 
 	// find voters for a closed election
 	const  cfetchVoters = useCallback( async () => {
