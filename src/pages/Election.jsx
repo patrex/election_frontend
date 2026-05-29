@@ -92,7 +92,7 @@ export default function Election() {
 	useEffect(() => {
 		if (!voter) {
 			Toast.warning("You need to register as a voter first")
-			navigate(`/`)
+			navigate(`/?event_id=${election._id}`)
 		}
 	}, [])
 
@@ -106,7 +106,7 @@ export default function Election() {
 			if (isPending) Toast.info('Voting has not started');
 			else if(hasEnded) Toast.info(`Voting has ended`)
 
-			navigate('/')
+			navigate(`/?event_id=${election._id}`)
 		}
 	}, [])
 
