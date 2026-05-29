@@ -43,12 +43,14 @@ const StatusBadge = ({ isPending, isActive, hasEnded }) => {
 			Live Now
 		</span>
 	);
+
 	if (isPending) return (
 		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
 			<span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
 			Upcoming
 		</span>
 	);
+
 	return (
 		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
 			<span className="w-1.5 h-1.5 rounded-full bg-gray-400" />

@@ -1,4 +1,4 @@
-export default addVoterToDb = async ({ _id, participant }) => {
+const addVoterToDb = async ({ _id, participant }) => {
     try {
         await axios_api.post(`election/${_id}/addvoter/participant`, {
             participant: participant,
@@ -9,3 +9,5 @@ export default addVoterToDb = async ({ _id, participant }) => {
        throw new Error('Failed to register voter');
     }
 }
+
+export default addVoterToDb;
