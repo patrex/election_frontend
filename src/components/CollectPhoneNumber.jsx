@@ -50,7 +50,7 @@ const PhoneInputModal = ({ isOpen, onClose, onSubmit }) => {
         setLoading(true);
         setError(null);
         try {
-            await onSubmit(phoneNumber);
+            await onSubmit(_id, phoneNumber);
             setVoter(phoneNumber);
             navigate(`/election/${_id}/${phoneNumber}`);
 
