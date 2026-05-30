@@ -8,6 +8,7 @@ import PhoneInputModal from "@/components/CollectPhoneNumber";
 import CollectEmailModal from "@/components/CollectEmailModal";
 import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
+import { useOTP } from "@/contexts/OTPContext";
 
 /**
  * Uses local date/time for comparison — new Date() is always local,
@@ -80,6 +81,8 @@ const ElectionInfo = () => {
 	} = state.election;
 
 	const { voter, setVoter } = useAuth();
+	const { startVerifcation } = useOTP();
+
 	const navigate = useNavigate();
 
 	const [showEmailModal, setShowEmailModal] = useState(false);
@@ -114,6 +117,17 @@ const ElectionInfo = () => {
 		}
 	}, [_id]);
 
+	const initiateVerification = useCallback(async(dest) => {
+		try {
+			await startVerifcation(dest);
+			await addVoterToDb(dest);
+
+			Toast.success("You were added")
+		} catch (error) {
+			throw new Error(`OTP verification failed`)
+		}
+	}, []);
+
 	// find voters for a closed election
 	const  cfetchVoters = useCallback( async () => {
 		if (type == "Closed") {
@@ -143,10 +157,10 @@ const ElectionInfo = () => {
 				message: `Your ${type == 'email' ? 'email' : 'phone number'} is not registered`,
 			})
 		}
-	}, [_id])
+	}, [_id]);
 
 	// fetch pre-registered voters for closed elections
-	useEffect(() => { cfetchVoters() }, [_id, type])
+	useEffect(() => { cfetchVoters() }, [_id, type]);
 
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
@@ -287,13 +301,13 @@ const ElectionInfo = () => {
 			<PhoneInputModal
 				isOpen={showPhoneModal}
 				onClose={() => setShowPhoneModal(false)}
-				onSubmit={addVoterToDb}
+				onSubmit={initiateVerification}
 			/>
 
 			<CollectEmailModal
 				isOpen={showEmailModal}
 				onClose={() => setShowEmailModal(false)}
-				onSubmit={addVoterToDb}
+				onSubmit={initiateVerification}
 			/>
 		</div>
 	);
