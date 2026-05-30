@@ -73,19 +73,18 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 );
 
 const ElectionInfo = () => {
-	const { state } = useLocation();
+	const { election } = useElection();
 
 	const {
 		title, startDate, endDate,
 		type, desc, rules,
 		userAuthType, addCandidatesBy,
 		_id,
-	} = state.election;
+	} = election;
 
 	const { voter, setVoter } = useAuth();
 	const { startVerifcation } = useOTP();
 
-	const { election } = useElection();
 
 	const navigate = useNavigate();
 
