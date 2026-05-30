@@ -107,7 +107,7 @@ const ElectionInfo = () => {
 	};
 
 	useEffect(() => {
-		console.log(election);
+		console.log(election, "from context");
 	}, [])
 
 	const addVoterToDb = useCallback( async(participant) => {
