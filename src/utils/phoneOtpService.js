@@ -1,4 +1,4 @@
-import { fetcher } from "./fetcher";
+import axios_api from "./axios";
 import handleOTPErrors from "./otpErr";
 
 export const sendPhoneOtp = async (dest, electionId) => {
@@ -8,7 +8,7 @@ export const sendPhoneOtp = async (dest, electionId) => {
 	}
 
 	try {
-		const token_req = await fetcher.post(
+		const token_req = await axios_api.post(
 			`otp/getOTP/phone`, 
 			payload
 		);
@@ -19,7 +19,7 @@ export const sendPhoneOtp = async (dest, electionId) => {
 	
 		// const token_response = await token_req.json();
 		// console.log(token_response);
-		return {success: true, data: token_req};
+		return {success: true, data: token_req.data};
 	} catch (error) {
 		const errMsg = handleOTPErrors(error)
 		console.error('Error sending phone OTP:', error, errMsg.message);
@@ -34,7 +34,7 @@ export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 	}
 
 	try {
-		const response = await fetcher.post(
+		const response = await axios_api.post(
 			`otp/verifyOtp`,
 			payload
 		);
@@ -44,7 +44,7 @@ export const verifyPhoneOtp = async ({ pinId, otpCode }) => {
 		// }
 	
 		// const successData = await response.json();
-		return { success: true, data: response }; 
+		return { success: true, data: response.data }; 
 	} catch (error) {
 		// This catch now handles both network errors AND server-side HTTP errors (4xx/5xx)
 		// Return false on any failure

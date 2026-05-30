@@ -3,6 +3,8 @@ import OTPInput from '../components/OTPInput.jsx';
 import { sendPhoneOtp, verifyPhoneOtp } from '@/utils/phoneOtpService.js';
 import { cleanNgPhoneNo, validatePhoneNo } from '@/utils/cleanPhoneNo';
 
+import { useElection } from './ElectionContext.jsx';
+
 // =================================================================
 // Constants
 // =================================================================
@@ -43,6 +45,8 @@ const parseDestination = (raw) => {
 
 const OTPVerificationModal = () => {
 	const { isModalOpen, destination, handleCancel, handleSuccess } = useOTP();
+
+	const { election } = useElection();
 
 	const [otpValue, setOtpValue]     = useState('');
 	const [isLoading, setIsLoading]   = useState(false);
@@ -85,7 +89,7 @@ const OTPVerificationModal = () => {
 		setError('');
 
 		try {
-			otpRequestRef.current = await sendPhoneOtp(destination);
+			otpRequestRef.current = await sendPhoneOtp(destination, election._id);
 			setResendTimer(RESEND_COOLDOWN);
 		} catch (err) {
 			setError(err.message || 'Failed to send code. Please try again.');
@@ -264,7 +268,7 @@ export const OTPProvider = ({ children }) => {
 	const resolveRef = useRef(null);
 	const rejectRef  = useRef(null);
 
-	const startVerification = useCallback((rawDestination) => {
+	const startVerification = useCallback((rawDestination, id) => {
 		return new Promise((resolve, reject) => {
 			let dest;
 			try {

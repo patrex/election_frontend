@@ -13,6 +13,7 @@ axios.defaults.withCredentials=true;
 axios.defaults.baseURL='/api';
 
 import { OTPProvider } from './contexts/OTPContext.jsx'
+import { ElectionProvider } from './contexts/ElectionContext.jsx'
 
 // Configure once at app startup
 configureFetcher({
@@ -37,7 +38,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 	<ErrorBoundary>
 		<OTPProvider>
-			<App />
+			<ElectionProvider>
+				<App />
+			</ElectionProvider>
 		</OTPProvider>
 	</ErrorBoundary>
   </React.StrictMode>,

@@ -3,6 +3,8 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import Toast from '@/utils/ToastMsg';
 import axios_api from "@/utils/axios";
 
+import { useElection } from "@/contexts/ElectionContext";
+
 export async function homeLoader({ request }) {
 	const url = new URL(request.url);
 	const electionid = url.searchParams.get("event_id");
@@ -16,6 +18,8 @@ function Home() {
 	// State management
 	const [electionId, setElectionId] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+
+	const { setElection } = useElection();
 
 	// Auto-process if ID comes from URL
 	useEffect(() => {
@@ -36,6 +40,7 @@ function Home() {
 			if (!e) throw new Error("No election was found with that ID!");
 
 			const electionFetched = e.data;
+			setElection(electionFetched);
 
 			navigate(`/election/${electionFetched._id}/info`, { state: { election: electionFetched } });
 		} catch (error) {

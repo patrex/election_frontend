@@ -10,6 +10,8 @@ import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
 
+import { useElection } from "@/contexts/ElectionContext";
+
 /**
  * Uses local date/time for comparison — new Date() is always local,
  * and the startDate/endDate strings are parsed into local Date objects.
@@ -83,6 +85,8 @@ const ElectionInfo = () => {
 	const { voter, setVoter } = useAuth();
 	const { startVerifcation } = useOTP();
 
+	const { election } = useElection();
+
 	const navigate = useNavigate();
 
 	const [showEmailModal, setShowEmailModal] = useState(false);
@@ -102,6 +106,10 @@ const ElectionInfo = () => {
 		userAuthType === "phone" ? setShowPhoneModal(true) : setShowEmailModal(true);
 	};
 
+	useEffect(() => {
+		console.log(election);
+	}, [])
+
 	const addVoterToDb = useCallback( async(participant) => {
 		try {
 			await axios_api.post(`election/${_id}/addvoter/participant`, {
@@ -117,9 +125,9 @@ const ElectionInfo = () => {
 		}
 	}, [_id]);
 
-	const initiateVerification = useCallback(async(dest) => {
+	const initiateVerification = useCallback(async (dest) => {
 		try {
-			await startVerifcation(dest);
+			await startVerifcation(dest, _id);
 			await addVoterToDb(dest);
 
 			Toast.success("You were added")
