@@ -268,7 +268,7 @@ export const OTPProvider = ({ children }) => {
 	const resolveRef = useRef(null);
 	const rejectRef  = useRef(null);
 
-	const startVerification = useCallback((rawDestination, id) => {
+	const startVerification = useCallback((rawDestination) => {
 		return new Promise((resolve, reject) => {
 			let dest;
 			try {
