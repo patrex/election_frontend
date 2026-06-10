@@ -53,7 +53,7 @@ const router = createBrowserRouter(
 				errorElement={<Error />}
 			/>
 
-			<Route path="/election/:id/:voterId" 
+			<Route path="/election/:id/vote" 
 				element={<Election />} 
 				loader={electionLoader}
 				errorElement={<Error />}
