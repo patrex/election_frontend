@@ -126,7 +126,7 @@ const ElectionInfo = () => {
 
 	const initiateVerification = useCallback(async (dest) => {
 		try {
-			await startVerifcation(dest, _id);
+			await startVerifcation(dest);
 			await addVoterToDb(dest);
 
 			Toast.success("You were added")
