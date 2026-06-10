@@ -131,7 +131,8 @@ const ElectionInfo = () => {
 
 			Toast.success("You were added")
 		} catch (error) {
-			throw new Error(error)
+			console.log(error)
+			throw new Error(`OTP verification failed`)
 		}
 	}, []);
 
