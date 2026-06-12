@@ -105,10 +105,6 @@ const ElectionInfo = () => {
 		userAuthType === "phone" ? setShowPhoneModal(true) : setShowEmailModal(true);
 	};
 
-	useEffect(() => {
-		console.log(election, "from context");
-	}, [])
-
 	const addVoterToDb = useCallback( async(participant) => {
 		try {
 			await axios_api.post(`election/${_id}/addvoter/participant`, {
