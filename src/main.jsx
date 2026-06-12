@@ -22,5 +22,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 			</OTPProvider>
 		</ElectionProvider>
 	</ErrorBoundary>
-  </React.StrictMode>,
+  </React.StrictMode>
 )
