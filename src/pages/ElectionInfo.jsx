@@ -120,7 +120,7 @@ const ElectionInfo = () => {
 	}, [_id]);
 
 	const initiateVerification = useCallback(async (dest) => {
-		console.log(useOTP);
+		console.log(startVerifcation);
 		
 		try {
 			await startVerifcation(dest);
