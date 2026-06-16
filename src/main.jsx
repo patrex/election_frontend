@@ -16,11 +16,11 @@ import { OTPProvider } from './contexts/OTPContext'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 	<ErrorBoundary>
-		<ElectionProvider>
-			<OTPProvider>
+		<OTPProvider>
+			<ElectionProvider>
 				<App />
-			</OTPProvider>
-		</ElectionProvider>
+			</ElectionProvider>
+		</OTPProvider>
 	</ErrorBoundary>
   </React.StrictMode>
 )

@@ -85,7 +85,6 @@ const ElectionInfo = () => {
 	const { voter, setVoter } = useAuth();
 	const { startVerifcation } = useOTP();
 
-
 	const navigate = useNavigate();
 
 	const [showEmailModal, setShowEmailModal] = useState(false);
@@ -121,6 +120,8 @@ const ElectionInfo = () => {
 	}, [_id]);
 
 	const initiateVerification = useCallback(async (dest) => {
+		console.log(useOTP);
+		
 		try {
 			await startVerifcation(dest);
 			await addVoterToDb(dest);
