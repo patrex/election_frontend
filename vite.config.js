@@ -12,6 +12,9 @@ export default defineConfig({
 	  		"@": path.resolve(__dirname, "./src"),
 		},
 		dedupe: ['react', 'react-dom'],
+		build: {
+    sourcemap: true,
+  },
     },
   	// server: {
 	// 	proxy: {
