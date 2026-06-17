@@ -10,8 +10,7 @@ import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
 
-const ctx = useOTP();
-console.log(ctx);
+
 
 
 
@@ -126,6 +125,8 @@ const ElectionInfo = () => {
 
 	const initiateVerification = useCallback(async (dest) => {
 		console.log(startVerifcation);
+		const ctx = useOTP();
+console.log(ctx);
 		
 		try {
 			await startVerifcation(dest);
