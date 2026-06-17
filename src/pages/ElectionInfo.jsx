@@ -87,7 +87,6 @@ const ElectionInfo = () => {
 	} = election;
 
 	const { voter, setVoter } = useAuth();
-	const { startVerifcation } = useOTP();
 
 	const navigate = useNavigate();
 
@@ -124,10 +123,8 @@ const ElectionInfo = () => {
 	}, [_id]);
 
 	const initiateVerification = useCallback(async (dest) => {
-		console.log(startVerifcation);
-		const ctx = useOTP();
-console.log(ctx);
-		
+		const { startVerifcation } = useOTP();
+
 		try {
 			await startVerifcation(dest);
 			await addVoterToDb(dest);
