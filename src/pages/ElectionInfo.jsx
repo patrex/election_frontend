@@ -9,11 +9,6 @@ import CollectEmailModal from "@/components/CollectEmailModal";
 import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
-
-
-
-
-
 import { useElection } from "@/contexts/ElectionContext";
 
 /**
@@ -77,7 +72,10 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 );
 
 const ElectionInfo = () => {
+	const { startVerifcation } = useOTP();
 	const { election } = useElection();
+	const { voter, setVoter } = useAuth();
+	const navigate = useNavigate();
 
 	const {
 		title, startDate, endDate,
@@ -85,10 +83,6 @@ const ElectionInfo = () => {
 		userAuthType, addCandidatesBy,
 		_id,
 	} = election;
-
-	const { voter, setVoter } = useAuth();
-
-	const navigate = useNavigate();
 
 	const [showEmailModal, setShowEmailModal] = useState(false);
 	const [showPhoneModal, setShowPhoneModal] = useState(false);
@@ -123,8 +117,6 @@ const ElectionInfo = () => {
 	}, [_id]);
 
 	const initiateVerification = useCallback(async (dest) => {
-		const { startVerifcation } = useOTP();
-
 		try {
 			await startVerifcation(dest);
 			await addVoterToDb(dest);
