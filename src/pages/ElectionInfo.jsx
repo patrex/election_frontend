@@ -10,6 +10,9 @@ import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
 
+console.log(useOTP);
+
+
 import { useElection } from "@/contexts/ElectionContext";
 
 /**
