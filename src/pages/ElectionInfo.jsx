@@ -9,6 +9,7 @@ import CollectEmailModal from "@/components/CollectEmailModal";
 import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
+import Toast from "@/utils/ToastMsg";
 import { useElection } from "@/contexts/ElectionContext";
 
 /**
@@ -116,17 +117,17 @@ const ElectionInfo = () => {
 		}
 	}, [_id]);
 
-	const initiateVerification = async (dest) => {
+	const initiateVerification = useCallback(async (dest) => {
 		try {
-			await startVerifcation(dest);
-			await addVoterToDb(dest);
+			const verificationResult = await startVerifcation(dest);
+			const addToDbResult = await addVoterToDb(dest);
 
 			Toast.success("You were added")
 		} catch (error) {
 			console.log(error)
 			throw new Error(`OTP verification failed`)
 		}
-	}
+	}, [startVerifcation, addVoterToDb]);
 
 	// find voters for a closed election
 	const  cfetchVoters = useCallback( async () => {
@@ -157,7 +158,7 @@ const ElectionInfo = () => {
 				message: `Your ${type == 'email' ? 'email' : 'phone number'} is not registered`,
 			})
 		}
-	}, [_id]);
+	}, [_id, voters, query]);
 
 	// fetch pre-registered voters for closed elections
 	useEffect(() => { cfetchVoters() }, [_id, type]);
