@@ -110,8 +110,7 @@ const ElectionInfo = () => {
 			});
 
             setVoter(participant);
-
-            navigate(`/election/${_id}/${participant}`);
+            // navigate(`/election/${_id}/${participant}`);	
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -119,25 +118,22 @@ const ElectionInfo = () => {
 
 	const initiateVerification = useCallback(async (dest) => {
 		try {
-			const verificationResult = await startVerification(dest);
-			const addToDbResult = await addVoterToDb(dest);
+			await startVerification(dest);
+			await addVoterToDb(dest);
 
-			Toast.success("You were added")
+			Toast.success("You have been added")
 		} catch (error) {
-			console.log(error)
 			throw new Error(`OTP verification failed`)
 		}
 	}, [startVerification, addVoterToDb]);
 
 	// find voters for a closed election
 	const  cfetchVoters = useCallback( async () => {
-		if (type == "Closed") {
-			try {
-				const _cv = await axios_api.get(`election/${_id}/voterlist`);
-				setVoters(_cv.data ?? []);
-			} catch (error) {
-				throw new Error("Could not fetch voters for this closed election")
-			}
+		try {
+			const _cv = await axios_api.get(`election/${_id}/voterlist`);
+			setVoters(_cv.data ?? []);
+		} catch (error) {
+			throw new Error("Could not fetch voters for this closed election")
 		}
 	}, [type, _id]);
 
@@ -148,14 +144,14 @@ const ElectionInfo = () => {
 				show: true,
 				status: 'success',
 				title: 'Verified',
-				message: `Your ${type == 'email' ? 'email' : 'phone number'} is registered`,
+				message: `Your ${ userAuthType === 'email' ? 'email' : 'phone number' } is registered`,
 			})
 		} else {
 			setStatusModal({
 				show: true,
 				status: 'error',
 				title: 'Verification failed',
-				message: `Your ${type == 'email' ? 'email' : 'phone number'} is not registered`,
+				message: `Your ${userAuthType == 'email' ? 'email' : 'phone number'} is not registered`,
 			})
 		}
 	}, [_id, voters, query]);
@@ -164,154 +160,172 @@ const ElectionInfo = () => {
 	useEffect(() => { cfetchVoters() }, [_id, type]);
 
 	return (
-		<div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
-			<div className="max-w-2xl mx-auto space-y-5">
-				{/* Header card */}
-				<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
-					<div className="bg-gradient-to-br from-indigo-600 to-indigo-700 px-6 pt-6 pb-10">
-						<p className="text-indigo-200 text-xs font-semibold uppercase tracking-widest mb-2">
-							We found your election
-						</p>
-						<h1 className="text-2xl font-bold text-white leading-snug">{title}</h1>
-						<div className="mt-3 flex items-center gap-2 flex-wrap">
-							<StatusBadge isPending={isPending} isActive={isActive} hasEnded={hasEnded} />
-							<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white">
-								<Shield className="h-3 w-3" />
-								{type}
-							</span>
-							{/* for closed ballots for people to check if they're pre-registered to vote */}
-							{isPending && type === 'Closed' && (
-								<div className="w-full sm:w-auto sm:ml-auto flex gap-2">
-									<div className="flex flex-1 sm:w-64 items-center bg-white rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-white/50 transition-all">
-										<span className="flex items-center justify-center pl-3 pr-2 text-gray-400 pointer-events-none shrink-0">
-											{userAuthType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
-										</span>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
+      <div className="max-w-2xl mx-auto space-y-5">
+        {/* Header card */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+          <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 px-6 pt-6 pb-10">
+            <p className="text-indigo-200 text-xs font-semibold uppercase tracking-widest mb-2">
+              We found your election
+            </p>
+            <h1 className="text-2xl font-bold text-white leading-snug">
+              {title}
+            </h1>
+            <div className="mt-3 flex items-center gap-2 flex-wrap">
+              <StatusBadge
+                isPending={isPending}
+                isActive={isActive}
+                hasEnded={hasEnded}
+              />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white">
+                <Shield className="h-3 w-3" />
+                {type}
+              </span>
 
-										<input
-											type={userAuthType === "email" ? "email" : "tel"}
-											value={query}
-											onChange={(e) => setQuery(e.target.value)}
-											onKeyDown={(e) => e.key === "Enter" && checkVoterExists()}
-											placeholder={userAuthType === "email" ? "Enter email" : "Enter phone"}
-											className="flex-1 min-w-0 text-sm bg-transparent !border-none !outline-none !shadow-none text-gray-900 placeholder-gray-400"
-										/>
-									</div>
-									<button
-										onClick={checkVoterExists}
-										className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
-									>
-										<Vote className="h-4 w-4" />
-										Check
-									</button>
-								</div>
-							)}
-							{isPending && type === 'Open' && !voter && (
-								<div className="w-full sm:w-auto sm:ml-auto flex gap-2">
-									<button
-										onClick={handleRegisterClick}
-										className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
-									>
-										<Vote className="h-4 w-4" />
-										Register to vote
-									</button>
-								</div>
-							)}
-						</div>
-					</div>
+              {/* for closed ballots for people to check if they're pre-registered to vote */}
+              {(
+                <div className="w-full sm:w-auto sm:ml-auto flex gap-2">
+                  <div className="flex flex-1 sm:w-64 items-center bg-white rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-white/50 transition-all">
+                    <span className="flex items-center justify-center pl-3 pr-2 text-gray-400 pointer-events-none shrink-0">
+                      {userAuthType === "email" ? (
+                        <Mail className="h-4 w-4" />
+                      ) : (
+                        <Phone className="h-4 w-4" />
+                      )}
+                    </span>
 
-					{/* Dates strip */}
-					<div className="grid grid-cols-2 divide-x divide-gray-100 dark:divide-gray-800 -mt-4 mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800">
-						<div className="px-4 py-3">
-							<p className="text-xs text-gray-400 flex items-center gap-1 mb-1">
-								<Calendar className="h-3 w-3" /> Starts
-							</p>
-							<p className="text-sm font-medium text-gray-800 dark:text-gray-200">{formatDate(startDate)}</p>
-						</div>
-						<div className="px-4 py-3">
-							<p className="text-xs text-gray-400 flex items-center gap-1 mb-1">
-								<Clock className="h-3 w-3" /> Ends
-							</p>
-							<p className="text-sm font-medium text-gray-800 dark:text-gray-200">{formatDate(endDate)}</p>
-						</div>
-					</div>
+                    <input
+                      type={userAuthType === "email" ? "email" : "tel"}
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && checkVoterExists()}
+                      placeholder={
+                        userAuthType === "email" ? "Enter email" : "Enter phone"
+                      }
+                      className="flex-1 min-w-0 text-sm bg-transparent !border-none !outline-none !shadow-none text-gray-900 placeholder-gray-400"
+                    />
+                  </div>
+                  <button
+                    onClick={checkVoterExists}
+                    className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
+                  >
+                    <Vote className="h-4 w-4" />
+                    Check
+                  </button>
+                </div>
+              )}
+              {isPending && type === "Open" && !voter && (
+                <div className="w-full sm:w-auto sm:ml-auto flex gap-2">
+                  <button
+                    onClick={handleRegisterClick}
+                    className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
+                  >
+                    <Vote className="h-4 w-4" />
+                    Register to vote
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
 
-					<div className="px-6 py-5 mt-1">
-						<InfoRow icon={FileText} label="Description" value={desc} />
-						<InfoRow icon={ScrollText} label="Rules" value={rules} />
-						<InfoRow
-							icon={Users}
-							label={`How do I ${type === 'Closed'? 'verify': 'register'}`}
-							value={lbl}
-							valueStyles={!isPending && 'text-red-500'}
-						/>
-					</div>
-				</div>
+          {/* Dates strip */}
+          <div className="grid grid-cols-2 divide-x divide-gray-100 dark:divide-gray-800 -mt-4 mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800">
+            <div className="px-4 py-3">
+              <p className="text-xs text-gray-400 flex items-center gap-1 mb-1">
+                <Calendar className="h-3 w-3" /> Starts
+              </p>
+              <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                {formatDate(startDate)}
+              </p>
+            </div>
+            <div className="px-4 py-3">
+              <p className="text-xs text-gray-400 flex items-center gap-1 mb-1">
+                <Clock className="h-3 w-3" /> Ends
+              </p>
+              <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                {formatDate(endDate)}
+              </p>
+            </div>
+          </div>
 
-				{/* Action card */}
-				{(isPending && canSelfAddCandidates) && (
-					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 w-full">	
-						<div className="flex flex-col gap-3 w-full">
-							<Link to={`/election/${_id}/addcandidate`}
-								className="w-full no-underline flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
-							>
-								<div className="flex items-center gap-3">
-									<Speech className="h-5 w-5 text-indigo-500 flex-shrink-0" />
-									<span>Become a Candidate</span>
-								</div>
-								<ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
-							</Link>
-						</div>
-					</div>
-				)}
+          <div className="px-6 py-5 mt-1">
+            <InfoRow icon={FileText} label="Description" value={desc} />
+            <InfoRow icon={ScrollText} label="Rules" value={rules} />
+            <InfoRow
+              icon={Users}
+              label={`How do I ${type === "Closed" ? "verify" : "register"}`}
+              value={lbl}
+              valueStyles={!isPending && "text-red-500"}
+            />
+          </div>
+        </div>
 
-				{hasEnded && (
-					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
-						<Link
-							to={`/election/${_id}/results`}
-							className="w-full no-underline text-red-600 bg-red-100 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
-						>
-							<div className="flex items-center gap-3">
-								<span>Election has Ended. View Results</span>
-							</div>
-							<ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
-						</Link>
-					</div>
-				)}
+        {/* Action card */}
+        {isPending && canSelfAddCandidates && (
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 w-full">
+            <div className="flex flex-col gap-3 w-full">
+              <Link
+                to={`/election/${_id}/addcandidate`}
+                className="w-full no-underline flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
+              >
+                <div className="flex items-center gap-3">
+                  <Speech className="h-5 w-5 text-indigo-500 flex-shrink-0" />
+                  <span>Become a Candidate</span>
+                </div>
+                <ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
+              </Link>
+            </div>
+          </div>
+        )}
 
-				{(isActive && voter) && (
-					<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
-						<Link
-							to={`/election/${_id}/vote`}
-							className="w-full no-underline text-green-600 bg-green-100 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
-						>
-							<div className="flex items-center gap-3">
-								<Vote className="h-5 w-5 text-indigo-500 flex-shrink-0" />
-								<span className="text-red dark:text-red-400">Go to Ballot</span>
-							</div>
-							<ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
-						</Link>
-					</div>
-				)}
-			</div>
+        {hasEnded && (
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
+            <Link
+              to={`/election/${_id}/results`}
+              className="w-full no-underline text-red-600 bg-red-100 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
+            >
+              <div className="flex items-center gap-3">
+                <span>Election has Ended. View Results</span>
+              </div>
+              <ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
+            </Link>
+          </div>
+        )}
 
-			<ShowAlert
-				{...statusModal}
-				onClose={() => setStatusModal(s => ({ ...s, show: false }))}
-			/>
+        {isActive && voter && (
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
+            <Link
+              to={`/election/${_id}/vote`}
+              className="w-full no-underline text-green-600 bg-green-100 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
+            >
+              <div className="flex items-center gap-3">
+                <Vote className="h-5 w-5 text-indigo-500 flex-shrink-0" />
+                <span className="text-red dark:text-red-400">Go to Ballot</span>
+              </div>
+              <ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
+            </Link>
+          </div>
+        )}
+      </div>
 
-			<PhoneInputModal
-				isOpen={showPhoneModal}
-				onClose={() => setShowPhoneModal(false)}
-				onSubmit={initiateVerification}
-			/>
+      <ShowAlert
+        {...statusModal}
+        onClose={() => setStatusModal((s) => ({ ...s, show: false }))}
+      />
 
-			<CollectEmailModal
-				isOpen={showEmailModal}
-				onClose={() => setShowEmailModal(false)}
-				onSubmit={initiateVerification}
-			/>
-		</div>
-	);
+      <PhoneInputModal
+        isOpen={showPhoneModal}
+        onClose={() => setShowPhoneModal(false)}
+        onSubmit={initiateVerification}
+      />
+
+      <CollectEmailModal
+        isOpen={showEmailModal}
+        onClose={() => setShowEmailModal(false)}
+        onSubmit={initiateVerification}
+      />
+    </div>
+  );
 };
 
 export default ElectionInfo;
