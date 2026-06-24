@@ -1,6 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Phone, Mail, Speech } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  Shield,
+  FileText,
+  ScrollText,
+  Users,
+  ChevronRight,
+  Vote,
+  Phone,
+  Mail,
+  Speech,
+} from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -18,137 +30,160 @@ import VoterCheckOverlay from "@/components/ConfirmReg";
  * and the startDate/endDate strings are parsed into local Date objects.
  */
 const getEventStatus = (startDate, endDate) => {
-	const now = new Date();
-	const start = new Date(startDate);
-	const end = new Date(endDate);
-	return {
-		isPending: now < start,
-		hasEnded: now > end,
-		isActive: now >= start && now <= end,
-	};
+  const now = new Date();
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  return {
+    isPending: now < start,
+    hasEnded: now > end,
+    isActive: now >= start && now <= end,
+  };
 };
 
 const formatDate = (dateStr) =>
-	new Date(dateStr).toLocaleString(undefined, {
-		weekday: "short",
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-		hour: "2-digit",
-		minute: "2-digit",
-	});
+  new Date(dateStr).toLocaleString(undefined, {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
 const StatusBadge = ({ isPending, isActive, hasEnded }) => {
-	if (isActive) return (
-		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
-			<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-			Live Now
-		</span>
-	);
+  if (isActive)
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        Live Now
+      </span>
+    );
 
-	if (isPending) return (
-		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
-			<span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-			Upcoming
-		</span>
-	);
+  if (isPending)
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+        Upcoming
+      </span>
+    );
 
-	return (
-		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-			<span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-			Ended
-		</span>
-	);
+  return (
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+      <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
+      Ended
+    </span>
+  );
 };
 
 const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
-	<div className="flex items-start gap-3 py-3 border-b border-gray-100 dark:border-gray-800 last:border-0">
-		<span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex-shrink-0">
-			<Icon className="h-3.5 w-3.5 text-indigo-500" />
-		</span>
-		<div className="min-w-0">
-			<p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-0.5">{label}</p>
-			<p className={`text-sm ${valueStyles ? valueStyles : 'text-gray-800'} dark:text-gray-200`}>{value}</p>
-		</div>
-	</div>
+  <div className="flex items-start gap-3 py-3 border-b border-gray-100 dark:border-gray-800 last:border-0">
+    <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex-shrink-0">
+      <Icon className="h-3.5 w-3.5 text-indigo-500" />
+    </span>
+    <div className="min-w-0">
+      <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-0.5">
+        {label}
+      </p>
+      <p
+        className={`text-sm ${valueStyles ? valueStyles : "text-gray-800"} dark:text-gray-200`}
+      >
+        {value}
+      </p>
+    </div>
+  </div>
 );
 
 const ElectionInfo = () => {
-	const { startVerification } = useOTP();
-	const { election } = useElection();
-	const { voter, setVoter } = useAuth();
-	const navigate = useNavigate();
+  const { startVerification } = useOTP();
+  const { election } = useElection();
+  const { voter, setVoter } = useAuth();
+  const navigate = useNavigate();
 
-	const {
-		title, startDate, endDate,
-		type, desc, rules,
-		userAuthType, addCandidatesBy,
-		_id,
-	} = election;
+  const {
+    title,
+    startDate,
+    endDate,
+    type,
+    desc,
+    rules,
+    userAuthType,
+    addCandidatesBy,
+    _id,
+  } = election;
 
-	const [showEmailModal, setShowEmailModal] = useState(false);
-	const [showPhoneModal, setShowPhoneModal] = useState(false);
-	const [showVoterCheck, setShowVoterCheck] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showPhoneModal, setShowPhoneModal] = useState(false);
+  const [showVoterCheck, setShowVoterCheck] = useState(false);
 
-	const [voters, setVoters] = useState([]);
+  const [voters, setVoters] = useState([]);
 
-	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate);
-	const canSelfAddCandidates = isPending && addCandidatesBy === "Candidates Will Add Themselves";
-	const lbl = isPending
-		? userAuthType === "phone" ? "Phone number required" : "Email address required"
-		: "Registration has ended";
+  const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate);
+  const canSelfAddCandidates =
+    isPending && addCandidatesBy === "Candidates Will Add Themselves";
+  const lbl = isPending
+    ? userAuthType === "phone"
+      ? "Phone number required"
+      : "Email address required"
+    : "Registration has ended";
 
-	const handleRegisterClick = () => {
-		userAuthType === "phone" ? setShowPhoneModal(true) : setShowEmailModal(true);
-	};
+  const handleRegisterClick = () => {
+    userAuthType === "phone"
+      ? setShowPhoneModal(true)
+      : setShowEmailModal(true);
+  };
 
-	const addVoterToDb = useCallback( async(participant) => {
-		try {
-			await axios_api.post(`election/${_id}/addvoter/participant`, {
-				participant: participant,
-				electionId: _id
-			});
+  const addVoterToDb = useCallback(
+    async (participant) => {
+      try {
+        await axios_api.post(`election/${_id}/addvoter/participant`, {
+          participant: participant,
+          electionId: _id,
+        });
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    [_id],
+  );
 
-            setVoter(participant);
-            // navigate(`/election/${_id}/${participant}`);	
-		} catch (error) {
-			throw new Error(error);
-		}
-	}, [_id]);
+  const initiateVerification = useCallback(
+    async (dest) => {
+      try {
+        await startVerification(dest);
+        await addVoterToDb(dest);
 
-	const initiateVerification = useCallback(async (dest) => {
-		try {
-			await startVerification(dest);
-			await addVoterToDb(dest);
+        Toast.success("You have been added");
+      } catch (error) {
+        throw new Error(`OTP verification failed`);
+      }
+    },
+    [startVerification, addVoterToDb],
+  );
 
-			Toast.success("You have been added")
-		} catch (error) {
-			throw new Error(`OTP verification failed`)
-		}
-	}, [startVerification, addVoterToDb]);
+  // find voters for a closed election
+  const cfetchVoters = useCallback(async () => {
+    try {
+      const _cv = await axios_api.get(`election/${_id}/voterlist`);
 
-	// find voters for a closed election
-	const  cfetchVoters = useCallback( async () => {
-		try {
-			const _cv = await axios_api.get(`election/${_id}/voterlist`);
-			
-			let contacts;
-			if (userAuthType === "email") {
-				contacts = _cv.data.map((c) => c.email);
-			} else {
-				contacts = _cv.data.map((c) => c.phoneNo);
-			}
+      let contacts;
+      if (userAuthType === "email") {
+        contacts = _cv.data.map((c) => c.email);
+      } else {
+        contacts = _cv.data.map((c) => c.phoneNo);
+      }
 
-			setVoters(contacts ?? []);
-		} catch (error) {
-			throw new Error("Could not fetch voters for this closed election")
-		}
-	}, [type, _id]);
+      setVoters(contacts ?? []);
+    } catch (error) {
+      throw new Error("Could not fetch voters for this closed election");
+    }
+  }, [type, _id]);
 
-	// fetch pre-registered voters for closed elections
-	useEffect(() => { cfetchVoters() }, [_id, type]);
+  // fetch registered voters for closed elections
+  useEffect(() => {
+    cfetchVoters();
+  }, [_id, type]);
 
-	return (
+  return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
       <div className="max-w-2xl mx-auto space-y-5">
         {/* Header card */}
@@ -176,7 +211,7 @@ const ElectionInfo = () => {
                   onClick={() => setShowVoterCheck(true)}
                   className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-sm font-semibold rounded-xl transition"
                 >
-                  <Vote className="h-4 w-4" />
+                  <DatabaseSearch className="h-4 w-4" />
                   Check Registration
                 </button>
               }
@@ -259,6 +294,8 @@ const ElectionInfo = () => {
             </Link>
           </div>
         )}
+
+        {/* TO-DO: When election is active, how do users login to vote? */}
 
         {isActive && voter && (
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">

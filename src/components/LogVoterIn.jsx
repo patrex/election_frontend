@@ -1,14 +1,43 @@
 import { useEffect, useState } from "react";
 import { Mail, Phone, Vote, CheckCircle2, XCircle, X } from "lucide-react";
+import { useOTP } from "@/contexts/OTPContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useElection } from "@/contexts/ElectionContext";
+import Toast from "@/utils/ToastMsg";
+import { useNavigate } from 'react-router-dom'
 
-const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
+const VoterLoginOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState(null); // null | "success" | "error"
+  const navigate = useNavigate();
 
+  const { setVoter } = useAuth()
+  const { startVerification } = useOTP();
+  const { election } = useElection();
+
+  const isEmail = userAuthType === "email";
+  
   const checkVoterExists = () => {
-    if (!query.trim()) return;
-    setStatus(voters.includes(query.trim()) ? "success" : "error");
-  };
+    if (!query.trim()) 
+      return Toast.error(`No ${isEmail ? 'Email': 'Phone number'} enttered`);
+    
+    if (!voters.includes(query.trim())) {
+      return Toast.error(`Your ${isEmail ? 'email' : 'phone number'} is not registered`)
+    } 
+
+    startIdCheck();
+  }
+
+  const startIdCheck = async () => {
+    try {
+      const _vRes = await startVerification(query);
+      setVoter(query);
+
+      navigate(`/election/${election._id}/${query}`);
+    } catch (error) {
+      throw new Error("Could not verify your identity");
+    }
+  }
 
   const handleClose = () => {
     setQuery("");
@@ -17,8 +46,6 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   };
 
   if (!isOpen) return null;
-
-  const isEmail = userAuthType === "email";
 
   return (
     <div
@@ -44,7 +71,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
           Enter the {isEmail ? "email address" : "phone number"} you registered
-          with to confirm you can vote.
+          with to proceed
         </p>
 
         {/* Input */}
@@ -89,11 +116,11 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
           className="w-full flex items-center justify-center gap-2 h-11 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition active:scale-95"
         >
           <Vote className="h-4 w-4" />
-          Check
+          Take me to ballot
         </button>
       </div>
     </div>
   );
 };
 
-export default VoterCheckOverlay;
+export default VoterLoginOverlay;
