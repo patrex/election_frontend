@@ -139,9 +139,7 @@ const ElectionInfo = () => {
 				contacts = _cv.data.map((c) => c.phoneNo);
 			}
 
-      		console.log(contacts);
-
-			setVoters(_cv.data ?? []);
+			setVoters(contacts ?? []);
 		} catch (error) {
 			throw new Error("Could not fetch voters for this closed election")
 		}
