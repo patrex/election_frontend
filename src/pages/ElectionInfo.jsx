@@ -87,6 +87,8 @@ const ElectionInfo = () => {
 
 	const [showEmailModal, setShowEmailModal] = useState(false);
 	const [showPhoneModal, setShowPhoneModal] = useState(false);
+	const [showVoterCheck, setShowVoterCheck] = useState(false);
+
 	const [voters, setVoters] = useState([]);
 	const [query, setQuery] = useState('');
 
@@ -182,36 +184,17 @@ const ElectionInfo = () => {
                 {type}
               </span>
 
-              {/* for closed ballots for people to check if they're pre-registered to vote */}
               {
-                <div className="w-full sm:w-auto sm:ml-auto flex gap-2">
-                  <div className="flex flex-1 sm:w-64 items-center bg-white rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-white/50 transition-all">
-                    <span className="flex items-center justify-center pl-3 pr-2 text-gray-400 pointer-events-none shrink-0">
-                      {userAuthType === "email" ? (
-                        <Mail className="h-2 w-2" />
-                      ) : (
-                        <Phone className="h-2 w-2" />
-                      )}
-                    </span>
-
-                    <input
-                      type={userAuthType === "email" ? "email" : "tel"}
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && checkVoterExists()}
-                      placeholder={`Enter your ${userAuthType === "email" ? "email" : "phone number"} to confirm you can vote`}
-                      className="flex-1 min-w-0 h-2 w-2 text-sm bg-transparent !border-none !outline-none !shadow-none text-gray-900 placeholder-gray-400"
-                    />
-                  </div>
-                  <button
-                    onClick={checkVoterExists}
-                    className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
-                  >
-                    <Vote className="h-4 w-4" />
-                    Check
-                  </button>
-                </div>
+                <button
+                  onClick={() => setShowVoterCheck(true)}
+                  className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-sm font-semibold rounded-xl transition"
+                >
+                  <Vote className="h-4 w-4" />
+                  Check Registration
+                </button>
               }
+
+              {/* allow people to register - open election */}
               {isPending && type === "Open" && !voter && (
                 <div className="w-full sm:w-auto sm:ml-auto flex gap-2">
                   <button
@@ -305,6 +288,13 @@ const ElectionInfo = () => {
           </div>
         )}
       </div>
+
+      <VoterCheckOverlay
+        isOpen={showVoterCheck}
+        onClose={() => setShowVoterCheck(false)}
+        userAuthType={userAuthType}
+        voters={voters}
+      />
 
       <ShowAlert
         {...statusModal}
