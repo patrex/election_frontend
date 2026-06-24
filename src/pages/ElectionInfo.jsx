@@ -148,6 +148,7 @@ const ElectionInfo = () => {
       try {
         await startVerification(dest);
         await addVoterToDb(dest);
+        await cfetchVoters();
 
         Toast.success("You have been added");
       } catch (error) {
