@@ -3,6 +3,7 @@ import { Mail, Phone, Vote, CheckCircle2, XCircle, X } from "lucide-react";
 
 const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   const [query, setQuery] = useState("");
+  const [v, setV] = useState([])
   const [status, setStatus] = useState(null); // null | "success" | "error"
 
   const checkVoterExists = () => {
@@ -20,6 +21,11 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   if (!isOpen) return null;
 
   const isEmail = userAuthType === "email";
+
+  useEffect(() => {
+    const v = {...voters}
+    console.log(v)
+  }, [voters])
 
   return (
     <div
