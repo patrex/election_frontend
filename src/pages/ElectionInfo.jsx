@@ -131,7 +131,12 @@ const ElectionInfo = () => {
 	const  cfetchVoters = useCallback( async () => {
 		try {
 			const _cv = await axios_api.get(`election/${_id}/voterlist`);
-			console.log(_cv);
+			
+			const t = _cv.data;
+			const u = {...t}
+
+			console.log(u);
+			
 			
 			setVoters(_cv.data ?? []);
 		} catch (error) {
