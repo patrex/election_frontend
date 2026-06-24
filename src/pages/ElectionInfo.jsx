@@ -11,6 +11,7 @@ import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
 import Toast from "@/utils/ToastMsg";
 import { useElection } from "@/contexts/ElectionContext";
+import VoterCheckOverlay from "@/components/ConfirmReg";
 
 /**
  * Uses local date/time for comparison — new Date() is always local,
