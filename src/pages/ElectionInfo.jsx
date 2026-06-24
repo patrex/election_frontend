@@ -10,14 +10,13 @@ import {
   ChevronRight,
   Vote,
   Speech,
-  DatabaseSearch
+  DatabaseSearch,
 } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 
 import PhoneInputModal from "@/components/CollectPhoneNumber";
 import CollectEmailModal from "@/components/CollectEmailModal";
-import ShowAlert from "@/components/ShowAlert";
 import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
 import Toast from "@/utils/ToastMsg";
@@ -96,7 +95,6 @@ const ElectionInfo = () => {
   const { startVerification } = useOTP();
   const { election } = useElection();
   const { voter, setVoter } = useAuth();
-  const navigate = useNavigate();
 
   const {
     title,
