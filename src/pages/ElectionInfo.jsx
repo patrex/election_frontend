@@ -12,6 +12,7 @@ import {
   Phone,
   Mail,
   Speech,
+  DatabaseSearch
 } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
