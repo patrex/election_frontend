@@ -6,6 +6,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   const [status, setStatus] = useState(null); // null | "success" | "error"
 
   const checkVoterExists = () => {
+    console.log(voters)
     if (!query.trim()) return;
     setStatus(voters.includes(query.trim()) ? "success" : "error");
   };
@@ -19,8 +20,6 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   if (!isOpen) return null;
 
   const isEmail = userAuthType === "email";
-
-  useEffect(() => {console.log(voters)},[])
 
   return (
     <div
