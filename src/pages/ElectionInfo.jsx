@@ -10,7 +10,7 @@ import {
   ChevronRight,
   Vote,
   Speech,
-  DatabaseSearch,
+  SearchCheck,
 } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
@@ -208,7 +208,7 @@ const ElectionInfo = () => {
                   onClick={() => setShowVoterCheck(true)}
                   className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-sm font-semibold rounded-xl transition"
                 >
-                  <DatabaseSearch className="h-4 w-4" />
+                  <SearchCheck className="h-4 w-4" />
                   Check Registration
                 </button>
               }
