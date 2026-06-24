@@ -127,7 +127,7 @@ const ElectionInfo = () => {
 			console.log(error)
 			throw new Error(`OTP verification failed`)
 		}
-	}, [startVerifcation, addVoterToDb]);
+	}, [startVerification, addVoterToDb]);
 
 	// find voters for a closed election
 	const  cfetchVoters = useCallback( async () => {
