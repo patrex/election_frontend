@@ -134,9 +134,12 @@ const ElectionInfo = () => {
 			
 			const t = _cv.data;
 			const u = {...t}
+			let contacts;
+			if (userAuthType == "email") {
+				contacts = u.map(c => c.email)
+			} else contacts = u.map(c => c.phoneNo)
 
-			console.log(u);
-			
+			console.log(contacts);
 			
 			setVoters(_cv.data ?? []);
 		} catch (error) {
