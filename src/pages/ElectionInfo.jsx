@@ -131,6 +131,8 @@ const ElectionInfo = () => {
 	const  cfetchVoters = useCallback( async () => {
 		try {
 			const _cv = await axios_api.get(`election/${_id}/voterlist`);
+			console.log(_cv);
+			
 			setVoters(_cv.data ?? []);
 		} catch (error) {
 			throw new Error("Could not fetch voters for this closed election")
