@@ -9,8 +9,6 @@ import {
   Users,
   ChevronRight,
   Vote,
-  Phone,
-  Mail,
   Speech,
   DatabaseSearch
 } from "lucide-react";
