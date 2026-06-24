@@ -132,15 +132,15 @@ const ElectionInfo = () => {
 		try {
 			const _cv = await axios_api.get(`election/${_id}/voterlist`);
 			
-			const t = _cv.data;
-			const u = {...t}
 			let contacts;
-			if (userAuthType == "email") {
-				contacts = u.map(c => c.email)
-			} else contacts = u.map(c => c.phoneNo)
+			if (userAuthType === "email") {
+				contacts = _cv.data.map((c) => c.email);
+			} else {
+				contacts = _cv.data.map((c) => c.phoneNo);
+			}
 
-			console.log(contacts);
-			
+      		console.log(contacts);
+
 			setVoters(_cv.data ?? []);
 		} catch (error) {
 			throw new Error("Could not fetch voters for this closed election")
