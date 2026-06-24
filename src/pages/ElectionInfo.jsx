@@ -91,9 +91,6 @@ const ElectionInfo = () => {
 	const [showVoterCheck, setShowVoterCheck] = useState(false);
 
 	const [voters, setVoters] = useState([]);
-	const [query, setQuery] = useState('');
-
-	const [statusModal, setStatusModal] = useState({ show: false, status: 'success', title: '', message: '' });
 
 	const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate);
 	const canSelfAddCandidates = isPending && addCandidatesBy === "Candidates Will Add Themselves";
@@ -139,25 +136,6 @@ const ElectionInfo = () => {
 			throw new Error("Could not fetch voters for this closed election")
 		}
 	}, [type, _id]);
-
-	const checkVoterExists = useCallback(() => {
-		const _0 = voters.includes(query);
-		if (_0) {
-			setStatusModal({
-				show: true,
-				status: 'success',
-				title: 'Verified',
-				message: `Your ${ userAuthType === 'email' ? 'email' : 'phone number' } is registered`,
-			})
-		} else {
-			setStatusModal({
-				show: true,
-				status: 'error',
-				title: 'Verification failed',
-				message: `Your ${userAuthType == 'email' ? 'email' : 'phone number'} is not registered`,
-			})
-		}
-	}, [_id, voters, query]);
 
 	// fetch pre-registered voters for closed elections
 	useEffect(() => { cfetchVoters() }, [_id, type]);
@@ -295,11 +273,6 @@ const ElectionInfo = () => {
         onClose={() => setShowVoterCheck(false)}
         userAuthType={userAuthType}
         voters={voters}
-      />
-
-      <ShowAlert
-        {...statusModal}
-        onClose={() => setStatusModal((s) => ({ ...s, show: false }))}
       />
 
       <PhoneInputModal

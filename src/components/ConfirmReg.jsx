@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Mail, Phone, Vote, CheckCircle2, XCircle, X } from "lucide-react";
 
 const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
@@ -19,6 +19,8 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   if (!isOpen) return null;
 
   const isEmail = userAuthType === "email";
+
+  useEffect(() => {console.log(voters)},[])
 
   return (
     <div
@@ -74,16 +76,14 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         {status === "success" && (
           <div className="flex items-center gap-2 px-3 py-2.5 mb-3 rounded-xl bg-emerald-50 border border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 text-sm font-medium">
             <CheckCircle2 className="h-4 w-4 shrink-0" />
-            Your {isEmail ? "email" : "phone number"} is registered — you're
-            eligible to vote.
+            Your {isEmail ? "email" : "phone number"} is registered
           </div>
         )}
 
         {status === "error" && (
           <div className="flex items-center gap-2 px-3 py-2.5 mb-3 rounded-xl bg-red-50 border border-red-200 dark:bg-red-900/30 dark:border-red-800 text-red-700 dark:text-red-400 text-sm font-medium">
             <XCircle className="h-4 w-4 shrink-0" />
-            Your {isEmail ? "email" : "phone number"} is not registered for this
-            election.
+            Your {isEmail ? "email" : "phone number"} is not registered
           </div>
         )}
 
