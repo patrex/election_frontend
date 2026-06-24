@@ -73,7 +73,7 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 );
 
 const ElectionInfo = () => {
-	const { startVerifcation } = useOTP();
+	const { startVerification } = useOTP();
 	const { election } = useElection();
 	const { voter, setVoter } = useAuth();
 	const navigate = useNavigate();
@@ -119,7 +119,7 @@ const ElectionInfo = () => {
 
 	const initiateVerification = useCallback(async (dest) => {
 		try {
-			const verificationResult = await startVerifcation(dest);
+			const verificationResult = await startVerification(dest);
 			const addToDbResult = await addVoterToDb(dest);
 
 			Toast.success("You were added")
