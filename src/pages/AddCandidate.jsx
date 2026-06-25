@@ -138,6 +138,8 @@ function AddCandidate() {
 	}
 
 	async function onSubmit(formData) {
+		console.log(formData);
+		
 		if (isSubmitting) return;
 
 		setIsSubmitting(true);
