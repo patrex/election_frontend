@@ -1,296 +1,351 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
+import { useState, useCallback, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useLoaderData } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { genUUID } from '@/utils/getUUID';
-import { fireman } from '../utils/fireloader';
-import Toast from '@/utils/ToastMsg';
-import { PulseLoader } from 'react-spinners';
-import NoData from '@/components/NoData';
-import noDataGraphic from '@/assets/undraw_no-data_ig65.svg';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useLoaderData } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { genUUID } from "@/utils/getUUID";
+import { fireman } from "../utils/fireloader";
+import Toast from "@/utils/ToastMsg";
+import { PulseLoader } from "react-spinners";
+import NoData from "@/components/NoData";
+import noDataGraphic from "@/assets/undraw_no-data_ig65.svg";
 
-import * as z from 'zod';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from "zod";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import axios_api from '@/utils/axios';
+import axios_api from "@/utils/axios";
 
 export async function addCandidateLoader({ params }) {
-	try {
-		const [positionsRes, electionRes] = await Promise.all([
-			axios_api.get(`election/${params.id}/positions`),
-			axios_api.get(`election/${params.id}`)
-		]);
+  try {
+    const [positionsRes, electionRes] = await Promise.all([
+      axios_api.get(`election/${params.id}/positions`),
+      axios_api.get(`election/${params.id}`),
+    ]);
 
-		return [positionsRes.data, electionRes.data];
-	} catch (error) {
-		console.error("Fetch error:", error.response?.data || error.message);
-		return null;
-	}
+    return [positionsRes.data, electionRes.data];
+  } catch (error) {
+    console.error("Fetch error:", error.response?.data || error.message);
+    return null;
+  }
 }
 
 function AddCandidate() {
-	const [listOfPositions, election] = useLoaderData()
-	const [positions, setPositions] = useState(listOfPositions || []);
-	const [selectedPosition, setSelectedPosition] = useState("");
+  const [listOfPositions, election] = useLoaderData();
+  const [positions, setPositions] = useState(listOfPositions || []);
 
-	const [image, setImage] = useState('');
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [preview, setPreview] = useState(null);
+  const [image, setImage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [preview, setPreview] = useState(null);
 
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	const { user } = useAuth();
+  const { user } = useAuth();
 
-	const schema = z.object({
-		firstname: z
-			.string()
-			.min(2, { message: "First name must be at least 2 characters" })
-			.max(100, { message: "First name cannot exceed 100 characters" }),
-		lastname: z
-			.string()
-			.min(2, { message: "Last name must be at least 2 characters" })
-			.max(100, { message: "Lastname cannot exceed 100 characters" }),
-		manifesto: z
-			.string()
-			.min(0, { message: "" })
-			.max(1000, { message: "Manifesto cannot exceed 1000 characters" }),
-		selectedPosition: z.enum(positions, {
-			errorMap: () => ({ message: "Please select a valid position" })
-		})
-	})
+  const positionEnumValues =
+    positions.length > 0 ? positions.map((p) => p.position) : [""];
 
-	const { register, handleSubmit, formState: { errors }, control } = useForm({
-		resolver: zodResolver(schema),
-		defaultValues: { firstname: '', lastname: '', manifesto: '', selectedPosition: '' },
-	});
+  const schema = z.object({
+    firstname: z
+      .string()
+      .min(2, { message: "First name must be at least 2 characters" })
+      .max(100, { message: "First name cannot exceed 100 characters" }),
+    lastname: z
+      .string()
+      .min(2, { message: "Last name must be at least 2 characters" })
+      .max(100, { message: "Lastname cannot exceed 100 characters" }),
+    manifesto: z
+      .string()
+      .max(1000, { message: "Manifesto cannot exceed 1000 characters" })
+      .optional()
+      .or(z.literal("")), // Handles empty strings gracefully
+    position: z.enum(positionEnumValues, {
+      errorMap: () => ({ message: "Please select a valid position" }),
+    }),
+  });
 
-	const handleFileChange = (event) => {
-		const file = event.target.files[0];
-		if (file) {
-			setImage(file)
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setPreview(reader.result);
-			};
-			reader.readAsDataURL(file);
-		}
-	};
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      firstname: "",
+      lastname: "",
+      manifesto: "",
+      selectedPosition: "",
+    },
+  });
 
-	const handleRemoveImage = () => {
-		setPreview(null);
-		document.getElementById('uploadpic').value = '';
-	};
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-	async function uploadImageAndSaveData(formData) {
-		try {
-			let imgRef;
-			let photoUrl = '';
-			let payload;
+  const handleRemoveImage = () => {
+    setPreview(null);
+    document.getElementById("uploadpic").value = "";
+  };
 
-			if (image) {
-				const fileExt = image.name.split('.').pop();
+  async function uploadImageAndSaveData(formData) {
+    try {
+      let imgRef;
+      let photoUrl = "";
+      let payload;
 
-				imgRef = ref(
-					fireman,
-					`${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${genUUID()}.${fileExt}`
-				);
-				const snapshot = await uploadBytes(imgRef, image);
+      if (image) {
+        const fileExt = image.name.split(".").pop();
 
-				// only fetch download url for when admin is adding candidates himself
-				if (user) {
-					photoUrl = await getDownloadURL(snapshot.ref);
-				}
-			}
+        imgRef = ref(
+          fireman,
+          `${user ? "votify" : "staging"}/${election.title}/${formData.selectedPosition}/${genUUID()}.${fileExt}`,
+        );
+        const snapshot = await uploadBytes(imgRef, image);
 
-			if (image) {
-				payload = {
-					...formData,
-					photoUrl: ((user) ? photoUrl : imgRef.fullPath),
-					selectedPosition,
-					isApproved: user ? true : false
-				}
-			} else {
-				payload = {
-					...formData,
-					photoUrl: "",
-					selectedPosition,
-					isApproved: user ? true : false
-				}
+        // only fetch download url for when admin is adding candidates himself
+        if (user) {
+          photoUrl = await getDownloadURL(snapshot.ref);
+        }
+      }
 
-			}
+      if (image) {
+        payload = {
+          ...formData,
+          photoUrl: user ? photoUrl : imgRef.fullPath,
+          selectedPosition: formData.selectedPosition,
+          isApproved: user ? true : false,
+        };
+      } else {
+        payload = {
+          ...formData,
+          photoUrl: "",
+          selectedPosition: formData.selectedPosition,
+          isApproved: user ? true : false,
+        };
+      }
 
-			await axios_api.post(
-				`election/${election._id}/add-candidate`,
-				payload
-			);
+      await axios_api.post(`election/${election._id}/add-candidate`, payload);
 
-			if (user) {
-				navigate(`/user/${user.id}/election/${election._id}`)
-			} else {
-				Toast.success("You've been registered")
-				navigate('/');
-			}
-		} catch (err) {
-			Toast.error(err.message || "An error occurred");
-		}
-	}
+      if (user) {
+        navigate(`/user/${user.id}/election/${election._id}`);
+      } else {
+        Toast.success("You've been registered");
+        navigate("/");
+      }
+    } catch (err) {
+      Toast.error(err.message || "An error occurred");
+    }
+  }
 
-	async function onSubmit(formData) {
-		console.log(formData);
-		
-		if (isSubmitting) return;
+  async function onSubmit(formData) {
+    console.log(formData);
 
-		setIsSubmitting(true);
-		await uploadImageAndSaveData(formData);
-		setIsSubmitting(false);
-	}
+    if (isSubmitting) return;
 
-	return (
-		<>
-			{positions.length > 0 ? (
-				<div className='flex items-center justify-center min-h-screen bg-gray-50 p-4'> {/* Centering and background */}
-					<div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl border border-gray-100"> {/* Form Container Card */}
-						<h2 className="text-3xl font-extrabold text-gray-900 mb-6 text-center border-b pb-4">
-							{election.addCandidatesBy === "I Will Add Candidates Myself" ? 'Add a Candidate' : `Register for ${election.title}`}
-						</h2>
+    setIsSubmitting(true);
+    await uploadImageAndSaveData(formData);
+    setIsSubmitting(false);
+  }
 
-						<form onSubmit={handleSubmit(onSubmit)} className='space-y-6'> {/* Spacing between form groups */}
-							{/* First Name Input Group */}
-							<div className="mb-4">
-								<label htmlFor="fname" className="block text-sm font-medium text-gray-700 mb-1">Firstname</label>
-								<input
-									type="text"
-									id="fname"
-									name='firstname'
-									autoFocus
-									className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
-									placeholder="Enter first name"
-									{...register('firstname')}
-								/>
-							</div>
+  return (
+    <>
+      {positions.length > 0 ? (
+        <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
+          {" "}
+          {/* Centering and background */}
+          <div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
+            {" "}
+            {/* Form Container Card */}
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-6 text-center border-b pb-4">
+              {election.addCandidatesBy === "I Will Add Candidates Myself"
+                ? "Add a Candidate"
+                : `Register for ${election.title}`}
+            </h2>
+            <form
+              onSubmit={handleSubmit(onSubmit, (errors) =>
+                console.log("Validation Errors:", errors),
+              )}
+              className="space-y-6"
+            >
+              {" "}
+              {/* Spacing between form groups */}
+              {/* First Name Input Group */}
+              <div className="mb-4">
+                <label
+                  htmlFor="fname"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Firstname
+                </label>
+                <input
+                  type="text"
+                  id="fname"
+                  name="firstname"
+                  autoFocus
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
+                  placeholder="Enter first name"
+                  {...register("firstname")}
+                />
+              </div>
+              {/* Last Name Input Group */}
+              <div className="mb-4">
+                <label
+                  htmlFor="lname"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Lastname
+                </label>
+                <input
+                  type="text"
+                  id="lname"
+                  name="lastname"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
+                  placeholder="Enter last name"
+                  {...register("lastname")}
+                />
+              </div>
+              {/* Position Select Group */}
+              <div className="mb-4">
+                <label
+                  htmlFor="position"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Select position
+                </label>
+                <Controller
+                  name="selectedPosition"
+                  control={control}
+                  render={({ field }) => (
+                    <select
+                      {...field}
+                      id="position"
+                      className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition"
+                    >
+                      <option value="" disabled>
+                        Select a position
+                      </option>
+                      {positions.map((position) => (
+                        <option key={position._id} value={position.position}>
+                          {position.position}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                />
+                {errors.position && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.position.message}
+                  </p>
+                )}
+              </div>
+              {/* Manifesto Textarea Group */}
+              <div className="mb-4">
+                <label
+                  htmlFor="manifesto"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Manifesto
+                </label>
+                <textarea
+                  name="manifesto"
+                  id="manifesto"
+                  rows="4"
+                  placeholder="Write your manifesto here..."
+                  {...register("manifesto")}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
+                />
+              </div>
+              {/* File Upload and Preview Group */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 pt-2">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  {/* Hidden File Input */}
+                  <input
+                    type="file"
+                    id="uploadpic"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
 
-							{/* Last Name Input Group */}
-							<div className="mb-4">
-								<label htmlFor="lname" className="block text-sm font-medium text-gray-700 mb-1">Lastname</label>
-								<input
-									type="text"
-									id="lname"
-									name='lastname'
-									className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
-									placeholder="Enter last name"
-									{...register('lastname')}
-								/>
-							</div>
+                  {/* Styled Label/Button */}
+                  <label
+                    htmlFor="uploadpic"
+                    className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg cursor-pointer hover:bg-indigo-700 transition duration-150 shadow-md"
+                  >
+                    {" "}
+                    Choose a picture
+                  </label>
 
-							{/* Position Select Group */}
-							<div className='mb-4'>
-								<label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-1">
-									Select position
-								</label>
-								<Controller
-									name="position"
-									control={control}
-									render={({ field }) => (
-										<select
-											{...field}
-											id="position"
-											className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition'
-										>
-											<option value="" disabled>Select a position</option>
-											{positions.map((position) => (
-												<option key={position._id} value={position.position}>
-													{position.position}
-												</option>
-											))}
-										</select>
-									)}
-								/>
-								{errors.position && (
-									<p className="mt-1 text-sm text-red-500">{errors.position.message}</p>
-								)}
-							</div>
+                  {/* Remove Image Button */}
+                  {preview && (
+                    <button
+                      type="button" // Important for buttons inside a form not to submit it
+                      onClick={handleRemoveImage}
+                      className="px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-150 shadow-md"
+                    >
+                      {" "}
+                      Remove Image
+                    </button>
+                  )}
+                </div>
 
-							{/* Manifesto Textarea Group */}
-							<div className="mb-4">
-								<label htmlFor="manifesto" className="block text-sm font-medium text-gray-700 mb-1">Manifesto</label>
-								<textarea
-									name="manifesto"
-									id="manifesto"
-									rows="4"
-									placeholder="Write your manifesto here..."
-									{...register('manifesto')}
-									className='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition'
-								/>
-							</div>
-
-							{/* File Upload and Preview Group */}
-							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 pt-2">
-
-								<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-									{/* Hidden File Input */}
-									<input
-										type="file"
-										id="uploadpic"
-										accept="image/*"
-										onChange={handleFileChange}
-										className="hidden"
-									/>
-
-									{/* Styled Label/Button */}
-									<label
-										htmlFor="uploadpic"
-										className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg cursor-pointer hover:bg-indigo-700 transition duration-150 shadow-md"
-									> Choose a picture
-									</label>
-
-									{/* Remove Image Button */}
-									{preview && (
-										<button
-											type="button" // Important for buttons inside a form not to submit it
-											onClick={handleRemoveImage}
-											className="px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-150 shadow-md"
-										> Remove Image
-										</button>
-									)}
-								</div>
-
-								{/* Image Preview */}
-								{preview && (
-									<div className="sm:ml-auto">
-										<img
-											src={preview}
-											alt="Preview"
-											className="w-24 h-24 object-cover rounded-full border-4 border-gray-200 shadow-lg"
-										/>
-									</div>
-								)}
-							</div>
-
-							{/* Submit Button */}
-							<button
-								type='submit'
-								disabled={isSubmitting}
-								className={`
-										w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
-										${isSubmitting
-										? 'bg-indigo-400 cursor-not-allowed'
-										: 'bg-indigo-600 hover:bg-indigo-700 text-white'
-									}
+                {/* Image Preview */}
+                {preview && (
+                  <div className="sm:ml-auto">
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="w-24 h-24 object-cover rounded-full border-4 border-gray-200 shadow-lg"
+                    />
+                  </div>
+                )}
+              </div>
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`
+							w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
+							${
+                      isSubmitting
+                        ? "bg-indigo-400 cursor-not-allowed"
+                        : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                    }
 									`}
-							>
-								{isSubmitting ? <PulseLoader color="#fff" size={5} loading={isSubmitting} /> :
-									election.addCandidatesBy === "I will Add Candidates Myself" ? 'Add Candidate' : `Register`}
-							</button>
-						</form>
-					</div>
-				</div>)
-				:
-				<NoData message={election.addCandidatesBy == "I Will Add Candidates Myself" ? "You have not added any positions" : 'No positions have been added. Please contact your election administrator'} image={noDataGraphic} />
-			}
-		</>
-	);
+              >
+                {isSubmitting ? (
+                  <PulseLoader color="#fff" size={5} loading={isSubmitting} />
+                ) : election.addCandidatesBy ===
+                  "I will Add Candidates Myself" ? (
+                  "Add Candidate"
+                ) : (
+                  `Register`
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <NoData
+          message={
+            election.addCandidatesBy == "I Will Add Candidates Myself"
+              ? "You have not added any positions"
+              : "No positions have been added. Please contact your election administrator"
+          }
+          image={noDataGraphic}
+        />
+      )}
+    </>
+  );
 }
 
 export default AddCandidate;
