@@ -227,7 +227,7 @@ function AddCandidate() {
                   render={({ field }) => (
                     <select
                       {...field}
-                      id="position"
+                      id="selectedPosition"
                       className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition"
                     >
                       <option value="" disabled>
@@ -241,9 +241,9 @@ function AddCandidate() {
                     </select>
                   )}
                 />
-                {errors.position && (
+                {errors.selectedPosition && (
                   <p className="mt-1 text-sm text-red-500">
-                    {errors.position.message}
+                    {errors.selectedPosition.message}
                   </p>
                 )}
               </div>
