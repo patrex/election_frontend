@@ -8,7 +8,11 @@ import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
 import { PulseLoader } from 'react-spinners';
 import NoData from '@/components/NoData';
-import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
+import noDataGraphic from '@/assets/undraw_no-data_ig65.svg';
+
+import * as z from 'zod';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import axios_api from '@/utils/axios';
 
@@ -39,10 +43,27 @@ function AddCandidate() {
 
 	const { user } = useAuth();
 
-	const [formData, setFormData] = useState({
-		firstname: '',
-		lastname: '',
-		manifesto: ''
+	const schema = z.object({
+		firstname: z
+			.string()
+			.min(2, { message: "First name must be at least 2 characters" })
+			.max(100, { message: "First name cannot exceed 100 characters" }),
+		lastname: z
+			.string()
+			.min(2, { message: "Last name must be at least 2 characters" })
+			.max(100, { message: "Lastname cannot exceed 100 characters" }),
+		manifesto: z
+			.string()
+			.min(0, { message: "" })
+			.max(1000, { message: "Manifesto cannot exceed 1000 characters" }),
+		selectedPosition: z.enum(positions, {
+			errorMap: () => ({ message: "Please select a valid position" })
+		})
+	})
+
+	const { register, handleSubmit, formState: { errors }, control } = useForm({
+		resolver: zodResolver(schema),
+		defaultValues: { firstname: '', lastname: '', manifesto: '', selectedPosition: '' },
 	});
 
 	const handleFileChange = (event) => {
@@ -62,7 +83,7 @@ function AddCandidate() {
 		document.getElementById('uploadpic').value = '';
 	};
 
-	async function uploadImage() {
+	async function uploadImageAndSaveData(formData) {
 		try {
 			let imgRef;
 			let photoUrl = '';
@@ -116,25 +137,13 @@ function AddCandidate() {
 		}
 	}
 
-	async function handleSubmit(e) {
-		e.preventDefault();
-
+	async function onSubmit(formData) {
 		if (isSubmitting) return;
 
 		setIsSubmitting(true);
-		await uploadImage();
+		await uploadImageAndSaveData(formData);
 		setIsSubmitting(false);
 	}
-
-	const handleSelect = useCallback((e) => {
-		const selected = e.target.value;
-		setSelectedPosition(selected);
-
-	}, [])
-
-	const handleChange = useCallback(({ target: { name, value } }) => {
-		setFormData((prev) => ({ ...prev, [name]: value }))
-	}, [])
 
 	return (
 		<>
@@ -142,10 +151,10 @@ function AddCandidate() {
 				<div className='flex items-center justify-center min-h-screen bg-gray-50 p-4'> {/* Centering and background */}
 					<div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl border border-gray-100"> {/* Form Container Card */}
 						<h2 className="text-3xl font-extrabold text-gray-900 mb-6 text-center border-b pb-4">
-							{election.addCandidatesBy === "I will Add Candidates Myself" ? 'Add a Candidate' : `Register for ${election.title}`}
+							{election.addCandidatesBy === "I Will Add Candidates Myself" ? 'Add a Candidate' : `Register for ${election.title}`}
 						</h2>
 
-						<form onSubmit={handleSubmit} className='space-y-6'> {/* Spacing between form groups */}
+						<form onSubmit={handleSubmit(onSubmit)} className='space-y-6'> {/* Spacing between form groups */}
 							{/* First Name Input Group */}
 							<div className="mb-4">
 								<label htmlFor="fname" className="block text-sm font-medium text-gray-700 mb-1">Firstname</label>
@@ -153,11 +162,10 @@ function AddCandidate() {
 									type="text"
 									id="fname"
 									name='firstname'
-									value={formData.firstname}
-									onChange={handleChange}
 									autoFocus
 									className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
 									placeholder="Enter first name"
+									{...register('firstname')}
 								/>
 							</div>
 
@@ -168,35 +176,38 @@ function AddCandidate() {
 									type="text"
 									id="lname"
 									name='lastname'
-									value={formData.lastname}
-									onChange={handleChange}
 									className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
 									placeholder="Enter last name"
+									{...register('lastname')}
 								/>
 							</div>
 
 							{/* Position Select Group */}
 							<div className='mb-4'>
-								<label className="block text-sm font-medium text-gray-700 mb-1">
+								<label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-1">
 									Select position
-									<select
-										name="position"
-										value={selectedPosition}
-										onChange={handleSelect}
-										className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition'
-									>
-										<option value="" disabled>Select a position</option>
-										{positions.map((position) => (
-											<option
-												key={position._id}
-												value={position.position}
-											>
-												{position.position}
-											</option>
-										))
-										}
-									</select>
 								</label>
+								<Controller
+									name="position"
+									control={control}
+									render={({ field }) => (
+										<select
+											{...field}
+											id="position"
+											className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm border transition'
+										>
+											<option value="" disabled>Select a position</option>
+											{positions.map((position) => (
+												<option key={position._id} value={position.position}>
+													{position.position}
+												</option>
+											))}
+										</select>
+									)}
+								/>
+								{errors.position && (
+									<p className="mt-1 text-sm text-red-500">{errors.position.message}</p>
+								)}
 							</div>
 
 							{/* Manifesto Textarea Group */}
@@ -206,9 +217,8 @@ function AddCandidate() {
 									name="manifesto"
 									id="manifesto"
 									rows="4"
-									value={formData.manifesto}
-									onChange={handleChange}
 									placeholder="Write your manifesto here..."
+									{...register('manifesto')}
 									className='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition'
 								/>
 							</div>
