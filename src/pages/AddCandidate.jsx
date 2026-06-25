@@ -1,13 +1,11 @@
 import { useState, useCallback, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import { ref, uploadBytes, getDownloadURL  } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useLoaderData } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-
 import { genUUID } from '@/utils/getUUID';
 import { fireman } from '../utils/fireloader';
 import Toast from '@/utils/ToastMsg';
-import { fetcher } from '@/utils/fetcher';
 import { PulseLoader } from 'react-spinners';
 import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
@@ -15,24 +13,24 @@ import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 import axios_api from '@/utils/axios';
 
 export async function addCandidateLoader({ params }) {
-    try {
-        const [positionsRes, electionRes] = await Promise.all([
-            axios_api.get(`election/${params.id}/positions`),
-            axios_api.get(`election/${params.id}`)
-        ]);
+	try {
+		const [positionsRes, electionRes] = await Promise.all([
+			axios_api.get(`election/${params.id}/positions`),
+			axios_api.get(`election/${params.id}`)
+		]);
 
-        return [positionsRes.data, electionRes.data];
-    } catch (error) {
-        console.error("Fetch error:", error.response?.data || error.message);
-        return null;
-    }
+		return [positionsRes.data, electionRes.data];
+	} catch (error) {
+		console.error("Fetch error:", error.response?.data || error.message);
+		return null;
+	}
 }
 
 function AddCandidate() {
 	const [listOfPositions, election] = useLoaderData()
 	const [positions, setPositions] = useState(listOfPositions || []);
 	const [selectedPosition, setSelectedPosition] = useState("");
-	
+
 	const [image, setImage] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [preview, setPreview] = useState(null);
@@ -65,11 +63,13 @@ function AddCandidate() {
 	};
 
 	async function uploadImage() {
+
+		if (!image) return;
 		
 		try {
 			let imgRef;
 			let photoUrl = '';
-			
+
 			if (image) {
 				const fileExt = image.name.split('.').pop();
 
@@ -78,7 +78,7 @@ function AddCandidate() {
 					`${user ? 'votify' : 'staging'}/${election.title}/${selectedPosition}/${genUUID()}.${fileExt}`
 				);
 				const snapshot = await uploadBytes(imgRef, image);
-				
+
 				// only fetch download url for when admin is adding candidates himself
 				if (user) {
 					photoUrl = await getDownloadURL(snapshot.ref);
@@ -87,7 +87,7 @@ function AddCandidate() {
 
 			const payload = {
 				...formData,
-				photoUrl: ((user) ? photoUrl: image ? imgRef.fullPath : ""),
+				photoUrl: ((user) ? photoUrl : image ? imgRef.fullPath : ""),
 				selectedPosition,
 				isApproved: user ? true : false
 			}
@@ -103,15 +103,15 @@ function AddCandidate() {
 				Toast.success("You've been registered")
 				navigate('/');
 			}
-		    } catch (err) {
+		} catch (err) {
 			Toast.error(err.message || "An error occurred");
 		}
 	}
 
-	async function handleSubmit (e) {
+	async function handleSubmit(e) {
 		e.preventDefault();
 
-		if (isSubmitting) return; 
+		if (isSubmitting) return;
 
 		setIsSubmitting(true);
 		await uploadImage();
@@ -124,8 +124,8 @@ function AddCandidate() {
 
 	}, [])
 
-	const handleChange = useCallback(({ target: { name, value}}) => {
-		setFormData((prev) => ({...prev, [name]: value}))
+	const handleChange = useCallback(({ target: { name, value } }) => {
+		setFormData((prev) => ({ ...prev, [name]: value }))
 	}, [])
 
 	return (
@@ -136,7 +136,7 @@ function AddCandidate() {
 						<h2 className="text-3xl font-extrabold text-gray-900 mb-6 text-center border-b pb-4">
 							{election.addCandidatesBy === "I will Add Candidates Myself" ? 'Add a Candidate' : `Register for ${election.title}`}
 						</h2>
-		
+
 						<form onSubmit={handleSubmit} className='space-y-6'> {/* Spacing between form groups */}
 							{/* First Name Input Group */}
 							<div className="mb-4">
@@ -152,7 +152,7 @@ function AddCandidate() {
 									placeholder="Enter first name"
 								/>
 							</div>
-		
+
 							{/* Last Name Input Group */}
 							<div className="mb-4">
 								<label htmlFor="lname" className="block text-sm font-medium text-gray-700 mb-1">Lastname</label>
@@ -166,7 +166,7 @@ function AddCandidate() {
 									placeholder="Enter last name"
 								/>
 							</div>
-		
+
 							{/* Position Select Group */}
 							<div className='mb-4'>
 								<label className="block text-sm font-medium text-gray-700 mb-1">
@@ -185,12 +185,12 @@ function AddCandidate() {
 											>
 												{position.position}
 											</option>
-											))
+										))
 										}
 									</select>
 								</label>
 							</div>
-		
+
 							{/* Manifesto Textarea Group */}
 							<div className="mb-4">
 								<label htmlFor="manifesto" className="block text-sm font-medium text-gray-700 mb-1">Manifesto</label>
@@ -204,10 +204,10 @@ function AddCandidate() {
 									className='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition'
 								/>
 							</div>
-		
+
 							{/* File Upload and Preview Group */}
 							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 pt-2">
-		
+
 								<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
 									{/* Hidden File Input */}
 									<input
@@ -217,14 +217,14 @@ function AddCandidate() {
 										onChange={handleFileChange}
 										className="hidden"
 									/>
-		
+
 									{/* Styled Label/Button */}
 									<label
 										htmlFor="uploadpic"
 										className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg cursor-pointer hover:bg-indigo-700 transition duration-150 shadow-md"
 									> Choose a picture
 									</label>
-		
+
 									{/* Remove Image Button */}
 									{preview && (
 										<button
@@ -235,7 +235,7 @@ function AddCandidate() {
 										</button>
 									)}
 								</div>
-		
+
 								{/* Image Preview */}
 								{preview && (
 									<div className="sm:ml-auto">
@@ -247,7 +247,7 @@ function AddCandidate() {
 									</div>
 								)}
 							</div>
-		
+
 							{/* Submit Button */}
 							<button
 								type='submit'
@@ -255,22 +255,22 @@ function AddCandidate() {
 								className={`
 										w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
 										${isSubmitting
-											? 'bg-indigo-400 cursor-not-allowed'
-											: 'bg-indigo-600 hover:bg-indigo-700 text-white'
-										}
+										? 'bg-indigo-400 cursor-not-allowed'
+										: 'bg-indigo-600 hover:bg-indigo-700 text-white'
+									}
 									`}
 							>
-								{isSubmitting ? <PulseLoader color="#fff" size={5} loading={isSubmitting} /> : 
-								election.addCandidatesBy === "I will Add Candidates Myself" ? 'Add Candidate' : `Register`}
+								{isSubmitting ? <PulseLoader color="#fff" size={5} loading={isSubmitting} /> :
+									election.addCandidatesBy === "I will Add Candidates Myself" ? 'Add Candidate' : `Register`}
 							</button>
 						</form>
 					</div>
-				</div> ) 
-				: 
-				<NoData message={election.addCandidatesBy == "I Will Add Candidates Myself" ? "You have not added any positions" :'No positions have been added. Please contact your election administrator'} image={noDataGraphic}/> 
+				</div>)
+				:
+				<NoData message={election.addCandidatesBy == "I Will Add Candidates Myself" ? "You have not added any positions" : 'No positions have been added. Please contact your election administrator'} image={noDataGraphic} />
 			}
 		</>
 	);
 }
- 
+
 export default AddCandidate;
