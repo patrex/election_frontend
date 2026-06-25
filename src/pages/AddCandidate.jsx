@@ -63,11 +63,10 @@ function AddCandidate() {
 	};
 
 	async function uploadImage() {
-		if (!image) return null;
-
 		try {
 			let imgRef;
 			let photoUrl = '';
+			let payload;
 
 			if (image) {
 				const fileExt = image.name.split('.').pop();
@@ -84,11 +83,21 @@ function AddCandidate() {
 				}
 			}
 
-			const payload = {
-				...formData,
-				photoUrl: ((user) ? photoUrl : image ? imgRef.fullPath : ""),
-				selectedPosition,
-				isApproved: user ? true : false
+			if (image) {
+				payload = {
+					...formData,
+					photoUrl: ((user) ? photoUrl : imgRef.fullPath),
+					selectedPosition,
+					isApproved: user ? true : false
+				}
+			} else {
+				payload = {
+					...formData,
+					photoUrl: "",
+					selectedPosition,
+					isApproved: user ? true : false
+				}
+
 			}
 
 			await axios_api.post(
@@ -97,7 +106,7 @@ function AddCandidate() {
 			);
 
 			if (user) {
-				navigate(`/user/${user.uid}/election/${election._id}`)
+				navigate(`/user/${user.id}/election/${election._id}`)
 			} else {
 				Toast.success("You've been registered")
 				navigate('/');
