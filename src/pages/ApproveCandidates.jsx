@@ -111,8 +111,6 @@ const ApproveCandidates = () => {
 		try {
 			const approved = await axios_api.patch(
 				`api/election/${election._id}/${selectedCandidate._id}/approve`,
-				{},
-				user
 			)
 
 			if (!approved) throw new Error("Could not approve candidate");
