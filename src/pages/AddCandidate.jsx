@@ -59,7 +59,7 @@ function AddCandidate() {
       .max(1000, { message: "Manifesto cannot exceed 1000 characters" })
       .optional()
       .or(z.literal("")), // Handles empty strings gracefully
-    position: z.enum(positionEnumValues, {
+    selectedPosition: z.enum(positionEnumValues, {
       errorMap: () => ({ message: "Please select a valid position" }),
     }),
   });
