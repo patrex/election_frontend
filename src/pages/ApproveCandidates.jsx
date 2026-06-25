@@ -2,7 +2,6 @@ import { useState, useContext} from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import Toast from '@/utils/ToastMsg';
-import { fetcher, FetchError } from '@/utils/fetcher';
 import NoData from '@/components/NoData';
 import noDataGraphic from '@/assets/undraw_no-data_ig65.svg'
 import axios_api from '@/utils/axios';
@@ -110,7 +109,7 @@ const ApproveCandidates = () => {
 	async function approveCandidate() {
 		try {
 			const approved = await axios_api.patch(
-				`api/election/${election._id}/${selectedCandidate._id}/approve`,
+				`election/${election._id}/${selectedCandidate._id}/approve`,
 			)
 
 			if (!approved) throw new Error("Could not approve candidate");
@@ -125,7 +124,7 @@ const ApproveCandidates = () => {
 
 	async function removeCandidate() {
 		try {
-			await axios_api.delete(`api/election/${election._id}/candidate/${selectedCandidate._id}/delete`)
+			await axios_api.delete(`election/${election._id}/candidate/${selectedCandidate._id}/delete`)
 			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
 		} catch (error) {
 			throw new Error("There was an error completing that");
