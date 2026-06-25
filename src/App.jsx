@@ -28,6 +28,7 @@ import ElectionInfo from './pages/ElectionInfo';
 
 import { ProtectedRoute } from './contexts/AuthContext';
 import { AuthProvider } from './contexts/AuthContext';
+import { OTPProvider } from './contexts/OTPContext';
 
 import Error from './pages/Error';
 
@@ -120,8 +121,10 @@ const router = createBrowserRouter(
 function App() {
 	return (
 		<AuthProvider>
-			<RouterProvider router={router} />
-			<ToastContainer />
+			<OTPProvider>
+				<RouterProvider router={router} />
+				<ToastContainer />
+			</OTPProvider>
 		</AuthProvider>
 	);
 }

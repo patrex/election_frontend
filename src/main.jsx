@@ -11,16 +11,13 @@ axios.defaults.withCredentials=true;
 axios.defaults.baseURL='/api';
 
 import { ElectionProvider } from './contexts/ElectionContext';
-import { OTPProvider } from './contexts/OTPContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 	<ErrorBoundary>
 		<ElectionProvider>
-			<OTPProvider>
-				<App />
-			</OTPProvider>
+			<App />
 		</ElectionProvider>
 	</ErrorBoundary>
-  </React.StrictMode>,
+  </React.StrictMode>
 )

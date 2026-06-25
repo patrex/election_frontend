@@ -92,7 +92,7 @@ function AddCandidate() {
 				isApproved: user ? true : false
 			}
 
-			await fetcher.post(
+			await axios_api.post(
 				`api/election/${election._id}/add-candidate`,
 				payload
 			);

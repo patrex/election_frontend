@@ -9,7 +9,7 @@ import axios_api from '@/utils/axios';
 
 export async function approveCandidatesLoader({ params }) {
     try {
-        const [positionsRes, candidatesRes, electionRes] = await Promise.all([
+        const [positions, candidates, election] = await Promise.all([
             axios_api.get(`election/${params.id}/positions`), 
             axios_api.get(`election/${params.id}/candidates/addedself`),
             axios_api.get(`election/${params.id}`)
@@ -17,9 +17,9 @@ export async function approveCandidatesLoader({ params }) {
 
         // Destructure data from the Axios response objects
         return { 
-            p: positionsRes.data, 
-            c: candidatesRes.data, 
-            e: electionRes.data 
+            positions: positions.data, 
+            candidates: candidates.data, 
+            election: election.data 
         };
     } catch (error) {
         console.error("There was a problem fetching data for candidate approval:", error.message);
@@ -72,9 +72,9 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, action, candidate }) =>
 };
 
 const ApproveCandidates = () => {
-	const { positionsRes, candidatesRes, electionRes } = useLoaderData();
+	const { positions: p, candidates: c, election: e } = useLoaderData();
 
-	const [positions] = useState(p || {});
+	const [positions, setPositions] = useState(p || {});
 	const [candidates, setCandidates] = useState(c || {});
 	const [election, setElection] = useState(e || {});
 
@@ -109,10 +109,8 @@ const ApproveCandidates = () => {
 
 	async function approveCandidate() {
 		try {
-			const approved = await fetcher.auth.patch(
+			const approved = await axios_api.patch(
 				`api/election/${election._id}/${selectedCandidate._id}/approve`,
-				{},
-				user
 			)
 
 			if (!approved) throw new Error("Could not approve candidate");
@@ -130,18 +128,7 @@ const ApproveCandidates = () => {
 			await axios_api.delete(`api/election/${election._id}/candidate/${selectedCandidate._id}/delete`)
 			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
 		} catch (error) {
-			if (error instanceof FetchError) {
-				if (error.status === 500) {
-					Toast.warning("There was an unexpected error");
-				} else if (error.status === 400) {
-					Toast.warning(error.message);
-				} else if (error.code !== 'AUTH_REQUIRED' && error.code !== 'TOKEN_EXPIRED') {
-					Toast.error('There was an error removing the candidate');
-				}
-			} else {
-				Toast.error('An unexpected error occurred');
-				console.log(error);
-			}
+			throw new Error("There was an error completing that");
 		}
 	}
 

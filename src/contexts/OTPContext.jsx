@@ -296,7 +296,7 @@ export const OTPProvider = ({ children }) => {
 	}, []);
 
 	return (
-		<OTPContext.Provider value={{ isModalOpen, destination, startVerification, handleSuccess, handleCancel }}>
+		<OTPContext.Provider value={{ startVerification, isModalOpen, destination, handleSuccess, handleCancel }}>
 			{children}
 			<OTPVerificationModal />
 		</OTPContext.Provider>
