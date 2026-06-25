@@ -63,9 +63,8 @@ function AddCandidate() {
 	};
 
 	async function uploadImage() {
+		if (!image) return null;
 
-		if (!image) return;
-		
 		try {
 			let imgRef;
 			let photoUrl = '';
