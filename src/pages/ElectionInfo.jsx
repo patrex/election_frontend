@@ -323,7 +323,7 @@ const ElectionInfo = () => {
       />
 
       <VoterLoginOverlay
-        isOpen={showVoterLogin}
+        isOpen={isActive}
         onClose={() => setShowVoterLogin(false)}
         userAuthType={userAuthType}
         voters={voters}
