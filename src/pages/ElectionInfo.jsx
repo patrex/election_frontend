@@ -22,6 +22,7 @@ import { useOTP } from "@/contexts/OTPContext";
 import Toast from "@/utils/ToastMsg";
 import { useElection } from "@/contexts/ElectionContext";
 import VoterCheckOverlay from "@/components/ConfirmReg";
+import VoterLoginOverlay from "@/components/LogVoterIn";
 
 /**
  * Uses local date/time for comparison — new Date() is always local,
@@ -111,6 +112,7 @@ const ElectionInfo = () => {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPhoneModal, setShowPhoneModal] = useState(false);
   const [showVoterCheck, setShowVoterCheck] = useState(false);
+  const [showVoterLogin, setShowVoterLogin] = useState(false);
 
   const [voters, setVoters] = useState([]);
 
@@ -261,6 +263,8 @@ const ElectionInfo = () => {
           </div>
         </div>
 
+        {isActive && VoterLoginOverlay}
+
         {/* Action card */}
         {isPending && canSelfAddCandidates && (
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 w-full">
@@ -314,6 +318,13 @@ const ElectionInfo = () => {
       <VoterCheckOverlay
         isOpen={showVoterCheck}
         onClose={() => setShowVoterCheck(false)}
+        userAuthType={userAuthType}
+        voters={voters}
+      />
+
+      <VoterLoginOverlay
+        isOpen={showVoterLogin}
+        onClose={() => setShowVoterLogin(false)}
         userAuthType={userAuthType}
         voters={voters}
       />

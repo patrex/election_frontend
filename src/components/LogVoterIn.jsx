@@ -116,7 +116,7 @@ const VoterLoginOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
           className="w-full flex items-center justify-center gap-2 h-11 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition active:scale-95"
         >
           <Vote className="h-4 w-4" />
-          Take me to ballot
+          Go to ballot
         </button>
       </div>
     </div>
