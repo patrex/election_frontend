@@ -10,7 +10,6 @@ import isValidEmail from '@/utils/validateEmail';
 import Toast from '@/utils/ToastMsg';
 import { useEventStatus } from '@/hooks/useEventStatus';
 import PositionsBox from '@/components/PositionsBox';
-import { fetcher } from '@/utils/fetcher';
 import axios_api from '@/utils/axios';
 
 export async function electionDetailLoader({ params }) {

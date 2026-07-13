@@ -24,6 +24,7 @@ import { useElection } from "@/contexts/ElectionContext";
 import VoterCheckOverlay from "@/components/ConfirmReg";
 import VoterLoginOverlay from "@/components/LogVoterIn";
 
+import { useEventStatus } from "@/hooks/useEventStatus";
 /**
  * Uses local date/time for comparison — new Date() is always local,
  * and the startDate/endDate strings are parsed into local Date objects.
@@ -38,6 +39,7 @@ const getEventStatus = (startDate, endDate) => {
     isActive: now >= start && now <= end,
   };
 };
+
 
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleString(undefined, {
@@ -98,15 +100,9 @@ const ElectionInfo = () => {
   const { voter, setVoter } = useAuth();
 
   const {
-    title,
-    startDate,
-    endDate,
-    type,
-    desc,
-    rules,
-    userAuthType,
-    addCandidatesBy,
-    _id,
+    title, startDate, endDate, type,
+    desc, rules, userAuthType,
+    addCandidatesBy, _id,
   } = election;
 
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -116,7 +112,11 @@ const ElectionInfo = () => {
 
   const [voters, setVoters] = useState([]);
 
-  const { isActive, isPending, hasEnded } = getEventStatus(startDate, endDate);
+  const { isPending, hasEnded, isActive } = useEventStatus(
+		new Date(startDate),
+		new Date(endDate)
+	);
+
   const canSelfAddCandidates =
     isPending && addCandidatesBy === "Candidates Will Add Themselves";
   const lbl = isPending
