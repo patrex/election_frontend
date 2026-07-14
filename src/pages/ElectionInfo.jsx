@@ -202,7 +202,7 @@ const ElectionInfo = () => {
                 hasEnded={hasEnded}
               />
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white">
-                <Shield className="h-3 w-3" />
+                <Shield className="h-4 w-4" />
                 {type}
               </span>
 
@@ -218,7 +218,6 @@ const ElectionInfo = () => {
 
               {/* allow people to register - open election */}
               {isPending && type === "Open" && !voter && (
-                <div className="w-full sm:w-auto sm:ml-auto flex gap-2">
                   <button
                     onClick={handleRegisterClick}
                     className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
@@ -226,12 +225,10 @@ const ElectionInfo = () => {
                     <Vote className="h-4 w-4" />
                     Register to vote
                   </button>
-                </div>
               )}
 
               {/* show Vote btn when election becomes active */}
               {isActive && (
-                <div className="bg-green text-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
                   <button
                     onClick={handleRegisterClick}
                     className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
@@ -239,7 +236,6 @@ const ElectionInfo = () => {
                     <Vote className="h-4 w-4" />
                     Go to vote
                   </button>
-                </div>
               )}
             </div>
           </div>
