@@ -166,12 +166,13 @@ const ElectionInfo = () => {
     cfetchVoters();
   }, [_id, type]);
 
+  // ensure refresh does not break the page
   useEffect(() => {
     try {
       const _election = axios_api.get(`election/${id}`);
       setElection(_election.data);
     } catch (error) {
-      
+      throw new Error(error);
     }
   }, [id])
 

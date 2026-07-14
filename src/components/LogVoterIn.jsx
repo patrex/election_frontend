@@ -1,24 +1,28 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Mail, Phone, Vote, CheckCircle2, XCircle, X, UserPlus } from "lucide-react";
+import axios_api from "@/utils/axios";
+
 import { useOTP } from "@/contexts/OTPContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useElection } from "@/contexts/ElectionContext";
 import Toast from "@/utils/ToastMsg";
 import { useNavigate } from "react-router-dom";
 
+import PhoneInputModal from "@/components/CollectPhoneNumber";
+import CollectEmailModal from "@/components/CollectEmailModal";
+
 const PHONE_REGEX = /^(0|234)\d{10}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const VoterCheckOverlay = ({
-  isOpen,
-  onClose,
-  userAuthType,
-  voters,
-  onRegister,
-  onProceed,
-}) => {
+const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState(null); // null | "success" | "error"
+
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showPhoneModal, setShowPhoneModal] = useState(false);
+
+  const { election } = useElection();
+  const { startVerification } = useOTP();
 
   const isEmail = userAuthType === "email";
   const voterSet = useMemo(() => new Set(voters), [voters]);
@@ -26,6 +30,19 @@ const VoterCheckOverlay = ({
 
   const normalize = (v) =>
     !isEmail && v.startsWith("234") ? "0" + v.slice(3) : v;
+
+  const addToDb = useCallback(async () => {
+    try {
+      await startVerification(normalize(query.trim()));
+      await axios_api.post(`election/${election._id}/addvoter/participant`, {
+        participant: query.trim(),
+        electionId: election._id,
+      });
+      return Toast.success("You have been added")
+    } catch (error) {
+      return Toast.error("We could not add you")
+    }
+  }, [addToDb, voters]);
 
   useEffect(() => {
     if (!isValid) {
@@ -116,7 +133,7 @@ const VoterCheckOverlay = ({
         )}
         {status === "error" && (
           <button
-            onClick={() => onRegister?.(normalize(query.trim()))}
+            onClick={ isEmail ? setShowEmailModal(true) : setShowPhoneModal(true) }
             className="w-full flex items-center justify-center gap-2 h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition active:scale-95"
           >
             <UserPlus className="h-4 w-4" />
@@ -124,6 +141,18 @@ const VoterCheckOverlay = ({
           </button>
         )}
       </div>
+
+      <PhoneInputModal
+        isOpen={showPhoneModal}
+        onClose={() => setShowPhoneModal(false)}
+        onSubmit={addToDb}
+      />
+
+      <CollectEmailModal
+        isOpen={showEmailModal}
+        onClose={() => setShowEmailModal(false)}
+        onSubmit={addToDb}
+      />
     </div>
   );
 };
