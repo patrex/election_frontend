@@ -1,17 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import {
-  Calendar,
-  Clock,
-  Shield,
-  FileText,
-  ScrollText,
-  Users,
-  ChevronRight,
-  Vote,
-  Speech,
-  SearchCheck,
-} from "lucide-react";
+import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Speech, SearchCheck } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -29,18 +18,6 @@ import { useEventStatus } from "@/hooks/useEventStatus";
  * Uses local date/time for comparison — new Date() is always local,
  * and the startDate/endDate strings are parsed into local Date objects.
  */
-const getEventStatus = (startDate, endDate) => {
-  const now = new Date();
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  return {
-    isPending: now < start,
-    hasEnded: now > end,
-    isActive: now >= start && now <= end,
-  };
-};
-
-
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleString(undefined, {
     weekday: "short",
@@ -113,9 +90,9 @@ const ElectionInfo = () => {
   const [voters, setVoters] = useState([]);
 
   const { isPending, hasEnded, isActive } = useEventStatus(
-		new Date(startDate),
-		new Date(endDate)
-	);
+    new Date(startDate),
+    new Date(endDate)
+  );
 
   const canSelfAddCandidates =
     isPending && addCandidatesBy === "Candidates Will Add Themselves";
@@ -228,6 +205,17 @@ const ElectionInfo = () => {
                   </button>
                 </div>
               )}
+
+              {isActive && (
+                <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
+                  <button
+                    onClick={handleRegisterClick}
+                    className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
+                  >
+                    <Vote className="h-4 w-4" />Vote
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -263,8 +251,6 @@ const ElectionInfo = () => {
           </div>
         </div>
 
-        {isActive && VoterLoginOverlay}
-
         {/* Action card */}
         {isPending && canSelfAddCandidates && (
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 w-full">
@@ -299,20 +285,7 @@ const ElectionInfo = () => {
 
         {/* TO-DO: When election is active, how do users login to vote? */}
 
-        {isActive && voter && (
-          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
-            <Link
-              to={`/election/${_id}/vote`}
-              className="w-full no-underline text-green-600 bg-green-100 flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-semibold border border-gray-200 dark:border-gray-700 transition"
-            >
-              <div className="flex items-center gap-3">
-                <Vote className="h-5 w-5 text-indigo-500 flex-shrink-0" />
-                <span className="text-red dark:text-red-400">Go to Ballot</span>
-              </div>
-              <ChevronRight className="h-4 w-4 opacity-40 flex-shrink-0" />
-            </Link>
-          </div>
-        )}
+
       </div>
 
       <VoterCheckOverlay
