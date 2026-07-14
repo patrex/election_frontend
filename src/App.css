@@ -263,7 +263,7 @@ input[type="password"]:focus,
 input[type="email"]:focus,
 input[type="tel"]:focus,
 input[type="number"]:focus {
-	box-shadow: 0 0 5px rgba(100, 149, 237, 0.5);
+	/* box-shadow: 0 0 5px rgba(100, 149, 237, 0.5); */
 	outline: none;
 }
 
