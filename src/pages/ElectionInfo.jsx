@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useLocation, useNavigate, Link, useParams } from "react-router-dom";
+import { useLocation, Link, useParams } from "react-router-dom";
 import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Speech, SearchCheck } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
@@ -33,7 +33,7 @@ const StatusBadge = ({ isPending, isActive, hasEnded }) => {
     return (
       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        Live Now
+        Live
       </span>
     );
 
@@ -172,7 +172,7 @@ const ElectionInfo = () => {
       const _election = axios_api.get(`election/${id}`);
       setElection(_election.data);
     } catch (error) {
-      throw new Error(error);
+      // throw new Error(error);
     }
   }, [id])
 
