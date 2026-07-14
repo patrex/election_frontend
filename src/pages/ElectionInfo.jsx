@@ -167,12 +167,12 @@ const ElectionInfo = () => {
   }, [_id, type]);
 
   // ensure refresh does not break the page
-  useEffect(() => {
+  useEffect(async () => {
     try {
-      const _election = axios_api.get(`election/${id}`);
+      const _election = await axios_api.get(`election/${id}`);
       setElection(_election.data);
     } catch (error) {
-      // throw new Error(error);
+      throw new Error(error);
     }
   }, [id])
 
