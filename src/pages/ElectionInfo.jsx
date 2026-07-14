@@ -98,7 +98,7 @@ const ElectionInfo = () => {
     title, startDate, endDate, type,
     desc, rules, userAuthType,
     addCandidatesBy, _id,
-  } = election;
+  } = e;
 
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPhoneModal, setShowPhoneModal] = useState(false);
