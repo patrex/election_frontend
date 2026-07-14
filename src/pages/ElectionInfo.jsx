@@ -1,6 +1,17 @@
 import { useEffect, useState, useCallback } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Speech, SearchCheck } from "lucide-react";
+import { Link, useLoaderData, useParams } from "react-router-dom"; // Added useParams safely just in case
+import {
+  Calendar,
+  Clock,
+  Shield,
+  FileText,
+  ScrollText,
+  Users,
+  ChevronRight,
+  Vote,
+  Speech,
+  SearchCheck,
+} from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -9,15 +20,22 @@ import CollectEmailModal from "@/components/CollectEmailModal";
 import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
 import Toast from "@/utils/ToastMsg";
-import { useElection } from "@/contexts/ElectionContext";
 import VoterCheckOverlay from "@/components/ConfirmReg";
 import VoterLoginOverlay from "@/components/LogVoterIn";
 
 import { useEventStatus } from "@/hooks/useEventStatus";
-/**
- * Uses local date/time for comparison — new Date() is always local,
- * and the startDate/endDate strings are parsed into local Date objects.
- */
+
+export async function infoLoader({ params }) {
+  const { id } = params;
+
+  try {
+    const _ = await axios_api.get(`election/${id}`);
+    return { election: _.data };
+  } catch (error) {
+    return [];
+  }
+}
+
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleString(undefined, {
     weekday: "short",
@@ -33,7 +51,7 @@ const StatusBadge = ({ isPending, isActive, hasEnded }) => {
     return (
       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        Live Now
+        Live
       </span>
     );
 
@@ -73,14 +91,23 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 
 const ElectionInfo = () => {
   const { startVerification } = useOTP();
-  const { election } = useElection();
   const { voter, setVoter } = useAuth();
 
+  const { election: e } = useLoaderData() || {};
+
+  const [election, setElection] = useState(e);
+
   const {
-    title, startDate, endDate, type,
-    desc, rules, userAuthType,
-    addCandidatesBy, _id,
-  } = election;
+    title,
+    startDate,
+    endDate,
+    type,
+    desc,
+    rules,
+    userAuthType,
+    addCandidatesBy,
+    _id,
+  } = election || {}; // Added fallback empty object just in case
 
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPhoneModal, setShowPhoneModal] = useState(false);
@@ -91,7 +118,7 @@ const ElectionInfo = () => {
 
   const { isPending, hasEnded, isActive } = useEventStatus(
     new Date(startDate),
-    new Date(endDate)
+    new Date(endDate),
   );
 
   const canSelfAddCandidates =
@@ -115,9 +142,7 @@ const ElectionInfo = () => {
           participant: participant,
           electionId: _id,
         });
-      } catch (error) {
-        throw new Error(error);
-      }
+      } catch (error) {}
     },
     [_id],
   );
@@ -139,6 +164,7 @@ const ElectionInfo = () => {
 
   // find voters for a closed election
   const cfetchVoters = useCallback(async () => {
+    if (!_id) return;
     try {
       const _cv = await axios_api.get(`election/${_id}/voterlist`);
 
@@ -151,14 +177,42 @@ const ElectionInfo = () => {
 
       setVoters(contacts ?? []);
     } catch (error) {
-      throw new Error("Could not fetch voters for this closed election");
+      console.error("Could not fetch voters for this closed election", error);
     }
-  }, [type, _id]);
+  }, [userAuthType, _id]);
 
-  // fetch registered voters for closed elections
+  // FIXED: Removed async from the hook callback
   useEffect(() => {
-    cfetchVoters();
-  }, [_id, type]);
+    if (_id) {
+      cfetchVoters();
+    }
+  }, [_id, type, cfetchVoters]);
+
+  // FIXED: Removed async from hook callback AND fixed infinite render loop
+  useEffect(() => {
+    if (!_id) return;
+
+    const refreshElectionData = async () => {
+      try {
+        const _election = await axios_api.get(`election/${_id}`);
+        setElection(_election.data);
+      } catch (error) {
+        console.error("Failed to refresh election data", error);
+      }
+    };
+
+    refreshElectionData();
+    // Removed 'election' from dependencies to prevent infinite loop
+  }, [_id]);
+
+  // Safeguard: Wait for loader data / election state to exist
+  if (!election) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <p className="text-gray-500 font-medium">Loading election details...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
@@ -179,7 +233,7 @@ const ElectionInfo = () => {
                 hasEnded={hasEnded}
               />
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white">
-                <Shield className="h-3 w-3" />
+                <Shield className="h-4 w-4" />
                 {type}
               </span>
 
@@ -193,9 +247,10 @@ const ElectionInfo = () => {
                 </button>
               }
 
-              {/* allow people to register - open election */}
-              {isPending && type === "Open" && !voter && (
-                <div className="w-full sm:w-auto sm:ml-auto flex gap-2">
+              {/* group: register / vote buttons, pushed to the right */}
+              <div className="flex gap-2 ml-auto">
+                {/* allow people to register - open election */}
+                {isPending && type === "Open" && !voter && (
                   <button
                     onClick={handleRegisterClick}
                     className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
@@ -203,19 +258,19 @@ const ElectionInfo = () => {
                     <Vote className="h-4 w-4" />
                     Register to vote
                   </button>
-                </div>
-              )}
+                )}
 
-              {isActive && (
-                <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-0 w-full">
+                {/* show Vote btn when election becomes active */}
+                {isActive && (
                   <button
-                    onClick={handleRegisterClick}
+                    onClick={() => setShowVoterLogin(true)}
                     className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
                   >
-                    <Vote className="h-4 w-4" />Vote
+                    <Vote className="h-4 w-4" />
+                    Go to vote
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
 
@@ -282,10 +337,6 @@ const ElectionInfo = () => {
             </Link>
           </div>
         )}
-
-        {/* TO-DO: When election is active, how do users login to vote? */}
-
-
       </div>
 
       <VoterCheckOverlay
@@ -296,7 +347,7 @@ const ElectionInfo = () => {
       />
 
       <VoterLoginOverlay
-        isOpen={isActive}
+        isOpen={showVoterLogin}
         onClose={() => setShowVoterLogin(false)}
         userAuthType={userAuthType}
         voters={voters}

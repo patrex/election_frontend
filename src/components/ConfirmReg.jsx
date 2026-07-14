@@ -26,7 +26,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
       onClick={handleClose}
     >
       <div
-        className="bg-white dark:bg-gray-900 w-full max-w-lg rounded-t-2xl px-5 pt-4 pb-10 shadow-xl"
+        className="bg-white dark:bg-gray-900 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto rounded-2xl px-5 pt-4 pb-5 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -55,7 +55,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
             <Phone className="h-4 w-4 text-gray-400 shrink-0" />
           )}
           <input
-            type={isEmail ? "email" : "tel"}
+            type={isEmail ? "email" : "number"}
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -63,7 +63,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
             }}
             onKeyDown={(e) => e.key === "Enter" && checkVoterExists()}
             placeholder={isEmail ? "you@example.com" : "+234 800 000 0000"}
-            className="flex-1 min-w-0 text-sm bg-transparent border-none outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
+            className="flex-1 min-w-0 text-sm bg-transparent !border-none !outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none"
           />
         </div>
 
