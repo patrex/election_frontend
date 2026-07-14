@@ -26,7 +26,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
       onClick={handleClose}
     >
       <div
-        className="bg-white dark:bg-gray-900 w-full max-w-lg rounded-t-2xl px-5 pt-4 pb-10 shadow-xl"
+        className="bg-white dark:bg-gray-900 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto rounded-2xl px-5 pt-4 pb-5 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
