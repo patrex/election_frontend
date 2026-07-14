@@ -63,7 +63,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
             }}
             onKeyDown={(e) => e.key === "Enter" && checkVoterExists()}
             placeholder={isEmail ? "you@example.com" : "+234 800 000 0000"}
-            className="flex-1 min-w-0 text-sm bg-transparent !border-none outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
+            className="flex-1 min-w-0 text-sm bg-transparent !border-none !outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
           />
         </div>
 
