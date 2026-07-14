@@ -38,6 +38,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         participant: dest,
         electionId: election._id,
       });
+      onClose();
       return Toast.success("You have been added")
     } catch (error) {
       throw new Error(error)
@@ -84,7 +85,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
           Enter the {isEmail ? "email address" : "phone number"} you registered
-          with to confirm you can vote.
+          with to continue
         </p>
 
         {/* Input */}
@@ -133,7 +134,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         )}
         {status === "error" && (
           <button
-            onClick={ () => {isEmail ? setShowEmailModal(true) : setShowPhoneModal(true); onClose() }}
+            onClick={ () => {isEmail ? setShowEmailModal(true) : setShowPhoneModal(true) }}
             className="w-full flex items-center justify-center gap-2 h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition active:scale-95"
           >
             <UserPlus className="h-4 w-4" />
@@ -151,6 +152,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
 
       <CollectEmailModal
         isOpen={showEmailModal}
+        prefill={normalize(query.trim())}
         onClose={() => setShowEmailModal(false)}
         onSubmit={addToDb}
       />

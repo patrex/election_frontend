@@ -23,10 +23,11 @@ export default function CollectEmailModal({
     isOpen,
     onClose,
     onSubmit,
+    prefill,
     title = "Enter your email to receive your OTP via email",
     subtitle = "We'll not share your email with third parties",
 }) {
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(prefill ?? "");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -35,7 +36,7 @@ export default function CollectEmailModal({
     // Reset form state whenever modal opens
     useEffect(() => {
         if (isOpen) {
-            setEmail("");
+            setEmail(prefill ?? "");
             setError(null);
             setLoading(false);
         }
