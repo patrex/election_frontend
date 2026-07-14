@@ -31,11 +31,11 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   const normalize = (v) =>
     !isEmail && v.startsWith("234") ? "0" + v.slice(3) : v;
 
-  const addToDb = useCallback(async () => {
+  const addToDb = useCallback(async (dest) => {
     try {
-      await startVerification(normalize(query.trim()));
+      await startVerification(dest);
       await axios_api.post(`election/${election._id}/addvoter/participant`, {
-        participant: query.trim(),
+        participant: dest,
         electionId: election._id,
       });
       return Toast.success("You have been added")
