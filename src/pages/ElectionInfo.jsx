@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useLocation, Link, useParams } from "react-router-dom";
+import { useLocation, Link, useParams, useLoaderData } from "react-router-dom";
 import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Speech, SearchCheck } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,6 +17,17 @@ import { useEventStatus } from "@/hooks/useEventStatus";
  * Uses local date/time for comparison — new Date() is always local,
  * and the startDate/endDate strings are parsed into local Date objects.
  */
+
+export async function infoLoader({ params }) {
+  const { id } = params;
+
+  try {
+    const _ = await axios_api.get(`election/${id}`);
+    return  { election: _.data };
+  } catch (error) {
+    return [];
+  }
+}
 
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleString(undefined, {
@@ -75,8 +86,7 @@ const ElectionInfo = () => {
   const { startVerification } = useOTP();
   const { voter, setVoter } = useAuth();
 
-  const location = useLocation();
-  const { election: e } = location.state || {};
+  const { election: e } = useLoaderData() || {};``
 
   const [election, setElection] = useState(e);
 
