@@ -85,8 +85,10 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 
 const ElectionInfo = () => {
   const { startVerification } = useOTP();
-  const { election: e } = useElection();
   const { voter, setVoter } = useAuth();
+
+  const location = useLocation();
+  const { election: e } = location.state || {};
 
   const [election, setElection] = useState(e);
 
