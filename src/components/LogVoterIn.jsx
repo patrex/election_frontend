@@ -42,7 +42,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
     } catch (error) {
       Toast.error("We could not add you")
     }
-  }, [addToDb, voters]);
+  }, [voters]);
 
   useEffect(() => {
     if (!isValid) {
