@@ -33,7 +33,6 @@ export const useOTP = () => {
  * Returns the cleaned destination string, or throws if invalid.
  */
 const parseDestination = (raw) => {
-	console.log(raw);
 	const trimmed = raw.trim();
 	if (EMAIL_REGEX.test(trimmed)) return trimmed;
 	if (validatePhoneNo(trimmed)) return cleanNgPhoneNo(trimmed);
