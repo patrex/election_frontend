@@ -1,7 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
 import { Mail, Phone, Vote, CheckCircle2, XCircle, X, UserPlus } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Mail, Phone, Vote, CheckCircle2, XCircle, X } from "lucide-react";
 import { useOTP } from "@/contexts/OTPContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useElection } from "@/contexts/ElectionContext";
