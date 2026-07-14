@@ -122,7 +122,7 @@ const ElectionInfo = () => {
           electionId: _id,
         });
       } catch (error) {
-        throw new Error(error);
+        
       }
     },
     [_id],

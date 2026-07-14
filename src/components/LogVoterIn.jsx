@@ -15,14 +15,14 @@ const PHONE_REGEX = /^(0|234)\d{10}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
+  const { election } = useElection();
+  const { startVerification } = useOTP();
+
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState(null); // null | "success" | "error"
 
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPhoneModal, setShowPhoneModal] = useState(false);
-
-  const { election } = useElection();
-  const { startVerification } = useOTP();
 
   const isEmail = userAuthType === "email";
   const voterSet = useMemo(() => new Set(voters), [voters]);
@@ -40,7 +40,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
       });
       return Toast.success("You have been added")
     } catch (error) {
-      return Toast.error("We could not add you")
+      Toast.error("We could not add you")
     }
   }, [addToDb, voters]);
 
