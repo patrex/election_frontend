@@ -1,43 +1,41 @@
+import { useEffect, useState, useMemo } from "react";
+import { Mail, Phone, Vote, CheckCircle2, XCircle, X, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Mail, Phone, Vote, CheckCircle2, XCircle, X } from "lucide-react";
 import { useOTP } from "@/contexts/OTPContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useElection } from "@/contexts/ElectionContext";
 import Toast from "@/utils/ToastMsg";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
-const VoterLoginOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
+const PHONE_REGEX = /^(0|234)\d{10}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const VoterCheckOverlay = ({
+  isOpen,
+  onClose,
+  userAuthType,
+  voters,
+  onRegister,
+  onProceed,
+}) => {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState(null); // null | "success" | "error"
-  const navigate = useNavigate();
-
-  const { setVoter } = useAuth()
-  const { startVerification } = useOTP();
-  const { election } = useElection();
 
   const isEmail = userAuthType === "email";
-  
-  const checkVoterExists = () => {
-    if (!query.trim()) 
-      return Toast.error(`No ${isEmail ? 'Email': 'Phone number'} enttered`);
-    
-    if (!voters.includes(query.trim())) {
-      return Toast.error(`Your ${isEmail ? 'email' : 'phone number'} is not registered`)
-    } 
+  const voterSet = useMemo(() => new Set(voters), [voters]);
+  const isValid = (isEmail ? EMAIL_REGEX : PHONE_REGEX).test(query.trim());
 
-    startIdCheck();
-  }
+  const normalize = (v) =>
+    !isEmail && v.startsWith("234") ? "0" + v.slice(3) : v;
 
-  const startIdCheck = async () => {
-    try {
-      const _vRes = await startVerification(query);
-      setVoter(query);
-
-      navigate(`/election/${election._id}/${query}`);
-    } catch (error) {
-      throw new Error("Could not verify your identity");
+  useEffect(() => {
+    if (!isValid) {
+      setStatus(null);
+      return;
     }
-  }
+    setStatus(voterSet.has(normalize(query.trim())) ? "success" : "error");
+  }, [isValid, query, voterSet]);
 
   const handleClose = () => {
     setQuery("");
@@ -53,7 +51,7 @@ const VoterLoginOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
       onClick={handleClose}
     >
       <div
-        className="bg-white dark:bg-gray-900 w-full max-w-lg rounded-t-2xl px-5 pt-4 pb-10 shadow-xl"
+        className="bg-white dark:bg-gray-900 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto rounded-2xl px-5 pt-4 pb-5 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -71,7 +69,7 @@ const VoterLoginOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
           Enter the {isEmail ? "email address" : "phone number"} you registered
-          with to proceed
+          with to confirm you can vote.
         </p>
 
         {/* Input */}
@@ -88,9 +86,8 @@ const VoterLoginOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
               setQuery(e.target.value);
               setStatus(null);
             }}
-            onKeyDown={(e) => e.key === "Enter" && checkVoterExists()}
             placeholder={isEmail ? "you@example.com" : "+234 800 000 0000"}
-            className="flex-1 min-w-0 text-sm bg-transparent border-none outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
+            className="flex-1 min-w-0 text-sm bg-transparent !border-none !outline-none focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
           />
         </div>
 
@@ -110,17 +107,27 @@ const VoterLoginOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         )}
 
         {/* CTA */}
-        <button
-          onClick={checkVoterExists}
-          disabled={!query.trim()}
-          className="w-full flex items-center justify-center gap-2 h-11 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition active:scale-95"
-        >
-          <Vote className="h-4 w-4" />
-          Go to ballot
-        </button>
+        {status === "success" && (
+          <button
+            onClick={() => onProceed?.(normalize(query.trim()))}
+            className="w-full flex items-center justify-center gap-2 h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition active:scale-95"
+          >
+            <Vote className="h-4 w-4" />
+            Proceed
+          </button>
+        )}
+        {status === "error" && (
+          <button
+            onClick={() => onRegister?.(normalize(query.trim()))}
+            className="w-full flex items-center justify-center gap-2 h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition active:scale-95"
+          >
+            <UserPlus className="h-4 w-4" />
+            Register
+          </button>
+        )}
       </div>
     </div>
   );
 };
 
-export default VoterLoginOverlay;
+export default VoterCheckOverlay;

@@ -55,7 +55,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
             <Phone className="h-4 w-4 text-gray-400 shrink-0" />
           )}
           <input
-            type={isEmail ? "email" : "tel"}
+            type={isEmail ? "email" : "number"}
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
