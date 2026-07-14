@@ -1,17 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate, Link, useParams } from "react-router-dom";
-import {
-  Calendar,
-  Clock,
-  Shield,
-  FileText,
-  ScrollText,
-  Users,
-  ChevronRight,
-  Vote,
-  Speech,
-  SearchCheck,
-} from "lucide-react";
+import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Speech, SearchCheck } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -20,7 +9,6 @@ import CollectEmailModal from "@/components/CollectEmailModal";
 import axios_api from "@/utils/axios";
 import { useOTP } from "@/contexts/OTPContext";
 import Toast from "@/utils/ToastMsg";
-import { useElection } from "@/contexts/ElectionContext";
 import VoterCheckOverlay from "@/components/ConfirmReg";
 import VoterLoginOverlay from "@/components/LogVoterIn";
 
@@ -236,7 +224,7 @@ const ElectionInfo = () => {
                 {/* show Vote btn when election becomes active */}
                 {isActive && (
                   <button
-                    onClick={handleRegisterClick}
+                    onClick={() => setShowVoterLogin(true)}
                     className="shrink-0 flex items-center gap-1.5 px-2 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-sm rounded-xl transition-all active:scale-95 whitespace-nowrap"
                   >
                     <Vote className="h-4 w-4" />
@@ -322,6 +310,7 @@ const ElectionInfo = () => {
       />
 
       <VoterLoginOverlay
+        isOpen={showVoterLogin}
         onClose={() => setShowVoterLogin(false)}
         userAuthType={userAuthType}
         voters={voters}
