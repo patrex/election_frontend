@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link, useParams } from "react-router-dom";
 import {
   Calendar,
   Clock,
@@ -29,17 +29,6 @@ import { useEventStatus } from "@/hooks/useEventStatus";
  * Uses local date/time for comparison — new Date() is always local,
  * and the startDate/endDate strings are parsed into local Date objects.
  */
-const getEventStatus = (startDate, endDate) => {
-  const now = new Date();
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  return {
-    isPending: now < start,
-    hasEnded: now > end,
-    isActive: now >= start && now <= end,
-  };
-};
-
 
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleString(undefined, {
@@ -96,8 +85,12 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 
 const ElectionInfo = () => {
   const { startVerification } = useOTP();
-  const { election } = useElection();
+  const { election: e } = useElection();
   const { voter, setVoter } = useAuth();
+
+  const [election, setElection] = useState(e);
+
+  const { id } = useParams();
 
   const {
     title, startDate, endDate, type,
@@ -182,6 +175,15 @@ const ElectionInfo = () => {
   useEffect(() => {
     cfetchVoters();
   }, [_id, type]);
+
+  useEffect(() => {
+    try {
+      const _election = axios_api.get(`election/${id}`);
+      setElection(_election.data);
+    } catch (error) {
+      
+    }
+  }, [id])
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
