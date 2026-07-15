@@ -86,17 +86,15 @@ const ElectionInfo = () => {
   const { startVerification } = useOTP();
   const { voter, setVoter } = useAuth();
 
-  const { election: e } = useLoaderData() || {};``
+  const { election: e } = useLoaderData() || {};
 
   const [election, setElection] = useState(e);
-
-  const { id } = useParams();
 
   const {
     title, startDate, endDate, type,
     desc, rules, userAuthType,
     addCandidatesBy, _id,
-  } = e;
+  } = election;
 
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPhoneModal, setShowPhoneModal] = useState(false);
@@ -123,6 +121,8 @@ const ElectionInfo = () => {
       ? setShowPhoneModal(true)
       : setShowEmailModal(true);
   };
+
+  useEffect(() => {console.log(election)}, [])
 
   const addVoterToDb = useCallback(
     async (participant) => {
@@ -172,8 +172,8 @@ const ElectionInfo = () => {
   }, [type, _id]);
 
   // fetch registered voters for closed elections
-  useEffect(() => {
-    cfetchVoters();
+  useEffect(async () => {
+    await cfetchVoters();
   }, [_id, type]);
 
   // ensure refresh does not break the page
