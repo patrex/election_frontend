@@ -20,11 +20,11 @@ const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
 
     useEffect(() => {
         if (isOpen) {
-            setPhoneNumber("");
+            setPhoneNumber(prefill ?? "");
             setError(null);
             setLoading(false);
         }
-    }, [isOpen]);
+    }, [isOpen, prefill]);
 
     useEffect(() => {
         if (!isOpen) return;
