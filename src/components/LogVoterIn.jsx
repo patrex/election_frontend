@@ -133,7 +133,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         )}
         {status === "error" && (
           <button
-            onClick={ isEmail ? setShowEmailModal(true) : setShowPhoneModal(true) }
+            onClick={ () => isEmail ? setShowEmailModal(true) : setShowPhoneModal(true) }
             className="w-full flex items-center justify-center gap-2 h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition active:scale-95"
           >
             <UserPlus className="h-4 w-4" />
