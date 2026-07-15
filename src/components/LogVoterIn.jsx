@@ -40,7 +40,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
       });
       return Toast.success("You have been added")
     } catch (error) {
-      Toast.error("We could not add you")
+      throw new Error(error)
     }
   }, [voters]);
 
