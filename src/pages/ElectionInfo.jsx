@@ -1,6 +1,17 @@
 import { useEffect, useState, useCallback } from "react";
-import { useLocation, Link, useParams, useLoaderData } from "react-router-dom";
-import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Speech, SearchCheck } from "lucide-react";
+import { Link, useLoaderData, useParams } from "react-router-dom"; // Added useParams safely just in case
+import {
+  Calendar,
+  Clock,
+  Shield,
+  FileText,
+  ScrollText,
+  Users,
+  ChevronRight,
+  Vote,
+  Speech,
+  SearchCheck,
+} from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -13,17 +24,13 @@ import VoterCheckOverlay from "@/components/ConfirmReg";
 import VoterLoginOverlay from "@/components/LogVoterIn";
 
 import { useEventStatus } from "@/hooks/useEventStatus";
-/**
- * Uses local date/time for comparison — new Date() is always local,
- * and the startDate/endDate strings are parsed into local Date objects.
- */
 
 export async function infoLoader({ params }) {
   const { id } = params;
 
   try {
     const _ = await axios_api.get(`election/${id}`);
-    return  { election: _.data };
+    return { election: _.data };
   } catch (error) {
     return [];
   }
@@ -91,10 +98,16 @@ const ElectionInfo = () => {
   const [election, setElection] = useState(e);
 
   const {
-    title, startDate, endDate, type,
-    desc, rules, userAuthType,
-    addCandidatesBy, _id,
-  } = election;
+    title,
+    startDate,
+    endDate,
+    type,
+    desc,
+    rules,
+    userAuthType,
+    addCandidatesBy,
+    _id,
+  } = election || {}; // Added fallback empty object just in case
 
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPhoneModal, setShowPhoneModal] = useState(false);
@@ -104,9 +117,9 @@ const ElectionInfo = () => {
   const [voters, setVoters] = useState([]);
 
   const { isPending, hasEnded, isActive } = useEventStatus(
-		new Date(startDate),
-		new Date(endDate)
-	);
+    new Date(startDate),
+    new Date(endDate),
+  );
 
   const canSelfAddCandidates =
     isPending && addCandidatesBy === "Candidates Will Add Themselves";
@@ -122,8 +135,6 @@ const ElectionInfo = () => {
       : setShowEmailModal(true);
   };
 
-  useEffect(() => {console.log(election)}, [])
-
   const addVoterToDb = useCallback(
     async (participant) => {
       try {
@@ -131,11 +142,9 @@ const ElectionInfo = () => {
           participant: participant,
           electionId: _id,
         });
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     },
-    [_id]
+    [_id],
   );
 
   const initiateVerification = useCallback(
@@ -155,6 +164,7 @@ const ElectionInfo = () => {
 
   // find voters for a closed election
   const cfetchVoters = useCallback(async () => {
+    if (!_id) return;
     try {
       const _cv = await axios_api.get(`election/${_id}/voterlist`);
 
@@ -167,24 +177,42 @@ const ElectionInfo = () => {
 
       setVoters(contacts ?? []);
     } catch (error) {
-      throw new Error("Could not fetch voters for this closed election");
+      console.error("Could not fetch voters for this closed election", error);
     }
-  }, [type, _id]);
+  }, [userAuthType, _id]);
 
-  // fetch registered voters for closed elections
-  useEffect(async () => {
-    await cfetchVoters();
-  }, [_id, type]);
-
-  // ensure refresh does not break the page
-  useEffect(async () => {
-    try {
-      const _election = await axios_api.get(`election/${_id}`);
-      setElection(_election.data);
-    } catch (error) {
-      throw new Error(error);
+  // FIXED: Removed async from the hook callback
+  useEffect(() => {
+    if (_id) {
+      cfetchVoters();
     }
-  }, [_id, election])
+  }, [_id, type, cfetchVoters]);
+
+  // FIXED: Removed async from hook callback AND fixed infinite render loop
+  useEffect(() => {
+    if (!_id) return;
+
+    const refreshElectionData = async () => {
+      try {
+        const _election = await axios_api.get(`election/${_id}`);
+        setElection(_election.data);
+      } catch (error) {
+        console.error("Failed to refresh election data", error);
+      }
+    };
+
+    refreshElectionData();
+    // Removed 'election' from dependencies to prevent infinite loop
+  }, [_id]);
+
+  // Safeguard: Wait for loader data / election state to exist
+  if (!election) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <p className="text-gray-500 font-medium">Loading election details...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
@@ -309,8 +337,6 @@ const ElectionInfo = () => {
             </Link>
           </div>
         )}
-
-        {/* TO-DO: When election is active, how do users login to vote? */}
       </div>
 
       <VoterCheckOverlay
