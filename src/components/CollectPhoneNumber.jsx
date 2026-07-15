@@ -47,6 +47,9 @@ const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
         const err = validate(phoneNumber);
         if (err) return setError(err);
 
+        console.log(phoneNumber);
+        
+
         setLoading(true);
         setError(null);
         try {
