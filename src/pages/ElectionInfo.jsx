@@ -179,12 +179,12 @@ const ElectionInfo = () => {
   // ensure refresh does not break the page
   useEffect(async () => {
     try {
-      const _election = await axios_api.get(`election/${id}`);
+      const _election = await axios_api.get(`election/${_id}`);
       setElection(_election.data);
     } catch (error) {
       throw new Error(error);
     }
-  }, [id, election])
+  }, [_id, election])
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
