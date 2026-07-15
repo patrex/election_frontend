@@ -144,6 +144,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
 
       <PhoneInputModal
         isOpen={showPhoneModal}
+        prefill={query}
         onClose={() => setShowPhoneModal(false)}
         onSubmit={addToDb}
       />

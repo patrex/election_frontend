@@ -11,8 +11,8 @@ function validate(value) {
     return null;
 }
 
-const PhoneInputModal = ({ isOpen, onClose, onSubmit }) => {
-    const [phoneNumber, setPhoneNumber] = useState("");
+const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
+    const [phoneNumber, setPhoneNumber] = useState(prefill ?? "");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
