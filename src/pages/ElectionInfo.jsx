@@ -33,6 +33,9 @@ export async function infoLoader({ params }) {
       contacts = voters.data.map((c) => c.phoneNo);
     }
 
+    console.log(election, contacts);
+    
+
     return { election: election.data, voters: contacts };
   } catch (error) {
     return [];
