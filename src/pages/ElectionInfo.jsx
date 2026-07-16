@@ -1,6 +1,17 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link, useLoaderData, useParams } from "react-router-dom"; // Added useParams safely just in case
-import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Speech, SearchCheck } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  Shield,
+  FileText,
+  ScrollText,
+  Users,
+  ChevronRight,
+  Vote,
+  Speech,
+  SearchCheck,
+} from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -21,8 +32,8 @@ export async function infoLoader({ params }) {
   try {
     const [election, voters] = await Promise.all([
       axios_api.get(`election/${id}`),
-      axios_api.get(`election/${_id}/voterlist`)
-    ])
+      axios_api.get(`election/${id}/voterlist`),
+    ]);
 
     const userAuthType = election.data.userAuthType;
 
@@ -34,7 +45,6 @@ export async function infoLoader({ params }) {
     }
 
     console.log(election, contacts);
-    
 
     return { election: election.data, voters: contacts };
   } catch (error) {
@@ -105,8 +115,6 @@ const ElectionInfo = () => {
   const [election, setElection] = useState(e);
   const [voters, setVoters] = useState(vtrs ?? []);
 
-  setElectionContext(election);
-
   const {
     title,
     startDate,
@@ -123,7 +131,6 @@ const ElectionInfo = () => {
   const [showPhoneModal, setShowPhoneModal] = useState(false);
   const [showVoterCheck, setShowVoterCheck] = useState(false);
   const [showVoterLogin, setShowVoterLogin] = useState(false);
-
 
   const { isPending, hasEnded, isActive } = useEventStatus(
     new Date(startDate),
@@ -170,19 +177,22 @@ const ElectionInfo = () => {
     [startVerification, addVoterToDb],
   );
 
+  useEffect(() => {
+    setElectionContext(election);
+  }, []);
+
   // find voters for a closed election
 
   useEffect(() => {
     // Open the SSE connection to the server
-    const eventSource = new EventSource('/api/election/voteradd/stream');
+    const eventSource = new EventSource("/api/election/voteradd/stream");
 
     // Listen for the server sending a new contact
     eventSource.onmessage = (event) => {
       const voter = JSON.parse(event.data);
-      
+
       // Append the new contact to your existing list instantly!
       setVoters((prev) => [voter, ...prev]);
-      console.log(voters);
     };
 
     // Cleanup on unmount
