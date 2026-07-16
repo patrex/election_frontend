@@ -178,15 +178,18 @@ const ElectionInfo = () => {
   // find voters for a closed election
 
   useEffect(() => {
+    console.log(voters);
+    
     // Open the SSE connection to the server
     const eventSource = new EventSource("/api/election/voteradd/stream");
-
     // Listen for the server sending a new contact
     eventSource.onmessage = (event) => {
       const voter = JSON.parse(event.data);
 
       // Append the new contact to your existing list instantly!
       setVoters((prev) => [voter, ...prev]);
+      console.log(voters);
+      
     };
 
     // Cleanup on unmount
