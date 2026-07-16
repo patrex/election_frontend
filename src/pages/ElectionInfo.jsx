@@ -44,8 +44,6 @@ export async function infoLoader({ params }) {
       contacts = voters.data.map((c) => c.phoneNo);
     }
 
-    console.log(election, contacts);
-
     return { election: election.data, voters: contacts };
   } catch (error) {
     return [];
@@ -177,10 +175,6 @@ const ElectionInfo = () => {
     [startVerification, addVoterToDb],
   );
 
-  useEffect(() => {
-    setElectionContext(election);
-  }, []);
-
   // find voters for a closed election
 
   useEffect(() => {
@@ -207,6 +201,7 @@ const ElectionInfo = () => {
       try {
         const _election = await axios_api.get(`election/${_id}`);
         setElection(_election.data);
+        setElectionContext(_election.data)
       } catch (error) {
         console.error("Failed to refresh election data", error);
       }
