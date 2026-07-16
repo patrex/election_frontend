@@ -171,7 +171,7 @@ const ElectionInfo = () => {
 
   useEffect(() => {
     // Open the SSE connection to the server
-    const eventSource = new EventSource('/api/election/voteradd/stream1');
+    const eventSource = new EventSource('/api/election/voteradd/stream');
 
     // Listen for the server sending a new contact
     eventSource.onmessage = (event) => {
