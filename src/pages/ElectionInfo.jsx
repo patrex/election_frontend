@@ -1,17 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link, useLoaderData, useParams } from "react-router-dom"; // Added useParams safely just in case
-import {
-  Calendar,
-  Clock,
-  Shield,
-  FileText,
-  ScrollText,
-  Users,
-  ChevronRight,
-  Vote,
-  Speech,
-  SearchCheck,
-} from "lucide-react";
+import { Calendar, Clock, Shield, FileText, ScrollText, Users, ChevronRight, Vote, Speech, SearchCheck } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -24,13 +13,27 @@ import VoterCheckOverlay from "@/components/ConfirmReg";
 import VoterLoginOverlay from "@/components/LogVoterIn";
 
 import { useEventStatus } from "@/hooks/useEventStatus";
+import { useElection } from "@/contexts/ElectionContext";
 
 export async function infoLoader({ params }) {
   const { id } = params;
 
   try {
-    const _ = await axios_api.get(`election/${id}`);
-    return { election: _.data };
+    const [election, voters] = await Promise.all([
+      axios_api.get(`election/${id}`),
+      axios_api.get(`election/${_id}/voterlist`)
+    ])
+
+    const userAuthType = election.data.userAuthType;
+
+    let contacts;
+    if (userAuthType === "email") {
+      contacts = voters.data.map((c) => c.email);
+    } else {
+      contacts = voters.data.map((c) => c.phoneNo);
+    }
+
+    return { election: election.data, voters: contacts };
   } catch (error) {
     return [];
   }
@@ -92,10 +95,14 @@ const InfoRow = ({ icon: Icon, label, value, valueStyles }) => (
 const ElectionInfo = () => {
   const { startVerification } = useOTP();
   const { voter, setVoter } = useAuth();
+  const { setElection: setElectionContext } = useElection();
 
-  const { election: e } = useLoaderData() || {};
+  const { election: e, voters: vtrs } = useLoaderData() || {};
 
   const [election, setElection] = useState(e);
+  const [voters, setVoters] = useState(vtrs ?? []);
+
+  setElectionContext(election);
 
   const {
     title,
@@ -114,7 +121,6 @@ const ElectionInfo = () => {
   const [showVoterCheck, setShowVoterCheck] = useState(false);
   const [showVoterLogin, setShowVoterLogin] = useState(false);
 
-  const [voters, setVoters] = useState([]);
 
   const { isPending, hasEnded, isActive } = useEventStatus(
     new Date(startDate),
@@ -152,7 +158,6 @@ const ElectionInfo = () => {
       try {
         await startVerification(dest);
         await addVoterToDb(dest);
-        await cfetchVoters();
 
         Toast.success("You have been added");
       } catch (error) {
@@ -163,30 +168,23 @@ const ElectionInfo = () => {
   );
 
   // find voters for a closed election
-  const cfetchVoters = useCallback(async () => {
-    if (!_id) return;
-    try {
-      const _cv = await axios_api.get(`election/${_id}/voterlist`);
 
-      let contacts;
-      if (userAuthType === "email") {
-        contacts = _cv.data.map((c) => c.email);
-      } else {
-        contacts = _cv.data.map((c) => c.phoneNo);
-      }
-
-      setVoters(contacts ?? []);
-    } catch (error) {
-      console.error("Could not fetch voters for this closed election", error);
-    }
-  }, [userAuthType, _id]);
-
-  // FIXED: Removed async from the hook callback
   useEffect(() => {
-    if (_id) {
-      cfetchVoters();
-    }
-  }, [_id, type, cfetchVoters]);
+    // Open the SSE connection to the server
+    const eventSource = new EventSource('election/voteradd/stream');
+
+    // Listen for the server sending a new contact
+    eventSource.onmessage = (event) => {
+      const voter = JSON.parse(event.data);
+      
+      // Append the new contact to your existing list instantly!
+      setVoters((prev) => [voter, ...prev]);
+      console.log(voters);
+    };
+
+    // Cleanup on unmount
+    return () => eventSource.close();
+  }, []);
 
   // FIXED: Removed async from hook callback AND fixed infinite render loop
   useEffect(() => {
