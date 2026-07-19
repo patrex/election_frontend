@@ -181,7 +181,9 @@ const ElectionInfo = () => {
 
   useEffect(() => {
     // Open the SSE connection to the server
-    const eventSource = new EventSource(`/api/election/${_id}/voteradd/stream`);
+    const eventSource = new EventSource(
+      `/api/election/voteradd/stream?electionId=${_id}`,
+    );
     // Listen for the server sending a new contact
     eventSource.onmessage = (event) => {
       const voter = JSON.parse(event.data);
