@@ -38,7 +38,8 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
         participant: dest,
         electionId: election._id,
       });
-      onClose();
+      handleClose();
+
       return Toast.success("You have been added")
     } catch (error) {
       throw new Error(error)
