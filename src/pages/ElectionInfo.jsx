@@ -114,7 +114,6 @@ const ElectionInfo = () => {
   const [voters, setVoters] = useState(vtrs ?? []);
   setElectionContext(election);
 
-
   const {
     title,
     startDate,
@@ -178,6 +177,10 @@ const ElectionInfo = () => {
     },
     [startVerification, addVoterToDb],
   );
+
+  useEffect(() => {
+    setElectionContext(election)
+  }, [_id])
 
   useEffect(() => {
     // Open the SSE connection to the server
