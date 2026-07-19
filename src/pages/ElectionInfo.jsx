@@ -112,6 +112,8 @@ const ElectionInfo = () => {
 
   const [election, setElection] = useState(e);
   const [voters, setVoters] = useState(vtrs ?? []);
+  setElectionContext(election);
+
 
   const {
     title,
@@ -123,7 +125,7 @@ const ElectionInfo = () => {
     userAuthType,
     addCandidatesBy,
     _id,
-  } = election || {}; // Added fallback empty object just in case
+  } = election || {}; 
 
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPhoneModal, setShowPhoneModal] = useState(false);
@@ -156,7 +158,9 @@ const ElectionInfo = () => {
           participant: participant,
           electionId: _id,
         });
-      } catch (error) {}
+      } catch (error) {
+        throw new Error(error);
+      }
     },
     [_id],
   );
@@ -175,43 +179,17 @@ const ElectionInfo = () => {
     [startVerification, addVoterToDb],
   );
 
-  // find voters for a closed election
-
   useEffect(() => {
-    console.log(voters);
-    
     // Open the SSE connection to the server
-    const eventSource = new EventSource("/api/election/voteradd/stream");
+    const eventSource = new EventSource(`/api/election/${id}/voteradd/stream`);
     // Listen for the server sending a new contact
     eventSource.onmessage = (event) => {
       const voter = JSON.parse(event.data);
-
       // Append the new contact to your existing list instantly!
       setVoters((prev) => [voter, ...prev]);
-      console.log(voters);
-      
     };
-
     // Cleanup on unmount
     return () => eventSource.close();
-  }, []);
-
-  // FIXED: Removed async from hook callback AND fixed infinite render loop
-  useEffect(() => {
-    if (!_id) return;
-
-    const refreshElectionData = async () => {
-      try {
-        const _election = await axios_api.get(`election/${_id}`);
-        setElection(_election.data);
-        setElectionContext(_election.data)
-      } catch (error) {
-        console.error("Failed to refresh election data", error);
-      }
-    };
-
-    refreshElectionData();
-    // Removed 'election' from dependencies to prevent infinite loop
   }, [_id]);
 
   // Safeguard: Wait for loader data / election state to exist
