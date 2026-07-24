@@ -112,7 +112,6 @@ const ElectionInfo = () => {
 
   const [election, setElection] = useState(e);
   const [voters, setVoters] = useState(vtrs ?? []);
-  setElectionContext(election);
 
   const {
     title,
@@ -153,10 +152,11 @@ const ElectionInfo = () => {
   const addVoterToDb = useCallback(
     async (participant) => {
       try {
-        await axios_api.post(`election/${_id}/addvoter/participant`, {
+        const voter = await axios_api.post(`election/${_id}/addvoter/participant`, {
           participant: participant,
           electionId: _id,
         });
+        setVoters((prev) => [voter.data, ...prev]);
       } catch (error) {
         throw new Error(error);
       }
@@ -181,21 +181,6 @@ const ElectionInfo = () => {
   useEffect(() => {
     setElectionContext(election)
   }, [_id])
-
-  useEffect(() => {
-    // Open the SSE connection to the server
-    const eventSource = new EventSource(
-      `/api/election/voteradd/stream?electionId=${_id}`,
-    );
-    // Listen for the server sending a new contact
-    eventSource.onmessage = (event) => {
-      const voter = JSON.parse(event.data);
-      // Append the new contact to your existing list instantly!
-      setVoters((prev) => [voter, ...prev]);
-    };
-    // Cleanup on unmount
-    return () => eventSource.close();
-  }, [_id]);
 
   // Safeguard: Wait for loader data / election state to exist
   if (!election) {

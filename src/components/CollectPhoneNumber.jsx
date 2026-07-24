@@ -16,8 +16,6 @@ const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const { setVoter } = useAuth();
-
     useEffect(() => {
         if (isOpen) {
             setPhoneNumber(prefill ?? "");

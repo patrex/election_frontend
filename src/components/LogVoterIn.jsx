@@ -3,10 +3,8 @@ import { Mail, Phone, Vote, CheckCircle2, XCircle, X, UserPlus } from "lucide-re
 import axios_api from "@/utils/axios";
 
 import { useOTP } from "@/contexts/OTPContext";
-import { useAuth } from "@/contexts/AuthContext";
 import { useElection } from "@/contexts/ElectionContext";
 import Toast from "@/utils/ToastMsg";
-import { useNavigate } from "react-router-dom";
 
 import PhoneInputModal from "@/components/CollectPhoneNumber";
 import CollectEmailModal from "@/components/CollectEmailModal";
