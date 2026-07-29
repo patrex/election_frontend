@@ -65,7 +65,7 @@ const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
             onClick={handleClose}
         >
             <div
-                className="relative w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 p-8 shadow-xl"
+                className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white dark:bg-gray-900 p-8 shadow-xl"
                 onClick={(e) => e.stopPropagation()}
                 role="dialog"
                 aria-modal="true"
@@ -95,7 +95,7 @@ const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
                     </label>
 
                     <div className="relative">
-                        <Phone className="absolute pr-10 left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-indigo-400" />
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-indigo-400" />
                         <input
                             id="modal-phone"
                             type="tel"
