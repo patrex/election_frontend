@@ -178,6 +178,10 @@ const ElectionInfo = () => {
     [startVerification, addVoterToDb],
   );
 
+  useEffect(() => {
+    setElectionContext(election)
+  }, [election])
+
   // Safeguard: Wait for loader data / election state to exist
   if (!election) {
     return (
