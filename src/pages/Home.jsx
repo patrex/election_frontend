@@ -42,7 +42,7 @@ function Home() {
 			const electionFetched = e.data;
 			setElection(electionFetched);
 
-			navigate(`/election/${electionFetched._id}/info`, { state: { election: electionFetched } });
+			navigate(`/election/${electionFetched._id}/info`);
 		} catch (error) {
 			Toast.error(error.message);
 		} finally {

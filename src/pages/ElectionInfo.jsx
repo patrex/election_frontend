@@ -146,17 +146,17 @@ const ElectionInfo = () => {
   const handleRegisterClick = () => {
     userAuthType === "phone"
       ? setShowPhoneModal(true)
-      : setShowEmailModal(true);
+      : setShowEmailModal(true)
   };
 
   const addVoterToDb = useCallback(
     async (participant) => {
       try {
-        const voter = await axios_api.post(`election/${_id}/addvoter/participant`, {
+        const newVoter = await axios_api.post(`election/${_id}/addvoter/participant`, {
           participant: participant,
           electionId: _id,
         });
-        setVoters((prev) => [voter.data, ...prev]);
+        setVoters((prev) => [newVoter.data, ...prev]);
       } catch (error) {
         throw new Error(error);
       }
@@ -177,10 +177,6 @@ const ElectionInfo = () => {
     },
     [startVerification, addVoterToDb],
   );
-
-  useEffect(() => {
-    setElectionContext(election)
-  }, [_id])
 
   // Safeguard: Wait for loader data / election state to exist
   if (!election) {
