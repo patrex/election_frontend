@@ -58,6 +58,12 @@ const OTPVerificationModal = () => {
 	const otpRequestRef = useRef(null);
 	const timerRef      = useRef(null);
 
+	// Re-entrancy guards. These are refs (not state) so an in-flight
+	// call is visible synchronously to any near-simultaneous invocation,
+	// instead of depending on a stale closure's view of isLoading/resendTimer.
+	const sendingRef    = useRef(false);
+	const verifyingRef  = useRef(false);
+
 	// ── Reset & auto-send whenever the modal opens ──────────────────
 	useEffect(() => {
 		if (!isModalOpen) {
@@ -69,7 +75,7 @@ const OTPVerificationModal = () => {
 		setOtpValue('');
 		setIsVerified(false);
 		setError('');
-		setResendTimer(0)
+		setResendTimer(0);
 		otpRequestRef.current = null;
 		sendOtp();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,11 +89,13 @@ const OTPVerificationModal = () => {
 	}, [resendTimer]);
 
 	// ── Send OTP ─────────────────────────────────────────────────────
-	const sendingRef = useRef(false);
 	const sendOtp = useCallback(async () => {
+		// Guard on the ref (synchronous, always current) rather than on
+		// isLoading/resendTimer state, which can be stale in the closure
+		// captured by the "modal opened" effect and cause a silent no-op.
 		if (sendingRef.current || resendTimer > 0) return;
-		sendingRef.current = true;
 
+		sendingRef.current = true;
 		setIsLoading(true);
 		setError('');
 
@@ -95,16 +103,20 @@ const OTPVerificationModal = () => {
 			otpRequestRef.current = await sendPhoneOtp(destination, election._id);
 			setResendTimer(RESEND_COOLDOWN);
 		} catch (err) {
+			otpRequestRef.current = null;
 			setError(err.message || 'Failed to send code. Please try again.');
 		} finally {
 			setIsLoading(false);
+			sendingRef.current = false;
 		}
 	}, [destination, resendTimer]);
 
 	// ── Verify OTP ───────────────────────────────────────────────────
-	const verifyingRef = useRef(false)
 	const verifyOtp = useCallback(async (codeOverride) => {
+		// Prevent overlapping calls (e.g. OTPInput's onComplete firing at
+		// nearly the same time as a manual "Verify Code" click).
 		if (verifyingRef.current) return;
+
 		const code = codeOverride ?? otpValue;
 		if (code.length !== 6) {
 			setError('Please enter the complete 6-digit code.');
@@ -127,6 +139,7 @@ const OTPVerificationModal = () => {
 			});
 
 			if (result.success) {
+				// Clear so a stale pinId can never be reused by a later call.
 				otpRequestRef.current = null;
 				setIsVerified(true);
 				setTimeout(() => handleSuccess(result), 1000);
@@ -137,6 +150,8 @@ const OTPVerificationModal = () => {
 		} catch (err) {
 			setError(err.message || 'Verification failed. Please try again.');
 			setIsLoading(false);
+		} finally {
+			verifyingRef.current = false;
 		}
 	}, [otpValue, handleSuccess]);
 
