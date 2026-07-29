@@ -69,6 +69,7 @@ const OTPVerificationModal = () => {
 		setOtpValue('');
 		setIsVerified(false);
 		setError('');
+		setResendTimer(0)
 		otpRequestRef.current = null;
 		sendOtp();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,8 +83,10 @@ const OTPVerificationModal = () => {
 	}, [resendTimer]);
 
 	// ── Send OTP ─────────────────────────────────────────────────────
+	const sendingRef = useRef(false);
 	const sendOtp = useCallback(async () => {
-		if (isLoading || resendTimer > 0) return;
+		if (sendingRef.current || resendTimer > 0) return;
+		sendingRef.current = true;
 
 		setIsLoading(true);
 		setError('');
@@ -96,10 +99,12 @@ const OTPVerificationModal = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [destination, isLoading, resendTimer]);
+	}, [destination, resendTimer]);
 
 	// ── Verify OTP ───────────────────────────────────────────────────
+	const verifyingRef = useRef(false)
 	const verifyOtp = useCallback(async (codeOverride) => {
+		if (verifyingRef.current) return;
 		const code = codeOverride ?? otpValue;
 		if (code.length !== 6) {
 			setError('Please enter the complete 6-digit code.');
@@ -111,6 +116,7 @@ const OTPVerificationModal = () => {
 			return;
 		}
 
+		verifyingRef.current = true;
 		setIsLoading(true);
 		setError('');
 
@@ -121,6 +127,7 @@ const OTPVerificationModal = () => {
 			});
 
 			if (result.success) {
+				otpRequestRef.current = null;
 				setIsVerified(true);
 				setTimeout(() => handleSuccess(result), 1000);
 			} else {

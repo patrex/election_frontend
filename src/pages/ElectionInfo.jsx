@@ -161,7 +161,7 @@ const ElectionInfo = () => {
         throw new Error(error);
       }
     },
-    [_id],
+    [_id, election],
   );
 
   const initiateVerification = useCallback(
