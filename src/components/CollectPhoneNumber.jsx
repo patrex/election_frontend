@@ -117,7 +117,7 @@ const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
                 <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="px-2 py-2 text-sm flex items-center justify-center bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition disabled:opacity-40"
+                    className="px-5 py-3 text-base flex items-center justify-center bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition disabled:opacity-40"
                 >
                     {loading ? (
                         <>
