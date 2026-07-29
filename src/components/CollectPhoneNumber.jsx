@@ -29,7 +29,7 @@ const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
         const handler = (e) => e.key === "Escape" && handleClose();
         window.addEventListener("keydown", handler);
         return () => window.removeEventListener("keydown", handler);
-    }, [isOpen]);
+    }, [isOpen, handleClose]);
 
     const handleClose = useCallback(() => {
         if (loading) return;
