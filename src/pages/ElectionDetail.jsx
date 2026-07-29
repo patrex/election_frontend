@@ -1,6 +1,6 @@
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import ElectionActions from '@/components/ElectionActions';
 import DeleteDialog from '@/components/DeleteDialog';
@@ -15,29 +15,29 @@ import axios_api from '@/utils/axios';
 export async function electionDetailLoader({ params }) {
 	try {
 		// Fetch election and positions in parallel
-		const [election, positions] = await Promise.all([
+		const [election, positions, voters] = await Promise.all([
 			axios_api.get(`election/${params.id}`),
-			axios_api.get(`election/${params.id}/positions`)
+			axios_api.get(`election/${params.id}/positions`),
+			axios_api.get(`election/${params.id}/voterlist`)
 		]);
 
-		// Fetch voters only for closed elections
-		let _v0 = null;
-		if (election.type === 'Closed') {
-			const voters = await axios_api.get(`election/${params.id}/voterlist`);
-			_v0 = voters.data;
-		}
-
-		return [election.data, positions.data, _v0];
+		return { election: election.data, 
+			positions: positions.data, 
+			voters: voters.data 
+		};
 	} catch (error) {
-		console.error('Error loading election details:', error);
-		return null;
+		return {
+      election: null,
+      positions: null,
+      voters: null,
+    };
 	}
 }
 
 function ElectionDetail() {
-	const [loaderElection, positions, voters] = useLoaderData();
+	const { election: el, positions, voters } = useLoaderData();
 
-	const [election, setElection] = useState(loaderElection);
+	const [election, setElection] = useState(el);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters || []);
 	const [votersFiltered, setVotersFiltered] = useState([]);
@@ -95,7 +95,7 @@ function ElectionDetail() {
 		setPositionModalOpen(false);
 	}
 
-	async function handleAddPosition(e) {
+	const handleAddPosition = useCallback( async () => {
 		e.preventDefault();
 
 		if (!newPosition) {
@@ -116,11 +116,10 @@ function ElectionDetail() {
 
 			setPositionsList(prev => [...prev, response.data]);
 			Toast.success('Position was added');
-
 		} catch (error) {
-			
+			throw new Error(error)
 		}
-	}
+	}, [election])
 
 	const handleUpdatePosition = async (e) => {
 		if (!updatedPosition) {
@@ -146,7 +145,7 @@ function ElectionDetail() {
 			);
 			Toast.success('Position was updated');
 		} catch (error) {
-
+			throw new Error(error);
 		}
 	}
 
@@ -163,8 +162,7 @@ function ElectionDetail() {
 			setPositionsList(positionsList.filter(p => p._id !== position._id));
 			Toast.success("The position was removed");
 		} catch (error) {
-			console.log(error);
-			return Toast.error('An unexpected error occurred');
+			throw new Error("Could not remove the position", error);
 		}
 	}
 
