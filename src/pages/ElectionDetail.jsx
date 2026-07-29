@@ -1,7 +1,6 @@
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
 import { useState, useCallback, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import ElectionActions from '@/components/ElectionActions';
 import DeleteDialog from '@/components/DeleteDialog';
 import StatusBadge from '@/components/StatusBadge';
