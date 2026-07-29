@@ -89,7 +89,7 @@ const PhoneInputModal = ({ isOpen, onClose, prefill, onSubmit }) => {
                     </p>
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 w-full">
                     <label htmlFor="modal-phone" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Phone number
                     </label>
