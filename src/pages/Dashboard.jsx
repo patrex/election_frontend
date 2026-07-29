@@ -77,8 +77,8 @@ function Dashboard() {
   /* ── Shared action buttons ───────────────────────────── */
   function ActionButtons({ election }) {
     const { isPending, hasEnded, isActive } = useEventStatus(
-      new Date(startDate),
-      new Date(endDate),
+      new Date(election.startDate),
+      new Date(election.endDate),
     );
 
     return (
