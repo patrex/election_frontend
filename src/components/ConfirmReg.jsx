@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 import { Mail, Phone, Vote, CheckCircle2, XCircle, X } from "lucide-react";
 
 const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
@@ -10,11 +10,11 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
     setStatus(voters.includes(query.trim()) ? "success" : "error");
   };
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setQuery("");
     setStatus(null);
     onClose();
-  };
+  }, []);
 
   if (!isOpen) return null;
 
@@ -55,7 +55,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
             <Phone className="h-4 w-4 text-gray-400 shrink-0" />
           )}
           <input
-            type={isEmail ? "email" : "number"}
+            type={isEmail ? "email" : "tel"}
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);

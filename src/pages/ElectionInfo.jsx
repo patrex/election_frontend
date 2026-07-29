@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Link, useLoaderData, useParams } from "react-router-dom"; // Added useParams safely just in case
+import { Link, useLoaderData } from "react-router-dom"; // Added useParams safely just in case
 import {
   Calendar,
   Clock,
@@ -46,7 +46,7 @@ export async function infoLoader({ params }) {
 
     return { election: election.data, voters: contacts };
   } catch (error) {
-    return [];
+    return { election: null, voters: null };
   }
 }
 
