@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Mail, Phone, Vote, CheckCircle2, XCircle, X } from "lucide-react";
 
 const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
@@ -10,11 +10,11 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
     setStatus(voters.includes(query.trim()) ? "success" : "error");
   };
 
-  const handleClose = useCallback( () => {
+  const handleClose = useCallback(() => {
     setQuery("");
     setStatus(null);
     onClose();
-  }), []};
+  }, []);
 
   if (!isOpen) return null;
 
