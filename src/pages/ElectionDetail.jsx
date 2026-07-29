@@ -183,7 +183,7 @@ function ElectionDetail() {
 			const updatedList = [...votersList, ...votersToDb.data.voters];
 			setVotersList(updatedList);
 			setVotersFiltered(updatedList);
-			Toast.success(`${votersToDb.voters.length} contacts were added`);
+			Toast.success(`${votersToDb.data.voters.length} contacts were added`);
 			setParticipantsList('');
 		} catch (error) {
 			console.error(error);
