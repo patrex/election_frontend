@@ -41,6 +41,7 @@ function ElectionDetail() {
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters || []);
 	const [votersFiltered, setVotersFiltered] = useState([]);
+	const [invalidEntries, setInvalidEntries] = useState([]);
 
 	const [modalConfig, setModalConfig] = useState({ open: false, action: null })
 
@@ -178,11 +179,14 @@ function ElectionDetail() {
 			const updatedList = [...votersList, ...votersToDb.data.voters];
 			setVotersList(updatedList);
 			setVotersFiltered(updatedList);
+			// TO-DO:
+			// add a way to display number of invalid entries
 			Toast.success(`${votersToDb.data.voters.length} contacts were added`);
 			setParticipantsList('');
 		} catch (error) {
-			console.error(error);
-			return Toast.error("An error occurred. Try again")
+			Toast.error("An error occurred. Try again")
+			throw new Error(error);
+			
 		}
 	}, [election])
 
@@ -196,7 +200,8 @@ function ElectionDetail() {
 			setVotersList(updatedList);
 			Toast.success('The participant was removed successfully');
 		} catch (error) {
-			return Toast.error("There was an error removing the participant");
+			Toast.error("There was an error removing the participant");
+			throw new Error(error);
 		}
 	}, [election])
 
@@ -208,43 +213,51 @@ function ElectionDetail() {
 	}, [election]);
 
 	const procList = useCallback(() => {
-		if (!participantsList) {
+		if (!participantsList?.trim()) {
 			Toast.warning("You did not enter any participants");
 			return;
 		}
 
 		const participantsAuthType = election.userAuthType
 
-		const voters = participantsList.split(',').map(v => v.trim());
+		const voters = participantsList.split(',').map(v => v.trim()).filter(Boolean);
 		const workingList = [...new Set(voters)];
 		let listToDb = []
 		const invalidContacts = []
 
 		if (participantsAuthType === 'email') {
 			listToDb = workingList
-				.map(email => {
+				.filter(email => {
 					if (isValidEmail(email)) {
-						return email;
+						return true;
 					}
-					invalidContacts.push(email)
+					setInvalidEntries(prev => [email, ...prev])
+					return false;
 				});
+			listToDb = [...new Set(listToDb)];
 		} else if (participantsAuthType === 'phone') {
-			const NIGERIAN_PHONE_REGEX = /^(?:\+?234|0)?(\d{10})$/;
+			const NIGERIAN_PHONE_REGEX = /^(?:\+?234|0)(\d{10})$/;
 
-			listToDb = workingList
-				.map(phoneno => {
-					const match = phoneno.match(NIGERIAN_PHONE_REGEX);
+			listToDb = workingList.reduce((acc, phoneno) => {
+				const cleaned = phoneno.replace(/[\s-]/g, ''); // strip stray spaces/dashes
+				const match = cleaned.match(NIGERIAN_PHONE_REGEX);
 
-					if (match) {
-						// The 10-digit number part is captured in match[1]
-						const tenDigits = match[1];
+				if (match) {
+					const tenDigits = match[1];
+					acc.push(`234${tenDigits}`);
+				} else {
+					setInvalidEntries(prev => [phoneno, ...prev])
+				}
 
-						// Reformat to standard 234xxxxxxxxxx (13 digits total)						
-						return `234${tenDigits}`;
-					}
-					
-					invalidContacts.push(phoneno);
-				})
+				return acc;
+			}, []);
+
+			// Dedupe again post-normalization, since "0801..." and "+234801..."
+			// are different raw strings but the same number once normalized
+			listToDb = [...new Set(listToDb)];
+		} else {
+			Toast.warning("Invalid auth type")
+			return;
 		}
 
 		if (invalidContacts.length) {
