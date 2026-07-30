@@ -15,21 +15,19 @@ import axios_api from '@/utils/axios';
 export async function electionDetailLoader({ params }) {
 	try {
 		// Fetch election and positions in parallel
-		const [election, positions] = await Promise.all([
+		const [election, positions, voters] = await Promise.all([
 			axios_api.get(`election/${params.id}`),
-			axios_api.get(`election/${params.id}/positions`)
+			axios_api.get(`election/${params.id}/positions`),
+			axios_api.get(`election/${params.id}/voterlist`)
 		]);
 
-		// Fetch voters only for closed elections
-		let _v0 = null;
-		if (election.type === 'Closed') {
-			const voters = await axios_api.get(`election/${params.id}/voterlist`);
-			_v0 = voters.data;
+		return { 
+			election: election.data, 
+			positions: positions.data, 
+			voters: voters.data 
 		}
-
-		return [election.data, positions.data, _v0];
 	} catch (error) {
-		console.error('Error loading election details:', error);
+		thr('Error loading election details:', error);
 		return null;
 	}
 }
