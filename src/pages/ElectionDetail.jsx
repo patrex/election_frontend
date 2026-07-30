@@ -20,16 +20,17 @@ export async function electionDetailLoader({ params }) {
 			axios_api.get(`election/${params.id}/voterlist`)
 		]);
 
-		return { election: election.data, 
+		return { 
+			election: election.data, 
 			positions: positions.data, 
 			voters: voters.data 
 		};
 	} catch (error) {
 		return {
-      election: null,
-      positions: null,
-      voters: null,
-    };
+			election: null,
+			positions: null,
+			voters: null,
+    	};
 	}
 }
 
@@ -76,23 +77,23 @@ function ElectionDetail() {
 		setUpdatedPosition(e.target.value);
 	}
 
-	const openUpdatePositionModal = () => {
+	const openUpdatePositionModal = useCallback(() => {
 		setUpdatedPosition("");
 		setUpdatePositionModalOpen(true);
-	}
+	}, [election])
 
-	const closeUpdatePositionModal = () => {
+	const closeUpdatePositionModal = useCallback(() => {
 		setUpdatePositionModalOpen(false);
-	}
+	}, [election])
 
-	const openPostionModal = () => {
+	const openPostionModal = useCallback(() => {
 		setNewPosition("");
 		setPositionModalOpen(true);
-	}
+	}, [election])
 
-	const closePositionModal = () => {
+	const closePositionModal = useCallback(() => {
 		setPositionModalOpen(false);
-	}
+	}, [election])
 
 	const handleAddPosition = useCallback( async () => {
 		e.preventDefault();
@@ -120,7 +121,7 @@ function ElectionDetail() {
 		}
 	}, [election])
 
-	const handleUpdatePosition = async (e) => {
+	const handleUpdatePosition = useCallback(async (e) => {
 		if (!updatedPosition) {
 			Toast.warning("Please enter a position name");
 			return;
@@ -146,7 +147,7 @@ function ElectionDetail() {
 		} catch (error) {
 			throw new Error(error);
 		}
-	}
+	}, [election])
 
 	function editPosition(position) {
 		openUpdatePositionModal();
@@ -154,18 +155,17 @@ function ElectionDetail() {
 		setCurrentlySelectedPosition(position.position);
 	}
 
-	async function removePosition(position) {
+	const removePosition = useCallback(async (position) => {
 		try {
 			await axios_api.delete(`election/${election._id}/${position._id}/delete`);
-
 			setPositionsList(positionsList.filter(p => p._id !== position._id));
-			Toast.success("The position was removed");
+			Toast.success("Position removed");
 		} catch (error) {
-			throw new Error("Could not remove the position", error);
+			throw new Error(error);
 		}
-	}
+	}, [election])
 
-	async function sendListToDB(voterlist) {
+	const sendListToDB = useCallback(async (voterlist) => {
 		try {
 			const votersToDb = await axios_api.post(
 				`election/${election._id}/closed_event/addvoters`,
@@ -184,13 +184,12 @@ function ElectionDetail() {
 			console.error(error);
 			return Toast.error("An error occurred. Try again")
 		}
-	}
+	}, [election])
 
-	async function removeVoter(voter) {
+	const removeVoter = useCallback(async (voter) => {
 		try {
-			await axios_api.post(
-				`election/voter/${voter._id}/delete`,
-				{}	
+			await axios_api.delete(
+				`election/voter/${voter._id}/delete`
 			);
 
 			const updatedList = votersList.filter(e => e._id !== voter._id);
@@ -199,16 +198,16 @@ function ElectionDetail() {
 		} catch (error) {
 			return Toast.error("There was an error removing the participant");
 		}
-	}
+	}, [election])
 
-	const triggerRemoveVoter = (voter) => {
+	const triggerRemoveVoter =useCallback( (voter) => {
 		setModalConfig({
 			open: true,
 			action: () => removeVoter(voter) // Pass the pre-wrapped async function
 		});
-	}
+	}, [election]);
 
-	function procList() {
+	const procList = useCallback(() => {
 		if (!participantsList) {
 			Toast.warning("You did not enter any participants");
 			return;
@@ -255,14 +254,14 @@ function ElectionDetail() {
 
 		setAddParticipantsModalOpen(false);
 		sendListToDB(listToDb);
-	}
+	}, [election])
 
-	function editParticipant(participant) {
+	const editParticipant = useCallback((participant) => {
 		setParticipant(participant);
 		setUpdateParticipantModal(true);
-	}
+	}, [election])
 
-	async function patchVoterEmail() {
+	const patchVoterEmail = useCallback(async () => {
 		if (!updatedParticipantInfo) {
 			Toast.warning("Please enter an email address");
 			return;
@@ -293,10 +292,11 @@ function ElectionDetail() {
 			Toast.success("Participant was updated");
 		} catch (error) {
 			Toast.warning("Could not update the participant");
+			throw new Error(error);
 		}
-	}
+	}, [election])
 
-	async function patchVoterPhone() {
+	const patchVoterPhone = useCallback(async() => {
 		if (!updatedParticipantInfo) {
 			Toast.warning("Please enter a phone number");
 			return;
@@ -334,10 +334,11 @@ function ElectionDetail() {
 			Toast.success("Participant was updated");
 		} catch (error) {
 			Toast.warning("Could not update the voter");
+			throw new Error(error);
 		}
-	}
+	}, [election])
 
-	async function endElection() {
+	const endElection = useCallback(async () => {
 		if (hasEnded) {
 			Toast.warning("The election has already ended");
 			return;
@@ -358,15 +359,16 @@ function ElectionDetail() {
 			return Toast.success("Election was ended successfully");
 		} catch (error) {
 			Toast.error("Could not end the election");
+			throw new Error(error);
 		}
-	}
+	}, [election]);
 
-	function checkPositionExists(e) {
+	const checkPositionExists = useCallback((e) => {
 		if (positionsList.length < 1) {
 			e.preventDefault();
 			return Toast.warning("You need to add a position first");
 		}
-	}
+	}, [election]);
 
 	useEffect(() => {
 		if (election.type !== 'Closed' || !votersList || votersList.length === 0) {
