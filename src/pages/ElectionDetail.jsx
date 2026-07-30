@@ -1,7 +1,6 @@
 import { useLoaderData } from 'react-router-dom';
 import moment from 'moment';
-import { useState, useContext, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useCallback, useEffect } from 'react';
 import ElectionActions from '@/components/ElectionActions';
 import DeleteDialog from '@/components/DeleteDialog';
 import StatusBadge from '@/components/StatusBadge';
@@ -21,21 +20,23 @@ export async function electionDetailLoader({ params }) {
 			axios_api.get(`election/${params.id}/voterlist`)
 		]);
 
-		return { 
-			election: election.data, 
+		return { election: election.data, 
 			positions: positions.data, 
 			voters: voters.data 
-		}
+		};
 	} catch (error) {
-		thr('Error loading election details:', error);
-		return null;
+		return {
+      election: null,
+      positions: null,
+      voters: null,
+    };
 	}
 }
 
 function ElectionDetail() {
-	const [loaderElection, positions, voters] = useLoaderData();
+	const { election: el, positions, voters } = useLoaderData();
 
-	const [election, setElection] = useState(loaderElection);
+	const [election, setElection] = useState(el);
 	const [positionsList, setPositionsList] = useState(positions);
 	const [votersList, setVotersList] = useState(voters || []);
 	const [votersFiltered, setVotersFiltered] = useState([]);
@@ -93,7 +94,7 @@ function ElectionDetail() {
 		setPositionModalOpen(false);
 	}
 
-	async function handleAddPosition(e) {
+	const handleAddPosition = useCallback( async () => {
 		e.preventDefault();
 
 		if (!newPosition) {
@@ -114,11 +115,10 @@ function ElectionDetail() {
 
 			setPositionsList(prev => [...prev, response.data]);
 			Toast.success('Position was added');
-
 		} catch (error) {
-			
+			throw new Error(error)
 		}
-	}
+	}, [election])
 
 	const handleUpdatePosition = async (e) => {
 		if (!updatedPosition) {
@@ -144,7 +144,7 @@ function ElectionDetail() {
 			);
 			Toast.success('Position was updated');
 		} catch (error) {
-
+			throw new Error(error);
 		}
 	}
 
@@ -161,14 +161,11 @@ function ElectionDetail() {
 			setPositionsList(positionsList.filter(p => p._id !== position._id));
 			Toast.success("The position was removed");
 		} catch (error) {
-			console.log(error);
-			return Toast.error('An unexpected error occurred');
+			throw new Error("Could not remove the position", error);
 		}
 	}
 
 	async function sendListToDB(voterlist) {
-		console.log(voterlist);
-		
 		try {
 			const votersToDb = await axios_api.post(
 				`election/${election._id}/closed_event/addvoters`,
@@ -476,14 +473,12 @@ function ElectionDetail() {
 												<span className="font-medium text-gray-700">
 													{election.userAuthType === 'email' ? voter.email : voter.phoneNo}
 												</span>
-												{isPending && (
+												{isPending && election.type === "Closed" (
 													<div className="flex gap-2">
 														<button onClick={() => {editParticipant(voter); setViewUsersModal(false)}} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i class="bi bi-pencil"></i></button>
 														<button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={() => triggerRemoveVoter(voter)}>
 															<i className="bi bi-trash3"></i>
 														</button>
-
-															
 													</div>
 												)}
 											</li>

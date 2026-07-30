@@ -3,9 +3,11 @@ import { useEventStatus } from '@/hooks/useEventStatus';
 
 const ElectionActions = ({ election, openPostionModal, checkPositionExists, setAddParticipantsModalOpen, setViewUsersModal, setEndElectionModalOpen }) => {
 	const params = useParams();
-	const { isActive, 
+	const { 
+		isActive, 
 		hasEnded, 
-		isPending } = useEventStatus(new Date(election.startDate), new Date(election.endDate));
+		isPending 
+	} = useEventStatus(new Date(election.startDate), new Date(election.endDate));
 
 	return (
 		<div style={{ display: 'flex', justifyContent: 'flex-start' }}>
@@ -46,10 +48,10 @@ const ElectionActions = ({ election, openPostionModal, checkPositionExists, setA
 					)}
 				</>
 			)}
-			{election.type === "Closed" && (
+			{(
 				<p>
 					<button className='Button violet action-item' onClick={() => setViewUsersModal(true)}>
-						View Voters
+						View Registered Voters
 					</button>
 				</p>
 			)}
