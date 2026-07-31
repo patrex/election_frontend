@@ -202,6 +202,9 @@ function ElectionDetail() {
 			Toast.success('The participant was removed successfully');
 		} catch (error) {
 			Toast.error("There was an error removing the participant");
+			setModalConfig({
+				open: false
+			})
 			throw new Error(error);
 		}
 	}
