@@ -96,7 +96,7 @@ function ElectionDetail() {
 		setPositionModalOpen(false);
 	}, [election])
 
-	const handleAddPosition = useCallback( async () => {
+	const handleAddPosition = useCallback( async (e) => {
 		e.preventDefault();
 
 		if (!newPosition) {
@@ -181,7 +181,7 @@ function ElectionDetail() {
 			setVotersFiltered(updatedList);
 			// TO-DO:
 			// add a way to display number of invalid entries
-			Toast.success(`${votersToDb.data.voters.length} contacts were added`);
+			Toast.success(`${votersToDb.data.voters.length} contacts were added. ${invalidEntries.length ? invalidEntries.length: "No"} duplicates were removed`);
 			setParticipantsList('');
 		} catch (error) {
 			Toast.error("An error occurred. Try again")
