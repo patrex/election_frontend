@@ -118,6 +118,7 @@ function ElectionDetail() {
 			setPositionsList(prev => [...prev, response.data]);
 			Toast.success('Position was added');
 		} catch (error) {
+			Toast.error('Failed to add position');
 			throw new Error(error)
 		}
 	}, [election])
@@ -537,7 +538,7 @@ function ElectionDetail() {
 							type='text'
 							placeholder="e.g. Secretary General"
 							value={newPosition}
-							onChange={handlePositionChange}
+							onChange={(e) => handlePositionChange(e)}
 							className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none mb-6"
 						/>
 						<div className="flex gap-4">
