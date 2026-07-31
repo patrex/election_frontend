@@ -489,7 +489,7 @@ function ElectionDetail() {
 												<span className="font-medium text-gray-700">
 													{election.userAuthType === 'email' ? voter.email : voter.phoneNo}
 												</span>
-												{isPending && election.type === "Closed" (
+												{isPending && election.type === "Closed" && (
 													<div className="flex gap-2">
 														<button onClick={() => {editParticipant(voter); setViewUsersModal(false)}} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i class="bi bi-pencil"></i></button>
 														<button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={() => triggerRemoveVoter(voter)}>
