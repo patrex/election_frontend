@@ -96,7 +96,7 @@ function ElectionDetail() {
 		setPositionModalOpen(false);
 	}, [election])
 
-	const handleAddPosition = useCallback( async (e) => {
+	const handleAddPosition = async (e) => {
 		e.preventDefault();
 
 		if (!newPosition) {
@@ -121,7 +121,7 @@ function ElectionDetail() {
 			Toast.error('Failed to add position');
 			throw new Error(error)
 		}
-	}, [election])
+	}
 
 	const handleUpdatePosition = useCallback(async (e) => {
 		if (!updatedPosition) {
