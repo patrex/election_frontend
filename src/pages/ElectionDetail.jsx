@@ -192,8 +192,6 @@ function ElectionDetail() {
 	}
 
 	const removeVoter = async (voter) => {
-		console.log(voter._id);
-		
 		try {
 			await axios_api.delete(
 				`election/voter/${voter._id}/delete`
