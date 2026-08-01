@@ -152,16 +152,17 @@ const ElectionInfo = () => {
   const addVoterToDb = useCallback(
     async (participant) => {
       try {
-        const newVoter = await axios_api.post(`election/${_id}/addvoter/participant`, {
+        const newVoter = await axios_api.post(`voter/addvoter`, {
           participant: participant,
           electionId: _id,
         });
         setVoters((prev) => [newVoter.data, ...prev]);
       } catch (error) {
+        Toast.error("Could not add voter. Please try again")
         throw new Error(error);
       }
     },
-    [_id, election],
+    [_id, election, setVoters],
   );
 
   const initiateVerification = useCallback(
@@ -172,7 +173,7 @@ const ElectionInfo = () => {
 
         Toast.success("You have been added");
       } catch (error) {
-        throw new Error(`OTP verification failed`);
+        throw new Error(error);
       }
     },
     [startVerification, addVoterToDb],

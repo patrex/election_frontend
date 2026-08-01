@@ -52,7 +52,7 @@ export default function Election() {
 	async function sendVote(candidate) {
 		try {
 			// fetch votes cast by this voter
-			const userVotes = await axios_api.get(`election/${election._id}/${voter}/votes`);
+			const userVotes = await axios_api.get(`voter/${voter}/votes`);
 			const userVotesList = userVotes.data;
 			let userHasVoted = false;
 

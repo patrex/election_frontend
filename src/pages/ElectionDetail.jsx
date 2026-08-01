@@ -170,7 +170,7 @@ function ElectionDetail() {
 	const sendListToDB = async (voterlist) => {
 		try {
 			const votersToDb = await axios_api.post(
-				`election/${election._id}/closed_event/addvoters`,
+				`voter/addforclosed`,
 				{
 					election: election._id,
 					voterList: voterlist
@@ -180,8 +180,7 @@ function ElectionDetail() {
 			const updatedList = [...votersList, ...votersToDb.data.voters];
 			setVotersList(updatedList);
 			setVotersFiltered(updatedList);
-			// TO-DO:
-			// add a way to display number of invalid entries
+
 			Toast.success(`${votersToDb.data.voters.length} contacts were added. ${invalidEntries.length ? invalidEntries.length: "No"} duplicates were invalid`);
 			setParticipantsList('');
 		} catch (error) {
@@ -194,7 +193,7 @@ function ElectionDetail() {
 	const removeVoter = async (voter) => {
 		try {
 			await axios_api.delete(
-				`election/voter/${voter._id}/delete`
+				`voter/${voter._id}/delete`
 			);
 
 			const updatedList = votersList.filter(e => e._id !== voter._id);
@@ -295,7 +294,7 @@ function ElectionDetail() {
 
 		try {
 			const response = await axios_api.patch(
-				`election/voter/update`,
+				`voter/update`,
 				{
 					emailAddr: emailForUpdate,
 					participantId: participant._id,
@@ -336,7 +335,7 @@ function ElectionDetail() {
 
 		try {
 			const response = await axios_api.patch(
-				`election/voter/update`,
+				`voter/update`,
 				{
 					phoneNo: validatedPhoneNo,
 					participantId: participant._id,
