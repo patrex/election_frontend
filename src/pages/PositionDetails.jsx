@@ -4,14 +4,13 @@ import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
 
 import { useAuth } from "@/contexts/AuthContext";
-import { fetcher, FetchError } from "@/utils/fetcher";
 import axios_api from "@/utils/axios";
 
 export async function loader({ params }) {
 	try {
 		const [election, candidates] = await Promise.all([
 			axios_api.get(`election/${params.id}`),
-			axios_api.get(`election/${params.id}/${params.position}/candidates`)
+			axios_api.get(`candidates/${params.position}`)
 		])
 
 		return [election.data, candidates.data, params.position]
@@ -26,8 +25,6 @@ function PositionDetails() {
 	const [candidatesList, setCandidatesList] = useState(candidates || []);
 	const params = useParams();
 
-	const { user } = useAuth();
-
 	const navigate = useNavigate();
 
 	function handleEdit(edit_url) {
@@ -36,7 +33,7 @@ function PositionDetails() {
 
 	async function removeCandidate(candidate) {
 		try {
-			await axios_api.delete(`election/${election._id}/candidate/${candidate._id}/delete`)
+			await axios_api.delete(`candidates/${candidate._id}`)
 			setCandidatesList(prev => prev.filter(c => c._id !== candidate._id));
 			Toast.success('Candidate was removed');
 		} catch (error) {

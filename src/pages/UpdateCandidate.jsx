@@ -3,7 +3,6 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage
 import { useState, useCallback, useMemo, useContext } from "react";
 import { fireman } from "../utils/fireloader";
 import Toast from "@/utils/ToastMsg";
-import { fetcher } from "@/utils/fetcher";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 import axios_api from "@/utils/axios";
@@ -103,25 +102,7 @@ function UpdateCandidate() {
 			await deleteObject(delRef);
 			return { success: true };
 		} catch (error) {
-			switch (error.code) {
-				case 'storage/unauthorized':
-					Toast.error("Permission denied. Check your user permissions.");
-					break;
-				case 'storage/unauthenticated':
-					Toast.error("You must be logged in to change the photo.");
-					break;
-				case 'storage/object-not-found':
-					// Soft error - file already doesn't exist
-					console.warn("Attempted to delete a non-existent file.");
-					return { success: true, message: 'File already deleted' };
-				case 'storage/canceled':
-					Toast.error("The photo deletion was canceled.");
-					break;
-				default:
-					Toast.error("An error occurred while deleting the old photo.");
-					break;
-			}
-			return { success: false, error };
+			throw new Error(error);
 		}
 	};
 
@@ -154,7 +135,7 @@ function UpdateCandidate() {
 			return { success: true };
 		} catch (error) {
 			Toast.error("Failed to update candidate");
-			return { success: false, error };
+			throw new Error(error);
 		}
 	};
 

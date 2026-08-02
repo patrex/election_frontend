@@ -123,6 +123,7 @@ function AddCandidate() {
           photoUrl: user ? photoUrl : imgRef.fullPath,
           selectedPosition: formData.selectedPosition,
           isApproved: user ? true : false,
+          electionId: election._id,
         };
       } else {
         payload = {
@@ -130,10 +131,11 @@ function AddCandidate() {
           photoUrl: "",
           selectedPosition: formData.selectedPosition,
           isApproved: user ? true : false,
+          electionId: election._id
         };
       }
 
-      await axios_api.post(`election/${election._id}/add-candidate`, payload);
+      await axios_api.post(`candidate/add-candidate`, payload);
 
       if (user) {
         navigate(`/user/${user.id}/election/${election._id}`);
@@ -147,8 +149,6 @@ function AddCandidate() {
   }
 
   async function onSubmit(formData) {
-    console.log(formData);
-
     if (isSubmitting) return;
 
     setIsSubmitting(true);

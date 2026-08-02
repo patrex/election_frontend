@@ -10,7 +10,7 @@ export async function approveCandidatesLoader({ params }) {
     try {
         const [positions, candidates, election] = await Promise.all([
             axios_api.get(`election/${params.id}/positions`), 
-            axios_api.get(`election/${params.id}/candidates/addedself`),
+            axios_api.get(`election/${params.id}/addedself`),
             axios_api.get(`election/${params.id}`)
         ]);
 
@@ -21,8 +21,7 @@ export async function approveCandidatesLoader({ params }) {
             election: election.data 
         };
     } catch (error) {
-        console.error("There was a problem fetching data for candidate approval:", error.message);
-        return null;
+        throw new Error("Failed to load resources", error);
     }
 }
 

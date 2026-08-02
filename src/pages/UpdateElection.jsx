@@ -8,7 +8,6 @@ import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from "@/contexts/AuthContext";
 import { getLocalTimezoneDate } from "@/utils/setLocalTime";
-import { fetcher } from "@/utils/fetcher";
 import axios_api from "@/utils/axios";
 
 export async function updateElectionLoader({ params }) {
