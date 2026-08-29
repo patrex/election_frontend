@@ -109,7 +109,7 @@ function ElectionDetail() {
 
 		try {
 			const response = await axios_api.post(
-				`positions`,
+				"positions",
 				{
 					position: String(newPosition).trim(),
 					electionId: election._id
@@ -134,7 +134,7 @@ function ElectionDetail() {
 
 		try {
 			const response = await axios_api.patch(
-				`positions/update`,
+				"positions/update",
 				{
 					position: currentlySelectedPosition,
 					electionId: election._id,
