@@ -8,9 +8,9 @@ import { Trophy, Medal } from 'lucide-react';
 export async function resultsLoader({ params }) {
 	try {
 		const [election, results, positions] = await Promise.all([
-			axios_api.get(`election/${params.id}`),
+			axios_api.get(`elections/${params.id}/find`),
 			axios_api.get(`results/${params.id}`),
-			axios_api.get(`election/${params.id}/positions`)
+			axios_api.get(`elections/${params.id}/positions`)
 		])
 
 		//results potentially contains: results.data for the total results

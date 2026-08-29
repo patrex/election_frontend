@@ -43,7 +43,7 @@ function Dashboard() {
 
   async function removeElection(election) {
     try {
-      await axios_api.delete(`election/${election._id}/delete`);
+      await axios_api.delete(`elections/${election._id}/delete`);
       setElections((old) =>
         old ? old.filter((e) => e._id !== election._id) : [],
       );

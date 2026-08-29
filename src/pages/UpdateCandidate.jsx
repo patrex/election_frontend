@@ -16,11 +16,12 @@ import { PulseLoader } from "react-spinners";
 
 export async function updateloader({ params }) {
 	try {
-		const candidate = await axios_api.get(`election/candidate/${params.candidateId}`);
+		const candidate = await axios_api.get(`candidates/${ params.candidateId }`);
+
 		const [positions, position, election] = await Promise.all([
-			axios_api.get(`election/${candidate.electionId}/positions`),
-			axios_api.get(`election/positions/${candidate.position}`),
-			axios_api.get(`election/${candidate.electionId}`)
+			axios_api.get(`positions/${candidate.electionId}/positions`),
+			axios_api.get(`positions/${candidate._id}/position`), //???
+			axios_api.get(`elections/${candidate.electionId}/find`)
 		]);
 		return [candidate.data, positions.data, position.data, election.data]
 	} catch (error) { 
@@ -123,7 +124,7 @@ function UpdateCandidate() {
 	const patchCandidate = async (formdata, photoUrl) => {
 		try {
 			await axios_api.patch(
-				`election/updatecandidate`,
+				`candidates/updatecandidate`,
 				{
 					electionId: election._id,
 					candidate_id: candidate._id,

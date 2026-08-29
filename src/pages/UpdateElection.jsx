@@ -12,7 +12,7 @@ import axios_api from "@/utils/axios";
 
 export async function updateElectionLoader({ params }) {
 	try {
-		const election = await axios_api.get(`election/${params.electionId}`)
+		const election = await axios_api.get(`elections/${params.electionId}/find`)
 		return election.data;
 	} catch (error) {
 		console.error("Failed to load election");

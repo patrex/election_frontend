@@ -18,20 +18,21 @@ import axios_api from "@/utils/axios";
 
 export async function addCandidateLoader({ params }) {
   try {
-    const [positionsRes, electionRes] = await Promise.all([
-      axios_api.get(`election/${params.id}/positions`),
-      axios_api.get(`election/${params.id}`),
+    const [positions, election] = await Promise.all([
+      axios_api.get(`positions/${params.id}/positions`),
+      axios_api.get(`elections/${params.id}/find`),
     ]);
 
-    return [positionsRes.data, electionRes.data];
+    return { positions: positions.data, election: election.data };
   } catch (error) {
-    console.error("Fetch error:", error.response?.data || error.message);
-    return null;
+    console.error("Failed to fetch");
+    return { positions: null, election: null };
   }
 }
 
 function AddCandidate() {
-  const [listOfPositions, election] = useLoaderData();
+  const { positions: listOfPositions, election } = useLoaderData();
+
   const [positions, setPositions] = useState(listOfPositions || []);
 
   const [image, setImage] = useState("");
@@ -131,7 +132,7 @@ function AddCandidate() {
           photoUrl: "",
           selectedPosition: formData.selectedPosition,
           isApproved: user ? true : false,
-          electionId: election._id
+          electionId: election._id,
         };
       }
 
@@ -313,15 +314,13 @@ function AddCandidate() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`
-							w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
-							${
+                className={`w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
+                    ${
                       isSubmitting
                         ? "bg-indigo-400 cursor-not-allowed"
                         : "bg-indigo-600 hover:bg-indigo-700 text-white"
                     }
-									`}
-              >
+								`}>
                 {isSubmitting ? (
                   <PulseLoader color="#fff" size={5} loading={isSubmitting} />
                 ) : election.addCandidatesBy ===

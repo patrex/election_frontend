@@ -15,9 +15,9 @@ export async function electionDetailLoader({ params }) {
 	try {
 		// Fetch election and positions in parallel
 		const [election, positions, voters] = await Promise.all([
-			axios_api.get(`election/${params.id}`),
-			axios_api.get(`election/${params.id}/positions`),
-			axios_api.get(`election/${params.id}/voterlist`)
+			axios_api.get(`elections/${params.id}/find`),
+			axios_api.get(`positions/${params.id}/positions`),
+			axios_api.get(`elections/${params.id}/voterlist`)
 		]);
 
 		return { 
@@ -96,6 +96,7 @@ function ElectionDetail() {
 		setPositionModalOpen(false);
 	}, [election, positionModalOpen])
 
+	// add a position
 	const handleAddPosition = async (e) => {
 		e.preventDefault();
 
@@ -108,14 +109,14 @@ function ElectionDetail() {
 
 		try {
 			const response = await axios_api.post(
-				`election/${election._id}/position`,
+				`positions`,
 				{
 					position: String(newPosition).trim(),
 					electionId: election._id
 				}
 			);
 
-			setPositionsList(prev => [...prev, response.data]);
+			setPositionsList((prev) => [...prev, response.data]);
 			Toast.success('Position was added');
 		} catch (error) {
 			Toast.error('Failed to add position');
@@ -133,7 +134,7 @@ function ElectionDetail() {
 
 		try {
 			const response = await axios_api.patch(
-				`election/${election._id}/position/update`,
+				`positions/update`,
 				{
 					position: currentlySelectedPosition,
 					electionId: election._id,
@@ -159,7 +160,7 @@ function ElectionDetail() {
 
 	const removePosition = async (position) => {
 		try {
-			await axios_api.delete(`election/${election._id}/${position._id}/delete`);
+			await axios_api.delete(`positions/${position._id}/delete`);
 			setPositionsList(positionsList.filter(p => p._id !== position._id));
 			Toast.success("Position removed");
 		} catch (error) {
@@ -170,7 +171,7 @@ function ElectionDetail() {
 	const sendListToDB = async (voterlist) => {
 		try {
 			const votersToDb = await axios_api.post(
-				`voter/addforclosed`,
+				`voters/addforclosed`,
 				{
 					election: election._id,
 					voterList: voterlist
@@ -193,7 +194,7 @@ function ElectionDetail() {
 	const removeVoter = async (voter) => {
 		try {
 			await axios_api.delete(
-				`voter/${voter._id}/delete`
+				`voters/${voter._id}/delete`
 			);
 
 			const updatedList = votersList.filter(e => e._id !== voter._id);
@@ -294,7 +295,7 @@ function ElectionDetail() {
 
 		try {
 			const response = await axios_api.patch(
-				`voter/update`,
+				`voters/update`,
 				{
 					emailAddr: emailForUpdate,
 					participantId: participant._id,
@@ -335,7 +336,7 @@ function ElectionDetail() {
 
 		try {
 			const response = await axios_api.patch(
-				`voter/update`,
+				`voters/update`,
 				{
 					phoneNo: validatedPhoneNo,
 					participantId: participant._id,
@@ -362,8 +363,7 @@ function ElectionDetail() {
 
 		try {
 			const endEvent = await axios_api.put(
-				`elections/${election._id}/end`,
-				{}
+				`elections/${election._id}/end`
 			)
 
 			setEndElectionModalOpen(false);

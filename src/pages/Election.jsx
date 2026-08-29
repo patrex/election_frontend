@@ -7,18 +7,17 @@ import { useAuth } from "@/contexts/AuthContext";
 import Countdown from "@/components/Countdown";
 import StatusBadge from "@/components/StatusBadge";
 
-import { fetcher } from "@/utils/fetcher";
 import axios_api from "@/utils/axios";
 
 export async function electionLoader({ params }) {
 	try {
 		const [election, positions, allCandidates] = await Promise.all([
-			axios_api.get(`election/${params.id}`),
-			axios_api.get(`election/${params.id}/positions`),
-			axios_api.get(`election/${params.id}/candidates`)
+			axios_api.get(`elections/${params.id}/find`),
+			axios_api.get(`positions/${params.id}/positions`),
+			axios_api.get(`candidates/${params.id}/candidates`)
 		]);
 
-		return [ election.data, positions.data, allCandidates.data]
+		return [ election.data, positions.data, allCandidates.data ]
 	} catch (error) {
 		console.error(error);
 		return null;
@@ -52,7 +51,7 @@ export default function Election() {
 	async function sendVote(candidate) {
 		try {
 			// fetch votes cast by this voter
-			const userVotes = await axios_api.get(`voter/${voter}/votes`);
+			const userVotes = await axios_api.get(`voters/${voter}/${election._id}/votes`);
 			const userVotesList = userVotes.data;
 			let userHasVoted = false;
 
@@ -62,10 +61,11 @@ export default function Election() {
 			let voteList = userVotesList.votes || [];
 			userHasVoted = voteList.includes(currentPosition);
 
-			if (userHasVoted) return Toast.warning('You already voted for this position');
+			if (userHasVoted) 
+				return Toast.warning('You already voted for this position');
 			
 			await axios_api.post(
-				`election/vote`,
+				`elections/vote`,
 				{
 					election: election._id,
 					candidate: candidate._id,

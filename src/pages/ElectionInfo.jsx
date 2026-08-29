@@ -31,8 +31,8 @@ export async function infoLoader({ params }) {
 
   try {
     const [election, voters] = await Promise.all([
-      axios_api.get(`election/${id}`),
-      axios_api.get(`election/${id}/voterlist`),
+      axios_api.get(`elections/${id}/find`),
+      axios_api.get(`elections/${id}/voterlist`),
     ]);
 
     const userAuthType = election.data.userAuthType;
@@ -152,7 +152,7 @@ const ElectionInfo = () => {
   const addVoterToDb = useCallback(
     async (participant) => {
       try {
-        const newVoter = await axios_api.post(`voter/addvoter`, {
+        const newVoter = await axios_api.post(`voters/addvoter`, {
           participant: participant,
           electionId: _id,
         });

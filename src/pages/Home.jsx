@@ -36,7 +36,7 @@ function Home() {
 
 		setIsLoading(true);
 		try {
-			const e = await axios_api.get(`election/${id}`);
+			const e = await axios_api.get(`elections/${id}/find`);
 			if (!e) throw new Error("No election was found with that ID!");
 
 			const electionFetched = e.data;

@@ -32,7 +32,7 @@ const VoterCheckOverlay = ({ isOpen, onClose, userAuthType, voters }) => {
   const addToDb = useCallback(async (dest) => {
     try {
       await startVerification(dest);
-      await axios_api.post(`election/${election._id}/addvoter/participant`, {
+      await axios_api.post(`elections/${election._id}/addvoter/participant`, {
         participant: dest,
         electionId: election._id,
       });

@@ -9,12 +9,11 @@ import axios_api from '@/utils/axios';
 export async function approveCandidatesLoader({ params }) {
     try {
         const [positions, candidates, election] = await Promise.all([
-            axios_api.get(`election/${params.id}/positions`), 
-            axios_api.get(`election/${params.id}/addedself`),
-            axios_api.get(`election/${params.id}`)
+            axios_api.get(`positions/${params.id}/positions`), 
+            axios_api.get(`candidates/${params.id}/addedself`),
+            axios_api.get(`elections/${params.id}/find`)
         ]);
-
-        // Destructure data from the Axios response objects
+		
         return { 
             positions: positions.data, 
             candidates: candidates.data, 
@@ -103,12 +102,10 @@ const ApproveCandidates = () => {
 		setModalAction(null);
 	};
 
-	const { user } = useAuth();
-
 	async function approveCandidate() {
 		try {
 			const approved = await axios_api.patch(
-				`election/${election._id}/${selectedCandidate._id}/approve`,
+				`candidates/${selectedCandidate._id}/approve`,
 			)
 
 			if (!approved) throw new Error("Could not approve candidate");
@@ -123,7 +120,7 @@ const ApproveCandidates = () => {
 
 	async function removeCandidate() {
 		try {
-			await axios_api.delete(`election/${election._id}/candidate/${selectedCandidate._id}/delete`)
+			await axios_api.delete(`candidates/${selectedCandidate._id}/delete`)
 			setCandidates(prev => prev.filter(c => c._id !== selectedCandidate._id));
 		} catch (error) {
 			throw new Error("There was an error completing that");

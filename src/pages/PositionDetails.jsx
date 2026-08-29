@@ -9,7 +9,7 @@ import axios_api from "@/utils/axios";
 export async function loader({ params }) {
 	try {
 		const [election, candidates] = await Promise.all([
-			axios_api.get(`election/${params.id}`),
+			axios_api.get(`elections/${params.id}/find`),
 			axios_api.get(`candidates/${params.position}`)
 		])
 
