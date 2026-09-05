@@ -136,7 +136,7 @@ function AddCandidate() {
         };
       }
 
-      await axios_api.post(`candidate/add-candidate`, payload);
+      await axios_api.post(`candidates/add-candidate`, payload);
 
       if (user) {
         navigate(`/user/${user.id}/election/${election._id}`);
