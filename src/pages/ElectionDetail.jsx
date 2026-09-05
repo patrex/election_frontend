@@ -119,8 +119,8 @@ function ElectionDetail() {
 			setPositionsList((prev) => [...prev, response.data]);
 			Toast.success('Position was added');
 		} catch (error) {
-			Toast.error('Failed to add position');
-			throw new Error(error)
+			console.log(error)
+			return Toast.error('Failed to add position');
 		}
 	}
 
