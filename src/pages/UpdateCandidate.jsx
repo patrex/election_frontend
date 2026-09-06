@@ -7,8 +7,6 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 import axios_api from "@/utils/axios";
 
-import { useAuth } from "@/contexts/AuthContext";
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,19 +17,20 @@ export async function updateloader({ params }) {
 		const candidate = await axios_api.get(`candidates/${ params.candidateId }`);
 
 		const [positions, position, election] = await Promise.all([
-			axios_api.get(`positions/${candidate.electionId}/positions`),
-			axios_api.get(`positions/${candidate._id}/position`), //???
-			axios_api.get(`elections/${candidate.electionId}/find`)
+			axios_api.get(`positions/${candidate.data.electionId}/positions`),
+			axios_api.get(`positions/${candidate.data._id}/position`), //???
+			axios_api.get(`elections/${candidate.data.electionId}/find`)
 		]);
+
 		return [candidate.data, positions.data, position.data, election.data]
 	} catch (error) { 
 		console.error("Could not finish loading resources");
+		return null;
 	}
 }
 
 function UpdateCandidate() {
 	const [candidate, positions, position, election] = useLoaderData();
-	const { user } = useAuth()
 
 	// Separated state variables
 	const [loading, setLoading] = useState(false);
