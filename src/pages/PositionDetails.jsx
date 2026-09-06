@@ -10,7 +10,7 @@ export async function loader({ params }) {
 	try {
 		const [election, candidates] = await Promise.all([
 			axios_api.get(`elections/${params.id}/find`),
-			axios_api.get(`candidates/${params.position}`)
+			axios_api.get(`candidates/${params.id}/${params.position}`)
 		])
 
 		return [election.data, candidates.data, params.position]
