@@ -53,7 +53,7 @@ function PositionDetails() {
 				<hr className="border-gray-200 mb-8" />
 
 				{/* Responsive Grid */}
-			<main className="container mx-auto px-4 pt-10 flex-1 max-w-7xl">
+		
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 					{candidatesList
 						.filter((c) => c.isApproved)
@@ -74,7 +74,7 @@ function PositionDetails() {
 							</div>
 						))}
 				</div>
-			</main>
+
 
 				{/* Empty State (Optional but helpful) */}
 				{candidatesList.filter((c) => c.isApproved).length === 0 && (
