@@ -3,7 +3,6 @@ import { useState, useContext } from "react";
 import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
 
-import { useAuth } from "@/contexts/AuthContext";
 import axios_api from "@/utils/axios";
 
 export async function loader({ params }) {
@@ -49,12 +48,12 @@ function PositionDetails() {
 					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
 						Candidates for <span className="text-violet-600">{position}</span>
 					</h1>
-					<p className="text-gray-500">Manage and view all approved candidates for this position.</p>
+					<p className="text-gray-500">Manage all approved candidates for this position.</p>
 				</div>
 
 				<hr className="border-gray-200 mb-8" />
 
-				{/* Responsive Grid System */}
+				{/* Responsive Grid */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 					{candidatesList
 						.filter((c) => c.isApproved)

@@ -25,13 +25,12 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 			elevation={3}
 			sx={{
 				width: 280,
-				height: 300,
+				minHeight: 220,
 				borderRadius: 3,
 				p: 2,
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				justifyContent: 'space-between',
 				overflow: 'hidden',
 				textAlign: 'center'
 			}}
@@ -40,11 +39,11 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 			<Avatar
 				alt={name}
 				src={imageUrl}
-				sx={{ width: 80, height: 80, mb: 2 }}
+				sx={{ width: 64, height: 64, mb: 1.5 }}
 			/>
 
 			{/* Name & Position */}
-			<CardContent sx={{ p: 0, flexGrow: 1 }}>
+			<CardContent sx={{ p: 0, width: '100%' }}>
 				<Typography
 					variant="h6"
 					sx={{
@@ -72,8 +71,8 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 
 			{/* Action Buttons */}
 			<Box sx={{ minHeight: 48, mt: 2 }}>
-				{ isPending && (
-					<Stack direction="row" spacing={1}>
+				{isPending && (
+					<Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
 						<IconButton color="primary" onClick={onEdit}>
 							<EditIcon />
 						</IconButton>
@@ -88,14 +87,14 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 								<AlertDialog.Content className="AlertDialogContent">
 									<AlertDialog.Title className="AlertDialogTitle">Remove Candidate</AlertDialog.Title>
 									<AlertDialog.Description className="AlertDialogDescription">
-										{`Remove this candidate: ${ name } ?`}
+										{`Remove: ${name} ?`}
 									</AlertDialog.Description>
 									<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
 										<AlertDialog.Cancel asChild>
 											<button className="Button mauve">Cancel</button>
 										</AlertDialog.Cancel>
 										<AlertDialog.Action asChild>
-											<button className="Button red" onClick={ onDelete }>Yes, remove</button>
+											<button className="Button red" onClick={onDelete}>Yes, remove</button>
 										</AlertDialog.Action>
 									</div>
 								</AlertDialog.Content>
