@@ -87,7 +87,7 @@ const UserCard = ({ name, position, imageUrl, onEdit, onDelete, election }) => {
 								<AlertDialog.Content className="AlertDialogContent">
 									<AlertDialog.Title className="AlertDialogTitle">Remove Candidate</AlertDialog.Title>
 									<AlertDialog.Description className="AlertDialogDescription">
-										{`Remove: ${name} ?`}
+										{`Remove: ${name}?`}
 									</AlertDialog.Description>
 									<div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
 										<AlertDialog.Cancel asChild>
