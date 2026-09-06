@@ -42,7 +42,6 @@ function PositionDetails() {
 
 	return (
 		<div className="min-h-screen flex flex-col bg-slate-50">
-			<main className="container mx-auto px-4 pt-10 flex-1 max-w-7xl">
 				{/* Header Section */}
 				<div className="flex flex-col gap-2 mb-6">
 					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
@@ -81,7 +80,7 @@ function PositionDetails() {
 						<p className="text-gray-400">No approved candidates found for this position.</p>
 					</div>
 				)}
-			</main>
+
 		</div>
 	);
 }
