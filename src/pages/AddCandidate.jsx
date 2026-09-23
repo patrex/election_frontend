@@ -4,7 +4,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useLoaderData } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { genUUID } from "@/utils/getUUID";
-import { fireman } from "../utils/fireloader";
 import Toast from "@/utils/ToastMsg";
 import { PulseLoader } from "react-spinners";
 import NoData from "@/components/NoData";
