@@ -8,6 +8,7 @@ import Toast from "@/utils/ToastMsg";
 import { PulseLoader } from "react-spinners";
 import NoData from "@/components/NoData";
 import noDataGraphic from "@/assets/undraw_no-data_ig65.svg";
+import axios from 'axios'
 
 import * as z from "zod";
 import { useForm, Controller } from "react-hook-form";
@@ -107,23 +108,27 @@ function AddCandidate() {
       };
 
       if (image) {
-        const CLOUD_NAME = 'dautx'
+        const CLOUD_NAME = "dautx";
         const cloudForm = new FormData();
         cloudForm.append("file", image);
-        cloudForm.append("upload_preset", 'voteng_default');
+        cloudForm.append("upload_preset", "voteng_default");
         cloudForm.append(
           "folder",
           `${user ? "voteng" : "staging"}/${election._id}/${formData.selectedPosition}`
         );
         cloudForm.append("public_id", genUUID());
 
-        const { data: cloudRes } = await axios_api.post(
+        const cloudRes = await fetch(
           `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-          cloudForm, { withCredentials: false }
-        );
+          {
+            method: "POST",
+            body: cloudForm,
+          }
+        ).then((res) => {
+          if (!res.ok) throw new Error("Image upload failed");
+          return res.json();
+        });
 
-        // secure_url is always public once uploaded via an unsigned preset,
-        // so there's no "only fetch URL if user" branch like there was with Firebase
         photoUrl = cloudRes.secure_url;
         payload.photoUrl = photoUrl;
       }
