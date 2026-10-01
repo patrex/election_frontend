@@ -118,7 +118,7 @@ function AddCandidate() {
         );
         cloudForm.append("public_id", genUUID());
 
-        const { data: cloudRes } = await axios.post(
+        const { data: cloudRes } = await axios_api.post(
           `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
           cloudForm
         );
