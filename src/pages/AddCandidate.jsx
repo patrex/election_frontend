@@ -79,8 +79,7 @@ function AddCandidate() {
     },
   });
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (file) => {
     if (file) {
       setImage(file);
       const reader = new FileReader();
@@ -266,7 +265,7 @@ function AddCandidate() {
                     type="file"
                     id="uploadpic"
                     accept="image/*"
-                    onChange={handleFileChange}
+                    onChange={(e) => handleFileChange(e.target.files[0])}
                     className="hidden"
                   />
 
