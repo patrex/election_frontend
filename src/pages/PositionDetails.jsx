@@ -3,14 +3,13 @@ import { useState, useContext } from "react";
 import Toast from "@/utils/ToastMsg";
 import UserCard from "@/components/UserCard"
 
-import { useAuth } from "@/contexts/AuthContext";
 import axios_api from "@/utils/axios";
 
 export async function loader({ params }) {
 	try {
 		const [election, candidates] = await Promise.all([
 			axios_api.get(`elections/${params.id}/find`),
-			axios_api.get(`candidates/${params.position}`)
+			axios_api.get(`candidates/${params.id}/${params.position}`)
 		])
 
 		return [election.data, candidates.data, params.position]
@@ -43,18 +42,18 @@ function PositionDetails() {
 
 	return (
 		<div className="min-h-screen flex flex-col bg-slate-50">
-			<main className="container mx-auto px-4 pt-10 flex-1 max-w-7xl">
 				{/* Header Section */}
 				<div className="flex flex-col gap-2 mb-6">
 					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
 						Candidates for <span className="text-violet-600">{position}</span>
 					</h1>
-					<p className="text-gray-500">Manage and view all approved candidates for this position.</p>
+					<p className="text-gray-500">Manage all approved candidates for this position.</p>
 				</div>
 
 				<hr className="border-gray-200 mb-8" />
 
-				{/* Responsive Grid System */}
+				{/* Responsive Grid */}
+		
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 					{candidatesList
 						.filter((c) => c.isApproved)
@@ -76,13 +75,13 @@ function PositionDetails() {
 						))}
 				</div>
 
+
 				{/* Empty State (Optional but helpful) */}
 				{candidatesList.filter((c) => c.isApproved).length === 0 && (
 					<div className="text-center py-20 bg-white rounded-xl border-2 border-dashed">
 						<p className="text-gray-400">No approved candidates found for this position.</p>
 					</div>
 				)}
-			</main>
 		</div>
 	);
 }

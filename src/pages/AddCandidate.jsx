@@ -4,11 +4,11 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useLoaderData } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { genUUID } from "@/utils/getUUID";
-import { fireman } from "../utils/fireloader";
 import Toast from "@/utils/ToastMsg";
 import { PulseLoader } from "react-spinners";
 import NoData from "@/components/NoData";
 import noDataGraphic from "@/assets/undraw_no-data_ig65.svg";
+import axios from 'axios'
 
 import * as z from "zod";
 import { useForm, Controller } from "react-hook-form";
@@ -80,8 +80,7 @@ function AddCandidate() {
     },
   });
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (file) => {
     if (file) {
       setImage(file);
       const reader = new FileReader();
@@ -99,41 +98,39 @@ function AddCandidate() {
 
   async function uploadImageAndSaveData(formData) {
     try {
-      let imgRef;
       let photoUrl = "";
-      let payload;
+      let payload = {
+        ...formData,
+        photoUrl: "",
+        selectedPosition: formData.selectedPosition,
+        isApproved: !!user,
+        electionId: election._id,
+      };
 
       if (image) {
-        const fileExt = image.name.split(".").pop();
-
-        imgRef = ref(
-          fireman,
-          `${user ? "votify" : "staging"}/${election.title}/${formData.selectedPosition}/${genUUID()}.${fileExt}`,
+        const CLOUD_NAME = "dautx";
+        const cloudForm = new FormData();
+        cloudForm.append("file", image);
+        cloudForm.append("upload_preset", "voteng_default");
+        cloudForm.append(
+          "folder",
+          `${user ? "voteng" : "staging"}/${election._id}/${formData.selectedPosition}`
         );
-        const snapshot = await uploadBytes(imgRef, image);
+        cloudForm.append("public_id", genUUID());
 
-        // only fetch download url for when admin is adding candidates himself
-        if (user) {
-          photoUrl = await getDownloadURL(snapshot.ref);
-        }
-      }
+        const cloudRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+          {
+            method: "POST",
+            body: cloudForm,
+          }
+        ).then((res) => {
+          if (!res.ok) throw new Error("Image upload failed");
+          return res.json();
+        });
 
-      if (image) {
-        payload = {
-          ...formData,
-          photoUrl: user ? photoUrl : imgRef.fullPath,
-          selectedPosition: formData.selectedPosition,
-          isApproved: user ? true : false,
-          electionId: election._id,
-        };
-      } else {
-        payload = {
-          ...formData,
-          photoUrl: "",
-          selectedPosition: formData.selectedPosition,
-          isApproved: user ? true : false,
-          electionId: election._id,
-        };
+        photoUrl = cloudRes.secure_url;
+        payload.photoUrl = photoUrl;
       }
 
       await axios_api.post(`candidates/add-candidate`, payload);
@@ -273,7 +270,7 @@ function AddCandidate() {
                     type="file"
                     id="uploadpic"
                     accept="image/*"
-                    onChange={handleFileChange}
+                    onChange={(e) => handleFileChange(e.target.files[0])}
                     className="hidden"
                   />
 
@@ -315,11 +312,10 @@ function AddCandidate() {
                 type="submit"
                 disabled={isSubmitting}
                 className={`w-full py-3 mt-6 text-lg font-semibold rounded-lg shadow-md transition duration-150 text-center
-                    ${
-                      isSubmitting
-                        ? "bg-indigo-400 cursor-not-allowed"
-                        : "bg-indigo-600 hover:bg-indigo-700 text-white"
-                    }
+                    ${isSubmitting
+                    ? "bg-indigo-400 cursor-not-allowed"
+                    : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                  }
 								`}>
                 {isSubmitting ? (
                   <PulseLoader color="#fff" size={5} loading={isSubmitting} />
