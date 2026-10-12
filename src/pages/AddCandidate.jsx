@@ -115,10 +115,27 @@ function AddCandidate() {
       };
 
       if (image) {
-        const perms = await axios_api.post("candidates/upload-img", {
+        // 1. Get a presigned URL from your backend
+        const { data: presignData } = await axios_api.post("candidates/upload-img", {
+          fileName: image.name,
           fileType: image.type,
+          electionId: election._id,
+          selectedPosition: formData.selectedPosition,
+          isAdmin: !!user,
         });
-        const { uploadUrl, key } = perms.data;
+
+        // 2. Upload directly to R2
+        const uploadRes = await fetch(presignData.uploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": image.type },
+          body: image,
+        });
+
+        if (!uploadRes.ok) throw new Error("Image upload failed");
+
+        // 3. We already know the final public URL — R2 doesn't return one
+        photoUrl = presignData.publicUrl;
+        payload.photoUrl = photoUrl;
       }
 
       await axios_api.post(`candidates/add-candidate`, payload);
