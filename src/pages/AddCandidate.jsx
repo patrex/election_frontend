@@ -98,7 +98,6 @@ function AddCandidate() {
 
   async function uploadImageAndSaveData(formData) {
     try {
-      let photoUrl = "";
       let payload = {
         ...formData,
         photoUrl: "",
@@ -112,9 +111,6 @@ function AddCandidate() {
         const { data: presignData } = await axios_api.post("candidates/upload-img", {
           fileName: image.name,
           fileType: image.type,
-          electionId: election._id,
-          selectedPosition: formData.selectedPosition,
-          isAdmin: !!user,
         });
 
         // 2. Upload directly to R2
@@ -127,7 +123,7 @@ function AddCandidate() {
         if (!uploadRes.ok) throw new Error("Image upload failed");
 
         // 3. We already know the final public URL — R2 doesn't return one
-        photoUrl = presignData.publicUrl;
+        let photoUrl = presignData.publicUrl;
         payload.photoUrl = photoUrl;
       }
 
