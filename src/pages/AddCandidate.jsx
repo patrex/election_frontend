@@ -96,13 +96,6 @@ function AddCandidate() {
     document.getElementById("uploadpic").value = "";
   };
 
-  
-  const getUploadUrl = async () => {
-    if (!image) return;
-
-    
-  };
-
   async function uploadImageAndSaveData(formData) {
     try {
       let photoUrl = "";
