@@ -121,10 +121,12 @@ function AddCandidate() {
           body: image,
         });
 
+
+
         if (!uploadRes.ok) throw new Error("Image upload failed");
 
         // 3. We already know the final public URL — R2 doesn't return one
-        let photoUrl = presignData.publicUrl;
+        let photoUrl = presignData.key;
         payload.photoUrl = photoUrl;
       }
 
