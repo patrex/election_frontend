@@ -1,6 +1,6 @@
-import { useState, useCallback, useContext, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import { useLoaderData } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { genUUID } from "@/utils/getUUID";
@@ -8,7 +8,6 @@ import Toast from "@/utils/ToastMsg";
 import { PulseLoader } from "react-spinners";
 import NoData from "@/components/NoData";
 import noDataGraphic from "@/assets/undraw_no-data_ig65.svg";
-import axios from 'axios'
 
 import * as z from "zod";
 import { useForm, Controller } from "react-hook-form";

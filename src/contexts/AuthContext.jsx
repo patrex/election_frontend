@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate, Navigate, Outlet } from 'react-router-dom';
 import axios_api from '@/utils/axios';
 
-
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
