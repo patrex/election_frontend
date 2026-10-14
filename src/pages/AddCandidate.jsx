@@ -97,21 +97,23 @@ function AddCandidate() {
   };
 
   async function uploadImageAndSaveData(formData) {
-    try {
-      let payload = {
-        ...formData,
-        photoUrl: "",
-        selectedPosition: formData.selectedPosition,
-        isApproved: !!user,
-        electionId: election._id,
-      };
+    let payload = {
+      ...formData,
+      photoUrl: "",
+      selectedPosition: formData.selectedPosition,
+      isApproved: !!user,
+      electionId: election._id,
+    };
 
+    try {
       if (image) {
         // 1. Get a presigned URL from your backend
         const { data: presignData } = await axios_api.post("candidates/upload-img", {
           fileName: image.name,
           fileType: image.type,
         });
+
+        console.log(presignData);
 
         // 2. Upload directly to R2
         const uploadRes = await fetch(presignData.uploadUrl, {
