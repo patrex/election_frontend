@@ -96,39 +96,35 @@ function AddCandidate() {
   };
 
   async function uploadImageAndSaveData(formData) {
+    let payload = {
+      ...formData,
+      photoUrl: "",
+      selectedPosition: formData.selectedPosition,
+      isApproved: !!user,
+      electionId: election._id,
+    };
+
     try {
-      let photoUrl = "";
-      let payload = {
-        ...formData,
-        photoUrl: "",
-        selectedPosition: formData.selectedPosition,
-        isApproved: !!user,
-        electionId: election._id,
-      };
-
       if (image) {
-        const CLOUD_NAME = "dautx";
-        const cloudForm = new FormData();
-        cloudForm.append("file", image);
-        cloudForm.append("upload_preset", "voteng_default");
-        cloudForm.append(
-          "folder",
-          `${user ? "voteng" : "staging"}/${election._id}/${formData.selectedPosition}`
-        );
-        cloudForm.append("public_id", genUUID());
-
-        const cloudRes = await fetch(
-          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-          {
-            method: "POST",
-            body: cloudForm,
-          }
-        ).then((res) => {
-          if (!res.ok) throw new Error("Image upload failed");
-          return res.json();
+        // 1. Get a presigned URL from your backend
+        const { data: presignData } = await axios_api.post("candidates/upload-img", {
+          fileName: image.name,
+          fileType: image.type,
         });
 
-        photoUrl = cloudRes.secure_url;
+        console.log(presignData);
+
+        // 2. Upload directly to R2
+        const uploadRes = await fetch(presignData.uploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": image.type },
+          body: image,
+        });
+
+        if (!uploadRes.ok) throw new Error("Image upload failed");
+
+        // 3. We already know the final public URL — R2 doesn't return one
+        let photoUrl = presignData.publicUrl;
         payload.photoUrl = photoUrl;
       }
 
