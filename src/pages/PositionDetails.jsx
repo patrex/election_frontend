@@ -62,7 +62,7 @@ function PositionDetails() {
 								<UserCard
 									name={`${candidate.firstname} ${candidate.lastname}`}
 									position={position}
-									imageUrl={candidate.imgUrl}
+									imageUrl={candidate.photoUrl}
 									onEdit={() =>
 										handleEdit(
 											`/user/${params.userId}/election/candidate/${candidate._id}/update`
