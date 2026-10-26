@@ -16,7 +16,7 @@ export const sendPhoneOtp = async (dest, electionId) => {
 		);
 
 		if (!token_req.ok) {
-			throw new Error("There was an error processing your OTP request")
+			throw new Error("There was an error processing your OTP request");
 		}
 	
 		console.log(token_response);

@@ -162,7 +162,7 @@ const ApproveCandidates = () => {
 												<div className="flex items-center space-x-3">
 													<div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
 														<img
-															src={candidate.imgUrl}
+															src={candidate.photoUrl}
 															alt="Candidate Image"
 															className="w-full h-full object-cover object-center"
 														/>
