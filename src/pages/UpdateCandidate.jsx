@@ -173,7 +173,7 @@ function UpdateCandidate() {
 			}
 
 			// Step 2: Upload new image if provided
-			let photoUrl = candidate.imgUrl; // Keep old URL if no new picture
+			let photoUrl = candidate.photoUrl; // Keep old URL if no new picture
 			if (newPicture) {
 				const uploadResult = await uploadNewImage(formdata);
 				photoUrl = uploadResult.photoUrl;
